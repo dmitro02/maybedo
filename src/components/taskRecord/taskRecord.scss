@@ -1,0 +1,19 @@
+.task-record {
+
+    font-size: 1.2rem;
+
+    input {
+        margin-right: 8px;
+        cursor: pointer;
+    }
+}
+
+.task-record.task-done {
+    color: #909090;
+    text-decoration: line-through;
+}
+
+.task-record.task-undone {
+    color: black;
+    text-decoration: none;
+}
