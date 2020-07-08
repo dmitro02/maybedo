@@ -1,11 +1,11 @@
 import React from 'react'
 import './TaskList.scss'
 import TaskRecord from '../TaskRecord/TaskRecord'
-import { Task } from '../../types'
+import { ITask } from '../../types'
 
-interface Props { tasks: Task[] }
+interface IProps { tasks: ITask[] }
 
-const TaskList = ({ tasks }: Props) => {
+const TaskList = ({ tasks }: IProps) => {
     return (
         <div className="task-list">
             {tasks.map(

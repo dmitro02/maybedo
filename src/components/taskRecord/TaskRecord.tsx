@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import './TaskRecord.scss'
-import { Task } from '../../types'
+import { ITask } from '../../types'
+import { TasksContext } from '../../contexts/TasksContext'
 
-interface Props { task: Task }
+interface IProps { task: ITask }
 
-const TaskRecord = ({ task }: Props) => {
-    const [isDone, setIsDone] = useState(task.isDone)
+const TaskRecord = ({ task }: IProps) => {
+    const { isDone, data } = task
+
+    const [, dispatch ] = useContext(TasksContext)
 
     const handleClickOnCheckbox = (e: any) => {
-        setIsDone(prevIsDone => !prevIsDone)
+        task.isDone = !isDone
+        task.isDone 
+            ? dispatch({ type: 'MARK_AS_COMPLETED', task })
+            : dispatch({ type: 'MARK_AS_ACTIVE', task })
     }
 
     return (
@@ -18,7 +24,7 @@ const TaskRecord = ({ task }: Props) => {
                 defaultChecked={isDone} 
                 onClick={handleClickOnCheckbox}
             />
-            <span>{task.data}</span>
+            <span>{data}</span>
         </div>
     )
 }
