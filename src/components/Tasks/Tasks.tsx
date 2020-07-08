@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import './Tasks.scss'
 import TaskList from '../TaskList/TaskList'
-import { TasksContext } from '../../contexts/TasksContext'
+import { useTasksContext } from '../../contexts/TasksContext'
 
 const Tasks = () => {
-    const [ allTasks ] = useContext(TasksContext)
+    const [ allTasks ] = useTasksContext()
 
     return (
         <div className="tasks-box">

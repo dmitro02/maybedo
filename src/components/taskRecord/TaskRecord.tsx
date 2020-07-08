@@ -1,20 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import './TaskRecord.scss'
 import { ITask } from '../../types'
-import { TasksContext } from '../../contexts/TasksContext'
+import { 
+    useTasksContext, 
+    moveTaskAction 
+} from '../../contexts/TasksContext'
 
 interface IProps { task: ITask }
 
 const TaskRecord = ({ task }: IProps) => {
     const { isDone, data } = task
 
-    const [, dispatch ] = useContext(TasksContext)
+    const [, dispatch ] = useTasksContext()
 
     const handleClickOnCheckbox = (e: any) => {
         task.isDone = !isDone
-        task.isDone 
-            ? dispatch({ type: 'MARK_AS_COMPLETED', task })
-            : dispatch({ type: 'MARK_AS_ACTIVE', task })
+        dispatch(moveTaskAction(task))
     }
 
     return (
