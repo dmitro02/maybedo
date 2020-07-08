@@ -1,15 +1,13 @@
 import React from 'react'
 import './App.scss'
-import Header from './components/header/Header'
-import Done from './components/done/Done'
-import Undone from './components/undone/Undone'
+import Header from './components/Header/Header'
+import Tasks from './components/Tasks/Tasks'
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <Undone />
-      <Done />
+      <Tasks />
     </div>
   );
 }

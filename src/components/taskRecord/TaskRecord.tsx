@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
-import './taskRecord.scss'
+import './TaskRecord.scss'
+import { Task } from '../../types'
 
-const TaskRecord = () => {
-    const [isDone, setIsDone] = useState(false)
+interface Props { task: Task }
+
+const TaskRecord = ({ task }: Props) => {
+    const [isDone, setIsDone] = useState(task.isDone)
 
     const handleClickOnCheckbox = (e: any) => {
         setIsDone(prevIsDone => !prevIsDone)
@@ -12,14 +15,12 @@ const TaskRecord = () => {
         <div className={'task-record ' + (isDone ? 'task-done' : 'task-undone')}>
             <input 
                 type="checkbox" 
-                checked={isDone} 
+                defaultChecked={isDone} 
                 onClick={handleClickOnCheckbox}
             />
-            <span>record</span>
+            <span>{task.data}</span>
         </div>
     )
 }
-
-
 
 export default TaskRecord
