@@ -1,3 +1,15 @@
 .tasks-box {
-    
+    box-sizing: border-box;
+    width: 80%;
+    margin: 0 auto;
+    padding: 15px 20px;
+    border-radius: 5px;
+    background-color: whitesmoke;
+}
+
+.divider {
+    margin: 10px auto;
+    border-top: 1px solid lightgray;
+    width: 98%;
+
 }

@@ -9,6 +9,7 @@ const Tasks = () => {
     return (
         <div className="tasks-box">
             <TaskList tasks={allTasks.activeTasks} />
+            <div className="divider" />
             <TaskList tasks={allTasks.completedTasks} />
         </div>
     )
