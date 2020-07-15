@@ -11,7 +11,6 @@ function App() {
       <TasksContextProvider>
         <Tasks />
       </TasksContextProvider>
-      
     </div>
   );
 }

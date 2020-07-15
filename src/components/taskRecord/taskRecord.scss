@@ -1,10 +1,10 @@
 .task-record {
-
     font-size: 1.2rem;
 
-    input {
-        margin-right: 8px;
+    .checkmark {
         cursor: pointer;
+        margin-right: 6px;
+        vertical-align: middle;
     }
 }
 

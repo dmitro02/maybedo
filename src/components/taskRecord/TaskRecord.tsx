@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './TaskRecord.scss'
 import { ITask } from '../../types'
 import { 
@@ -9,22 +9,29 @@ import {
 interface IProps { task: ITask }
 
 const TaskRecord = ({ task }: IProps) => {
-    const { isDone, data } = task
+    const { isDone: initialState, data } = task
+
+    const [ isDone, setIsDone ] = useState(initialState)
 
     const [, dispatch ] = useTasksContext()
 
-    const handleClickOnCheckbox = (e: any) => {
-        task.isDone = !isDone
+    const handleMouseDownOnCheckbox = (e: any) => {
+        setIsDone((prevState) => task.isDone = !prevState)
+    }
+
+    const handleMouseUpOnCheckbox = (e: any) => {     
         dispatch(moveTaskAction(task))
     }
 
     return (
         <div className={'task-record ' + (isDone ? 'task-done' : 'task-undone')}>
-            <input 
-                type="checkbox" 
-                defaultChecked={isDone} 
-                onClick={handleClickOnCheckbox}
-            />
+            <span
+                onMouseDown={handleMouseDownOnCheckbox} 
+                onMouseUp={handleMouseUpOnCheckbox}
+            >
+                {!isDone && <i className="material-icons checkmark">check_box_outline_blank</i>}
+                {isDone && <i className="material-icons checkmark">check_box</i>}
+            </span>
             <span>{data}</span>
         </div>
     )
