@@ -1,6 +1,7 @@
 import React from 'react'
 import './TaskList.scss'
 import TaskRecord from '../TaskRecord/TaskRecord'
+import AddTAsk from '../AddTask/AddTask'
 import { ITask } from '../../types'
 
 interface IProps { tasks: ITask[], isActive?: boolean }
@@ -11,11 +12,7 @@ const TaskList = ({ tasks, isActive }: IProps) => {
             {tasks.map(
                 task => <TaskRecord key={task.id} task={task} />
             )}
-            {isActive &&
-                <div className="add-task-record">
-                    <i className="material-icons add-mark">add</i>
-                    <span>new task</span>
-                </div>
+            {isActive && <AddTAsk />
             } 
         </div>
     )

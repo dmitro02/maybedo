@@ -24,7 +24,7 @@ const TaskRecord = ({ task }: IProps) => {
     }
 
     return (
-        <div className={'task-record ' + (isDone ? 'task-done' : 'task-undone')}>
+        <div className="task-record">
             <span
                 onMouseDown={handleMouseDownOnCheckbox} 
                 onMouseUp={handleMouseUpOnCheckbox}
@@ -32,7 +32,8 @@ const TaskRecord = ({ task }: IProps) => {
                 {!isDone && <i className="material-icons checkmark">check_box_outline_blank</i>}
                 {isDone && <i className="material-icons checkmark">check_box</i>}
             </span>
-            <span>{data}</span>
+            <span className={isDone ? 'task-done' : 'task-undone'}>{data}</span>
+            <i className="material-icons delete-btn">clear</i>
         </div>
     )
 }
