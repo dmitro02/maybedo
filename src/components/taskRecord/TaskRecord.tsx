@@ -29,10 +29,15 @@ const TaskRecord = ({ task }: IProps) => {
                 onMouseDown={handleMouseDownOnCheckbox} 
                 onMouseUp={handleMouseUpOnCheckbox}
             >
-                {!isDone && <i className="material-icons checkmark">check_box_outline_blank</i>}
-                {isDone && <i className="material-icons checkmark">check_box</i>}
+                {!isDone && <i className="material-icons check-mark">check_box_outline_blank</i>}
+                {isDone && <i className="material-icons check-mark">check_box</i>}
             </span>
-            <span className={isDone ? 'task-done' : 'task-undone'}>{data}</span>
+            <span 
+                className={'task-content ' + (isDone && 'task-done')} 
+                contentEditable="true"
+            >
+                {data}
+            </span>
             <i className="material-icons delete-btn">clear</i>
         </div>
     )

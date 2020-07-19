@@ -6,11 +6,13 @@ import { useTasksContext } from '../../contexts/TasksContext'
 const Tasks = () => {
     const [ allTasks ] = useTasksContext()
 
+    const { activeTasks, completedTasks } = allTasks
+
     return (
         <div className="tasks-box">
-            <TaskList tasks={allTasks.activeTasks} isActive={true} />
-            <div className="divider" />
-            <TaskList tasks={allTasks.completedTasks} />
+            <TaskList tasks={activeTasks} isActive={true} />
+            <div className={'divider ' + (!completedTasks.length && 'hidden')} />
+            <TaskList tasks={completedTasks} />
         </div>
     )
 }

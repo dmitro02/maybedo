@@ -1,7 +1,7 @@
 import React from 'react'
 import './TaskList.scss'
 import TaskRecord from '../TaskRecord/TaskRecord'
-import AddTAsk from '../AddTask/AddTask'
+import AddTAsk from '../TaskRecord/AddTask'
 import { ITask } from '../../types'
 
 interface IProps { tasks: ITask[], isActive?: boolean }
