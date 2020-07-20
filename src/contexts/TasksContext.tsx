@@ -22,6 +22,11 @@ export const moveTaskAction = (task: ITask) => ({
     task
 }) 
 
+export const addTaskAction = (task: ITask) => ({
+    type: "ADD_TASK",
+    task
+}) 
+
 const TasksContext = createContext<any>(undefined)
 
 const tasksReducer = (state: IFullTasksList, action: any) => {
@@ -38,6 +43,13 @@ const tasksReducer = (state: IFullTasksList, action: any) => {
             activeTasks.push(task)
         }
         return { activeTasks, completedTasks }
+    }
+    case "ADD_TASK": {
+        let activeTasks = [...state.activeTasks]
+        const { task } = action
+        console.log(task)
+        activeTasks.push(task)
+        return { ...state, activeTasks }
     }
     default:
         return state;

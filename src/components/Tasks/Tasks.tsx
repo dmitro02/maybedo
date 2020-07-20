@@ -11,7 +11,7 @@ const Tasks = () => {
     return (
         <div className="tasks-box">
             <TaskList tasks={activeTasks} isActive={true} />
-            <div className={'divider ' + (!completedTasks.length && 'hidden')} />
+            <div className={'divider' + (!completedTasks.length ? ' hidden' : '')} />
             <TaskList tasks={completedTasks} />
         </div>
     )

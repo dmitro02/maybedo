@@ -70,3 +70,7 @@ $text-gray: #909090;
         color: $text-gray;
     }
 }
+
+.add-record > .task-content:empty::before {
+    content: "new task";
+}
