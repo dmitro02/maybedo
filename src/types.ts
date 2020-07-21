@@ -7,4 +7,5 @@ export interface ITask {
 export interface IFullTasksList {
     activeTasks: ITask[]
     completedTasks: ITask[]
+    editedTaskId: number | undefined
   } 

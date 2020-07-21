@@ -42,14 +42,15 @@ const tasksReducer = (state: IFullTasksList, action: any) => {
             completedTasks = completedTasks.filter(t => t !== task)
             activeTasks.push(task)
         }
-        return { activeTasks, completedTasks }
+        return { ...state, activeTasks, completedTasks }
     }
     case "ADD_TASK": {
-        let activeTasks = [...state.activeTasks]
+        const activeTasks = [...state.activeTasks]
+        const completedTasks = [...state.completedTasks]
         const { task } = action
-        console.log(task)
+        task.id = generateNextId([...activeTasks, ...completedTasks])
         activeTasks.push(task)
-        return { ...state, activeTasks }
+        return { ...state, activeTasks, editedTaskId: task.id }
     }
     default:
         return state;
@@ -64,5 +65,14 @@ const getInitialState = () => {
             ? completedTasks.push(task)
             : activeTasks.push(task)
     })
-    return { activeTasks, completedTasks }
+    return { activeTasks, completedTasks, editedTaskId: undefined }
 }
+
+export const createTaskObj = (
+    data: string = '', 
+    isDone: boolean = false, 
+): ITask => ({id: -1, data, isDone})
+
+const generateNextId = (tasks: ITask[]) => tasks
+    .map((task) => task.id)
+    .reduce((prev, curr) => Math.max(prev, curr)) + 1

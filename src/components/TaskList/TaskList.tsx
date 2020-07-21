@@ -4,11 +4,9 @@ import TaskRecord from '../TaskRecord/TaskRecord'
 import AddTAsk from '../TaskRecord/AddTask'
 import { ITask } from '../../types'
 
-interface IProps { tasks: ITask[], isActive?: boolean }
+interface IProps { tasks: ITask[], isActive?: boolean, editedTaskId?: number }
 
-const editedTaskId = 100 
-
-const TaskList = ({ tasks, isActive }: IProps) => {
+const TaskList = ({ tasks, isActive, editedTaskId }: IProps) => {
     useEffect(() => {
         const el = document.querySelector<HTMLElement>(`#task${editedTaskId} > .task-content`)
         el && moveCursorToEndAndFocus(el)

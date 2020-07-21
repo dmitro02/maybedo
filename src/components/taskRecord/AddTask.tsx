@@ -3,9 +3,9 @@ import './TaskRecord.scss'
 import { ITask } from '../../types'
 import { 
     useTasksContext, 
-    addTaskAction 
+    addTaskAction,
+    createTaskObj
 } from '../../contexts/TasksContext'
-import { createTaskObj } from '../../objectFactory' 
 
 const AddTask = () => {
     const [, dispatch ] = useTasksContext()

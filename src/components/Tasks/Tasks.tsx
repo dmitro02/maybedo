@@ -4,15 +4,15 @@ import TaskList from '../TaskList/TaskList'
 import { useTasksContext } from '../../contexts/TasksContext'
 
 const Tasks = () => {
-    const [ allTasks ] = useTasksContext()
+    const [ contex ] = useTasksContext()
 
-    const { activeTasks, completedTasks } = allTasks
+    const { activeTasks, completedTasks, editedTaskId } = contex
 
     return (
         <div className="tasks-box">
-            <TaskList tasks={activeTasks} isActive={true} />
+            <TaskList tasks={activeTasks} isActive={true} editedTaskId={editedTaskId}/>
             <div className={'divider' + (!completedTasks.length ? ' hidden' : '')} />
-            <TaskList tasks={completedTasks} />
+            <TaskList tasks={completedTasks} editedTaskId={editedTaskId}/>
         </div>
     )
 }
