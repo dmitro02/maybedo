@@ -39,6 +39,7 @@ const TaskRecord = ({ task }: IProps) => {
 
     return (
         <div className="task-record" id={'task' + task.id}>
+            <i className="material-icons drag-mark">drag_handle</i>
             <span
                 onMouseDown={handleMouseDownOnCheckbox} 
                 onMouseUp={handleMouseUpOnCheckbox}

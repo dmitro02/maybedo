@@ -1,6 +1,7 @@
 $text-gray: #909090;
 
 .task-record {
+    position: relative;
     font-size: 1.2rem;
     display: flex;
 
@@ -44,14 +45,21 @@ $text-gray: #909090;
 
     [contenteditable] {
         outline: 0px solid transparent;
-      }
+    }
+
+    .drag-mark {
+        cursor: move;
+        position: absolute;
+        left: -22px;
+        visibility: hidden;
+    }
 }
 
 .task-record:hover {
     background-color: #e9e9e9;
     border-radius: 4px;
 
-    .delete-btn {
+    .delete-btn, .drag-mark {
         visibility: visible;
     }
 }
