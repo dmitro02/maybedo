@@ -10,7 +10,7 @@ const TaskList = ({ tasks, isActive, editedTaskId }: IProps) => {
     useEffect(() => {
         const el = document.querySelector<HTMLElement>(`#task${editedTaskId} > .task-content`)
         el && moveCursorToEndAndFocus(el)
-    }, [tasks])
+    }, [editedTaskId, tasks])
 
     return (
         <div className="task-list">

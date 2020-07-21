@@ -27,6 +27,11 @@ export const addTaskAction = (task: ITask) => ({
     task
 }) 
 
+export const deleteTaskAction = (task: ITask) => ({
+    type: "DELETE_TASK",
+    task
+}) 
+
 const TasksContext = createContext<any>(undefined)
 
 const tasksReducer = (state: IFullTasksList, action: any) => {
@@ -34,8 +39,8 @@ const tasksReducer = (state: IFullTasksList, action: any) => {
     case "MOVE_TASK": {
         let activeTasks = [...state.activeTasks]
         let completedTasks = [...state.completedTasks]
-        const { task, task: { isDone } } = action
-        if (isDone) {
+        const { task } = action
+        if (task.isDone) {
             activeTasks = activeTasks.filter(t => t !== task)
             completedTasks.unshift(task)
         } else {
@@ -51,6 +56,15 @@ const tasksReducer = (state: IFullTasksList, action: any) => {
         task.id = generateNextId([...activeTasks, ...completedTasks])
         activeTasks.push(task)
         return { ...state, activeTasks, editedTaskId: task.id }
+    }
+    case "DELETE_TASK": {
+        let activeTasks = [...state.activeTasks]
+        let completedTasks = [...state.completedTasks]
+        const { task } = action
+        task.isDone
+            ? completedTasks = completedTasks.filter(t => t !== task)
+            : activeTasks = activeTasks.filter(t => t !== task)
+        return { ...state, activeTasks, completedTasks }
     }
     default:
         return state;

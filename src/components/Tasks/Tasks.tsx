@@ -10,9 +10,9 @@ const Tasks = () => {
 
     return (
         <div className="tasks-box">
-            <TaskList tasks={activeTasks} isActive={true} editedTaskId={editedTaskId}/>
+            <TaskList tasks={activeTasks} isActive={true} editedTaskId={editedTaskId} />
             <div className={'divider' + (!completedTasks.length ? ' hidden' : '')} />
-            <TaskList tasks={completedTasks} editedTaskId={editedTaskId}/>
+            <TaskList tasks={completedTasks} editedTaskId={editedTaskId} />
         </div>
     )
 }

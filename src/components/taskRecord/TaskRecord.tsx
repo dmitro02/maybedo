@@ -3,7 +3,8 @@ import './TaskRecord.scss'
 import { ITask } from '../../types'
 import { 
     useTasksContext, 
-    moveTaskAction 
+    moveTaskAction,
+    deleteTaskAction
 } from '../../contexts/TasksContext'
 
 interface IProps { task: ITask }
@@ -15,11 +16,11 @@ const TaskRecord = ({ task }: IProps) => {
 
     const [, dispatch ] = useTasksContext()
 
-    const handleMouseDownOnCheckbox = (e: any) => {
+    const handleMouseDownOnCheckbox = () => {
         setIsDone((prevState) => task.isDone = !prevState)
     }
 
-    const handleMouseUpOnCheckbox = (e: any) => {     
+    const handleMouseUpOnCheckbox = () => {     
         dispatch(moveTaskAction(task))
     }
 
@@ -30,6 +31,10 @@ const TaskRecord = ({ task }: IProps) => {
             clearTimeout(timeout)
             timeout = setTimeout(() => task.data = text, 500)
         }
+    }
+
+    const deleteTask = () => {
+        dispatch(deleteTaskAction(task))
     }
 
     return (
@@ -49,7 +54,7 @@ const TaskRecord = ({ task }: IProps) => {
             >
                 {data}
             </span>
-            <i className="material-icons delete-btn">clear</i>
+            <i className="material-icons delete-btn" onClick={deleteTask}>clear</i>
         </div>
     )
 }
