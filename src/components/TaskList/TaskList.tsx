@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import './TaskList.scss'
 import TaskRecord from '../TaskRecord/TaskRecord'
 import AddTAsk from '../TaskRecord/AddTask'
@@ -8,31 +8,21 @@ import Sortable from 'sortablejs';
 interface IProps { tasks: ITask[], isActive?: boolean, editedTaskId?: number }
 
 const TaskList = ({ tasks, isActive, editedTaskId }: IProps) => {
+    const thisList = useRef(null)
+
     useEffect(() => {
-        const el = document.querySelector<HTMLElement>(`#task${editedTaskId} > .task-content`)
-        el && moveCursorToEndAndFocus(el)
-        const el2 = document.querySelector<HTMLElement>('.task-list')
-        el2 && new Sortable(el2, { animation: 150 });
-    }, [editedTaskId, tasks])
+        const tl = thisList.current
+        tl && new Sortable(tl, { animation: 150 });
+    }, [])
 
     return (
-        <div className="task-list">
+        <div className="task-list" ref={thisList}>
             {tasks.map(
                 task => <TaskRecord key={task.id} task={task} />
             )}
             {isActive && <AddTAsk />} 
         </div>
     )
-}
-
-const moveCursorToEndAndFocus = (el: HTMLElement) => {
-    const range = document.createRange()
-    const selection = window.getSelection()
-    range.setStart(el.childNodes[0], 1)
-    range.collapse(true)
-    selection?.removeAllRanges()
-    selection?.addRange(range)
-    el.focus()
 }
 
 export default TaskList

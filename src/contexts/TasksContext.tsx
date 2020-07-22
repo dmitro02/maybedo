@@ -6,6 +6,8 @@ import React, {
 import { TASKS } from '../tasks'
 import { ITask, IFullTasksList } from '../types'
 
+const TasksContext = createContext<any>(undefined)
+
 export function TasksContextProvider({ children }: any) {
     const context = useReducer(tasksReducer, getInitialState())
     return (
@@ -32,7 +34,10 @@ export const deleteTaskAction = (task: ITask) => ({
     task
 }) 
 
-const TasksContext = createContext<any>(undefined)
+export const setEditedTask = (task: ITask) => ({
+    type: "SET_EDITED_TASK",
+    task
+}) 
 
 const tasksReducer = (state: IFullTasksList, action: any) => {
   switch (action.type) {
@@ -65,6 +70,10 @@ const tasksReducer = (state: IFullTasksList, action: any) => {
             ? completedTasks = completedTasks.filter(t => t !== task)
             : activeTasks = activeTasks.filter(t => t !== task)
         return { ...state, activeTasks, completedTasks }
+    }
+    case "SET_EDITED_TASK": {
+        const { task } = action
+        return { ...state, editedTaskId: task.id}
     }
     default:
         return state;
