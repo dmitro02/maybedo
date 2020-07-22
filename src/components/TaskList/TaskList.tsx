@@ -3,6 +3,7 @@ import './TaskList.scss'
 import TaskRecord from '../TaskRecord/TaskRecord'
 import AddTAsk from '../TaskRecord/AddTask'
 import { ITask } from '../../types'
+import Sortable from 'sortablejs';
 
 interface IProps { tasks: ITask[], isActive?: boolean, editedTaskId?: number }
 
@@ -10,6 +11,8 @@ const TaskList = ({ tasks, isActive, editedTaskId }: IProps) => {
     useEffect(() => {
         const el = document.querySelector<HTMLElement>(`#task${editedTaskId} > .task-content`)
         el && moveCursorToEndAndFocus(el)
+        const el2 = document.querySelector<HTMLElement>('.task-list')
+        el2 && new Sortable(el2, { animation: 150 });
     }, [editedTaskId, tasks])
 
     return (

@@ -1,22 +1,13 @@
 $text-gray: #909090;
 
 .task-record {
-    position: relative;
     font-size: 1.2rem;
     display: flex;
-
-    .check-mark {
-        margin-left: 6px;
-    }
 
     .delete-btn {
         margin-left: auto;
         margin-right: 6px;
         visibility: hidden;
-    }
-
-    .delete-btn, .check-mark {
-        cursor: pointer;
     }
 
     .delete-btn, .check-mark {
@@ -48,9 +39,8 @@ $text-gray: #909090;
     }
 
     .drag-mark {
+        margin-left: 5px;
         cursor: move;
-        position: absolute;
-        left: -22px;
         visibility: hidden;
     }
 }
@@ -66,11 +56,11 @@ $text-gray: #909090;
 
 .add-record {
     color: $text-gray;
-    margin-top: 3px;
+    margin-top: 4px;
+    margin-left: 29px;
 
     .add-mark {
         top: 7px;
-        margin-left: 6px;
         cursor: default;
     }
 
