@@ -4,8 +4,7 @@ import { ITask } from '../../types'
 import { 
     useTasksContext, 
     moveTaskAction,
-    deleteTaskAction,
-    setEditedTask
+    deleteTaskAction
 } from '../../contexts/TasksContext'
 
 interface IProps { task: ITask }
@@ -20,11 +19,11 @@ const TaskRecord = ({ task }: IProps) => {
     const thisTaskContent = useRef(null)
 
     useEffect(() => {
-        if (context.editedTaskId === id) {
+        if (context.justAddedTaskId === id) {
             const el = thisTaskContent.current
             el && moveCursorToEndAndFocus(el)
         }
-    }, [context.editedTaskId, id])
+    }, [context.justAddedTaskId, id])
 
     const handleMouseDownOnCheckbox = () => {
         setIsDone((prevState) => task.isDone = !prevState)
@@ -39,16 +38,12 @@ const TaskRecord = ({ task }: IProps) => {
         return (e: any) => {
             const text = e.target.textContent
             clearTimeout(timeout)
-            timeout = setTimeout(() => task.data = text, 500)
+            timeout = setTimeout(() => task.data = text, 700)
         }
     }
 
     const deleteTask = () => {
         dispatch(deleteTaskAction(task))
-    }
-
-    const setEditedTaskId = () => {
-        dispatch(setEditedTask(task))
     }
 
     return (
@@ -67,7 +62,6 @@ const TaskRecord = ({ task }: IProps) => {
                 contentEditable="true"
                 suppressContentEditableWarning={true}
                 onInput={debouncedInputHandler()}
-                onClick={setEditedTaskId}
             >
                 {data}
             </span>
@@ -79,8 +73,10 @@ const TaskRecord = ({ task }: IProps) => {
 const moveCursorToEndAndFocus = (el: HTMLElement) => {
     const range = document.createRange()
     const selection = window.getSelection()
-    range.setStart(el.childNodes[0], 1)
-    range.collapse(true)
+    const elContentNode = el.childNodes[0]
+    if (!elContentNode || !elContentNode.textContent) return
+    range.setStart(elContentNode, elContentNode.textContent.length)
+    range.collapse()
     selection?.removeAllRanges()
     selection?.addRange(range)
     el.focus()

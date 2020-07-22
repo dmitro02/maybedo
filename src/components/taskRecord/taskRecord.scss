@@ -1,9 +1,9 @@
-$text-gray: #909090;
+@import '../../styles/_variables.scss';
 
 .task-record {
-    font-size: 1.2rem;
     display: flex;
-
+    font-size: 1.2rem;
+    
     .delete-btn {
         margin-left: auto;
         margin-right: 6px;
@@ -30,8 +30,9 @@ $text-gray: #909090;
     }
     
     .task-content {
-        padding: 4px;
+        padding: 4px 4px 6px 4px;
         width: 100%;
+        overflow-wrap: anywhere;
     }
 
     [contenteditable] {

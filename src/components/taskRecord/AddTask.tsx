@@ -11,10 +11,14 @@ const AddTask = () => {
     const [, dispatch ] = useTasksContext()
 
     const addTaskRecord = (e: any) => {
-        if (!e.target.textContent) return
+        if (!e.target.textContent.trim()) return
         const task: ITask = createTaskObj(e.target.textContent)
         e.target.textContent = ''
         dispatch(addTaskAction(task))
+    }
+
+    const preventEnterOnEmpty = (e: any) => {
+        !e.target.textContent.trim() && e.key === 'Enter' && e.preventDefault()
     }
 
     return (  
@@ -25,6 +29,7 @@ const AddTask = () => {
                 contentEditable="true"
                 suppressContentEditableWarning={true}
                 onInput={addTaskRecord}
+                onKeyPress={preventEnterOnEmpty}
             ></span>
         </div>
     )

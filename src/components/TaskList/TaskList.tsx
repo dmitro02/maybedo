@@ -5,9 +5,9 @@ import AddTAsk from '../TaskRecord/AddTask'
 import { ITask } from '../../types'
 import Sortable from 'sortablejs';
 
-interface IProps { tasks: ITask[], isActive?: boolean, editedTaskId?: number }
+interface IProps { tasks: ITask[], isActive?: boolean }
 
-const TaskList = ({ tasks, isActive, editedTaskId }: IProps) => {
+const TaskList = ({ tasks, isActive }: IProps) => {
     const thisList = useRef(null)
 
     useEffect(() => {

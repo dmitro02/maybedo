@@ -1,18 +1,10 @@
 .tasks-box {
     box-sizing: border-box;
-    width: 80%;
-    margin: 0 auto;
-    padding: 15px 5px;
+    width: 90%;
+    margin: 20px auto;
+    padding: 10px 5px;
     border-radius: 5px;
     background-color: whitesmoke;
-
-    .divider {
-        margin: 10px auto;
-        border-top: 1px solid lightgray;
-        width: 98%;
-    }
-}
-
-.hidden {
-    visibility: hidden;
+    box-shadow: 2px 3px 5px 2px grey;
+    max-width: 1000px;
 }

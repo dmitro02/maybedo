@@ -34,12 +34,7 @@ export const deleteTaskAction = (task: ITask) => ({
     task
 }) 
 
-export const setEditedTask = (task: ITask) => ({
-    type: "SET_EDITED_TASK",
-    task
-}) 
-
-const tasksReducer = (state: IFullTasksList, action: any) => {
+const tasksReducer = (state: IFullTasksList, action: any): IFullTasksList => {
   switch (action.type) {
     case "MOVE_TASK": {
         let activeTasks = [...state.activeTasks]
@@ -60,7 +55,7 @@ const tasksReducer = (state: IFullTasksList, action: any) => {
         const { task } = action
         task.id = generateNextId([...activeTasks, ...completedTasks])
         activeTasks.push(task)
-        return { ...state, activeTasks, editedTaskId: task.id }
+        return { ...state, activeTasks, justAddedTaskId: task.id }
     }
     case "DELETE_TASK": {
         let activeTasks = [...state.activeTasks]
@@ -70,10 +65,6 @@ const tasksReducer = (state: IFullTasksList, action: any) => {
             ? completedTasks = completedTasks.filter(t => t !== task)
             : activeTasks = activeTasks.filter(t => t !== task)
         return { ...state, activeTasks, completedTasks }
-    }
-    case "SET_EDITED_TASK": {
-        const { task } = action
-        return { ...state, editedTaskId: task.id}
     }
     default:
         return state;
@@ -88,7 +79,7 @@ const getInitialState = () => {
             ? completedTasks.push(task)
             : activeTasks.push(task)
     })
-    return { activeTasks, completedTasks, editedTaskId: undefined }
+    return { activeTasks, completedTasks, justAddedTaskId: undefined }
 }
 
 export const createTaskObj = (
