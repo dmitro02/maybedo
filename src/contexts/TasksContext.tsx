@@ -19,10 +19,10 @@ export function TasksContextProvider({ children }: any) {
 
 export const useTasksContext = () => useContext(TasksContext)
 
-// export const setTitleAction = (title: string) => ({
-//     type: "SET_TITLE",
-//     title
-// }) 
+export const setTitleAction = (title: string) => ({
+    type: "SET_TITLE",
+    title
+}) 
 
 export const setTaskAction = (task: ITask) => ({
     type: "SET_TASK",
@@ -60,10 +60,10 @@ const tasksReducer = (state: ITaskList, action: any): ITaskList => {
         const tasks = [ ...state.tasks ].filter(t => t !== task)
         return { ...state, tasks }
     }
-    // case "SET_TITLE": {
-    //     const { title } = action
-    //     return { ...state, title }
-    // }
+    case "SET_TITLE": {
+        const { title } = action
+        return { ...state, title }
+    }
     default:
         return state;
   }

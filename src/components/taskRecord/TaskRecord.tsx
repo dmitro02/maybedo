@@ -6,6 +6,7 @@ import {
     setTaskAction,
     deleteTaskAction
 } from '../../contexts/TasksContext'
+import { debounceInput } from '../../utils'
 
 interface IProps { task: ITask }
 
@@ -29,22 +30,11 @@ const TaskRecord = ({ task }: IProps) => {
         setIsDone((prevState) => task.isDone = !prevState)
     }
 
-    const handleMouseUpOnCheckbox = () => {     
-        dispatch(setTaskAction(task))
-    }
+    const handleMouseUpOnCheckbox = () => dispatch(setTaskAction(task))
 
-    const debouncedInputHandler = () => {
-        let timeout: any
-        return (e: any) => {
-            const text = e.target.textContent
-            clearTimeout(timeout)
-            timeout = setTimeout(() => task.data = text, 700)
-        }
-    }
+    const handleInput = debounceInput((text: string) => task.data = text)
 
-    const deleteTask = () => {
-        dispatch(deleteTaskAction(task))
-    }
+    const deleteTask = () => dispatch(deleteTaskAction(task))
 
     return (
         <div className="task-record" id={'task' + task.id}>
@@ -61,7 +51,7 @@ const TaskRecord = ({ task }: IProps) => {
                 className={'task-content' + (isDone ? ' task-done' : '')} 
                 contentEditable="true"
                 suppressContentEditableWarning={true}
-                onInput={debouncedInputHandler()}
+                onInput={handleInput}
             >
                 {data}
             </span>

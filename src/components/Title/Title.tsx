@@ -1,23 +1,17 @@
 import React from 'react'
 import './Title.scss'
+import { debounceInput } from '../../utils'
 
-interface IProps { title: string }
+interface IProps { title: string, setTitle: Function }
 
-const Title = ({ title }: IProps) => {
-    const debouncedInputHandler = () => {
-        let timeout: any
-        return (e: any) => {
-            const text = e.target.textContent
-            clearTimeout(timeout)
-            timeout = setTimeout(() => title = text, 700)
-        }
-    }
+const Title = ({ title, setTitle }: IProps) => {
+    const handleInput = debounceInput((text: string) => setTitle(text)) 
 
     return (
         <header
             contentEditable="true"
             suppressContentEditableWarning={true}
-            onInput={debouncedInputHandler()}
+            onInput={handleInput}
         >
             {title}
         </header>
