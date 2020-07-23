@@ -4,8 +4,9 @@ export interface ITask {
     id: number
 }
 
-export interface IFullTasksList {
-    activeTasks: ITask[]
-    completedTasks: ITask[]
+export interface ITaskList {
+    id: number
+    title: string
+    tasks: ITask[]
     justAddedTaskId: number | undefined
   } 

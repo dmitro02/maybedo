@@ -3,7 +3,7 @@ import './TaskRecord.scss'
 import { ITask } from '../../types'
 import { 
     useTasksContext, 
-    moveTaskAction,
+    setTaskAction,
     deleteTaskAction
 } from '../../contexts/TasksContext'
 
@@ -30,7 +30,7 @@ const TaskRecord = ({ task }: IProps) => {
     }
 
     const handleMouseUpOnCheckbox = () => {     
-        dispatch(moveTaskAction(task))
+        dispatch(setTaskAction(task))
     }
 
     const debouncedInputHandler = () => {

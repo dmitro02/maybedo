@@ -3,8 +3,8 @@ import React, {
     useReducer, 
     useContext 
 } from "react"
-import { TASKS } from '../tasks'
-import { ITask, IFullTasksList } from '../types'
+import { DB } from '../mockDB'
+import { ITask, ITaskList } from '../types'
 
 const TasksContext = createContext<any>(undefined)
 
@@ -19,8 +19,13 @@ export function TasksContextProvider({ children }: any) {
 
 export const useTasksContext = () => useContext(TasksContext)
 
-export const moveTaskAction = (task: ITask) => ({
-    type: "MOVE_TASK",
+// export const setTitleAction = (title: string) => ({
+//     type: "SET_TITLE",
+//     title
+// }) 
+
+export const setTaskAction = (task: ITask) => ({
+    type: "SET_TASK",
     task
 }) 
 
@@ -34,53 +39,37 @@ export const deleteTaskAction = (task: ITask) => ({
     task
 }) 
 
-const tasksReducer = (state: IFullTasksList, action: any): IFullTasksList => {
+const tasksReducer = (state: ITaskList, action: any): ITaskList => {
   switch (action.type) {
-    case "MOVE_TASK": {
-        let activeTasks = [...state.activeTasks]
-        let completedTasks = [...state.completedTasks]
+    case "SET_TASK": {
         const { task } = action
-        if (task.isDone) {
-            activeTasks = activeTasks.filter(t => t !== task)
-            completedTasks.unshift(task)
-        } else {
-            completedTasks = completedTasks.filter(t => t !== task)
-            activeTasks.push(task)
-        }
-        return { ...state, activeTasks, completedTasks }
+        const tasks = [ ...state.tasks ]
+        const i = tasks.findIndex(t => t.id === task.id)
+        tasks[i] = { ...task }
+        return { ...state, tasks }
     }
     case "ADD_TASK": {
-        const activeTasks = [...state.activeTasks]
-        const completedTasks = [...state.completedTasks]
         const { task } = action
-        task.id = generateNextId([...activeTasks, ...completedTasks])
-        activeTasks.push(task)
-        return { ...state, activeTasks, justAddedTaskId: task.id }
+        const tasks = [ ...state.tasks ]        
+        task.id = generateNextId(tasks)
+        tasks.push(task)
+        return { ...state, tasks, justAddedTaskId: task.id }
     }
     case "DELETE_TASK": {
-        let activeTasks = [...state.activeTasks]
-        let completedTasks = [...state.completedTasks]
         const { task } = action
-        task.isDone
-            ? completedTasks = completedTasks.filter(t => t !== task)
-            : activeTasks = activeTasks.filter(t => t !== task)
-        return { ...state, activeTasks, completedTasks }
+        const tasks = [ ...state.tasks ].filter(t => t !== task)
+        return { ...state, tasks }
     }
+    // case "SET_TITLE": {
+    //     const { title } = action
+    //     return { ...state, title }
+    // }
     default:
         return state;
   }
 };
 
-const getInitialState = () => {
-    const activeTasks: ITask[] = []
-    const completedTasks: ITask[] = []
-    TASKS.forEach(task => {
-        task.isDone 
-            ? completedTasks.push(task)
-            : activeTasks.push(task)
-    })
-    return { activeTasks, completedTasks, justAddedTaskId: undefined }
-}
+const getInitialState = () => DB[0]
 
 export const createTaskObj = (
     data: string = '', 
