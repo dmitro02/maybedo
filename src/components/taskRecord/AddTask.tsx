@@ -8,13 +8,13 @@ import {
 } from '../../contexts/TasksContext'
 
 const AddTask = () => {
-    const [, dispatch ] = useTasksContext()
+    const [ , dispatch ] = useTasksContext()
 
     const addTaskRecord = (e: any) => {
         if (!e.target.textContent.trim()) return
         const task: ITask = createTaskObj(e.target.textContent)
-        e.target.textContent = ''
         dispatch(addTaskAction(task))
+        e.target.textContent = ''
     }
 
     const preventEnterOnEmpty = (e: any) => {

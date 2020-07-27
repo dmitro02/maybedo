@@ -1,0 +1,10 @@
+.main-container {
+    display: flex;
+    text-align: justify;
+    padding: 20px;
+
+    [contenteditable] {
+        outline: 0px solid transparent;
+    }
+}
+  

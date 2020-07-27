@@ -1,16 +1,6 @@
 import React from 'react'
-import './App.scss'
-import Tasks from './components/Tasks/Tasks'
-import { TasksContextProvider } from './contexts/TasksContext'
+import MainContainer from './components/MainConteiner/MainContainer';
 
-function App() {
-  return (
-    <div className="App">
-      <TasksContextProvider>
-        <Tasks />
-      </TasksContextProvider>
-    </div>
-  );
-}
+const App = () => <MainContainer />
 
 export default App;
