@@ -1,19 +1,12 @@
 import React from 'react'
-import './TaskRecord.scss'
-import { ITask } from '../../types'
-import { 
-    useTasksContext, 
-    addTaskAction,
-    createTaskObj
-} from '../../contexts/TasksContext'
+import './Record.scss'
 
-const AddTask = () => {
-    const [ , dispatch ] = useTasksContext()
+interface IProps { addRecord: Function }
 
-    const addTaskRecord = (e: any) => {
+const AddRecord = ({ addRecord }: IProps) => {
+    const createRecord = (e: any) => {
         if (!e.target.textContent.trim()) return
-        const task: ITask = createTaskObj(e.target.textContent)
-        dispatch(addTaskAction(task))
+        addRecord(e)
         e.target.textContent = ''
     }
 
@@ -22,17 +15,17 @@ const AddTask = () => {
     }
 
     return (  
-        <div className="task-record add-record">
+        <div className="record add-record">
             <i className="material-icons add-mark">add</i>
             <span 
                 className="task-content" 
                 contentEditable="true"
                 suppressContentEditableWarning={true}
-                onInput={addTaskRecord}
+                onInput={createRecord}
                 onKeyPress={preventEnterOnEmpty}
             ></span>
         </div>
     )
 }
 
-export default AddTask
+export default AddRecord

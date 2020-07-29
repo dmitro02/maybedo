@@ -3,10 +3,13 @@ import './Tasks.scss'
 import TaskList from '../TaskList/TaskList'
 import { 
     useTasksContext, 
-    setTitleAction 
+    setTitleAction,
+    addTaskAction,
+    createTaskObj
 } from '../../contexts/TasksContext'
 import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
+import AddTask from '../Record/AddRecord'
 import { ITask } from '../../types'
 
 const Tasks = () => {
@@ -17,11 +20,17 @@ const Tasks = () => {
 
     const setTitle = (text: string) => dispatch(setTitleAction(text))
 
+    const addTaskRecord = (e: any) => {
+        const task: ITask = createTaskObj(e.target.textContent)
+        dispatch(addTaskAction(task))
+    }
+
     return (
         <div className="tasks-box">
-            <Title title={context.title} setTitle={setTitle}/>
+            <Title title={context.text} setTitle={setTitle}/>
             <Divider />
-            <TaskList tasks={activeTasks} isActive={true} />
+            <TaskList tasks={activeTasks} />
+            <AddTask addRecord={addTaskRecord}/>
             <Divider isHidden={!completedTasks.length} />
             <TaskList tasks={completedTasks} />
         </div>

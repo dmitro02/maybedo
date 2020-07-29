@@ -1,12 +1,10 @@
 export interface ITask { 
-    isDone: boolean
-    data: string
     id: number
+    text: string
+    isDone: boolean
 }
 
-export interface ITaskList {
-    id: number
-    title: string
+export interface IProject extends ITask {
     tasks: ITask[]
     justAddedTaskId: number | undefined
-  } 
+} 

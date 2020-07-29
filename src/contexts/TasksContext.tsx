@@ -4,7 +4,7 @@ import React, {
     useContext 
 } from "react"
 import { DB } from '../mockDB'
-import { ITask, ITaskList } from '../types'
+import { ITask, IProject } from '../types'
 
 const TasksContext = createContext<any>(undefined)
 
@@ -39,7 +39,7 @@ export const deleteTaskAction = (task: ITask) => ({
     task
 }) 
 
-const tasksReducer = (state: ITaskList, action: any): ITaskList => {
+const tasksReducer = (state: IProject, action: any): IProject => {
   switch (action.type) {
     case "SET_TASK": {
         const { task } = action
@@ -62,7 +62,7 @@ const tasksReducer = (state: ITaskList, action: any): ITaskList => {
     }
     case "SET_TITLE": {
         const { title } = action
-        return { ...state, title }
+        return { ...state, text: title }
     }
     default:
         return state;
@@ -72,9 +72,9 @@ const tasksReducer = (state: ITaskList, action: any): ITaskList => {
 const getInitialState = () => DB[0]
 
 export const createTaskObj = (
-    data: string = '', 
+    text: string = '', 
     isDone: boolean = false, 
-): ITask => ({id: -1, data, isDone})
+): ITask => ({id: -1, text, isDone})
 
 const generateNextId = (tasks: ITask[]) => tasks
     .map((task) => task.id)

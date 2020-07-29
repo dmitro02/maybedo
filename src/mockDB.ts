@@ -1,64 +1,91 @@
-export const taskList1 = { 
+import { IProject } from './types';
+
+const project1: IProject = { 
     id: 1,
-    title: 'Ungoing Project 1',
+    text: 'Project 1',
+    isDone: false,
     justAddedTaskId: undefined,
     tasks: [
         {
             isDone: false,
-            data: 'make love',
+            text: 'make love',
             id: 1
         },
         {
             isDone: true,
-            data: 'take five',
+            text: 'take five',
             id: 2
         },
         {
             isDone: true,
-            data: 'kiss wife',
+            text: 'kiss wife',
             id: 3
         },
         {
             isDone: false,
-            data: 'enjoy life',
+            text: 'enjoy life',
             id: 4
         },
         {
             isDone: true,
-            data: 'catch dove',
+            text: 'catch dove',
             id: 5
         },
         {
             isDone: false,
-            data: 'milk cow',
+            text: 'milk cow',
             id: 6
         },
         {
             isDone: false,
-            data: 'sharpen knife',
+            text: 'sharpen knife',
             id: 7
         },
         {
             isDone: false,
-            data: 'test drive',
+            text: 'test drive',
             id: 8
         },
         {
             isDone: false,
-            data: 'free dive',
+            text: 'free dive',
             id: 9
         },
         {
             isDone: false,
-            data: 'sky dive',
+            text: 'sky dive',
             id: 10
         },
         {
             isDone: false,
-            data: 'scuba dive',
+            text: 'scuba dive',
             id: 11
         }
     ]
 }
 
-export const DB = [ taskList1 ]
+const project2: IProject = { 
+    id: 2,
+    text: 'Project 2',
+    isDone: false,
+    justAddedTaskId: undefined,
+    tasks: [
+        {
+            isDone: false,
+            text: 'kill hector',
+            id: 1
+        },
+        {
+            isDone: false,
+            text: 'draw vector',
+            id: 2
+        },
+        {
+            isDone: false,
+            text: 'occupy sector',
+            id: 3
+        }
+    ]
+}
+
+export const DB = [ project1, project2 ]

@@ -1,17 +1,20 @@
 @import '../../styles/_variables.scss';
 
-.task-record {
+.record {
     display: flex;
     font-size: 1.2rem;
     
     .delete-btn {
         margin-left: auto;
         margin-right: 6px;
-        visibility: hidden;
     }
 
-    .delete-btn, .check-mark {
+    .delete-btn, .check-mark, .edit-btn {
         cursor: pointer;
+    }
+
+    .delete-btn, .drag-mark, .edit-btn {
+        visibility: hidden;
     }
 
     .material-icons {
@@ -38,26 +41,26 @@
     .drag-mark {
         margin-left: 5px;
         cursor: move;
-        visibility: hidden;
     }
 }
 
-.task-record:hover {
+.record:hover {
     background-color: $record-hover-color;
     border-radius: 4px;
 
-    .delete-btn, .drag-mark {
+    .delete-btn, .drag-mark, .edit-btn {
         visibility: visible;
     }
 }
 
 .add-record {
     color: $text-gray;
-    margin-top: 4px;
-    margin-left: 29px;
+    margin-left: 5px;
+    margin-right: 5px;
 
     .add-mark {
         top: 7px;
+        margin-left: 29px;
         cursor: default;
     }
 

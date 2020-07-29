@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import './TaskRecord.scss'
+import './Record.scss'
 import { ITask } from '../../types'
 import { 
     useTasksContext, 
@@ -8,16 +8,32 @@ import {
 } from '../../contexts/TasksContext'
 import { debounceInput } from '../../utils'
 
-interface IProps { task: ITask }
+export interface IRecordConfig {
+    useCheckMark: boolean
+    useDeleteBtn: boolean
+    useDragBtn: boolean
+    useEditBtn: boolean
+    isEditable: boolean
+}
 
-const TaskRecord = ({ task }: IProps) => {
-    const { isDone: initialState, data, id } = task
+interface IProps { task: ITask, config: IRecordConfig }
+
+const Record = ({ task, config }: IProps) => {
+    const { isDone: initialState, text: data, id } = task
+    
+    const {
+        useCheckMark,
+        useDeleteBtn,
+        useDragBtn,
+        useEditBtn,
+        isEditable
+    } = config
 
     const [ isDone, setIsDone ] = useState(initialState)
 
     const [ context, dispatch ] = useTasksContext()
 
-    const thisTaskContent = useRef(null)
+    const thisTaskContent = useRef<HTMLElement>(null)
 
     useEffect(() => {
         if (context.justAddedTaskId === id) {
@@ -32,30 +48,43 @@ const TaskRecord = ({ task }: IProps) => {
 
     const handleMouseUpOnCheckbox = () => dispatch(setTaskAction(task))
 
-    const handleInput = debounceInput((text: string) => task.data = text)
+    const handleInput = debounceInput((text: string) => task.text = text)
 
     const deleteTask = () => dispatch(deleteTaskAction(task))
 
+    const setContentEditable = (flag: boolean) => {
+        if (!useEditBtn) return
+        const el = thisTaskContent.current
+        if (!el) return
+        el.setAttribute('contenteditable', '' + flag)
+        el.focus()
+        moveCursorToEndAndFocus(el)
+    }
+
     return (
-        <div className="task-record" id={'task' + task.id}>
-            <i className="material-icons drag-mark">drag_handle</i>
-            <span
+        <div className="record" id={'task' + task.id}>
+            {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
+            {useCheckMark && <span
                 onMouseDown={handleMouseDownOnCheckbox} 
                 onMouseUp={handleMouseUpOnCheckbox}
             >
                 {!isDone && <i className="material-icons check-mark">check_box_outline_blank</i>}
                 {isDone && <i className="material-icons check-mark">check_box</i>}
-            </span>
+            </span>}
             <span 
                 ref={thisTaskContent}
                 className={'task-content' + (isDone ? ' task-done' : '')} 
-                contentEditable="true"
+                contentEditable={isEditable && !useEditBtn}
                 suppressContentEditableWarning={true}
                 onInput={handleInput}
+                onBlur={() => setContentEditable(false)}
             >
                 {data}
             </span>
-            <i className="material-icons delete-btn" onClick={deleteTask}>clear</i>
+            {useEditBtn && 
+                <i className="material-icons edit-btn" onClick={() => setContentEditable(true)}>edit</i>}
+            {useDeleteBtn && 
+                <i className="material-icons delete-btn" onClick={deleteTask}>clear</i>}
         </div>
     )
 }
@@ -72,4 +101,4 @@ const moveCursorToEndAndFocus = (el: HTMLElement) => {
     el.focus()
 }
 
-export default TaskRecord
+export default Record
