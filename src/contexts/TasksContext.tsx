@@ -48,7 +48,6 @@ export const deleteTaskAction = (task: ITask) => ({
 const tasksReducer = (state: IStore, action: any): IStore => {
   switch (action.type) {
     case "CHANGE_TASK": {
-        console.log("CHANGE_TASK")
         const project = state.projects.find((p) => p.id === state.currentProjectId)
         if (!project) return state
         const { task } = action
@@ -57,17 +56,14 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         return { ...state }
     }
     case "ADD_TASK": {
-        console.log("ADD_TASK")
         const project = state.projects.find((p) => p.id === state.currentProjectId)
         if (!project) return state
         const { task } = action
-        const tasks = [ ...project.tasks ]
-        task.id = generateNextId(tasks)
-        tasks.push(task)
-        project.tasks = tasks
+        task.id = generateNextId(project.tasks)
+        const newProject = { ...project, tasks: project.tasks.concat(task) }
         return { 
             ...state, 
-            projects: [ ...state.projects.map((p) => p !== project ? p : { ...project })],  
+            projects: state.projects.map((p) => p !== project ? p : newProject),  
             justAddedItemId: task.id 
         }
     }
@@ -83,15 +79,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         if (!project) return state
         const { title } = action
         project.text = title
-        return { ...state,
-            projects: state.projects.map((p) => {
-                if (p !== project) {
-                    return p
-                }
-                console.log('EQUAL')
-                return { ...project }
-            }) 
-        }
+        return { ...state }
     }
     default:
         return state;
@@ -112,3 +100,13 @@ export const createTaskObj = (
 const generateNextId = (items: any[]) => items
     .map((item) => item.id)
     .reduce((prev, curr) => Math.max(prev, curr)) + 1
+
+const updateObject = (oldObject: any, newValues: any) => {
+    return Object.assign({}, oldObject, newValues)
+}
+
+const updateItemInArray = 
+    (array: any[], itemId: number, updateItemCallback: Function) => {
+        return array.map((item: any) => 
+            item.id !== itemId ? item : updateItemCallback(item))
+}
