@@ -51,13 +51,9 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         const { task } = action
         return { 
             ...state, 
-            projects: updateArray(
-                state.projects, 
-                state.currentProjectId, 
+            projects: updateProjects(state, 
                 (project: IProject) => updateObject(project, 
-                    { tasks: updateArray(
-                        project.tasks, task.id, () => ({ ...task })
-                    )})
+                    { tasks: updateArray(project.tasks, task.id, () => ({ ...task }))})
             ) 
         }
     }
@@ -65,9 +61,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         const { task } = action
         return { 
             ...state, 
-            projects: updateArray(
-                state.projects, 
-                state.currentProjectId, 
+            projects: updateProjects(state,
                 (project: IProject) => {
                     task.id = generateNextId(project.tasks)
                     return updateObject(project, { tasks: project.tasks.concat(task) }) 
@@ -77,14 +71,19 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         }   
     }
     case "DELETE_TASK": {
-        return updateProjects(state,
-            (project: IProject) => 
-                updateObject(project, 
+        return {
+            ...state,
+            projects: updateProjects(state,
+                (project: IProject) => updateObject(project, 
                     { tasks: project.tasks.filter(task => task !== action.task) }))
+        }
     }
     case "SET_TITLE": {
-        return updateProjects(state,
+        return {
+            ...state,
+            projects: updateProjects(state,
                     (project: IProject) => updateObject(project, {text: action.title})) 
+        }
     }
     default:
         return state;
@@ -116,13 +115,5 @@ const updateArray =
             item.id !== itemId ? item : updateItemCallback(item))
 }
 
-const updateProjects = (state: IStore, updateProjectCallback: Function) => {
-    return { 
-        ...state, 
-        projects: updateArray(
-            state.projects, 
-            state.currentProjectId, 
-            updateProjectCallback
-        )
-    }
-}
+const updateProjects = (state: IStore, updateProjectCallback: Function) => 
+    updateArray(state.projects, state.currentProjectId, updateProjectCallback)
