@@ -6,6 +6,12 @@ import React, {
 import { DB } from '../mockDB'
 import { ITask, IProject } from '../types'
 
+interface IStore {
+    projects: IProject[]
+    justAddedItemId: number | undefined
+    currentProjectId: number
+}
+
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
@@ -24,8 +30,8 @@ export const setTitleAction = (title: string) => ({
     title
 }) 
 
-export const setTaskAction = (task: ITask) => ({
-    type: "SET_TASK",
+export const changeTaskAction = (task: ITask) => ({
+    type: "CHANGE_TASK",
     task
 }) 
 
@@ -39,43 +45,70 @@ export const deleteTaskAction = (task: ITask) => ({
     task
 }) 
 
-const tasksReducer = (state: IProject, action: any): IProject => {
+const tasksReducer = (state: IStore, action: any): IStore => {
   switch (action.type) {
-    case "SET_TASK": {
+    case "CHANGE_TASK": {
+        console.log("CHANGE_TASK")
+        const project = state.projects.find((p) => p.id === state.currentProjectId)
+        if (!project) return state
         const { task } = action
-        const tasks = [ ...state.tasks ]
-        const i = tasks.findIndex(t => t.id === task.id)
-        tasks[i] = { ...task }
-        return { ...state, tasks }
+        const i = project.tasks.findIndex(t => t.id === task.id)
+        project.tasks[i] = { ...task }
+        return { ...state }
     }
     case "ADD_TASK": {
+        console.log("ADD_TASK")
+        const project = state.projects.find((p) => p.id === state.currentProjectId)
+        if (!project) return state
         const { task } = action
-        const tasks = [ ...state.tasks ]        
+        const tasks = [ ...project.tasks ]
         task.id = generateNextId(tasks)
         tasks.push(task)
-        return { ...state, tasks, justAddedTaskId: task.id }
+        project.tasks = tasks
+        return { 
+            ...state, 
+            projects: [ ...state.projects.map((p) => p !== project ? p : { ...project })],  
+            justAddedItemId: task.id 
+        }
     }
     case "DELETE_TASK": {
+        const project = state.projects.find((p) => p.id === state.currentProjectId)
+        if (!project) return state
         const { task } = action
-        const tasks = [ ...state.tasks ].filter(t => t !== task)
-        return { ...state, tasks }
+        project.tasks = project.tasks.filter(t => t !== task)
+        return { ...state }
     }
     case "SET_TITLE": {
+        const project = state.projects.find((p) => p.id === state.currentProjectId)
+        if (!project) return state
         const { title } = action
-        return { ...state, text: title }
+        project.text = title
+        return { ...state,
+            projects: state.projects.map((p) => {
+                if (p !== project) {
+                    return p
+                }
+                console.log('EQUAL')
+                return { ...project }
+            }) 
+        }
     }
     default:
         return state;
   }
 };
 
-const getInitialState = () => DB[0]
+const getInitialState = (): IStore => ({ 
+    projects: DB,
+    justAddedItemId: undefined,
+    currentProjectId: DB[0].id
+})
 
 export const createTaskObj = (
     text: string = '', 
     isDone: boolean = false, 
 ): ITask => ({id: -1, text, isDone})
 
-const generateNextId = (tasks: ITask[]) => tasks
-    .map((task) => task.id)
+const generateNextId = (items: any[]) => items
+    .map((item) => item.id)
     .reduce((prev, curr) => Math.max(prev, curr)) + 1

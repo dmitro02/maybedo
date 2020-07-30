@@ -3,7 +3,7 @@ import './Record.scss'
 import { ITask } from '../../types'
 import { 
     useTasksContext, 
-    setTaskAction,
+    changeTaskAction,
     deleteTaskAction
 } from '../../contexts/TasksContext'
 import { debounceInput } from '../../utils'
@@ -31,24 +31,27 @@ const Record = ({ task, config }: IProps) => {
 
     const [ isDone, setIsDone ] = useState(initialState)
 
-    const [ context, dispatch ] = useTasksContext()
+    const [ store, dispatch ] = useTasksContext()
 
     const thisTaskContent = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        if (context.justAddedTaskId === id) {
+        if (store.justAddedItemId === id) {
             const el = thisTaskContent.current
             el && moveCursorToEndAndFocus(el)
         }
-    }, [context.justAddedTaskId, id])
+    }, [store.justAddedItemId, id])
 
     const handleMouseDownOnCheckbox = () => {
         setIsDone((prevState) => task.isDone = !prevState)
     }
 
-    const handleMouseUpOnCheckbox = () => dispatch(setTaskAction(task))
+    const handleMouseUpOnCheckbox = () => dispatch(changeTaskAction(task))
 
-    const handleInput = debounceInput((text: string) => task.text = text)
+    const handleInput = debounceInput((text: string) => {
+        task.text = text
+        dispatch(changeTaskAction(task))
+    })
 
     const deleteTask = () => dispatch(deleteTaskAction(task))
 
@@ -62,7 +65,7 @@ const Record = ({ task, config }: IProps) => {
     }
 
     return (
-        <div className="record" id={'task' + task.id}>
+        <div className="record">
             {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
             {useCheckMark && <span
                 onMouseDown={handleMouseDownOnCheckbox} 

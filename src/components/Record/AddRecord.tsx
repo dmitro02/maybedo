@@ -1,12 +1,12 @@
 import React from 'react'
 import './Record.scss'
 
-interface IProps { addRecord: Function }
+interface IProps { addNewRecord: Function }
 
-const AddRecord = ({ addRecord }: IProps) => {
+const AddRecord = ({ addNewRecord }: IProps) => {
     const createRecord = (e: any) => {
         if (!e.target.textContent.trim()) return
-        addRecord(e)
+        addNewRecord(e.target.textContent)
         e.target.textContent = ''
     }
 

@@ -10,27 +10,29 @@ import {
 import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
 import AddTask from '../Record/AddRecord'
-import { ITask } from '../../types'
+import { ITask, IProject } from '../../types'
 
 const Tasks = () => {
-    const [ context, dispatch ] = useTasksContext()
+    const [ state, dispatch ] = useTasksContext()
 
-    const activeTasks = context.tasks.filter((t: ITask) => !t.isDone)
-    const completedTasks = context.tasks.filter((t: ITask) => t.isDone)
+    const project = state.projects.find((p: IProject) => p.id === state.currentProjectId)
+
+    const activeTasks = project.tasks.filter((t: ITask) => !t.isDone)
+    const completedTasks = project.tasks.filter((t: ITask) => t.isDone)
 
     const setTitle = (text: string) => dispatch(setTitleAction(text))
 
-    const addTaskRecord = (e: any) => {
-        const task: ITask = createTaskObj(e.target.textContent)
+    const addTaskRecord = (text: string) => {
+        const task: ITask = createTaskObj(text)
         dispatch(addTaskAction(task))
     }
 
     return (
         <div className="tasks-box">
-            <Title title={context.text} setTitle={setTitle}/>
+            <Title title={project.text} setTitle={setTitle}/>
             <Divider />
             <TaskList tasks={activeTasks} />
-            <AddTask addRecord={addTaskRecord}/>
+            <AddTask addNewRecord={addTaskRecord}/>
             <Divider isHidden={!completedTasks.length} />
             <TaskList tasks={completedTasks} />
         </div>

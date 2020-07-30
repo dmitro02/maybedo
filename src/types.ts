@@ -6,5 +6,4 @@ export interface ITask {
 
 export interface IProject extends ITask {
     tasks: ITask[]
-    justAddedTaskId: number | undefined
 } 

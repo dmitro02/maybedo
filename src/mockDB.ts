@@ -4,7 +4,6 @@ const project1: IProject = {
     id: 1,
     text: 'Project 1',
     isDone: false,
-    justAddedTaskId: undefined,
     tasks: [
         {
             isDone: false,
@@ -68,7 +67,6 @@ const project2: IProject = {
     id: 2,
     text: 'Project 2',
     isDone: false,
-    justAddedTaskId: undefined,
     tasks: [
         {
             isDone: false,
