@@ -18,7 +18,7 @@ const AddRecord = ({ addNewRecord }: IProps) => {
         <div className="record add-record">
             <i className="material-icons add-mark">add</i>
             <span 
-                className="task-content" 
+                className="item-content" 
                 contentEditable="true"
                 suppressContentEditableWarning={true}
                 onInput={createRecord}

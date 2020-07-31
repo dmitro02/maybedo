@@ -25,7 +25,7 @@ const TaskList = ({ tasks }: IProps) => {
     return (
         <div className="task-list" ref={thisList}>
             {tasks.map(
-                task => <Record key={task.id} task={task} config={recordConfig}/>
+                task => <Record key={task.id} item={task} config={recordConfig}/>
             )}
         </div>
     )

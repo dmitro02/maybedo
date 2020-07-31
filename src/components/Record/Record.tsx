@@ -20,10 +20,10 @@ export interface IRecordConfig {
     isEditable: boolean
 }
 
-interface IProps { task: ITask, config: IRecordConfig }
+interface IProps { item: ITask, config: IRecordConfig }
 
-const Record = ({ task, config }: IProps) => {
-    const { isDone: initialState, text: data, id } = task
+const Record = ({ item, config }: IProps) => {
+    const { isDone: initialState, text: data, id } = item
     
     const {
         useCheckMark,
@@ -48,18 +48,18 @@ const Record = ({ task, config }: IProps) => {
     }, [id, store.addedItemId])
 
     const handleMouseDownOnCheckbox = () => {
-        setIsDone((prevState) => task.isDone = !prevState)
+        setIsDone((prevState) => item.isDone = !prevState)
     }
 
-    const handleMouseUpOnCheckbox = () => dispatch(changeTaskAction(task))
+    const handleMouseUpOnCheckbox = () => dispatch(changeTaskAction(item))
 
     const handleInput = debounceInput((text: string) => {
-        task.text = text
-        dispatch(changeTaskAction(task))
+        item.text = text
+        dispatch(changeTaskAction(item))
         setCaret()
     })
 
-    const deleteTask = () => dispatch(deleteTaskAction(task))
+    const deleteTask = () => dispatch(deleteTaskAction(item))
 
     const setContentEditable = (flag: boolean) => {
         if (!useEditBtn) return
@@ -91,7 +91,7 @@ const Record = ({ task, config }: IProps) => {
             </span>}
             <span 
                 ref={recordContentRef}
-                className={'task-content' + (isDone ? ' task-done' : '')} 
+                className={'item-content' + (isDone ? ' item-done' : '')} 
                 contentEditable={isEditable && !useEditBtn}
                 suppressContentEditableWarning={true}
                 onInput={handleInput}

@@ -27,12 +27,12 @@
         color: black;
     }
 
-    .task-done {
+    .item-done {
         color: $text-gray;
         text-decoration: line-through;
     }
     
-    .task-content {
+    .item-content {
         padding: 4px 4px 6px 4px;
         width: 100%;
         overflow-wrap: anywhere;
@@ -69,6 +69,6 @@
     }
 }
 
-.add-record > .task-content:empty::before {
+.add-record > .item-content:empty::before {
     content: "new task";
 }

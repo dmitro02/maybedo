@@ -24,7 +24,7 @@ const Projects = () => {
             <header>Projects</header>
             <Divider />
             {projects.map(
-                project => <Record key={project.id} task={project} config={recordConfig}/>
+                project => <Record key={project.id} item={project} config={recordConfig}/>
             )}
         </div>  
     )
