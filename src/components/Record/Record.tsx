@@ -23,7 +23,7 @@ export interface IRecordConfig {
 interface IProps { item: ITask, config: IRecordConfig }
 
 const Record = ({ item, config }: IProps) => {
-    const { isDone: initialState, text: data, id } = item
+    const { isDone: initialState, text, id } = item
     
     const {
         useCheckMark,
@@ -97,7 +97,7 @@ const Record = ({ item, config }: IProps) => {
                 onInput={handleInput}
                 onBlur={handleBlur}
             >
-                {data}
+                {text}
             </span>
             {useEditBtn && 
                 <i className="material-icons edit-btn" onClick={() => setContentEditable(true)}>edit</i>}

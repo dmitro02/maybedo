@@ -10,4 +10,18 @@
     background-color: $background-light;
     box-shadow: 2px 3px 5px 2px $shadow-color;
     max-width: 1000px;
+
+    .active-tasks {
+        margin: 0 auto;
+        padding: 5px;
+    }
+
+    .completed-tasks {
+        margin: 0 auto;
+        padding: 5px;
+        
+        .record {
+            padding-left: 28px;
+        }
+    }
 }
