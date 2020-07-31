@@ -7,7 +7,7 @@ import { useTasksContext } from '../../contexts/TasksContext'
 
 const Projects = () => {
 
-    const [ context, dispatch ] = useTasksContext()
+    const [ store, dispatch ] = useTasksContext()
 
     const recordConfig: IRecordConfig = {
         useCheckMark: true,
@@ -17,7 +17,7 @@ const Projects = () => {
         isEditable: true
     }
 
-    const projects: IProject[] = []
+    const projects: IProject[] = store.projects
 
     return (
         <div className="projects">

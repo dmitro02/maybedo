@@ -10,6 +10,7 @@ import {
     updateObject,
     updateArray
 } from '../utils'
+import { actionTypes } from '../contexts/actionCreators'
 
 interface IStore {
     projects: IProject[]
@@ -30,34 +31,9 @@ export function TasksContextProvider({ children }: any) {
 
 export const useTasksContext = () => useContext(TasksContext)
 
-export const setTitleAction = (title: string) => ({
-    type: "SET_TITLE",
-    title
-}) 
-
-export const changeTaskAction = (task: ITask) => ({
-    type: "CHANGE_TASK",
-    task
-}) 
-
-export const addTaskAction = (task: ITask) => ({
-    type: "ADD_TASK",
-    task
-}) 
-
-export const deleteTaskAction = (task: ITask) => ({
-    type: "DELETE_TASK",
-    task
-}) 
-
-export const setAddedTaskId = (value: number | undefined) => ({
-    type: "SET_ADDED_TASK",
-    value
-}) 
-
 const tasksReducer = (state: IStore, action: any): IStore => {
   switch (action.type) {
-    case "CHANGE_TASK": {
+    case actionTypes.CHANGE_TASK: {
         const { task } = action
         return { 
             ...state, 
@@ -68,7 +44,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             addedItemId: task.id 
         }
     }
-    case "ADD_TASK": {
+    case actionTypes.ADD_TASK: {
         const { task } = action
         return { 
             ...state, 
@@ -81,7 +57,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             addedItemId: task.id
         }   
     }
-    case "DELETE_TASK": {
+    case actionTypes.DELETE_TASK: {
         return {
             ...state,
             projects: updateProjects(state,
@@ -89,14 +65,14 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                     { tasks: project.tasks.filter(task => task !== action.task) }))
         }
     }
-    case "SET_TITLE": {
+    case actionTypes.SET_TITLE: {
         return {
             ...state,
             projects: updateProjects(state,
                     (project: IProject) => updateObject(project, {text: action.title})) 
         }
     }
-    case "SET_ADDED_TASK": {
+    case actionTypes.SET_ADDED_TASK: {
         return {
             ...state,
             addedItemId: action.value

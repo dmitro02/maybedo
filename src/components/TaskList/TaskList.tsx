@@ -18,7 +18,7 @@ const TaskList = ({ tasks }: IProps) => {
         useCheckMark: true,
         useDeleteBtn: true,
         useDragBtn: true,
-        useEditBtn: true,
+        useEditBtn: false,
         isEditable: true
     }
 

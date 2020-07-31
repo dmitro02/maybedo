@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
 import './Record.scss'
 import { ITask } from '../../types'
-import { 
-    useTasksContext, 
+import { useTasksContext } from '../../contexts/TasksContext'
+import {
     changeTaskAction,
     deleteTaskAction,
     setAddedTaskId
-} from '../../contexts/TasksContext'
+} from '../../contexts/actionCreators'
 import { 
     debounceInput, 
     moveCaretToEndAndFocus 

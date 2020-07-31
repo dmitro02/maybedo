@@ -3,10 +3,12 @@ import './Tasks.scss'
 import TaskList from '../TaskList/TaskList'
 import { 
     useTasksContext, 
-    setTitleAction,
-    addTaskAction,
     createTaskObj
 } from '../../contexts/TasksContext'
+import {
+    setTitleAction,
+    addTaskAction
+} from '../../contexts/actionCreators'
 import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
 import AddTask from '../Record/AddRecord'
