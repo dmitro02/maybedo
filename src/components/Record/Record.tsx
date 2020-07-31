@@ -4,9 +4,13 @@ import { ITask } from '../../types'
 import { 
     useTasksContext, 
     changeTaskAction,
-    deleteTaskAction
+    deleteTaskAction,
+    setAddedTaskId
 } from '../../contexts/TasksContext'
-import { debounceInput } from '../../utils'
+import { 
+    debounceInput, 
+    moveCaretToEndAndFocus 
+} from '../../utils'
 
 export interface IRecordConfig {
     useCheckMark: boolean
@@ -33,14 +37,15 @@ const Record = ({ task, config }: IProps) => {
 
     const [ store, dispatch ] = useTasksContext()
 
-    const thisTaskContent = useRef<HTMLElement>(null)
+    const recordContentRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        if (store.justAddedItemId === id) {
-            const el = thisTaskContent.current
-            el && moveCursorToEndAndFocus(el)
+        if (store.addedItemId === id) {
+            setContentEditable(true)
+            setCaret()
         }
-    }, [store.justAddedItemId, id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id, store.addedItemId])
 
     const handleMouseDownOnCheckbox = () => {
         setIsDone((prevState) => task.isDone = !prevState)
@@ -51,17 +56,27 @@ const Record = ({ task, config }: IProps) => {
     const handleInput = debounceInput((text: string) => {
         task.text = text
         dispatch(changeTaskAction(task))
+        setCaret()
     })
 
     const deleteTask = () => dispatch(deleteTaskAction(task))
 
     const setContentEditable = (flag: boolean) => {
         if (!useEditBtn) return
-        const el = thisTaskContent.current
+        const el = recordContentRef.current
         if (!el) return
         el.setAttribute('contenteditable', '' + flag)
-        el.focus()
-        moveCursorToEndAndFocus(el)
+        setCaret()
+    }
+
+    const handleBlur = () => {
+        setContentEditable(false)
+        dispatch(setAddedTaskId)
+    }
+
+    const setCaret = () => {
+        const el = recordContentRef.current
+        el && moveCaretToEndAndFocus(el)
     }
 
     return (
@@ -75,12 +90,12 @@ const Record = ({ task, config }: IProps) => {
                 {isDone && <i className="material-icons check-mark">check_box</i>}
             </span>}
             <span 
-                ref={thisTaskContent}
+                ref={recordContentRef}
                 className={'task-content' + (isDone ? ' task-done' : '')} 
                 contentEditable={isEditable && !useEditBtn}
                 suppressContentEditableWarning={true}
                 onInput={handleInput}
-                onBlur={() => setContentEditable(false)}
+                onBlur={handleBlur}
             >
                 {data}
             </span>
@@ -90,18 +105,6 @@ const Record = ({ task, config }: IProps) => {
                 <i className="material-icons delete-btn" onClick={deleteTask}>clear</i>}
         </div>
     )
-}
-
-const moveCursorToEndAndFocus = (el: HTMLElement) => {
-    const range = document.createRange()
-    const selection = window.getSelection()
-    const elContentNode = el.childNodes[0]
-    if (!elContentNode || !elContentNode.textContent) return
-    range.setStart(elContentNode, elContentNode.textContent.length)
-    range.collapse()
-    selection?.removeAllRanges()
-    selection?.addRange(range)
-    el.focus()
 }
 
 export default Record

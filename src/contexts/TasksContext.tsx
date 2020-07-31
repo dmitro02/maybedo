@@ -5,10 +5,15 @@ import React, {
 } from "react"
 import { DB } from '../mockDB'
 import { ITask, IProject } from '../types'
+import { 
+    generateNextId,
+    updateObject,
+    updateArray
+} from '../utils'
 
 interface IStore {
     projects: IProject[]
-    justAddedItemId: number | undefined
+    addedItemId: number | undefined
     currentProjectId: number
 }
 
@@ -45,6 +50,11 @@ export const deleteTaskAction = (task: ITask) => ({
     task
 }) 
 
+export const setAddedTaskId = (value: number | undefined) => ({
+    type: "SET_ADDED_TASK",
+    value
+}) 
+
 const tasksReducer = (state: IStore, action: any): IStore => {
   switch (action.type) {
     case "CHANGE_TASK": {
@@ -54,7 +64,8 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             projects: updateProjects(state, 
                 (project: IProject) => updateObject(project, 
                     { tasks: updateArray(project.tasks, task.id, () => ({ ...task }))})
-            ) 
+            ),
+            addedItemId: task.id 
         }
     }
     case "ADD_TASK": {
@@ -67,7 +78,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                     return updateObject(project, { tasks: project.tasks.concat(task) }) 
                 }  
             ),
-            justAddedItemId: task.id
+            addedItemId: task.id
         }   
     }
     case "DELETE_TASK": {
@@ -85,6 +96,12 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                     (project: IProject) => updateObject(project, {text: action.title})) 
         }
     }
+    case "SET_ADDED_TASK": {
+        return {
+            ...state,
+            addedItemId: action.value
+        }
+    }
     default:
         return state;
   }
@@ -92,7 +109,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
 
 const getInitialState = (): IStore => ({ 
     projects: DB,
-    justAddedItemId: undefined,
+    addedItemId: undefined,
     currentProjectId: DB[0].id
 })
 
@@ -100,20 +117,6 @@ export const createTaskObj = (
     text: string = '', 
     isDone: boolean = false, 
 ): ITask => ({id: -1, text, isDone})
-
-const generateNextId = (items: any[]) => items
-    .map((item) => item.id)
-    .reduce((prev, curr) => Math.max(prev, curr)) + 1
-
-const updateObject = (oldObject: any, newValues: any) => {
-    return Object.assign({}, oldObject, newValues)
-}
-
-const updateArray = 
-    (array: any[], itemId: number, updateItemCallback: Function) => {
-        return array.map((item: any) => 
-            item.id !== itemId ? item : updateItemCallback(item))
-}
 
 const updateProjects = (state: IStore, updateProjectCallback: Function) => 
     updateArray(state.projects, state.currentProjectId, updateProjectCallback)
