@@ -2,11 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import './Record.scss'
 import { ITask } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
-import {
-    changeTaskAction,
-    deleteTaskAction,
-    setAddedTaskId
-} from '../../contexts/actionCreators'
+import { setAddedTaskId } from '../../contexts/actionCreators'
 import { 
     debounceInput, 
     moveCaretToEndAndFocus 
@@ -19,10 +15,15 @@ export interface IRecordConfig {
     useEditBtn: boolean
     isEditable: boolean
 }
+export interface IRecordActions{
+    updateRecord: Function
+    deleteRecord: Function
+    moveRecord: Function
+}
 
-interface IProps { item: ITask, config: IRecordConfig }
+interface IProps { item: ITask, config: IRecordConfig, actions: IRecordActions }
 
-const Record = ({ item, config }: IProps) => {
+const Record = ({ item, config, actions }: IProps) => {
     const { isDone: initialState, text, id } = item
     
     const {
@@ -32,6 +33,12 @@ const Record = ({ item, config }: IProps) => {
         useEditBtn,
         isEditable
     } = config
+
+    const { 
+        updateRecord, 
+        deleteRecord, 
+        moveRecord 
+    } = actions
 
     const [ isDone, setIsDone ] = useState(initialState)
 
@@ -51,15 +58,15 @@ const Record = ({ item, config }: IProps) => {
         setIsDone((prevState) => item.isDone = !prevState)
     }
 
-    const handleMouseUpOnCheckbox = () => dispatch(changeTaskAction(item))
+    const handleMouseUpOnCheckbox = () => dispatch(updateRecord(item))
 
     const handleInput = debounceInput((text: string) => {
         item.text = text
-        dispatch(changeTaskAction(item))
+        dispatch(updateRecord(item))
         setCaret()
     })
 
-    const deleteTask = () => dispatch(deleteTaskAction(item))
+    const deleteTask = () => dispatch(deleteRecord(item))
 
     const setContentEditable = (flag: boolean) => {
         if (!useEditBtn) return

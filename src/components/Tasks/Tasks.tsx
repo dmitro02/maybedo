@@ -6,13 +6,15 @@ import {
 } from '../../contexts/TasksContext'
 import {
     setTitleAction,
-    addTaskAction
+    addTaskAction,
+    changeTaskAction,
+    deleteTaskAction
 } from '../../contexts/actionCreators'
 import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
 import AddTask from '../Record/AddRecord'
 import { ITask, IProject } from '../../types'
-import Record, { IRecordConfig } from '../Record/Record'
+import Record, { IRecordConfig, IRecordActions } from '../Record/Record'
 import Sortable from 'sortablejs';
 
 const Tasks = () => {
@@ -50,6 +52,12 @@ const Tasks = () => {
         useDragBtn: false 
     }
 
+    const recordActions: IRecordActions = {
+        updateRecord: changeTaskAction,
+        deleteRecord: deleteTaskAction,
+        moveRecord: () => {}
+    }
+
     return (
         <div className="tasks-box">
             <Title title={project.text} setTitle={setTitle}/>
@@ -61,6 +69,7 @@ const Tasks = () => {
                             key={task.id} 
                             item={task} 
                             config={activeRecordConfig}
+                            actions={recordActions}
                         />
                 )}
             </div>
@@ -73,6 +82,7 @@ const Tasks = () => {
                             key={task.id} 
                             item={task} 
                             config={completedRecordConfig}
+                            actions={recordActions}
                         />
                 )}
             </div>
