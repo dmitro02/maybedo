@@ -1,34 +1,65 @@
 import { ITask, IProject } from '../types'
 
 export enum actionTypes {
-    SET_TITLE = 'SET_TITLE',
-    CHANGE_TASK = 'CHANGE_TASK',
-    ADD_TASK = 'ADD_TASK',
+    SET_ADDED_RECORD_ID = 'SET_ADDED_RECORD_ID',
+    SET_PROJECT_TITLE = 'SET_TITLE',
+    CREATE_TASK = 'CREATE_TASK',
+    UPDATE_TASK = 'UPDATE_TASK',
     DELETE_TASK = 'DELETE_TASK',
-    SET_ADDED_TASK = 'SET_ADDED_TASK'
+    MOVE_TASK = 'MOVE_TASK',
+    CREATE_PROJECT = 'CREATE_PROJECT',
+    UPDATE_PROJECT = 'UPDATE_PROJECT',
+    DELETE_PROJECT = 'DELETE_PROJECT',
+    MOVE_PROJECT = 'MOVE_PROJECT'
 }
 
-export const setTitleAction = (title: string) => ({
-    type: actionTypes.SET_TITLE,
+export const setAddedRecordId = (id: number | undefined) => ({
+    type: actionTypes.SET_ADDED_RECORD_ID,
+    id
+}) 
+
+export const setProjectTitleAction = (title: string) => ({
+    type: actionTypes.SET_PROJECT_TITLE,
     title
 }) 
 
-export const changeTaskAction = (task: ITask) => ({
-    type: actionTypes.CHANGE_TASK,
-    task
+export const createTaskAction = (item: ITask) => ({
+    type: actionTypes.CREATE_TASK,
+    item
 }) 
 
-export const addTaskAction = (task: ITask) => ({
-    type: actionTypes.ADD_TASK,
-    task
+export const updateTaskAction = (item: ITask) => ({
+    type: actionTypes.UPDATE_TASK,
+    item
 }) 
 
-export const deleteTaskAction = (task: ITask) => ({
+export const deleteTaskAction = (item: ITask) => ({
     type: actionTypes.DELETE_TASK,
-    task
+    item
+})
+
+export const moveTaskAction = (item: ITask) => ({
+    type: actionTypes.MOVE_TASK,
+    item
 }) 
 
-export const setAddedTaskId = (value: number | undefined) => ({
-    type: actionTypes.SET_ADDED_TASK,
-    value
+export const createProjectAction = (item: IProject) => ({
+    type: actionTypes.CREATE_PROJECT,
+    item
 }) 
+
+export const updateProjectAction = (item: IProject) => ({
+    type: actionTypes.UPDATE_PROJECT,
+    item
+}) 
+
+export const deleteProjectAction = (item: IProject) => ({
+    type: actionTypes.DELETE_PROJECT,
+    item
+})
+
+export const moveProjectAction = (item: IProject) => ({
+    type: actionTypes.MOVE_PROJECT,
+    item
+}) 
+

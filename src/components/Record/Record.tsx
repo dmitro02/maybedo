@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import './Record.scss'
 import { ITask } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { setAddedTaskId } from '../../contexts/actionCreators'
+import { setAddedRecordId } from '../../contexts/actionCreators'
 import { 
     debounceInput, 
     moveCaretToEndAndFocus 
@@ -66,7 +66,7 @@ const Record = ({ item, config, actions }: IProps) => {
         setCaret()
     })
 
-    const deleteTask = () => dispatch(deleteRecord(item))
+    const handleDelete = () => dispatch(deleteRecord(item))
 
     const setContentEditable = (flag: boolean) => {
         if (!useEditBtn) return
@@ -78,7 +78,7 @@ const Record = ({ item, config, actions }: IProps) => {
 
     const handleBlur = () => {
         setContentEditable(false)
-        dispatch(setAddedTaskId)
+        dispatch(setAddedRecordId)
     }
 
     const setCaret = () => {
@@ -109,7 +109,7 @@ const Record = ({ item, config, actions }: IProps) => {
             {useEditBtn && 
                 <i className="material-icons edit-btn" onClick={() => setContentEditable(true)}>edit</i>}
             {useDeleteBtn && 
-                <i className="material-icons delete-btn" onClick={deleteTask}>clear</i>}
+                <i className="material-icons delete-btn" onClick={handleDelete}>clear</i>}
         </div>
     )
 }

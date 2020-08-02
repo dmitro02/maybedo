@@ -5,14 +5,15 @@ import {
     createTaskObj
 } from '../../contexts/TasksContext'
 import {
-    setTitleAction,
-    addTaskAction,
-    changeTaskAction,
-    deleteTaskAction
+    setProjectTitleAction,
+    createTaskAction,
+    updateTaskAction,
+    deleteTaskAction,
+    moveTaskAction
 } from '../../contexts/actionCreators'
 import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
-import AddTask from '../Record/AddRecord'
+import AddRecord from '../Record/AddRecord'
 import { ITask, IProject } from '../../types'
 import Record, { IRecordConfig, IRecordActions } from '../Record/Record'
 import Sortable from 'sortablejs';
@@ -32,11 +33,11 @@ const Tasks = () => {
     const activeTasks = project.tasks.filter((t: ITask) => !t.isDone)
     const completedTasks = project.tasks.filter((t: ITask) => t.isDone)
 
-    const setTitle = (text: string) => dispatch(setTitleAction(text))
+    const setTitle = (text: string) => dispatch(setProjectTitleAction(text))
 
-    const addTaskRecord = (text: string) => {
-        const task: ITask = createTaskObj(text)
-        dispatch(addTaskAction(task))
+    const createRecord = (text: string) => {
+        const item: ITask = createTaskObj(text)
+        dispatch(createTaskAction(item))
     }
 
     const activeRecordConfig: IRecordConfig = {
@@ -53,9 +54,9 @@ const Tasks = () => {
     }
 
     const recordActions: IRecordActions = {
-        updateRecord: changeTaskAction,
+        updateRecord: updateTaskAction,
         deleteRecord: deleteTaskAction,
-        moveRecord: () => {}
+        moveRecord: moveTaskAction
     }
 
     return (
@@ -73,7 +74,7 @@ const Tasks = () => {
                         />
                 )}
             </div>
-            <AddTask addNewRecord={addTaskRecord}/>
+            <AddRecord addNewRecord={createRecord}/>
             <Divider isHidden={!completedTasks.length} />
             <div className="completed-tasks">
                 {completedTasks.map(

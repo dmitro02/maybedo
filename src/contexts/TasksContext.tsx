@@ -8,7 +8,7 @@ import { ITask, IProject } from '../types'
 import { 
     generateNextId,
     updateObject,
-    updateArray
+    updateArrayItem
 } from '../utils'
 import { actionTypes } from '../contexts/actionCreators'
 
@@ -32,55 +32,81 @@ export function TasksContextProvider({ children }: any) {
 export const useTasksContext = () => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {
-  switch (action.type) {
-    case actionTypes.CHANGE_TASK: {
-        const { task } = action
-        return { 
-            ...state, 
-            projects: updateProjects(state, 
-                (project: IProject) => updateObject(project, 
-                    { tasks: updateArray(project.tasks, task.id, () => ({ ...task }))})
-            ),
-            addedItemId: task.id 
+    console.log(action);
+    
+    switch (action.type) {
+        case actionTypes.SET_ADDED_RECORD_ID: {
+            return {
+                ...state,
+                addedItemId: action.value
+            }
         }
-    }
-    case actionTypes.ADD_TASK: {
-        const { task } = action
-        return { 
-            ...state, 
-            projects: updateProjects(state,
-                (project: IProject) => {
-                    task.id = generateNextId(project.tasks)
-                    return updateObject(project, { tasks: project.tasks.concat(task) }) 
-                }  
-            ),
-            addedItemId: task.id
-        }   
-    }
-    case actionTypes.DELETE_TASK: {
-        return {
-            ...state,
-            projects: updateProjects(state,
-                (project: IProject) => updateObject(project, 
-                    { tasks: project.tasks.filter(task => task !== action.task) }))
+        case actionTypes.SET_PROJECT_TITLE: {
+            return {
+                ...state,
+                projects: updateProjects(state,
+                        (project: IProject) => updateObject(project, {text: action.title})) 
+            }
         }
-    }
-    case actionTypes.SET_TITLE: {
-        return {
-            ...state,
-            projects: updateProjects(state,
-                    (project: IProject) => updateObject(project, {text: action.title})) 
+        case actionTypes.CREATE_TASK: {
+            const { item } = action
+            return { 
+                ...state, 
+                projects: updateProjects(state,
+                    (project: IProject) => {
+                        item.id = generateNextId(project.tasks)
+                        return updateObject(project, { tasks: project.tasks.concat(item) }) 
+                    }  
+                ),
+                addedItemId: item.id
+            }   
         }
-    }
-    case actionTypes.SET_ADDED_TASK: {
-        return {
-            ...state,
-            addedItemId: action.value
+        case actionTypes.UPDATE_TASK: {
+            const { item } = action
+            return { 
+                ...state, 
+                projects: updateProjects(state, 
+                    (project: IProject) => updateObject(project, 
+                        { tasks: updateArrayItem(project.tasks, item.id, () => ({ ...item }))})
+                ),
+                addedItemId: item.id 
+            }
         }
+        case actionTypes.DELETE_TASK: {
+            return {
+                ...state,
+                projects: updateProjects(state,
+                    (project: IProject) => updateObject(project, 
+                        { tasks: project.tasks.filter(item => item !== action.item) }))
+            }
+        }
+        case actionTypes.CREATE_PROJECT: {
+            const { item } = action
+            const { projects } = state
+            item.id = generateNextId(projects)
+            return { 
+                ...state, 
+                projects: projects.concat(item),
+                addedItemId: item.id
+            }   
+        }
+        case actionTypes.UPDATE_PROJECT: {
+            const { item } = action
+            return { 
+                ...state, 
+                projects: updateArrayItem(state.projects, item.id, () => ({ ...item })),
+                addedItemId: item.id 
+            }
+        }
+        case actionTypes.DELETE_PROJECT: {
+            return {
+                ...state,
+                projects: state.projects.filter(item => item !== action.item)
+            }
+        }
+        default:
+            return state;
     }
-    default:
-        return state;
-  }
 };
 
 const getInitialState = (): IStore => ({ 
@@ -94,5 +120,10 @@ export const createTaskObj = (
     isDone: boolean = false, 
 ): ITask => ({id: -1, text, isDone})
 
+export const createProjectObj = (
+    text: string = '', 
+    isDone: boolean = false, 
+): IProject => ({id: -1, text, isDone, tasks: []})
+
 const updateProjects = (state: IStore, updateProjectCallback: Function) => 
-    updateArray(state.projects, state.currentProjectId, updateProjectCallback)
+    updateArrayItem(state.projects, state.currentProjectId, updateProjectCallback)
