@@ -13,19 +13,15 @@ export enum actionTypes {
     MOVE_PROJECT = 'MOVE_PROJECT'
 }
 
-export const setAddedRecordId = (id: number | undefined) => ({
-    type: actionTypes.SET_ADDED_RECORD_ID,
-    id
-}) 
-
 export const setProjectTitleAction = (title: string) => ({
     type: actionTypes.SET_PROJECT_TITLE,
     title
 }) 
 
-export const createTaskAction = (item: ITask) => ({
+export const createTaskAction = (item: ITask, listName: string) => ({
     type: actionTypes.CREATE_TASK,
-    item
+    item,
+    listName
 }) 
 
 export const updateTaskAction = (item: ITask) => ({
@@ -43,9 +39,10 @@ export const moveTaskAction = (item: ITask) => ({
     item
 }) 
 
-export const createProjectAction = (item: IProject) => ({
+export const createProjectAction = (item: IProject, listName: string) => ({
     type: actionTypes.CREATE_PROJECT,
-    item
+    item,
+    listName
 }) 
 
 export const updateProjectAction = (item: IProject) => ({

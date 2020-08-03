@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import './Record.scss'
 import { ITask } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { setAddedRecordId } from '../../contexts/actionCreators'
 import { 
     debounceInput, 
-    moveCaretToEndAndFocus 
+    getCaretPosition,
+    setCaretPosition
 } from '../../utils'
 
 export interface IRecordConfig {
+    listName: string,
     useCheckMark: boolean
     useDeleteBtn: boolean
     useDragBtn: boolean
@@ -27,6 +28,7 @@ const Record = ({ item, config, actions }: IProps) => {
     const { isDone: initialState, text, id } = item
     
     const {
+        listName,
         useCheckMark,
         useDeleteBtn,
         useDragBtn,
@@ -41,14 +43,21 @@ const Record = ({ item, config, actions }: IProps) => {
     } = actions
 
     const [ isDone, setIsDone ] = useState(initialState)
+    const [ caretPos, setCaretPos ] = useState<number|undefined>(undefined)
 
     const [ store, dispatch ] = useTasksContext()
 
     const recordContentRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        if (store.addedItemId === id) {
+        document.activeElement === recordContentRef.current && setCaret()   
+    })
+
+    useEffect(() => {
+        const { addedItemId, activeListName } = store
+        if (activeListName === listName && addedItemId === id) {
             setContentEditable(true)
+            setFocus()
             setCaret()
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,8 +71,8 @@ const Record = ({ item, config, actions }: IProps) => {
 
     const handleInput = debounceInput((text: string) => {
         item.text = text
+        setCaretPos(getCaretPosition(recordContentRef.current || undefined))
         dispatch(updateRecord(item))
-        setCaret()
     })
 
     const handleDelete = () => dispatch(deleteRecord(item))
@@ -76,15 +85,13 @@ const Record = ({ item, config, actions }: IProps) => {
         setCaret()
     }
 
-    const handleBlur = () => {
-        setContentEditable(false)
-        dispatch(setAddedRecordId)
-    }
+    const handleBlur = () => setContentEditable(false)
 
-    const setCaret = () => {
-        const el = recordContentRef.current
-        el && moveCaretToEndAndFocus(el)
-    }
+    const setCaret = () =>
+        setCaretPosition(recordContentRef.current || undefined, caretPos)
+
+    const setFocus = () => 
+        recordContentRef.current?.focus()
 
     return (
         <div className="record">

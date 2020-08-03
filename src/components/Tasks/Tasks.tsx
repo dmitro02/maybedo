@@ -18,6 +18,8 @@ import { ITask, IProject } from '../../types'
 import Record, { IRecordConfig, IRecordActions } from '../Record/Record'
 import Sortable from 'sortablejs';
 
+const LIST_NAME = 'tasks'
+
 const Tasks = () => {
     const [ state, dispatch ] = useTasksContext()
 
@@ -37,10 +39,11 @@ const Tasks = () => {
 
     const createRecord = (text: string) => {
         const item: ITask = createTaskObj(text)
-        dispatch(createTaskAction(item))
+        dispatch(createTaskAction(item, LIST_NAME))
     }
 
     const activeRecordConfig: IRecordConfig = {
+        listName: LIST_NAME,
         useCheckMark: true,
         useDeleteBtn: true,
         useDragBtn: true,

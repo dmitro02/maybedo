@@ -7,31 +7,27 @@ export const debounceInput = (callback: Function) => {
     }
 }
 
-// https://gist.github.com/islishude/6ccd1fbf42d1eaac667d6873e7b134f8}
-const getCaretPosition = (e: any) => {
+export const getCaretPosition = (el?: HTMLElement) => {
+    if (!el) return
     let _range = document.getSelection()?.getRangeAt(0)
     if (!_range) return
     let range = _range.cloneRange()
-    range.selectNodeContents(e.target)
+    range.selectNodeContents(el)
     range.setEnd(_range.endContainer, _range.endOffset)
     return range.toString().length;
 }
 
-const setCaretPosition = (el: HTMLElement, pos: number) => {
-    el.focus()
-    document.getSelection()?.collapse(el, pos)
-}
-
-export const moveCaretToEndAndFocus = (el: HTMLElement) => {
+export const setCaretPosition = (el?: HTMLElement, pos?: number) => {
+    if (!el) return
     const range = document.createRange()
     const selection = window.getSelection()
     const elContentNode = el.childNodes[0]
     if (!elContentNode || !elContentNode.textContent) return
-    range.setStart(elContentNode, elContentNode.textContent.length)
+    range.setStart(elContentNode, pos || elContentNode.textContent.length)
     range.collapse()
     selection?.removeAllRanges()
     selection?.addRange(range)
-    el.focus()
+    
 }
 
 export const generateNextId = (items: any[]) => items

@@ -15,16 +15,19 @@ import {
     moveProjectAction
 } from '../../contexts/actionCreators'
 
+const LIST_NAME = 'projects'
+
 const Projects = () => {
 
     const [ store, dispatch ] = useTasksContext()
 
     const createRecord = (text: string) => {
         const item: IProject = createProjectObj(text)
-        dispatch(createProjectAction(item))
+        dispatch(createProjectAction(item, LIST_NAME))
     }
 
     const recordConfig: IRecordConfig = {
+        listName: LIST_NAME,
         useCheckMark: true,
         useDeleteBtn: true,
         useDragBtn: false,

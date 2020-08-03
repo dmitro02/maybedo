@@ -15,7 +15,8 @@ import { actionTypes } from '../contexts/actionCreators'
 interface IStore {
     projects: IProject[]
     addedItemId: number | undefined
-    currentProjectId: number
+    currentProjectId: number,
+    activeListName: string | undefined
 }
 
 const TasksContext = createContext<any>(undefined)
@@ -31,16 +32,8 @@ export function TasksContextProvider({ children }: any) {
 
 export const useTasksContext = () => useContext(TasksContext)
 
-const tasksReducer = (state: IStore, action: any): IStore => {
-    console.log(action);
-    
+const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
-        case actionTypes.SET_ADDED_RECORD_ID: {
-            return {
-                ...state,
-                addedItemId: action.value
-            }
-        }
         case actionTypes.SET_PROJECT_TITLE: {
             return {
                 ...state,
@@ -49,7 +42,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             }
         }
         case actionTypes.CREATE_TASK: {
-            const { item } = action
+            const { item, listName } = action
             return { 
                 ...state, 
                 projects: updateProjects(state,
@@ -58,7 +51,8 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                         return updateObject(project, { tasks: project.tasks.concat(item) }) 
                     }  
                 ),
-                addedItemId: item.id
+                addedItemId: item.id,
+                activeListName: listName
             }   
         }
         case actionTypes.UPDATE_TASK: {
@@ -69,7 +63,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                     (project: IProject) => updateObject(project, 
                         { tasks: updateArrayItem(project.tasks, item.id, () => ({ ...item }))})
                 ),
-                addedItemId: item.id 
             }
         }
         case actionTypes.DELETE_TASK: {
@@ -81,13 +74,14 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             }
         }
         case actionTypes.CREATE_PROJECT: {
-            const { item } = action
+            const { item, listName } = action
             const { projects } = state
             item.id = generateNextId(projects)
-            return { 
+            return {
                 ...state, 
                 projects: projects.concat(item),
-                addedItemId: item.id
+                addedItemId: item.id,
+                activeListName: listName
             }   
         }
         case actionTypes.UPDATE_PROJECT: {
@@ -95,7 +89,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return { 
                 ...state, 
                 projects: updateArrayItem(state.projects, item.id, () => ({ ...item })),
-                addedItemId: item.id 
             }
         }
         case actionTypes.DELETE_PROJECT: {
@@ -112,7 +105,8 @@ const tasksReducer = (state: IStore, action: any): IStore => {
 const getInitialState = (): IStore => ({ 
     projects: DB,
     addedItemId: undefined,
-    currentProjectId: DB[0].id
+    currentProjectId: DB[0].id,
+    activeListName: undefined
 })
 
 export const createTaskObj = (
