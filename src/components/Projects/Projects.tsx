@@ -16,6 +16,7 @@ import {
     updateProjectsAction
 } from '../../contexts/actionCreators'
 import Sortable from 'sortablejs'
+import Title from '../Title/Title'
 
 const LIST_NAME = 'projects'
 
@@ -82,7 +83,7 @@ const Projects = () => {
 
     return (
         <div className="projects" ref={activeItemListRef}>
-            <header>Projects</header>
+            <Title title="Projects" />
             <Divider />
             {projects.map(
                 project => 

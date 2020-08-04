@@ -2,14 +2,20 @@ import React from 'react'
 import './Title.scss'
 import { debounceInput } from '../../utils'
 
-interface IProps { title: string, setTitle: Function }
+interface IProps { 
+    title: string, 
+    isEditable?: boolean, 
+    setTitle?: Function 
+}
 
-const Title = ({ title, setTitle }: IProps) => {
-    const handleInput = debounceInput((text: string) => setTitle(text)) 
+const Title = ({ title, isEditable = false, setTitle }: IProps) => {
+    const handleInput = setTitle 
+        ? debounceInput((text: string) => setTitle(text)) 
+        : undefined
 
     return (
         <header
-            contentEditable="true"
+            contentEditable={isEditable}
             suppressContentEditableWarning={true}
             onInput={handleInput}
         >
