@@ -1,7 +1,7 @@
 @import '../../styles/variables';
 
 .projects {
-    width: 250px;
+    min-width: 300px;
     margin-left: auto;
     background-color: $background-light;
     border-radius: 5px;

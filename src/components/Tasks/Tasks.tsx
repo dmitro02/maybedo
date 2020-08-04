@@ -28,34 +28,34 @@ const Tasks = () => {
     const activeTasks = project.tasks.filter((t: ITask) => !t.isDone)
     const completedTasks = project.tasks.filter((t: ITask) => t.isDone)
 
-    const activeTaskListRef = useRef<HTMLDivElement>(null)
+    const activeItemListRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        const tl = activeTaskListRef.current
-        tl && new Sortable(tl, {
+        const l = activeItemListRef.current
+        l && new Sortable(l, {
             animation: 150, 
             onEnd: (e: any) => {
-                let { tasks } = project
+                let { tasks: items } = project
 
-                const movedTaskId = parseInt(e.item.id.split(':')[1])
-                const movedTask = tasks.find((t: ITask) => t.id === movedTaskId)
+                const movedItemId = parseInt(e.item.id.split(':')[1])
+                const movedItem = items.find((it: ITask) => it.id === movedItemId)
 
-                tasks = tasks.filter((t: ITask) => t.id !== movedTaskId)
+                items = items.filter((it: ITask) => it.id !== movedItemId)
 
-                let movedTaskNewIndex
+                let movedItemNewIndex
 
                 if (e.newIndex === 0) {
-                    movedTaskNewIndex = 0
+                    movedItemNewIndex = 0
                 } else {
-                    const taskToPlaceAfterId = parseInt(e.item.previousSibling.id.split(':')[1])
-                    const taskToPlaceAfterIndex =  
-                            tasks.findIndex((t: ITask) => t.id === taskToPlaceAfterId)
-                    movedTaskNewIndex = taskToPlaceAfterIndex + 1
+                    const itemToPlaceAfterId = parseInt(e.item.previousSibling.id.split(':')[1])
+                    const itemToPlaceAfterIndex =  
+                        items.findIndex((it: ITask) => it.id === itemToPlaceAfterId)
+                    movedItemNewIndex = itemToPlaceAfterIndex + 1
                 }
 
-                tasks.splice(movedTaskNewIndex, 0, movedTask)
+                items.splice(movedItemNewIndex, 0, movedItem)
 
-                dispatch(updateTasksAction(tasks))
+                dispatch(updateTasksAction(items))
             }
         })
     }, [dispatch, project])
@@ -82,15 +82,18 @@ const Tasks = () => {
     }
 
     const recordActions: IRecordActions = {
-        updateRecord: updateTaskAction,
-        deleteRecord: deleteTaskAction
+        updateRecord: (item: ITask) => 
+            dispatch(updateTaskAction(item)),
+        deleteRecord: (item: ITask) => 
+            dispatch(deleteTaskAction(item)),
+        selectRecord: () => {}
     }
 
     return (
         <div className="tasks-box">
             <Title title={project.text} setTitle={setTitle}/>
             <Divider />
-            <div className="active-tasks" ref={activeTaskListRef}>
+            <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(
                     (task: ITask) => 
                         <Record 

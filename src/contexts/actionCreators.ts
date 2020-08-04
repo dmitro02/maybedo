@@ -2,6 +2,7 @@ import { ITask, IProject } from '../types'
 
 export enum actionTypes {
     SET_ADDED_RECORD_ID = 'SET_ADDED_RECORD_ID',
+    SET_CURRENT_PROJECT_ID = 'SET_CURRENT_PROJECT_ID',
     SET_PROJECT_TITLE = 'SET_TITLE',
     CREATE_TASK = 'CREATE_TASK',
     UPDATE_TASK = 'UPDATE_TASK',
@@ -10,12 +11,17 @@ export enum actionTypes {
     CREATE_PROJECT = 'CREATE_PROJECT',
     UPDATE_PROJECT = 'UPDATE_PROJECT',
     DELETE_PROJECT = 'DELETE_PROJECT',
-    MOVE_PROJECT = 'MOVE_PROJECT'
+    UPDATE_PROJECTS = 'UPDATE_PROJECTS'
 }
 
 export const setProjectTitleAction = (title: string) => ({
     type: actionTypes.SET_PROJECT_TITLE,
     title
+}) 
+
+export const setCurrentProjectIdAction = (item: IProject) => ({
+    type: actionTypes.SET_CURRENT_PROJECT_ID,
+    item
 }) 
 
 export const createTaskAction = (item: ITask, listName: string) => ({
@@ -34,7 +40,7 @@ export const deleteTaskAction = (item: ITask) => ({
     item
 })
 
-export const updateTasksAction = (items: ITask) => ({
+export const updateTasksAction = (items: ITask[]) => ({
     type: actionTypes.UPDATE_TASKS,
     items
 }) 
@@ -55,8 +61,8 @@ export const deleteProjectAction = (item: IProject) => ({
     item
 })
 
-export const moveProjectAction = (item: IProject) => ({
-    type: actionTypes.MOVE_PROJECT,
-    item
+export const updateProjectsAction = (items: IProject[]) => ({
+    type: actionTypes.UPDATE_PROJECTS,
+    items
 }) 
 

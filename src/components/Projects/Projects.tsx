@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import './Projects.scss'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
@@ -12,14 +12,48 @@ import {
     createProjectAction,
     updateProjectAction,
     deleteProjectAction,
-    moveProjectAction
+    setCurrentProjectIdAction,
+    updateProjectsAction
 } from '../../contexts/actionCreators'
+import Sortable from 'sortablejs'
 
 const LIST_NAME = 'projects'
 
 const Projects = () => {
 
     const [ store, dispatch ] = useTasksContext()
+
+    const activeItemListRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const l = activeItemListRef.current
+        l && new Sortable(l, {
+            animation: 150, 
+            onEnd: (e: any) => {
+                let { projects: items } = store
+
+                const movedItemId = parseInt(e.item.id.split(':')[1])
+                const movedItem = items.find((it: IProject) => it.id === movedItemId)
+
+                items = items.filter((it: IProject) => it.id !== movedItemId)
+
+                let movedItemNewIndex
+
+                if (e.newIndex === 0) {
+                    movedItemNewIndex = 0
+                } else {
+                    const itemToPlaceAfterId = parseInt(e.item.previousSibling.id.split(':')[1])
+                    const itemToPlaceAfterIndex =  
+                        items.findIndex((it: IProject) => it.id === itemToPlaceAfterId)
+                    movedItemNewIndex = itemToPlaceAfterIndex + 1
+                }
+
+                items.splice(movedItemNewIndex, 0, movedItem)
+
+                dispatch(updateProjectsAction(items))
+            }
+        })
+    }, [dispatch, store])
 
     const createRecord = (text: string) => {
         const item: IProject = createProjectObj(text)
@@ -30,20 +64,24 @@ const Projects = () => {
         listName: LIST_NAME,
         useCheckMark: true,
         useDeleteBtn: true,
-        useDragBtn: false,
-        useEditBtn: true,
-        isEditable: true
+        useDragBtn: true,
+        useEditBtn: false,
+        isEditable: false
     }
 
     const recordActions: IRecordActions = {
-        updateRecord: updateProjectAction,
-        deleteRecord: deleteProjectAction
+        updateRecord: (item: IProject) => 
+            dispatch(updateProjectAction(item)),
+        deleteRecord: (item: IProject) => 
+            dispatch(deleteProjectAction(item)),
+        selectRecord: (item: IProject) => 
+            dispatch(setCurrentProjectIdAction(item))
     }
 
     const projects: IProject[] = store.projects
 
     return (
-        <div className="projects">
+        <div className="projects" ref={activeItemListRef}>
             <header>Projects</header>
             <Divider />
             {projects.map(

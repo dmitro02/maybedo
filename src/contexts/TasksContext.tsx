@@ -41,6 +41,12 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                         (project: IProject) => updateObject(project, {text: action.title})) 
             }
         }
+        case actionTypes.SET_CURRENT_PROJECT_ID: {
+            return {
+                ...state,
+                currentProjectId: action.item.id
+            }
+        }
         case actionTypes.CREATE_TASK: {
             const { item, listName } = action
             return { 
@@ -103,6 +109,12 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return {
                 ...state,
                 projects: state.projects.filter(item => item !== action.item)
+            }
+        }
+        case actionTypes.UPDATE_PROJECTS: {
+            return { 
+                ...state, 
+                projects: action.items
             }
         }
         default:

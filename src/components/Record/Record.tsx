@@ -19,6 +19,7 @@ export interface IRecordConfig {
 export interface IRecordActions{
     updateRecord: Function
     deleteRecord: Function
+    selectRecord: Function
 }
 
 interface IProps { item: ITask, config: IRecordConfig, actions: IRecordActions }
@@ -37,13 +38,14 @@ const Record = ({ item, config, actions }: IProps) => {
 
     const { 
         updateRecord, 
-        deleteRecord
+        deleteRecord,
+        selectRecord
     } = actions
 
     const [ isDone, setIsDone ] = useState(initialState)
     const [ caretPos, setCaretPos ] = useState<number|undefined>(undefined)
 
-    const [ store, dispatch ] = useTasksContext()
+    const [ store ] = useTasksContext()
 
     const recordContentRef = useRef<HTMLElement>(null)
 
@@ -65,25 +67,25 @@ const Record = ({ item, config, actions }: IProps) => {
         setIsDone((prevState) => item.isDone = !prevState)
     }
 
-    const handleMouseUpOnCheckbox = () => dispatch(updateRecord(item))
+    const handleMouseUpOnCheckbox = () => updateRecord(item)
 
     const handleInput = debounceInput((text: string) => {
         item.text = text
         setCaretPos(getCaretPosition(recordContentRef.current || undefined))
-        dispatch(updateRecord(item))
+        updateRecord(item)
     })
 
-    const handleDelete = () => dispatch(deleteRecord(item))
+    const handleDelete = () => deleteRecord(item)
 
     const setContentEditable = (flag: boolean) => {
-        if (!useEditBtn) return
         const el = recordContentRef.current
-        if (!el) return
-        el.setAttribute('contenteditable', '' + flag)
+        el?.setAttribute('contenteditable', '' + flag)
         setCaret()
     }
 
-    const handleBlur = () => setContentEditable(false)
+    const handleBlur = () => {
+        (useEditBtn || !isEditable) && setContentEditable(false)
+    }
 
     const setCaret = () =>
         setCaretPosition(recordContentRef.current || undefined, caretPos)
@@ -92,7 +94,11 @@ const Record = ({ item, config, actions }: IProps) => {
         recordContentRef.current?.focus()
 
     return (
-        <div className="record" id={listName + ':' + id}>
+        <div 
+            className="record" 
+            id={listName + ':' + id} 
+            onClick={() => selectRecord(item)}
+        >
             {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
             {useCheckMark && <span
                 onMouseDown={handleMouseDownOnCheckbox} 
