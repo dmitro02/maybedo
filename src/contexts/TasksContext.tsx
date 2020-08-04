@@ -62,7 +62,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                 projects: updateProjects(state, 
                     (project: IProject) => updateObject(project, 
                         { tasks: updateArrayItem(project.tasks, item.id, () => ({ ...item }))})
-                ),
+                )
             }
         }
         case actionTypes.DELETE_TASK: {
@@ -71,6 +71,14 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                 projects: updateProjects(state,
                     (project: IProject) => updateObject(project, 
                         { tasks: project.tasks.filter(item => item !== action.item) }))
+            }
+        }
+        case actionTypes.UPDATE_TASKS: {
+            const { items } = action
+            return { 
+                ...state, 
+                projects: updateProjects(state, 
+                    (project: IProject) => updateObject(project, { tasks: items }))
             }
         }
         case actionTypes.CREATE_PROJECT: {

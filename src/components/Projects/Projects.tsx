@@ -37,8 +37,7 @@ const Projects = () => {
 
     const recordActions: IRecordActions = {
         updateRecord: updateProjectAction,
-        deleteRecord: deleteProjectAction,
-        moveRecord: moveProjectAction
+        deleteRecord: deleteProjectAction
     }
 
     const projects: IProject[] = store.projects

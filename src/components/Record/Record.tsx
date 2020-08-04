@@ -19,7 +19,6 @@ export interface IRecordConfig {
 export interface IRecordActions{
     updateRecord: Function
     deleteRecord: Function
-    moveRecord: Function
 }
 
 interface IProps { item: ITask, config: IRecordConfig, actions: IRecordActions }
@@ -38,8 +37,7 @@ const Record = ({ item, config, actions }: IProps) => {
 
     const { 
         updateRecord, 
-        deleteRecord, 
-        moveRecord 
+        deleteRecord
     } = actions
 
     const [ isDone, setIsDone ] = useState(initialState)
@@ -94,7 +92,7 @@ const Record = ({ item, config, actions }: IProps) => {
         recordContentRef.current?.focus()
 
     return (
-        <div className="record">
+        <div className="record" id={listName + ':' + id}>
             {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
             {useCheckMark && <span
                 onMouseDown={handleMouseDownOnCheckbox} 

@@ -6,7 +6,7 @@ export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',
     UPDATE_TASK = 'UPDATE_TASK',
     DELETE_TASK = 'DELETE_TASK',
-    MOVE_TASK = 'MOVE_TASK',
+    UPDATE_TASKS = 'MOVE_TASK',
     CREATE_PROJECT = 'CREATE_PROJECT',
     UPDATE_PROJECT = 'UPDATE_PROJECT',
     DELETE_PROJECT = 'DELETE_PROJECT',
@@ -34,9 +34,9 @@ export const deleteTaskAction = (item: ITask) => ({
     item
 })
 
-export const moveTaskAction = (item: ITask) => ({
-    type: actionTypes.MOVE_TASK,
-    item
+export const updateTasksAction = (items: ITask) => ({
+    type: actionTypes.UPDATE_TASKS,
+    items
 }) 
 
 export const createProjectAction = (item: IProject, listName: string) => ({
