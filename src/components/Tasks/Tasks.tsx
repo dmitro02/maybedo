@@ -9,12 +9,12 @@ import {
     createTaskAction,
     updateTaskAction,
     deleteTaskAction,
-    updateTasksAction
+    moveTaskAction
 } from '../../contexts/actionCreators'
 import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
-import { ITask, IProject } from '../../types'
+import { ITask } from '../../types'
 import Record, { IRecordConfig, IRecordActions } from '../Record/Record'
 import Sortable from 'sortablejs';
 
@@ -23,42 +23,28 @@ const LIST_NAME = 'tasks'
 const Tasks = () => {
     const [ store, dispatch ] = useTasksContext()
 
-    const project = store.projects.find((p: IProject) => p.id === store.currentProjectId)
+    const project = store.projects.find((p: ITask) => p.id === store.currentProjectId)
 
-    const activeTasks = project.tasks.filter((t: ITask) => !t.isDone)
-    const completedTasks = project.tasks.filter((t: ITask) => t.isDone)
+    const activeTasks = project.subTasks.filter((t: ITask) => !t.isDone)
+    const completedTasks = project.subTasks.filter((t: ITask) => t.isDone)
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
+    const handleItemMove = (e: any) => {
+        const movedItemId = parseInt(e.item.id.split(':')[1])
+        const sibling = e.item.previousSibling
+        const siblingId = sibling 
+            ? parseInt(sibling.id.split(':')[1])
+            : null
+        dispatch(moveTaskAction(movedItemId, siblingId))
+    }
+
     useEffect(() => {
-        const l = activeItemListRef.current
-        l && new Sortable(l, {
+        new Sortable(activeItemListRef.current!, {
             animation: 150, 
-            onEnd: (e: any) => {
-                let { tasks: items } = project
-
-                const movedItemId = parseInt(e.item.id.split(':')[1])
-                const movedItem = items.find((it: ITask) => it.id === movedItemId)
-
-                items = items.filter((it: ITask) => it.id !== movedItemId)
-
-                let movedItemNewIndex
-
-                if (e.newIndex === 0) {
-                    movedItemNewIndex = 0
-                } else {
-                    const itemToPlaceAfterId = parseInt(e.item.previousSibling.id.split(':')[1])
-                    const itemToPlaceAfterIndex =  
-                        items.findIndex((it: ITask) => it.id === itemToPlaceAfterId)
-                    movedItemNewIndex = itemToPlaceAfterIndex + 1
-                }
-
-                items.splice(movedItemNewIndex, 0, movedItem)
-
-                dispatch(updateTasksAction(items))
-            }
+            onEnd: handleItemMove
         })
-    }, [dispatch, project])
+    })
 
     const setTitle = (text: string) => dispatch(setProjectTitleAction(text))
 
@@ -91,7 +77,11 @@ const Tasks = () => {
 
     return (
         <div className="tasks-box">
-            <Title title={project.text} setTitle={setTitle}/>
+            <Title 
+                title={project.text} 
+                setTitle={setTitle} 
+                isEditable={true} 
+            />
             <Divider />
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(

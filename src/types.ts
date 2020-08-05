@@ -2,8 +2,5 @@ export interface ITask {
     id: number
     text: string
     isDone: boolean
+    subTasks: ITask[]
 }
-
-export interface IProject extends ITask {
-    tasks: ITask[]
-} 

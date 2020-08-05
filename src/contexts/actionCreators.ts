@@ -1,4 +1,4 @@
-import { ITask, IProject } from '../types'
+import { ITask } from '../types'
 
 export enum actionTypes {
     SET_ADDED_RECORD_ID = 'SET_ADDED_RECORD_ID',
@@ -7,11 +7,11 @@ export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',
     UPDATE_TASK = 'UPDATE_TASK',
     DELETE_TASK = 'DELETE_TASK',
-    UPDATE_TASKS = 'MOVE_TASK',
+    MOVE_TASK = 'MOVE_TASK',
     CREATE_PROJECT = 'CREATE_PROJECT',
     UPDATE_PROJECT = 'UPDATE_PROJECT',
     DELETE_PROJECT = 'DELETE_PROJECT',
-    UPDATE_PROJECTS = 'UPDATE_PROJECTS'
+    MOVE_PROJECT = 'MOVE_PROJECT'
 }
 
 export const setProjectTitleAction = (title: string) => ({
@@ -19,7 +19,7 @@ export const setProjectTitleAction = (title: string) => ({
     title
 }) 
 
-export const setCurrentProjectIdAction = (item: IProject) => ({
+export const setCurrentProjectIdAction = (item: ITask) => ({
     type: actionTypes.SET_CURRENT_PROJECT_ID,
     item
 }) 
@@ -40,29 +40,31 @@ export const deleteTaskAction = (item: ITask) => ({
     item
 })
 
-export const updateTasksAction = (items: ITask[]) => ({
-    type: actionTypes.UPDATE_TASKS,
-    items
+export const moveTaskAction = (movedItemId: number, siblingId: number | null) => ({
+    type: actionTypes.MOVE_TASK,
+    movedItemId,
+    siblingId
 }) 
 
-export const createProjectAction = (item: IProject, listName: string) => ({
+export const createProjectAction = (item: ITask, listName: string) => ({
     type: actionTypes.CREATE_PROJECT,
     item,
     listName
 }) 
 
-export const updateProjectAction = (item: IProject) => ({
+export const updateProjectAction = (item: ITask) => ({
     type: actionTypes.UPDATE_PROJECT,
     item
 }) 
 
-export const deleteProjectAction = (item: IProject) => ({
+export const deleteProjectAction = (item: ITask) => ({
     type: actionTypes.DELETE_PROJECT,
     item
 })
 
-export const updateProjectsAction = (items: IProject[]) => ({
-    type: actionTypes.UPDATE_PROJECTS,
-    items
+export const moveProjectAction = (movedItemId: number, siblingId: number | null) => ({
+    type: actionTypes.MOVE_PROJECT,
+    movedItemId,
+    siblingId
 }) 
 

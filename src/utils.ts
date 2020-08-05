@@ -1,7 +1,7 @@
 export const debounceInput = (callback: Function) => {
     let timeout: any
     return (e: any) => {
-        const text = e.target.textContent
+        const text = e.target.innerText
         clearTimeout(timeout)
         timeout = setTimeout(() => callback(text), 700)
     }
@@ -27,12 +27,14 @@ export const setCaretPosition = (el?: HTMLElement, pos?: number) => {
     range.collapse()
     selection?.removeAllRanges()
     selection?.addRange(range)
-    
 }
 
-export const generateNextId = (items: any[]) => items
-    .map((item) => item.id)
-    .reduce((prev, curr) => Math.max(prev, curr)) + 1
+export const generateNextId = (items: any[]) => (items && items.length) 
+    ? items
+        .map((item) => item.id)
+        .reduce((prev, curr) => Math.max(prev, curr)) + 1
+    : 1
+
 
 export const updateObject = (oldObject: any, newValues: any) => {
     return Object.assign({}, oldObject, newValues)

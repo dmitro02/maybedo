@@ -3,17 +3,17 @@ import './Projects.scss'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import Record, { IRecordConfig, IRecordActions } from '../Record/Record'
-import { IProject } from '../../types'
+import { ITask } from '../../types'
 import { 
     useTasksContext, 
-    createProjectObj
+    createTaskObj
 } from '../../contexts/TasksContext'
 import {
     createProjectAction,
     updateProjectAction,
     deleteProjectAction,
     setCurrentProjectIdAction,
-    updateProjectsAction
+    moveProjectAction
 } from '../../contexts/actionCreators'
 import Sortable from 'sortablejs'
 import Title from '../Title/Title'
@@ -26,38 +26,24 @@ const Projects = () => {
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
+    const handleItemMove = (e: any) => {
+        const movedItemId = parseInt(e.item.id.split(':')[1])
+        const sibling = e.item.previousSibling
+        const siblingId = sibling 
+            ? parseInt(sibling.id.split(':')[1])
+            : null
+        dispatch(moveProjectAction(movedItemId, siblingId))
+    }
+
     useEffect(() => {
-        const l = activeItemListRef.current
-        l && new Sortable(l, {
+        new Sortable(activeItemListRef.current!, {
             animation: 150, 
-            onEnd: (e: any) => {
-                let { projects: items } = store
-
-                const movedItemId = parseInt(e.item.id.split(':')[1])
-                const movedItem = items.find((it: IProject) => it.id === movedItemId)
-
-                items = items.filter((it: IProject) => it.id !== movedItemId)
-
-                let movedItemNewIndex
-
-                if (e.newIndex === 0) {
-                    movedItemNewIndex = 0
-                } else {
-                    const itemToPlaceAfterId = parseInt(e.item.previousSibling.id.split(':')[1])
-                    const itemToPlaceAfterIndex =  
-                        items.findIndex((it: IProject) => it.id === itemToPlaceAfterId)
-                    movedItemNewIndex = itemToPlaceAfterIndex + 1
-                }
-
-                items.splice(movedItemNewIndex, 0, movedItem)
-
-                dispatch(updateProjectsAction(items))
-            }
+            onEnd: handleItemMove
         })
-    }, [dispatch, store])
+    })
 
     const createRecord = (text: string) => {
-        const item: IProject = createProjectObj(text)
+        const item: ITask = createTaskObj(text)
         dispatch(createProjectAction(item, LIST_NAME))
     }
 
@@ -71,15 +57,15 @@ const Projects = () => {
     }
 
     const recordActions: IRecordActions = {
-        updateRecord: (item: IProject) => 
+        updateRecord: (item: ITask) => 
             dispatch(updateProjectAction(item)),
-        deleteRecord: (item: IProject) => 
+        deleteRecord: (item: ITask) => 
             dispatch(deleteProjectAction(item)),
-        selectRecord: (item: IProject) => 
+        selectRecord: (item: ITask) => 
             dispatch(setCurrentProjectIdAction(item))
     }
 
-    const projects: IProject[] = store.projects
+    const projects: ITask[] = store.projects
 
     return (
         <div className="projects" ref={activeItemListRef}>

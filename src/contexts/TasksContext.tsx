@@ -4,7 +4,7 @@ import React, {
     useContext 
 } from "react"
 import { DB } from '../mockDB'
-import { ITask, IProject } from '../types'
+import { ITask } from '../types'
 import { 
     generateNextId,
     updateObject,
@@ -13,7 +13,7 @@ import {
 import { actionTypes } from '../contexts/actionCreators'
 
 interface IStore {
-    projects: IProject[]
+    projects: ITask[]
     addedItemId: number | undefined
     currentProjectId: number,
     activeListName: string | undefined
@@ -38,7 +38,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return {
                 ...state,
                 projects: updateProjects(state,
-                        (project: IProject) => updateObject(project, {text: action.title})) 
+                        (project: ITask) => updateObject(project, {text: action.title})) 
             }
         }
         case actionTypes.SET_CURRENT_PROJECT_ID: {
@@ -52,9 +52,9 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return { 
                 ...state, 
                 projects: updateProjects(state,
-                    (project: IProject) => {
-                        item.id = generateNextId(project.tasks)
-                        return updateObject(project, { tasks: project.tasks.concat(item) }) 
+                    (project: ITask) => {
+                        item.id = generateNextId(project.subTasks)
+                        return updateObject(project, { subTasks: project.subTasks.concat(item) }) 
                     }  
                 ),
                 addedItemId: item.id,
@@ -66,8 +66,8 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return { 
                 ...state, 
                 projects: updateProjects(state, 
-                    (project: IProject) => updateObject(project, 
-                        { tasks: updateArrayItem(project.tasks, item.id, () => ({ ...item }))})
+                    (project: ITask) => updateObject(project, 
+                        { subTasks: updateArrayItem(project.subTasks, item.id, () => ({ ...item }))})
                 )
             }
         }
@@ -75,16 +75,24 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return {
                 ...state,
                 projects: updateProjects(state,
-                    (project: IProject) => updateObject(project, 
-                        { tasks: project.tasks.filter(item => item !== action.item) }))
+                    (project: ITask) => updateObject(project, 
+                        { subTasks: project.subTasks.filter(item => item !== action.item) }))
             }
         }
-        case actionTypes.UPDATE_TASKS: {
-            const { items } = action
+        case actionTypes.MOVE_TASK: {
+            const { movedItemId, siblingId } = action
             return { 
                 ...state, 
                 projects: updateProjects(state, 
-                    (project: IProject) => updateObject(project, { tasks: items }))
+                    (project: ITask) => {
+                        const movedItem = project.subTasks.find((it: ITask) => it.id === movedItemId)
+                        const subTasks = project.subTasks.filter((it: ITask) => it.id !== movedItemId)
+                        const movedItemNewIndex = siblingId
+                            ? subTasks.findIndex((it: ITask) => it.id === siblingId) + 1
+                            : 0
+                        subTasks.splice(movedItemNewIndex, 0, movedItem!)
+                        return updateObject(project, { subTasks })
+                    })
             }
         }
         case actionTypes.CREATE_PROJECT: {
@@ -111,11 +119,15 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                 projects: state.projects.filter(item => item !== action.item)
             }
         }
-        case actionTypes.UPDATE_PROJECTS: {
-            return { 
-                ...state, 
-                projects: action.items
-            }
+        case actionTypes.MOVE_PROJECT: {
+            const { movedItemId, siblingId } = action
+            const movedItem = state.projects.find((it: ITask) => it.id === movedItemId)
+            const projects = state.projects.filter((it: ITask) => it.id !== movedItemId)
+            const movedItemNewIndex = siblingId
+                ? projects.findIndex((it: ITask) => it.id === siblingId) + 1
+                : 0
+            projects.splice(movedItemNewIndex, 0, movedItem!)
+            return { ...state, projects }
         }
         default:
             return state;
@@ -132,12 +144,7 @@ const getInitialState = (): IStore => ({
 export const createTaskObj = (
     text: string = '', 
     isDone: boolean = false, 
-): ITask => ({id: -1, text, isDone})
-
-export const createProjectObj = (
-    text: string = '', 
-    isDone: boolean = false, 
-): IProject => ({id: -1, text, isDone, tasks: []})
+): ITask => ({id: -1, text, isDone, subTasks: []})
 
 const updateProjects = (state: IStore, updateProjectCallback: Function) => 
     updateArrayItem(state.projects, state.currentProjectId, updateProjectCallback)

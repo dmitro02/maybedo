@@ -1,87 +1,101 @@
-import { IProject } from './types';
+import { ITask } from './types';
 
-const project1: IProject = { 
+const project1: ITask = { 
     id: 1,
     text: 'Project 1',
     isDone: false,
-    tasks: [
+    subTasks: [
         {
             isDone: false,
             text: 'make love',
-            id: 1
+            id: 1,
+            subTasks: []
         },
         {
             isDone: true,
             text: 'take five',
-            id: 2
+            id: 2,
+            subTasks: []
         },
         {
             isDone: true,
             text: 'kiss wife',
-            id: 3
+            id: 3,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'enjoy life',
-            id: 4
+            id: 4,
+            subTasks: []
         },
         {
             isDone: true,
             text: 'catch dove',
-            id: 5
+            id: 5,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'milk cow',
-            id: 6
+            id: 6,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'sharpen knife',
-            id: 7
+            id: 7,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'test drive',
-            id: 8
+            id: 8,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'free dive',
-            id: 9
+            id: 9,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'sky dive',
-            id: 10
+            id: 10,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'scuba dive',
-            id: 11
+            id: 11,
+            subTasks: []
         }
     ]
 }
 
-const project2: IProject = { 
+const project2: ITask = { 
     id: 2,
     text: 'Project 2',
     isDone: false,
-    tasks: [
+    subTasks: [
         {
             isDone: false,
             text: 'kill hector',
-            id: 1
+            id: 1,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'draw vector',
-            id: 2
+            id: 2,
+            subTasks: []
         },
         {
             isDone: false,
             text: 'occupy sector',
-            id: 3
+            id: 3,
+            subTasks: []
         }
     ]
 }
