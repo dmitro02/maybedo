@@ -1,16 +1,16 @@
 import React from 'react'
 import './MainContainer.scss'
 import { TasksContextProvider } from '../../contexts/TasksContext'
-import Projects from '../RecordList/Projects'
-import Tasks from '../RecordList/Tasks'
+import ProjectList from '../ProjectList/ProjectList'
+import TaskList from '../TaskList/TaskList'
 
 const MainContainer = () => {
 
     return (
         <div className="main-container">
             <TasksContextProvider>
-                <Projects />
-                <Tasks />
+                <ProjectList />
+                <TaskList />
             </TasksContextProvider>
         </div>
     )

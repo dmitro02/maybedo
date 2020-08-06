@@ -12,29 +12,38 @@ import Record, {
     IRecordActions 
 } from '../Record/Record'
 import Sortable from 'sortablejs';
-import './Tasks.scss'
-import {
-    setProjectTitleAction,
-    createTaskAction,
-    updateTaskAction,
-    deleteTaskAction,
-    moveTaskAction
-} from '../../contexts/actionCreators'
+import './RecordList.scss'
 
-const Tasks = () => {
-    const [ store, dispatch ] = useTasksContext()
+interface IProps { 
+    listName: string,
+    root: ITask,
+    createRecordAction: Function,
+    moveRecordAction: Function,
+    selectRecord: Function,
+    updateRecord: Function,
+    deleteRecord: Function,
+    setTitle: Function,
+    isTitleEditable: boolean,
+    activeRecordConfig: IRecordConfig,
+    completedRecordConfig: IRecordConfig
+}
 
-    // DIFFERENCE
-    const LIST_NAME = 'tasks'
-    const root = store.rootProject.tasks.find((p: ITask) => p.id === store.currentProjectId)
-    const createRecordAction = createTaskAction
-    const moveRecordAction = moveTaskAction
-    const selectRecord = () => {}
-    const updateRecord = (item: ITask) => dispatch(updateTaskAction(item))
-    const deleteRecord = (item: ITask) => dispatch(deleteTaskAction(item))
-    const setTitle = (title: string) => dispatch(setProjectTitleAction(title))
-    const isTitleEditable = true
-    //------------
+const RecordList = (props: IProps) => {
+    const [ , dispatch ] = useTasksContext()
+
+    const {
+        listName,
+        root,
+        createRecordAction,
+        moveRecordAction,
+        selectRecord,
+        updateRecord,
+        deleteRecord,
+        setTitle,
+        isTitleEditable,
+        activeRecordConfig,
+        completedRecordConfig
+    } = props
 
     const { text: title, tasks: items } = root
 
@@ -61,21 +70,7 @@ const Tasks = () => {
 
     const createRecord = (text: string) => {
         const item: ITask = createTaskObj(text)
-        dispatch(createRecordAction(item, LIST_NAME))
-    }
-
-    const activeRecordConfig: IRecordConfig = {
-        listName: LIST_NAME,
-        useCheckMark: true,
-        useDeleteBtn: true,
-        useDragBtn: true,
-        useEditBtn: false,
-        isEditable: true
-    }
-
-    const completedRecordConfig: IRecordConfig = { 
-        ...activeRecordConfig, 
-        useDragBtn: false 
+        dispatch(createRecordAction(item, listName))
     }
 
     const recordActions: IRecordActions = {
@@ -120,4 +115,4 @@ const Tasks = () => {
     )
 }
 
-export default Tasks
+export default RecordList
