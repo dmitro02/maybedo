@@ -1,32 +1,46 @@
-import React, { useRef, useEffect } from 'react'
-import './Tasks.scss'
+import React, { useEffect, useRef } from 'react'
 import { 
     useTasksContext, 
     createTaskObj
 } from '../../contexts/TasksContext'
-import {
-    setProjectTitleAction,
-    createTaskAction,
-    updateTaskAction,
-    deleteTaskAction,
-    moveTaskAction
-} from '../../contexts/actionCreators'
 import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import { ITask } from '../../types'
-import Record, { IRecordConfig, IRecordActions } from '../Record/Record'
-import Sortable from 'sortablejs';
+import Record, { 
+    IRecordConfig, 
+    IRecordActions 
+} from '../Record/Record'
+import Sortable from 'sortablejs'
+import './Projects.scss'
+import {
+    createProjectAction,
+    updateProjectAction,
+    deleteProjectAction,
+    setCurrentProjectIdAction,
+    moveProjectAction
+} from '../../contexts/actionCreators'
 
-const LIST_NAME = 'tasks'
+const Projects = () => {
 
-const Tasks = () => {
     const [ store, dispatch ] = useTasksContext()
-    
-    const project = store.rootProject.tasks.find((p: ITask) => p.id === store.currentProjectId)
 
-    const activeTasks = project.tasks.filter((t: ITask) => !t.isDone)
-    const completedTasks = project.tasks.filter((t: ITask) => t.isDone)
+    // DIFFERENCE
+    const LIST_NAME = 'projects'
+    const root = store.rootProject
+    const createRecordAction = createProjectAction
+    const moveRecordAction = moveProjectAction
+    const selectRecord = (item: ITask) => dispatch(setCurrentProjectIdAction(item))
+    const updateRecord = (item: ITask) => dispatch(updateProjectAction(item))
+    const deleteRecord = (item: ITask) => dispatch(deleteProjectAction(item))
+    const setTitle = () => {}
+    const isTitleEditable = false
+    //------------
+
+    const { text: title, tasks: items } = root
+
+    const activeTasks = items.filter((t: ITask) => !t.isDone)
+    const completedTasks = items.filter((t: ITask) => t.isDone)
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
@@ -36,7 +50,7 @@ const Tasks = () => {
         const siblingId = sibling 
             ? parseInt(sibling.id.split(':')[1])
             : null
-        dispatch(moveTaskAction(movedItemId, siblingId))
+        dispatch(moveRecordAction(movedItemId, siblingId))
     }
 
     useEffect(() => {
@@ -46,11 +60,9 @@ const Tasks = () => {
         })
     })
 
-    const setTitle = (text: string) => dispatch(setProjectTitleAction(text))
-
     const createRecord = (text: string) => {
         const item: ITask = createTaskObj(text)
-        dispatch(createTaskAction(item, LIST_NAME))
+        dispatch(createRecordAction(item, LIST_NAME))
     }
 
     const activeRecordConfig: IRecordConfig = {
@@ -68,19 +80,17 @@ const Tasks = () => {
     }
 
     const recordActions: IRecordActions = {
-        updateRecord: (item: ITask) => 
-            dispatch(updateTaskAction(item)),
-        deleteRecord: (item: ITask) => 
-            dispatch(deleteTaskAction(item)),
-        selectRecord: () => {}
+        updateRecord,
+        deleteRecord,
+        selectRecord
     }
 
     return (
-        <div className="tasks-box">
+        <div className="projects">
             <Title 
-                title={project.text} 
+                title={title} 
                 setTitle={setTitle} 
-                isEditable={true} 
+                isEditable={isTitleEditable} 
             />
             <Divider />
             <div className="active-tasks" ref={activeItemListRef}>
@@ -111,4 +121,4 @@ const Tasks = () => {
     )
 }
 
-export default Tasks
+export default Projects

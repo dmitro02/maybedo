@@ -1,8 +1,8 @@
 import React from 'react'
 import './MainContainer.scss'
 import { TasksContextProvider } from '../../contexts/TasksContext'
-import Projects from '../Projects/Projects'
-import Tasks from '../Tasks/Tasks'
+import Projects from '../RecordList/Projects'
+import Tasks from '../RecordList/Tasks'
 
 const MainContainer = () => {
 
