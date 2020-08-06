@@ -24,6 +24,11 @@ const Projects = () => {
 
     const [ store, dispatch ] = useTasksContext()
 
+    const project = store.rootProject
+
+    const activeTasks = project.tasks.filter((t: ITask) => !t.isDone)
+    const completedTasks = project.tasks.filter((t: ITask) => t.isDone)
+
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
     const handleItemMove = (e: any) => {
@@ -47,13 +52,18 @@ const Projects = () => {
         dispatch(createProjectAction(item, LIST_NAME))
     }
 
-    const recordConfig: IRecordConfig = {
+    const activeRecordConfig: IRecordConfig = {
         listName: LIST_NAME,
         useCheckMark: true,
         useDeleteBtn: true,
         useDragBtn: true,
         useEditBtn: false,
-        isEditable: false
+        isEditable: true
+    }
+
+    const completedRecordConfig: IRecordConfig = { 
+        ...activeRecordConfig, 
+        useDragBtn: false 
     }
 
     const recordActions: IRecordActions = {
@@ -65,23 +75,35 @@ const Projects = () => {
             dispatch(setCurrentProjectIdAction(item))
     }
 
-    const projects: ITask[] = store.projects
-
     return (
-        <div className="projects" ref={activeItemListRef}>
-            <Title title="Projects" />
+        <div className="projects">
+            <Title title={project.text} />
             <Divider />
-            {projects.map(
-                project => 
-                    <Record 
-                        key={project.id} 
-                        item={project} 
-                        config={recordConfig}
-                        actions={recordActions}
-                    />
-            )}
+            <div className="active-tasks" ref={activeItemListRef}>
+                {activeTasks.map(
+                    (task: ITask) => 
+                        <Record 
+                            key={task.id} 
+                            item={task} 
+                            config={activeRecordConfig}
+                            actions={recordActions}
+                        />
+                )}
+            </div>
             <AddRecord addNewRecord={createRecord}/>
-        </div>  
+            <Divider isHidden={!completedTasks.length} />
+            <div className="completed-tasks">
+                {completedTasks.map(
+                    (task: ITask) => 
+                        <Record 
+                            key={task.id} 
+                            item={task} 
+                            config={completedRecordConfig}
+                            actions={recordActions}
+                        />
+                )}
+            </div>
+        </div>
     )
 }
 

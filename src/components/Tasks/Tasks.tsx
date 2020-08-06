@@ -22,11 +22,11 @@ const LIST_NAME = 'tasks'
 
 const Tasks = () => {
     const [ store, dispatch ] = useTasksContext()
+    
+    const project = store.rootProject.tasks.find((p: ITask) => p.id === store.currentProjectId)
 
-    const project = store.projects.find((p: ITask) => p.id === store.currentProjectId)
-
-    const activeTasks = project.subTasks.filter((t: ITask) => !t.isDone)
-    const completedTasks = project.subTasks.filter((t: ITask) => t.isDone)
+    const activeTasks = project.tasks.filter((t: ITask) => !t.isDone)
+    const completedTasks = project.tasks.filter((t: ITask) => t.isDone)
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 

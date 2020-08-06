@@ -75,7 +75,10 @@ const Record = ({ item, config, actions }: IProps) => {
         updateRecord(item)
     })
 
-    const handleDelete = () => deleteRecord(item)
+    const handleDelete = (e: any) => {
+        e.stopPropagation() // prevent item selection ob click
+        deleteRecord(item)
+    }
 
     const setContentEditable = (flag: boolean) => {
         const el = recordContentRef.current
