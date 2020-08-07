@@ -19,13 +19,11 @@ interface IProps {
     root: ITask,
     createRecordAction: Function,
     moveRecordAction: Function,
-    selectRecord: Function,
-    updateRecord: Function,
-    deleteRecord: Function,
     setTitle: Function,
     isTitleEditable: boolean,
     activeRecordConfig: IRecordConfig,
-    completedRecordConfig: IRecordConfig
+    completedRecordConfig: IRecordConfig,
+    recordActions: IRecordActions
 }
 
 const RecordList = (props: IProps) => {
@@ -36,13 +34,11 @@ const RecordList = (props: IProps) => {
         root,
         createRecordAction,
         moveRecordAction,
-        selectRecord,
-        updateRecord,
-        deleteRecord,
         setTitle,
         isTitleEditable,
         activeRecordConfig,
-        completedRecordConfig
+        completedRecordConfig,
+        recordActions
     } = props
 
     const { text: title, tasks: items } = root
@@ -71,12 +67,6 @@ const RecordList = (props: IProps) => {
     const createRecord = (text: string) => {
         const item: ITask = createTaskObj(text)
         dispatch(createRecordAction(item, listName))
-    }
-
-    const recordActions: IRecordActions = {
-        updateRecord,
-        deleteRecord,
-        selectRecord
     }
 
     return (

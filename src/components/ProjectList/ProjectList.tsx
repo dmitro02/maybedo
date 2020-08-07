@@ -10,7 +10,10 @@ import {
     moveProjectAction
 } from '../../contexts/actionCreators'
 import RecordList from '../RecordList/RecordList'
-import { IRecordConfig } from '../Record/Record'
+import { 
+    IRecordConfig, 
+    IRecordActions 
+} from '../Record/Record'
 
 const LIST_NAME = 'projects'
 
@@ -31,19 +34,23 @@ const ProjectList = () => {
         useDragBtn: false
     }
 
+    const recordActions: IRecordActions = {
+        updateRecord: (item: ITask) => dispatch(updateProjectAction(item)),
+        deleteRecord: (item: ITask) => dispatch(deleteProjectAction(item)),
+        selectRecord: (item: ITask) => dispatch(setCurrentProjectIdAction(item))
+    }
+
     return (
         <RecordList 
             listName={LIST_NAME}
             root={store.rootProject}
             createRecordAction={createProjectAction}
             moveRecordAction={moveProjectAction}
-            selectRecord={(item: ITask) => dispatch(setCurrentProjectIdAction(item))}
-            updateRecord={(item: ITask) => dispatch(updateProjectAction(item))}
-            deleteRecord={(item: ITask) => dispatch(deleteProjectAction(item))}
             setTitle={() => {}}
             isTitleEditable={false}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
+            recordActions={recordActions}
         />
     )
 }
