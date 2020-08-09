@@ -2,8 +2,8 @@ import React from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { ITask } from '../../types'
 import { 
-    IRecordConfig, 
-    IRecordActions 
+    RecordConfig, 
+    RecordActions 
 } from '../Record/Record'
 import './TaskList.scss'
 import {
@@ -20,24 +20,22 @@ const LIST_NAME = 'tasks'
 const TaskList = () => {
     const [ store, dispatch ] = useTasksContext()
 
-    const activeRecordConfig: IRecordConfig = {
+    const activeRecordConfig: RecordConfig = {
         listName: LIST_NAME,
         useCheckMark: true,
         useDeleteBtn: true,
         useDragBtn: true,
-        useEditBtn: false,
-        isEditable: false
+        isEditable: true
     }
 
-    const completedRecordConfig: IRecordConfig = { 
+    const completedRecordConfig: RecordConfig = { 
         ...activeRecordConfig, 
         useDragBtn: false
     }
 
-    const recordActions: IRecordActions = {
+    const recordActions: RecordActions = {
         updateRecord: (item: ITask) => dispatch(updateTaskAction(item)),
-        deleteRecord: (item: ITask) => dispatch(deleteTaskAction(item)),
-        selectRecord: () => {}
+        deleteRecord: (item: ITask) => dispatch(deleteTaskAction(item))
     }
 
     return (
@@ -46,8 +44,7 @@ const TaskList = () => {
             root={store.rootProject.tasks.find((p: ITask) => p.id === store.currentProjectId)}
             createRecordAction={createTaskAction}
             moveRecordAction={moveTaskAction}
-            setTitle={(title: string) => dispatch(setProjectTitleAction(title))}
-            isTitleEditable={true}
+            setTitle={(item: ITask) => dispatch(setProjectTitleAction(item.text))}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
             recordActions={recordActions}

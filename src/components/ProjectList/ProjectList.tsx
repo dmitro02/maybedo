@@ -11,8 +11,8 @@ import {
 } from '../../contexts/actionCreators'
 import RecordList from '../RecordList/RecordList'
 import { 
-    IRecordConfig, 
-    IRecordActions 
+    RecordConfig, 
+    RecordActions 
 } from '../Record/Record'
 
 const LIST_NAME = 'projects'
@@ -20,21 +20,19 @@ const LIST_NAME = 'projects'
 const ProjectList = () => {
     const [ store, dispatch ] = useTasksContext()
 
-    const activeRecordConfig: IRecordConfig = {
+    const activeRecordConfig: RecordConfig = {
         listName: LIST_NAME,
         useCheckMark: true,
         useDeleteBtn: true,
-        useDragBtn: true,
-        useEditBtn: false,
-        isEditable: false
+        useDragBtn: true
     }
 
-    const completedRecordConfig: IRecordConfig = { 
+    const completedRecordConfig: RecordConfig = { 
         ...activeRecordConfig, 
         useDragBtn: false
     }
 
-    const recordActions: IRecordActions = {
+    const recordActions: RecordActions = {
         updateRecord: (item: ITask) => dispatch(updateProjectAction(item)),
         deleteRecord: (item: ITask) => dispatch(deleteProjectAction(item)),
         selectRecord: (item: ITask) => dispatch(setCurrentProjectIdAction(item))
@@ -46,8 +44,6 @@ const ProjectList = () => {
             root={store.rootProject}
             createRecordAction={createProjectAction}
             moveRecordAction={moveProjectAction}
-            setTitle={() => {}}
-            isTitleEditable={false}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
             recordActions={recordActions}

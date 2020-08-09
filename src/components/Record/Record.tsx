@@ -8,38 +8,42 @@ import {
     setCaretPosition
 } from '../../utils'
 
-export interface IRecordConfig {
-    listName: string,
-    useCheckMark: boolean
-    useDeleteBtn: boolean
-    useDragBtn: boolean
-    useEditBtn: boolean
-    isEditable: boolean
+export type RecordConfig = {
+    listName?: string,
+    useCheckMark?: boolean
+    useDeleteBtn?: boolean
+    useDragBtn?: boolean
+    useEditBtn?: boolean
+    isEditable?: boolean
 }
-export interface IRecordActions{
-    updateRecord: Function
-    deleteRecord: Function
-    selectRecord: Function
+export type RecordActions = {
+    updateRecord?: Function
+    deleteRecord?: Function
+    selectRecord?: Function
 }
 
-interface IProps { item: ITask, config: IRecordConfig, actions: IRecordActions }
+type Props = { 
+    item: ITask, 
+    config: RecordConfig, 
+    actions: RecordActions 
+}
 
-const Record = ({ item, config, actions }: IProps) => {
+const Record = ({ item, config, actions }: Props) => {
     const { isDone: initialState, text, id } = item
     
     const {
-        listName,
-        useCheckMark,
-        useDeleteBtn,
-        useDragBtn,
-        useEditBtn,
-        isEditable
+        listName = '',
+        useCheckMark = false,
+        useDeleteBtn = false,
+        useDragBtn = false,
+        useEditBtn = false,
+        isEditable = false
     } = config
 
     const { 
-        updateRecord, 
-        deleteRecord,
-        selectRecord
+        updateRecord = () => {}, 
+        deleteRecord = () => {},
+        selectRecord = () => {}
     } = actions
 
     const [ isDone, setIsDone ] = useState(initialState)

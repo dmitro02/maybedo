@@ -1,0 +1,5 @@
+- HOC for Sortable
+- replace all IProps with type Props
+- check Firefox & Edge support
+- housekeep setCaret
+- replace all 'f: Function' with 'f(arg: type): void'

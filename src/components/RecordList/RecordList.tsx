@@ -3,27 +3,26 @@ import {
     useTasksContext, 
     createTaskObj
 } from '../../contexts/TasksContext'
-import Title from '../Title/Title'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import { ITask } from '../../types'
 import Record, { 
-    IRecordConfig, 
-    IRecordActions 
+    RecordConfig, 
+    RecordActions 
 } from '../Record/Record'
 import Sortable from 'sortablejs';
 import './RecordList.scss'
+import TitleRecord from '../TitleRecord/TitleRecord'
 
 interface IProps { 
     listName: string,
     root: ITask,
     createRecordAction: Function,
     moveRecordAction: Function,
-    setTitle: Function,
-    isTitleEditable: boolean,
-    activeRecordConfig: IRecordConfig,
-    completedRecordConfig: IRecordConfig,
-    recordActions: IRecordActions
+    setTitle?: Function,
+    activeRecordConfig: RecordConfig,
+    completedRecordConfig: RecordConfig,
+    recordActions: RecordActions
 }
 
 const RecordList = (props: IProps) => {
@@ -34,17 +33,16 @@ const RecordList = (props: IProps) => {
         root,
         createRecordAction,
         moveRecordAction,
-        setTitle,
-        isTitleEditable,
+        setTitle = undefined,
         activeRecordConfig,
         completedRecordConfig,
         recordActions
     } = props
 
-    const { text: title, tasks: items } = root
+    const { tasks } = root
 
-    const activeTasks = items.filter((t: ITask) => !t.isDone)
-    const completedTasks = items.filter((t: ITask) => t.isDone)
+    const activeTasks = tasks.filter((t: ITask) => !t.isDone)
+    const completedTasks = tasks.filter((t: ITask) => t.isDone)
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
@@ -71,11 +69,7 @@ const RecordList = (props: IProps) => {
 
     return (
         <div className="tasks-box">
-            <Title 
-                title={title} 
-                setTitle={setTitle} 
-                isEditable={isTitleEditable} 
-            />
+            <TitleRecord item={root} setTitle={setTitle} />
             <Divider />
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(

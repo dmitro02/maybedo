@@ -1,19 +1,23 @@
 import React from 'react'
-import './MainContainer.scss'
+import './Layout.scss'
 import { TasksContextProvider } from '../../contexts/TasksContext'
 import ProjectList from '../ProjectList/ProjectList'
 import TaskList from '../TaskList/TaskList'
 
-const MainContainer = () => {
+const Layout = () => {
 
     return (
         <div className="main-container">
             <TasksContextProvider>
-                <ProjectList />
-                <TaskList />
+                <div className="left-panel card">
+                    <ProjectList />
+                </div>
+                <div className="right-panel card">
+                    <TaskList />
+                </div>
             </TasksContextProvider>
         </div>
     )
 }
 
-export default MainContainer
+export default Layout
