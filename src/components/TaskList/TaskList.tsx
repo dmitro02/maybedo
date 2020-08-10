@@ -41,6 +41,7 @@ const TaskList = () => {
     return (
         <RecordList 
             listName={LIST_NAME}
+            classNames={['task-list']}
             root={store.rootProject.tasks.find((p: ITask) => p.id === store.currentProjectId)}
             createRecordAction={createTaskAction}
             moveRecordAction={moveTaskAction}

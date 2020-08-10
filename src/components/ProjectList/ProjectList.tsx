@@ -41,6 +41,7 @@ const ProjectList = () => {
     return (
         <RecordList 
             listName={LIST_NAME}
+            classNames={['project-list']}
             root={store.rootProject}
             createRecordAction={createProjectAction}
             moveRecordAction={moveProjectAction}

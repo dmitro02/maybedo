@@ -3,16 +3,17 @@
 .main-container {
     display: flex;
     min-height: 70vh;
-    margin: 20px auto;
-    width: 60%;
+    margin: 20px 0;
 
     .left-panel {
         width: 300px;
         margin-right: 10px; 
+        margin-left: auto;
     }
     
     .right-panel {
-        flex-grow: auto;
+        width: 900px;
+        margin-right: auto;
     }
 }
 

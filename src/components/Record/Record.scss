@@ -3,6 +3,12 @@
 .record {
     display: flex;
     font-size: 1.2rem;
+    text-align: justify;
+
+    [contenteditable] {
+        outline: 0px solid transparent;
+        white-space: pre-wrap;
+    }
     
     .delete-btn {
         margin-left: auto;
@@ -42,6 +48,10 @@
         margin-left: 5px;
         cursor: move;
     }
+}
+
+.record-selected {
+    background-color: $record-selected-color;
 }
 
 .record:hover {

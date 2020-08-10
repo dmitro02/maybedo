@@ -16,6 +16,7 @@ import TitleRecord from '../TitleRecord/TitleRecord'
 
 interface IProps { 
     listName: string,
+    classNames?: string[],
     root: ITask,
     createRecordAction: Function,
     moveRecordAction: Function,
@@ -30,6 +31,7 @@ const RecordList = (props: IProps) => {
 
     const {
         listName,
+        classNames = [],
         root,
         createRecordAction,
         moveRecordAction,
@@ -68,7 +70,7 @@ const RecordList = (props: IProps) => {
     }
 
     return (
-        <div className="tasks-box">
+        <div className={`tasks-box ${classNames.join(' ')}`}>
             <TitleRecord item={root} setTitle={setTitle} />
             <Divider />
             <div className="active-tasks" ref={activeItemListRef}>

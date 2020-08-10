@@ -21,13 +21,13 @@ const TitleRecord = ({ item, setTitle }: Props) => {
     }
 
     return (
-        <div className="title-record">
+        <header>
             <Record 
                 item={item} 
                 config={recordConfig} 
                 actions={recordActions}
             />
-        </div>
+        </header>
     ) 
 
 }
