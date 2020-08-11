@@ -7,7 +7,6 @@ import {
 } from '../Record/Record'
 import './TaskList.scss'
 import {
-    setProjectTitleAction,
     createTaskAction,
     updateTaskAction,
     deleteTaskAction,
@@ -15,13 +14,13 @@ import {
 } from '../../contexts/actionCreators'
 import RecordList from '../RecordList/RecordList'
 
-const LIST_NAME = 'tasks'
-
 const TaskList = () => {
     const [ store, dispatch ] = useTasksContext()
 
+    const root = store.rootProject.tasks.find((p: ITask) => p.path === store.currentProjectPath)
+
     const activeRecordConfig: RecordConfig = {
-        listName: LIST_NAME,
+        listPath: root.path,
         useCheckMark: true,
         useDeleteBtn: true,
         useDragBtn: true,
@@ -40,12 +39,11 @@ const TaskList = () => {
 
     return (
         <RecordList 
-            listName={LIST_NAME}
             classNames={['task-list']}
-            root={store.rootProject.tasks.find((p: ITask) => p.id === store.currentProjectId)}
+            root={root}
             createRecordAction={createTaskAction}
             moveRecordAction={moveTaskAction}
-            setTitle={(item: ITask) => dispatch(setProjectTitleAction(item.text))}
+            setTitle={(item: ITask) => dispatch(updateTaskAction(item))}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
             recordActions={recordActions}

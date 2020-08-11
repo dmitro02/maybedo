@@ -1,9 +1,9 @@
 import React from 'react'
 import './Record.scss'
 
-interface IProps { addNewRecord: Function }
+type Props = { addNewRecord: Function }
 
-const AddRecord = ({ addNewRecord }: IProps) => {
+const AddRecord = ({ addNewRecord }: Props) => {
     const createRecord = (e: any) => {
         if (!e.target.textContent.trim()) return
         addNewRecord(e.target.textContent)

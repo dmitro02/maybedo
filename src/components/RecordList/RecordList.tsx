@@ -14,8 +14,7 @@ import Sortable from 'sortablejs';
 import './RecordList.scss'
 import TitleRecord from '../TitleRecord/TitleRecord'
 
-interface IProps { 
-    listName: string,
+type Props = { 
     classNames?: string[],
     root: ITask,
     createRecordAction: Function,
@@ -26,11 +25,10 @@ interface IProps {
     recordActions: RecordActions
 }
 
-const RecordList = (props: IProps) => {
+const RecordList = (props: Props) => {
     const [ , dispatch ] = useTasksContext()
 
     const {
-        listName,
         classNames = [],
         root,
         createRecordAction,
@@ -41,7 +39,7 @@ const RecordList = (props: IProps) => {
         recordActions
     } = props
 
-    const { tasks } = root
+    const { path: listPath, tasks, selectedTaskPath } = root
 
     const activeTasks = tasks.filter((t: ITask) => !t.isDone)
     const completedTasks = tasks.filter((t: ITask) => t.isDone)
@@ -49,12 +47,10 @@ const RecordList = (props: IProps) => {
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
     const handleItemMove = (e: any) => {
-        const movedItemId = parseInt(e.item.id.split(':')[1])
+        const movedItemPath = e.item.id
         const sibling = e.item.previousSibling
-        const siblingId = sibling 
-            ? parseInt(sibling.id.split(':')[1])
-            : null
-        dispatch(moveRecordAction(movedItemId, siblingId))
+        const siblingPath = sibling ? sibling.id : null
+        dispatch(moveRecordAction(movedItemPath, siblingPath))
     }
 
     useEffect(() => {
@@ -64,9 +60,17 @@ const RecordList = (props: IProps) => {
         })
     })
 
+    const getNewPath = () => {
+        return tasks.length 
+            ? listPath + ':' + (tasks
+                .map(t => parseInt(t.path.split(':').reverse()[0]))
+                .reduce((prev, curr) => Math.max(prev, curr)) + 1)
+            : listPath + ':1'
+    }
+
     const createRecord = (text: string) => {
-        const item: ITask = createTaskObj(text)
-        dispatch(createRecordAction(item, listName))
+        const item: ITask = createTaskObj(getNewPath(), text)
+        dispatch(createRecordAction(item))
     }
 
     return (
@@ -77,10 +81,11 @@ const RecordList = (props: IProps) => {
                 {activeTasks.map(
                     (task: ITask) => 
                         <Record 
-                            key={task.id} 
+                            key={task.path} 
                             item={task} 
                             config={activeRecordConfig}
                             actions={recordActions}
+                            isSelected={task.path === selectedTaskPath}
                         />
                 )}
             </div>
@@ -90,10 +95,11 @@ const RecordList = (props: IProps) => {
                 {completedTasks.map(
                     (task: ITask) => 
                         <Record 
-                            key={task.id} 
+                            key={task.path}
                             item={task} 
                             config={completedRecordConfig}
                             actions={recordActions}
+                            isSelected={task.path === selectedTaskPath}
                         />
                 )}
             </div>

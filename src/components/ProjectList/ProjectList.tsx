@@ -3,11 +3,11 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import { ITask } from '../../types'
 import './ProjectList.scss'
 import {
-    createProjectAction,
-    updateProjectAction,
-    deleteProjectAction,
+    createTaskAction,
+    updateTaskAction,
+    deleteTaskAction,
     setCurrentProjectIdAction,
-    moveProjectAction
+    moveTaskAction
 } from '../../contexts/actionCreators'
 import RecordList from '../RecordList/RecordList'
 import { 
@@ -15,13 +15,13 @@ import {
     RecordActions 
 } from '../Record/Record'
 
-const LIST_NAME = 'projects'
-
 const ProjectList = () => {
     const [ store, dispatch ] = useTasksContext()
 
+    const root = store.rootProject
+
     const activeRecordConfig: RecordConfig = {
-        listName: LIST_NAME,
+        listPath: root.path,
         useCheckMark: true,
         useDeleteBtn: true,
         useDragBtn: true
@@ -33,18 +33,17 @@ const ProjectList = () => {
     }
 
     const recordActions: RecordActions = {
-        updateRecord: (item: ITask) => dispatch(updateProjectAction(item)),
-        deleteRecord: (item: ITask) => dispatch(deleteProjectAction(item)),
+        updateRecord: (item: ITask) => dispatch(updateTaskAction(item)),
+        deleteRecord: (item: ITask) => dispatch(deleteTaskAction(item)),
         selectRecord: (item: ITask) => dispatch(setCurrentProjectIdAction(item))
     }
 
     return (
         <RecordList 
-            listName={LIST_NAME}
             classNames={['project-list']}
-            root={store.rootProject}
-            createRecordAction={createProjectAction}
-            moveRecordAction={moveProjectAction}
+            root={root}
+            createRecordAction={createTaskAction}
+            moveRecordAction={moveTaskAction}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
             recordActions={recordActions}

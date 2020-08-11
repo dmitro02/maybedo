@@ -12,6 +12,6 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*, *:before, *:after, *:focus {
   box-sizing: inherit;
 }

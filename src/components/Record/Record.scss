@@ -56,11 +56,14 @@
 
 .record:hover {
     background-color: $record-hover-color;
-    border-radius: 4px;
-
+    
     .delete-btn, .drag-mark, .edit-btn {
         visibility: visible;
     }
+}
+
+.record-selected, .record:hover {
+    border-radius: 4px;
 }
 
 .add-record {

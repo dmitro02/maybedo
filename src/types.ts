@@ -1,6 +1,7 @@
 export interface ITask { 
-    id: number
+    path: string
     text: string
     isDone: boolean
     tasks: ITask[]
+    selectedTaskPath?: string
 }

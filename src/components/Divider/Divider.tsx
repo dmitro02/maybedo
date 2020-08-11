@@ -1,9 +1,9 @@
 import React from 'react'
 import './Divider.scss'
 
-interface IProps { isHidden?: boolean }
+type Props = { isHidden?: boolean }
 
-const Divider = ({ isHidden }: IProps) => (
+const Divider = ({ isHidden }: Props) => (
     <div className={'divider' + (isHidden ? ' hidden' : '')} />
 )
 

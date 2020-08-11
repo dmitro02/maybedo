@@ -9,7 +9,7 @@ import {
 } from '../../utils'
 
 export type RecordConfig = {
-    listName?: string,
+    listPath?: string,
     useCheckMark?: boolean
     useDeleteBtn?: boolean
     useDragBtn?: boolean
@@ -25,14 +25,15 @@ export type RecordActions = {
 type Props = { 
     item: ITask, 
     config: RecordConfig, 
-    actions: RecordActions 
+    actions: RecordActions,
+    isSelected?: boolean
 }
 
-const Record = ({ item, config, actions }: Props) => {
-    const { isDone: initialState, text, id } = item
+const Record = ({ item, config, actions, isSelected = false }: Props) => {
+    const { isDone: initialState, text, path } = item
     
     const {
-        listName = '',
+        listPath = '',
         useCheckMark = false,
         useDeleteBtn = false,
         useDragBtn = false,
@@ -58,14 +59,17 @@ const Record = ({ item, config, actions }: Props) => {
     })
 
     useEffect(() => {
-        const { addedItemId, activeListName } = store
-        if (activeListName === listName && addedItemId === id) {
+        if (isJustAddedRecord()) {
             setContentEditable(true)
             setFocus()
             setCaret()
+            selectRecord(item)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, store.addedItemId])
+    }, [path, store.addedItemId])
+
+    const isJustAddedRecord = () =>
+        store.addedItemPath === path && !!listPath && path.startsWith(listPath)
 
     const handleMouseDownOnCheckbox = () => {
         setIsDone((prevState) => item.isDone = !prevState)
@@ -97,13 +101,12 @@ const Record = ({ item, config, actions }: Props) => {
     const setCaret = () =>
         setCaretPosition(recordContentRef.current || undefined, caretPos)
 
-    const setFocus = () => 
-        recordContentRef.current?.focus()
+    const setFocus = () => recordContentRef.current?.focus()
 
     return (
         <div 
-            className="record" 
-            id={listName + ':' + id} 
+            className={`record ${isSelected ? 'record-selected' : ''}`} 
+            id={path} 
             onClick={() => selectRecord(item)}
         >
             {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
