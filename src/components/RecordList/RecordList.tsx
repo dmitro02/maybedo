@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useMemo } from 'react'
 import { 
     useTasksContext, 
     createTaskObj
@@ -39,6 +39,10 @@ const RecordList = (props: Props) => {
 
     const { path: listPath, tasks, selectedTaskPath } = root
 
+    useEffect(() => {
+        // console.log('RENDER RECORD LIST - ' + root.path)
+    })
+
     const activeTasks = tasks.filter((t: ITask) => !t.isDone)
     const completedTasks = tasks.filter((t: ITask) => t.isDone)
 
@@ -71,14 +75,29 @@ const RecordList = (props: Props) => {
         dispatch(createTaskAction(item))
     }
 
-    const recordActions: RecordActions = {
-        updateRecord: (item: ITask) => dispatch(updateTaskAction(item)),
-        deleteRecord: (item: ITask) => dispatch(deleteTaskAction(item)),
-        selectRecord: (item: ITask) => {
-            root.selectedTaskPath = item.path
-            dispatch(updateTaskAction(root))
+    const recordActions: RecordActions = useMemo(() => (
+        {
+            updateRecord: (item: ITask) => dispatch(updateTaskAction(item)),
+            deleteRecord: (item: ITask) => {    
+                if (isTopLevelItem(item)) {
+                    if (root.tasks.length === 1) {
+                        root.selectedTaskPath = undefined
+                    } else if (item === root.tasks[0]) {
+                        root.selectedTaskPath = root.tasks[1].path
+                    } else {
+                        root.selectedTaskPath = root.tasks[0].path
+                    }
+                    dispatch(updateTaskAction(root))
+                }
+                dispatch(deleteTaskAction(item))
+            },
+            selectRecord: (item: ITask) => {
+                if (root.selectedTaskPath === item.path) return
+                root.selectedTaskPath = item.path
+                dispatch(updateTaskAction(root))
+            }
         }
-    }
+    ), [root, dispatch])
 
     return (
         <div className={`tasks-box ${classNames.join(' ')}`}>
@@ -92,6 +111,7 @@ const RecordList = (props: Props) => {
                             item={task} 
                             config={activeRecordConfig}
                             actions={recordActions}
+                            listPath={root.path}
                             isSelected={task.path === selectedTaskPath}
                         />
                 )}
@@ -106,6 +126,7 @@ const RecordList = (props: Props) => {
                             item={task} 
                             config={completedRecordConfig}
                             actions={recordActions}
+                            listPath={root.path}
                             isSelected={task.path === selectedTaskPath}
                         />
                 )}
@@ -113,5 +134,7 @@ const RecordList = (props: Props) => {
         </div>
     )
 }
+
+const isTopLevelItem = (item: ITask) => item.path.split(':').length === 2
 
 export default RecordList

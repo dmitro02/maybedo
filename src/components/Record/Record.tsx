@@ -9,7 +9,6 @@ import {
 } from '../../utils'
 
 export type RecordConfig = {
-    listPath?: string,
     useCheckMark?: boolean
     useDeleteBtn?: boolean
     useDragBtn?: boolean
@@ -26,14 +25,23 @@ type Props = {
     item: ITask, 
     config: RecordConfig, 
     actions: RecordActions,
-    isSelected?: boolean
+    isSelected?: boolean,
+    listPath?: string
 }
 
-const Record = ({ item, config, actions, isSelected = false }: Props) => {
+const Record = ({ item, config, actions, isSelected = false, listPath }: Props) => {
     const { isDone: initialState, text, path } = item
     
+    useEffect(() => {
+        console.log('RENDER RECORD - ' + item.path)
+    })
+    useEffect(() => console.log('item'), [item])
+    useEffect(() => console.log('config'), [config])
+    useEffect(() => console.log('actions'), [actions])
+    useEffect(() => console.log('isSelected'), [isSelected])
+    useEffect(() => console.log('listPath'), [listPath])
+
     const {
-        listPath = '',
         useCheckMark = false,
         useDeleteBtn = false,
         useDragBtn = false,
@@ -107,7 +115,10 @@ const Record = ({ item, config, actions, isSelected = false }: Props) => {
         <div 
             className={`record ${isSelected ? 'record-selected' : ''}`} 
             id={path} 
-            onClick={() => selectRecord(item)}
+            onClick={() => {
+                setCaretPos(getCaretPosition(recordContentRef.current || undefined))
+                selectRecord(item)
+            }}
         >
             {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
             {useCheckMark && <span

@@ -1,28 +1,36 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { ITask } from '../../types'
 import { RecordConfig } from '../Record/Record'
 import './TaskList.scss'
 import RecordList from '../RecordList/RecordList'
 
+const activeRecordConfig: RecordConfig = {
+    useCheckMark: true,
+    useDeleteBtn: true,
+    useDragBtn: true,
+    isEditable: true
+}
+
+const completedRecordConfig: RecordConfig = { 
+    ...activeRecordConfig, 
+    useDragBtn: false
+}
+
 const TaskList = () => {
     const [ store ] = useTasksContext()
 
-    const root = store.rootProject.tasks
-        .find((p: ITask) => p.path === store.rootProject.selectedTaskPath)
+    const { tasks } = store.rootProject
 
-    const activeRecordConfig: RecordConfig = {
-        listPath: root.path,
-        useCheckMark: true,
-        useDeleteBtn: true,
-        useDragBtn: true,
-        isEditable: true
-    }
+    const root = tasks.length 
+        ? tasks.find((p: ITask) => p.path === store.rootProject.selectedTaskPath)
+        : null
 
-    const completedRecordConfig: RecordConfig = { 
-        ...activeRecordConfig, 
-        useDragBtn: false
-    }
+    useEffect(() => { 
+        // console.log('RENDER TASK LIST - ' + root.path)
+    })
+
+    if (!root) return null
 
     return (
         <RecordList 
