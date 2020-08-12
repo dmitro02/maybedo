@@ -1,18 +1,11 @@
 import { ITask } from '../types'
 
 export enum actionTypes {
-    SET_ADDED_RECORD_ID = 'SET_ADDED_RECORD_ID',
-    SET_CURRENT_PROJECT_ID = 'SET_CURRENT_PROJECT_ID',
     CREATE_TASK = 'CREATE_TASK',
     UPDATE_TASK = 'UPDATE_TASK',
     DELETE_TASK = 'DELETE_TASK',
     MOVE_TASK = 'MOVE_TASK'
 }
-
-export const setCurrentProjectIdAction = (item: ITask) => ({
-    type: actionTypes.SET_CURRENT_PROJECT_ID,
-    item
-}) 
 
 export const createTaskAction = (item: ITask) => ({
     type: actionTypes.CREATE_TASK,

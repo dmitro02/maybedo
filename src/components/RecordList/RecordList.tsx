@@ -23,12 +23,8 @@ import {
 type Props = { 
     classNames?: string[],
     root: ITask,
-    createRecordAction: Function,
-    moveRecordAction: Function,
-    setTitle?: Function,
     activeRecordConfig: RecordConfig,
-    completedRecordConfig: RecordConfig,
-    recordActions: RecordActions
+    completedRecordConfig: RecordConfig
 }
 
 const RecordList = (props: Props) => {
@@ -37,12 +33,8 @@ const RecordList = (props: Props) => {
     const {
         classNames = [],
         root,
-        createRecordAction,
-        moveRecordAction,
-        setTitle = undefined,
         activeRecordConfig,
-        completedRecordConfig,
-        recordActions
+        completedRecordConfig
     } = props
 
     const { path: listPath, tasks, selectedTaskPath } = root
@@ -56,7 +48,7 @@ const RecordList = (props: Props) => {
         const movedItemPath = e.item.id
         const sibling = e.item.previousSibling
         const siblingPath = sibling ? sibling.id : null
-        dispatch(moveRecordAction(movedItemPath, siblingPath))
+        dispatch(moveTaskAction(movedItemPath, siblingPath))
     }
 
     useEffect(() => {
@@ -76,17 +68,21 @@ const RecordList = (props: Props) => {
 
     const createRecord = (text: string) => {
         const item: ITask = createTaskObj(getNewPath(), text)
-        dispatch(createRecordAction(item))
+        dispatch(createTaskAction(item))
     }
 
-    recordActions.selectRecord = (task: ITask) => {
-        root.selectedTaskPath = task.path
-        dispatch(updateTaskAction(root))
+    const recordActions: RecordActions = {
+        updateRecord: (item: ITask) => dispatch(updateTaskAction(item)),
+        deleteRecord: (item: ITask) => dispatch(deleteTaskAction(item)),
+        selectRecord: (item: ITask) => {
+            root.selectedTaskPath = item.path
+            dispatch(updateTaskAction(root))
+        }
     }
 
     return (
         <div className={`tasks-box ${classNames.join(' ')}`}>
-            <TitleRecord item={root} setTitle={setTitle} />
+            <TitleRecord item={root} setTitle={(item: ITask )=> dispatch(updateTaskAction(item))} />
             <Divider />
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(

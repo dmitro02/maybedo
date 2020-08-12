@@ -40,12 +40,6 @@ export const useTasksContext = () => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
-        case actionTypes.SET_CURRENT_PROJECT_ID: {
-            return {
-                ...state,
-                currentProjectPath: action.item.path
-            }
-        }
         case actionTypes.CREATE_TASK: {
             const { item } = action 
             return {

@@ -4,7 +4,7 @@ const DATA =
        "path":"0",
        "text":"Projects",
        "isDone":false,
-       "selectedTaskPath":"0:2",
+       "selectedTaskPath":"0:1",
        "tasks":[
           {
              "path":"0:1",
