@@ -10,9 +10,15 @@ import Record, {
     RecordConfig, 
     RecordActions 
 } from '../Record/Record'
-import Sortable from 'sortablejs';
+import Sortable from 'sortablejs'
 import './RecordList.scss'
 import TitleRecord from '../TitleRecord/TitleRecord'
+import {
+    createTaskAction,
+    updateTaskAction,
+    deleteTaskAction,
+    moveTaskAction
+} from '../../contexts/actionCreators'
 
 type Props = { 
     classNames?: string[],
@@ -71,6 +77,11 @@ const RecordList = (props: Props) => {
     const createRecord = (text: string) => {
         const item: ITask = createTaskObj(getNewPath(), text)
         dispatch(createRecordAction(item))
+    }
+
+    recordActions.selectRecord = (task: ITask) => {
+        root.selectedTaskPath = task.path
+        dispatch(updateTaskAction(root))
     }
 
     return (

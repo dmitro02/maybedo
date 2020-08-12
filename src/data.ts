@@ -4,6 +4,7 @@ const DATA =
        "path":"0",
        "text":"Projects",
        "isDone":false,
+       "selectedTaskPath":"0:2",
        "tasks":[
           {
              "path":"0:1",
@@ -14,89 +15,67 @@ const DATA =
                    "isDone":false,
                    "text":"make love",
                    "path":"0:1:1",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":true,
                    "text":"take five",
                    "path":"0:1:2",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":true,
                    "text":"kiss wife",
                    "path":"0:1:3",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"enjoy life",
                    "path":"0:1:4",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":true,
                    "text":"catch dove",
                    "path":"0:1:5",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"milk cow",
                    "path":"0:1:6",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"sharpen knife",
                    "path":"0:1:7",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"test drive",
                    "path":"0:1:8",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"free dive",
                    "path":"0:1:9",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"sky dive",
                    "path":"0:1:10",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"scuba dive",
                    "path":"0:1:11",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 }
              ]
           },
@@ -109,25 +88,19 @@ const DATA =
                    "isDone":false,
                    "text":"kill hector",
                    "path":"0:2:1",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"draw vector",
                    "path":"0:2:2",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 },
                 {
                    "isDone":false,
                    "text":"occupy sector",
                    "path":"0:2:3",
-                   "tasks":[
- 
-                   ]
+                   "tasks":[]
                 }
              ]
           }

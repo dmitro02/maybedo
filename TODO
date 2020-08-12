@@ -4,3 +4,5 @@
 - replace all 'f: Function' with 'f(arg: type): void'
 - collapsable completed tasks list
 - change createTaskObj to class
+- set project to done should set all tasks to done 
+- add confirmation before delete 
