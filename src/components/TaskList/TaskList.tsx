@@ -8,7 +8,8 @@ import RecordList from '../RecordList/RecordList'
 const TaskList = () => {
     const [ store ] = useTasksContext()
 
-    const root = store.rootProject.tasks.find((p: ITask) => p.path === store.currentProjectPath)
+    const root = store.rootProject.tasks
+        .find((p: ITask) => p.path === store.rootProject.selectedTaskPath)
 
     const activeRecordConfig: RecordConfig = {
         listPath: root.path,

@@ -16,13 +16,11 @@ import DATA from '../data'
 export interface IStore {
     rootProject: ITask
     addedItemPath: string | undefined
-    currentProjectPath: string
 }
 
 const getInitialState = (): IStore => ({
     ...DATA,
-    addedItemPath: undefined,
-    currentProjectPath: '0:1'
+    addedItemPath: undefined
 })
 
 const TasksContext = createContext<any>(undefined)
