@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import './Record.scss'
 
 type Props = { addNewRecord: Function }
@@ -28,4 +28,4 @@ const AddRecord = ({ addNewRecord }: Props) => {
     )
 }
 
-export default AddRecord
+export default memo(AddRecord)

@@ -6,7 +6,4 @@
 - change createTaskObj to class
 - set project to done should set all tasks to done 
 - add confirmation before delete 
-- show an empty card when ther is no projects
-- BUG: app rerenders each time item selected (click the same item)
-- BUG: curet jumps to the end on items selection (click)
-- generate path based on item index in array
+- getItemChain as recursive function

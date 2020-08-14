@@ -41,10 +41,10 @@ const getItemChain = (root: ITask, updateByItem: ITask) => {
     for (let i = 1; i < pathArr.length - 1; i++) {
         const currPath = item.path + ':' + pathArr[i]
         item = item.tasks.find(it => it.path === currPath)!
-        itemChain.push(item)
+        itemChain.unshift(item)
     }
-    itemChain.push(updateByItem)
-    return itemChain.reverse()
+    itemChain.unshift(updateByItem)
+    return itemChain
 }
 
 const createArrayItem = (array: ITask[], createdItem: ITask) =>

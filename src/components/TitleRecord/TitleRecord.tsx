@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import './TitleRecord.scss'
 import Record, { 
     RecordConfig, 
@@ -32,4 +32,4 @@ const TitleRecord = ({ item, setTitle }: Props) => {
 
 }
 
-export default TitleRecord
+export default memo(TitleRecord)

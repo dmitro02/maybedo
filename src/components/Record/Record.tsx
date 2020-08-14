@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, memo } from 'react'
 import './Record.scss'
 import { ITask } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
@@ -146,4 +146,4 @@ const Record = ({ item, config, actions, isSelected = false, listPath }: Props) 
     )
 }
 
-export default Record
+export default memo(Record)
