@@ -4,6 +4,8 @@
 - replace all 'f: Function' with 'f(arg: type): void'
 - collapsable completed tasks list
 - change createTaskObj to class
-- set project to done should set all tasks to done 
+- set project to done should set all tasks to done and vice versa
 - add confirmation before delete 
-- getItemChain as recursive function
+- getItemChain, getItemByPath as recursive functions
+- get rid of listPath in Record
+- move out of components functions all that possible (constants)

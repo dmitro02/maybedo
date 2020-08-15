@@ -19,6 +19,10 @@ import {
     deleteTaskAction,
     moveTaskAction
 } from '../../contexts/actionCreators'
+import { 
+    constructNewPath,
+    isTopLevelItem 
+} from '../../contexts/contextUtils'
 
 type Props = { 
     classNames?: string[],
@@ -37,11 +41,7 @@ const RecordList = (props: Props) => {
         completedRecordConfig
     } = props
 
-    const { path: listPath, tasks, selectedTaskPath } = root
-
-    useEffect(() => {
-        // console.log('RENDER RECORD LIST - ' + root.path)
-    })
+    const { tasks, selectedTaskPath } = root
 
     const activeTasks = tasks.filter((t: ITask) => !t.isDone)
     const completedTasks = tasks.filter((t: ITask) => t.isDone)
@@ -62,16 +62,8 @@ const RecordList = (props: Props) => {
         })
     })
 
-    const getNewPath = () => {
-        return tasks.length 
-            ? listPath + ':' + (tasks
-                .map(t => parseInt(t.path.split(':').reverse()[0]))
-                .reduce((prev, curr) => Math.max(prev, curr)) + 1)
-            : listPath + ':1'
-    }
-
     const createRecord = (text: string) => {
-        const item: ITask = createTaskObj(getNewPath(), text)
+        const item: ITask = createTaskObj(constructNewPath(root), text)
         dispatch(createTaskAction(item))
     }
 
@@ -134,7 +126,5 @@ const RecordList = (props: Props) => {
         </div>
     )
 }
-
-const isTopLevelItem = (item: ITask) => item.path.split(':').length === 2
 
 export default RecordList

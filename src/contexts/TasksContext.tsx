@@ -8,7 +8,8 @@ import {
     createItem,
     updateItem,
     deleteItem,
-    moveItem
+    moveItem,
+    initPaths
 } from './contextUtils'
 import { actionTypes } from '../contexts/actionCreators'
 import DATA from '../data'
@@ -18,10 +19,14 @@ export interface IStore {
     addedItemPath: string | undefined
 }
 
-const getInitialState = (): IStore => ({
-    ...DATA,
-    addedItemPath: undefined
-})
+const getInitialState = (): IStore => {
+    const rootProject: ITask = initPaths(DATA)
+    rootProject.selectedTaskPath = rootProject.tasks[0].path
+    return {
+        rootProject,
+        addedItemPath: undefined
+    }
+}
 
 const TasksContext = createContext<any>(undefined)
 

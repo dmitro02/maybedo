@@ -1,6 +1,8 @@
 import { IStore } from './TasksContext';
 import { ITask } from './../types';
 
+export const PATH_SEPARATOR = '.' 
+
 export const createItem = (state: IStore, createdItem: ITask) =>
     updateItemChain(state, createdItem, createArrayItem)
 
@@ -16,35 +18,9 @@ export const moveItem = (state: IStore, movedItemPath: string, siblingPath: stri
         (a: ITask[], b: ITask) => moveArrayItem(a, b, siblingPath))
 }
 
-export const initPath = (root: ITask): ITask => {
-    root.tasks.forEach((item: ITask, index: number) => {
-        item.path = root.path + ':' + index
-        initPath(item)
-    })
-    return root
-}
-
-const getItemByPath = (root: ITask, path: string) => {
-    const pathArr = path.split(':')
-    let item = root
-    for (let i = 1; i < pathArr.length; i++) {
-        const currPath = item.path + ':' + pathArr[i]
-        item = item.tasks.find(it => it.path === currPath)!
-    }
-    return item
-}
-
-const getItemChain = (root: ITask, updateByItem: ITask) => {
-    const pathArr = updateByItem.path.split(':')
-    let item = root
-    const itemChain = [item]
-    for (let i = 1; i < pathArr.length - 1; i++) {
-        const currPath = item.path + ':' + pathArr[i]
-        item = item.tasks.find(it => it.path === currPath)!
-        itemChain.unshift(item)
-    }
-    itemChain.unshift(updateByItem)
-    return itemChain
+export const initPaths = (root: any) => {
+    root.path = '0'
+    return initPathsRecursively(root)
 }
 
 const createArrayItem = (array: ITask[], createdItem: ITask) =>
@@ -67,16 +43,60 @@ const moveArrayItem = (array: ITask[], movedItem: ITask, siblingPath: string) =>
 
 const updateItemChain = (state: IStore, updatedItem: ITask, whatToDo: Function) => {
     const itemChain = getItemChain(state.rootProject, updatedItem)
-    for (let i = 0; i < itemChain.length - 1; i++) {
-        itemChain[i + 1] = {
-            ...itemChain[i + 1],
-            tasks: i === 0
-                ? whatToDo(itemChain[i + 1].tasks, itemChain[i])
-                : updateArrayItem(itemChain[i + 1].tasks, itemChain[i])
-        } 
-    }
     return {
         ...state,
-        rootProject: itemChain[itemChain.length - 1]
+        rootProject: updateChain(itemChain, whatToDo)
     }
 }
+
+const updateChain = (chain: ITask[], whatToDo: Function) => {
+    return chain.reduce((prev: ITask, curr: ITask, index: number) => ({
+        ...curr,
+        tasks: index === 1
+            ? whatToDo(curr.tasks, prev)
+            : updateArrayItem(curr.tasks, prev)
+    }))
+}
+
+const getItemByPath = (root: ITask, path: string) => {
+    const pathArr = path.split(PATH_SEPARATOR)
+    let item = root
+    for (let i = 1; i < pathArr.length; i++) {
+        const currPath = item.path + PATH_SEPARATOR + pathArr[i]
+        item = item.tasks.find(it => it.path === currPath)!
+    }
+    return item
+}
+
+const getItemChain = (root: ITask, updateByItem: ITask) => {
+    const pathArr = updateByItem.path.split(PATH_SEPARATOR)
+    let item = root
+    const itemChain = [item]
+    for (let i = 1; i < pathArr.length - 1; i++) {
+        const currPath = item.path + PATH_SEPARATOR + pathArr[i]
+        item = item.tasks.find(it => it.path === currPath)!
+        itemChain.unshift(item)
+    }
+    itemChain.unshift(updateByItem)
+    return itemChain
+}
+
+const initPathsRecursively = (root: any) => {
+    root.tasks.forEach((item: any, index: number) => {
+        item.path = root.path + PATH_SEPARATOR + index
+        initPathsRecursively(item)
+    })
+    return root
+}
+
+export const constructNewPath = (root: ITask) => {
+    const { path, tasks } = root
+    return tasks.length 
+        ? path + PATH_SEPARATOR + (tasks
+            .map(t => parseInt(t.path.split(PATH_SEPARATOR).reverse()[0]))
+            .reduce((prev, curr) => Math.max(prev, curr)) + 1)
+        : path + PATH_SEPARATOR + '0'
+}
+
+export const isTopLevelItem = 
+    (item: ITask) => item.path.split(PATH_SEPARATOR).length === 2

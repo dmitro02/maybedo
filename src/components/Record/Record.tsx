@@ -32,15 +32,6 @@ type Props = {
 const Record = ({ item, config, actions, isSelected = false, listPath }: Props) => {
     const { isDone: initialState, text, path } = item
     
-    useEffect(() => {
-        console.log('RENDER RECORD - ' + item.path)
-    })
-    useEffect(() => console.log('item'), [item])
-    useEffect(() => console.log('config'), [config])
-    useEffect(() => console.log('actions'), [actions])
-    useEffect(() => console.log('isSelected'), [isSelected])
-    useEffect(() => console.log('listPath'), [listPath])
-
     const {
         useCheckMark = false,
         useDeleteBtn = false,

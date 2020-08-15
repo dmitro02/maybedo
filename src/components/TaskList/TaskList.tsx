@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { ITask } from '../../types'
 import { RecordConfig } from '../Record/Record'
@@ -25,10 +25,6 @@ const TaskList = () => {
     const root = tasks.length 
         ? tasks.find((p: ITask) => p.path === store.rootProject.selectedTaskPath)
         : null
-
-    useEffect(() => { 
-        // console.log('RENDER TASK LIST - ' + root.path)
-    })
 
     if (!root) return null
 
