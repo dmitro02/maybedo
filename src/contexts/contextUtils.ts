@@ -61,24 +61,21 @@ const updateChain = (chain: ITask[], whatToDo: Function) => {
 const getItemByPath = (root: ITask, path: string) => {
     const pathArr = path.split(PATH_SEPARATOR)
     let item = root
-    for (let i = 1; i < pathArr.length; i++) {
-        const currPath = item.path + PATH_SEPARATOR + pathArr[i]
-        item = item.tasks.find(it => it.path === currPath)!
-    }
+    pathArr.forEach((path: string, index: number) => {
+        item = index === 0 
+            ? item 
+            : item.tasks.find(it => it.path === item.path + PATH_SEPARATOR + path)!
+    })
     return item
 }
 
-const getItemChain = (root: ITask, updateByItem: ITask) => {
-    const pathArr = updateByItem.path.split(PATH_SEPARATOR)
-    let item = root
-    const itemChain = [item]
-    for (let i = 1; i < pathArr.length - 1; i++) {
-        const currPath = item.path + PATH_SEPARATOR + pathArr[i]
-        item = item.tasks.find(it => it.path === currPath)!
-        itemChain.unshift(item)
-    }
-    itemChain.unshift(updateByItem)
-    return itemChain
+const getItemChain = (root: ITask, updatedItem: ITask): ITask[] => {
+    const pathArr = updatedItem.path.split(PATH_SEPARATOR)
+    return pathArr.map((path: string, index: number) => {
+        if (index === 0) return root 
+        if (index === pathArr.length - 1) return updatedItem
+        return root = root.tasks.find(it => it.path === root.path + PATH_SEPARATOR + path)!
+    }).reverse()
 }
 
 const initPathsRecursively = (root: any) => {
@@ -98,5 +95,5 @@ export const constructNewPath = (root: ITask) => {
         : path + PATH_SEPARATOR + '0'
 }
 
-export const isTopLevelItem = 
-    (item: ITask) => item.path.split(PATH_SEPARATOR).length === 2
+export const isTopLevelItem = (item: ITask) => 
+    item.path.split(PATH_SEPARATOR).length === 2
