@@ -6,7 +6,7 @@ import {
     debounceInput, 
     getCaretPosition,
     setCaretPosition
-} from '../../utils'
+} from '../../utils/textInputUtils'
 
 export type RecordConfig = {
     useCheckMark?: boolean

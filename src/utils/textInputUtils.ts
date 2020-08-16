@@ -9,7 +9,12 @@ export const debounceInput = (callback: Function) => {
 
 export const getCaretPosition = (el?: HTMLElement) => {
     if (!el || !el.isContentEditable) return
-    const _range = document.getSelection()?.getRangeAt(0)
+    let _range
+    try {
+        _range = document.getSelection()?.getRangeAt(0)
+    } catch(err) {
+        console.log(err)
+    }
     if (!_range) return
     let range = _range.cloneRange()
     range.selectNodeContents(el)
