@@ -59,28 +59,27 @@ const updateChain = (chain: ITask[], whatToDo: Function) => {
 }
 
 const getItemByPath = (root: ITask, path: string) => {
-    const pathArr = path.split(PATH_SEPARATOR)
     let item = root
-    pathArr.forEach((path: string, index: number) => {
+    pathToArray(path).forEach((path: string, index: number) => {
         item = index === 0 
             ? item 
-            : item.tasks.find(it => it.path === item.path + PATH_SEPARATOR + path)!
+            : item.tasks.find(it => it.path === addToPath(item.path, path))!
     })
     return item
 }
 
 const getItemChain = (root: ITask, updatedItem: ITask): ITask[] => {
-    const pathArr = updatedItem.path.split(PATH_SEPARATOR)
+    const pathArr = pathToArray(updatedItem.path)
     return pathArr.map((path: string, index: number) => {
         if (index === 0) return root 
         if (index === pathArr.length - 1) return updatedItem
-        return root = root.tasks.find(it => it.path === root.path + PATH_SEPARATOR + path)!
+        return root = root.tasks.find(it => it.path === addToPath(root.path, path))!
     }).reverse()
 }
 
 const initPathsRecursively = (root: any) => {
     root.tasks.forEach((item: any, index: number) => {
-        item.path = root.path + PATH_SEPARATOR + index
+        item.path = addToPath(root.path, index)
         initPathsRecursively(item)
     })
     return root
@@ -89,11 +88,17 @@ const initPathsRecursively = (root: any) => {
 export const constructNewPath = (root: ITask) => {
     const { path, tasks } = root
     return tasks.length 
-        ? path + PATH_SEPARATOR + (tasks
-            .map(t => parseInt(t.path.split(PATH_SEPARATOR).reverse()[0]))
+        ? addToPath(path, tasks
+            .map((t) => parseInt(pathToArray(t.path).reverse()[0]))
             .reduce((prev, curr) => Math.max(prev, curr)) + 1)
-        : path + PATH_SEPARATOR + '0'
+        : addToPath(path, '0')
 }
 
-export const isTopLevelItem = (item: ITask) => 
-    item.path.split(PATH_SEPARATOR).length === 2
+export const isTopLevelItem = (item: ITask): boolean => 
+    pathToArray(item.path).length === 2
+
+export const pathToArray = (path: string) => 
+    path.split(PATH_SEPARATOR)
+
+export const addToPath = (path: string, addition: string | number) =>
+    path + PATH_SEPARATOR + addition

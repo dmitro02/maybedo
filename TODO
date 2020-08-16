@@ -3,9 +3,10 @@
 - replace all 'f: Function' with 'f(arg: type): void'
 - collapsable completed tasks list
 - change createTaskObj to class
-- set project to done should set all tasks to done and vice versa
 - add confirmation before delete 
 - get rid of listPath in Record
 - move all that possible (constants) out of components functions 
 - move state out of contextUtils
 - path as array, not string
+- add return type to functions
+- create separate pathUtils
