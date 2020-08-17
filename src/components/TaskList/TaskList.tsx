@@ -3,7 +3,7 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import { ITask } from '../../types'
 import { RecordConfig } from '../Record/Record'
 import './TaskList.scss'
-import RecordList from '../RecordList/RecordList'
+import RecordList from '../RecordList/RucordList'
 
 const activeRecordConfig: RecordConfig = {
     useCheckMark: true,
@@ -15,6 +15,11 @@ const activeRecordConfig: RecordConfig = {
 const completedRecordConfig: RecordConfig = { 
     ...activeRecordConfig, 
     useDragBtn: false
+}
+
+const titleRecordConfig: RecordConfig = {
+    isEditable: true, 
+    isTitle: true
 }
 
 const TaskList = () => {
@@ -34,6 +39,7 @@ const TaskList = () => {
             root={root}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
+            titleRecordConfig={titleRecordConfig}
         />
     )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import './ProjectList.scss'
-import RecordList from '../RecordList/RecordList'
+import RecordList from '../RecordList/RucordList'
 import { RecordConfig } from '../Record/Record'
 
 const activeRecordConfig: RecordConfig = {
@@ -15,6 +15,8 @@ const completedRecordConfig: RecordConfig = {
     useDragBtn: false
 }
 
+const titleRecordConfig: RecordConfig = { isTitle: true }
+
 const ProjectList = () => {
     const [ store ] = useTasksContext()
 
@@ -26,6 +28,7 @@ const ProjectList = () => {
             root={root}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
+            titleRecordConfig={titleRecordConfig}
         />
     )
 }

@@ -7,6 +7,11 @@ import {
     getCaretPosition,
     setCaretPosition
 } from '../../utils/textInputUtils'
+import {
+    updateTaskAction,
+    deleteTaskAction
+} from '../../contexts/actionCreators'
+import { isTopLevelItem } from '../../contexts/contextUtils'
 
 export type RecordConfig = {
     useCheckMark?: boolean
@@ -14,22 +19,16 @@ export type RecordConfig = {
     useDragBtn?: boolean
     useEditBtn?: boolean
     isEditable?: boolean
-}
-export type RecordActions = {
-    updateRecord?: Function
-    deleteRecord?: Function
-    selectRecord?: Function
+    isTitle?: boolean
 }
 
 type Props = { 
     item: ITask, 
     config: RecordConfig, 
-    actions: RecordActions,
-    isSelected?: boolean,
-    listPath?: string
+    parent: ITask
 }
 
-const Record = ({ item, config, actions, isSelected = false, listPath }: Props) => {
+const Record = ({ item, config, parent }: Props) => {
     const { isDone: initialState, text, path } = item
     
     const {
@@ -37,19 +36,14 @@ const Record = ({ item, config, actions, isSelected = false, listPath }: Props) 
         useDeleteBtn = false,
         useDragBtn = false,
         useEditBtn = false,
-        isEditable = false
+        isEditable = false,
+        isTitle = false
     } = config
-
-    const { 
-        updateRecord = () => {}, 
-        deleteRecord = () => {},
-        selectRecord = () => {}
-    } = actions
 
     const [ isDone, setIsDone ] = useState(initialState)
     const [ caretPos, setCaretPos ] = useState<number|undefined>(undefined)
 
-    const [ store ] = useTasksContext()
+    const [ store, dispatch ] = useTasksContext()
 
     const recordContentRef = useRef<HTMLElement>(null)
 
@@ -58,7 +52,7 @@ const Record = ({ item, config, actions, isSelected = false, listPath }: Props) 
     })
 
     useEffect(() => {
-        if (isJustAddedRecord()) {
+        if (isJustAdded) {
             setContentEditable(true)
             setFocus()
             setCaret()
@@ -67,8 +61,27 @@ const Record = ({ item, config, actions, isSelected = false, listPath }: Props) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [path, store.addedItemId])
 
-    const isJustAddedRecord = () =>
-        store.addedItemPath === path && !!listPath && path.startsWith(listPath)
+    const updateRecord = (item: ITask) => dispatch(updateTaskAction(item))
+
+    const deleteRecord = (item: ITask) => {    
+        if (isTopLevelItem(item)) {
+            if (parent.tasks.length === 1) {
+                parent.selectedTaskPath = undefined
+            } else if (item === parent.tasks[0]) {
+                parent.selectedTaskPath = parent.tasks[1].path
+            } else {
+                parent.selectedTaskPath = parent.tasks[0].path
+            }
+            dispatch(updateTaskAction(parent))
+        }
+        dispatch(deleteTaskAction(item))
+    }
+
+    const selectRecord = (item: ITask) => {
+        if (parent.selectedTaskPath === item.path) return
+        parent.selectedTaskPath = item.path
+        dispatch(updateTaskAction(parent))
+    }
 
     const handleMouseDownOnCheckbox = () => {
         setIsDone((prevState) => item.isDone = !prevState)
@@ -102,13 +115,20 @@ const Record = ({ item, config, actions, isSelected = false, listPath }: Props) 
 
     const setFocus = () => recordContentRef.current?.focus()
 
+    const isJustAdded = store.addedItemPath === path && !isTitle
+
+    const isSelected = path === parent.selectedTaskPath && !isTitle
+
+    const className = `record${isSelected ? ' record-selected' : ''}\
+        ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
+
     return (
         <div 
-            className={`record ${isSelected ? 'record-selected' : ''}`} 
+            className={className}
             id={path} 
             onClick={() => {
                 setCaretPos(getCaretPosition(recordContentRef.current || undefined))
-                selectRecord(item)
+                !isTitle && selectRecord(item)
             }}
         >
             {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}

@@ -85,3 +85,28 @@
 .add-record > .item-content:empty::before {
     content: "new item";
 }
+
+.record.title  {
+    font-weight: bold;
+    font-size: 1.6rem;
+    text-align: center;
+    color: $text-gray;
+    border: 1px dashed transparent;
+
+    .item-content {
+        border: 1px dashed transparent;
+    }
+
+    .item-content:focus, .item-content:hover{
+        border: 1px dashed $text-gray;
+        border-radius: 4px;
+    }
+}
+
+.record.title:hover {
+    background-color: inherit;
+}
+
+.record.title.read-only:hover .item-content:hover {
+    border: 1px dashed transparent;
+}

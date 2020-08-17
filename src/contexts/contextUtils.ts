@@ -50,12 +50,14 @@ const updateItemChain = (state: IStore, updatedItem: ITask, whatToDo: Function) 
 }
 
 const updateChain = (chain: ITask[], whatToDo: Function) => {
-    return chain.reduce((prev: ITask, curr: ITask, index: number) => ({
-        ...curr,
-        tasks: index === 1
-            ? whatToDo(curr.tasks, prev)
-            : updateArrayItem(curr.tasks, prev)
-    }))
+    return chain.length === 1
+        ? { ...chain[0] }
+        : chain.reduce((prev: ITask, curr: ITask, index: number) => ({
+            ...curr,
+            tasks: index === 1
+                ? whatToDo(curr.tasks, prev)
+                : updateArrayItem(curr.tasks, prev)
+        }))
 }
 
 const getItemByPath = (root: ITask, path: string) => {

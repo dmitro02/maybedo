@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { 
     useTasksContext, 
     createTaskObj
@@ -6,42 +6,35 @@ import {
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import { ITask } from '../../types'
-import Record, { 
-    RecordConfig, 
-    RecordActions 
-} from '../Record/Record'
+import Record, { RecordConfig } from '../Record/Record'
 import Sortable from 'sortablejs'
 import './RecordList.scss'
-import TitleRecord from '../TitleRecord/TitleRecord'
 import {
     createTaskAction,
-    updateTaskAction,
-    deleteTaskAction,
     moveTaskAction
 } from '../../contexts/actionCreators'
-import { 
-    constructNewPath,
-    isTopLevelItem 
-} from '../../contexts/contextUtils'
+import { constructNewPath } from '../../contexts/contextUtils'
 
 type Props = { 
     classNames?: string[],
     root: ITask,
     activeRecordConfig: RecordConfig,
-    completedRecordConfig: RecordConfig
+    completedRecordConfig: RecordConfig,
+    titleRecordConfig: RecordConfig
 }
 
 const RecordList = (props: Props) => {
-    const [ , dispatch ] = useTasksContext()
+    const [ store, dispatch ] = useTasksContext()
 
     const {
         classNames = [],
         root,
         activeRecordConfig,
-        completedRecordConfig
+        completedRecordConfig,
+        titleRecordConfig
     } = props
 
-    const { tasks, selectedTaskPath } = root
+    const { tasks } = root
 
     const activeTasks = tasks.filter((t: ITask) => !t.isDone)
     const completedTasks = tasks.filter((t: ITask) => t.isDone)
@@ -67,33 +60,13 @@ const RecordList = (props: Props) => {
         dispatch(createTaskAction(item))
     }
 
-    const recordActions: RecordActions = useMemo(() => (
-        {
-            updateRecord: (item: ITask) => dispatch(updateTaskAction(item)),
-            deleteRecord: (item: ITask) => {    
-                if (isTopLevelItem(item)) {
-                    if (root.tasks.length === 1) {
-                        root.selectedTaskPath = undefined
-                    } else if (item === root.tasks[0]) {
-                        root.selectedTaskPath = root.tasks[1].path
-                    } else {
-                        root.selectedTaskPath = root.tasks[0].path
-                    }
-                    dispatch(updateTaskAction(root))
-                }
-                dispatch(deleteTaskAction(item))
-            },
-            selectRecord: (item: ITask) => {
-                if (root.selectedTaskPath === item.path) return
-                root.selectedTaskPath = item.path
-                dispatch(updateTaskAction(root))
-            }
-        }
-    ), [root, dispatch])
-
     return (
         <div className={`tasks-box ${classNames.join(' ')}`}>
-            <TitleRecord item={root} setTitle={(item: ITask )=> dispatch(updateTaskAction(item))} />
+            <Record 
+                item={root} 
+                config={titleRecordConfig}
+                parent={store.rootProject}
+            />
             <Divider />
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(
@@ -102,9 +75,7 @@ const RecordList = (props: Props) => {
                             key={task.path} 
                             item={task} 
                             config={activeRecordConfig}
-                            actions={recordActions}
-                            listPath={root.path}
-                            isSelected={task.path === selectedTaskPath}
+                            parent={root}
                         />
                 )}
             </div>
@@ -117,9 +88,7 @@ const RecordList = (props: Props) => {
                             key={task.path}
                             item={task} 
                             config={completedRecordConfig}
-                            actions={recordActions}
-                            listPath={root.path}
-                            isSelected={task.path === selectedTaskPath}
+                            parent={root}
                         />
                 )}
             </div>

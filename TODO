@@ -4,9 +4,10 @@
 - collapsable completed tasks list
 - change createTaskObj to class
 - add confirmation before delete 
-- get rid of listPath in Record
 - move all that possible (constants) out of components functions 
 - move state out of contextUtils
-- path as array, not string
 - add return type to functions
 - create separate pathUtils
+- BUG: while moving record other record statically displayed as hovered 
+- BUG: caret jumps to the end when it placed at very start
+- housekeep styles for Record, RecordList, ProjectList and TaskList

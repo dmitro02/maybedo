@@ -1,35 +1,26 @@
 import React, { memo } from 'react'
 import './TitleRecord.scss'
-import Record, { 
-    RecordConfig, 
-    RecordActions 
-} from '../Record/Record'
+import Record, { RecordConfig } from '../Record/Record'
 import { ITask } from '../../types'
 
 type Props = { 
     item: ITask, 
-    setTitle?: Function 
+    parent: ITask,
+    isEditable: boolean
 }
 
-const TitleRecord = ({ item, setTitle }: Props) => {
-    const recordConfig: RecordConfig = {
-        isEditable: !!setTitle
-    }
-
-    const recordActions: RecordActions = {
-        updateRecord: setTitle
-    }
+const TitleRecord = ({ item, isEditable, parent }: Props) => {
+    const recordConfig: RecordConfig = { isEditable }
 
     return (
         <header>
             <Record 
                 item={item} 
-                config={recordConfig} 
-                actions={recordActions}
+                config={recordConfig}
+                parent={parent}
             />
         </header>
     ) 
-
 }
 
 export default memo(TitleRecord)
