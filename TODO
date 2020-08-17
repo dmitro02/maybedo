@@ -9,5 +9,5 @@
 - add return type to functions
 - create separate pathUtils
 - BUG: while moving record other record statically displayed as hovered 
-- BUG: caret jumps to the end when it placed at very start
 - housekeep styles for Record, RecordList, ProjectList and TaskList
+- get rid of devider

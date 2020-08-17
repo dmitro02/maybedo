@@ -19,7 +19,7 @@ export const getCaretPosition = (el?: HTMLElement) => {
     let range = _range.cloneRange()
     range.selectNodeContents(el)
     range.setEnd(_range.endContainer, _range.endOffset)
-    return range.toString().length;
+    return range.toString().length
 }
 
 export const setCaretPosition = (el?: HTMLElement, pos?: number) => {
@@ -29,7 +29,9 @@ export const setCaretPosition = (el?: HTMLElement, pos?: number) => {
     const elContentNode = el.childNodes[0]
     if (!elContentNode || !elContentNode.textContent) return
     const textLength = elContentNode.textContent.length
-    const positionNormalized = pos ? Math.min(pos, textLength) : textLength
+    const positionNormalized = pos !== undefined 
+        ? Math.min(pos, textLength) 
+        : textLength
     range.setStart(elContentNode, positionNormalized)
     range.collapse()
     selection?.removeAllRanges()
