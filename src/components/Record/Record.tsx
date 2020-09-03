@@ -11,7 +11,7 @@ import {
     updateTaskAction,
     deleteTaskAction
 } from '../../contexts/actionCreators'
-import { isTopLevelItem } from '../../contexts/contextUtils'
+import { isTopLevelItem } from '../../utils/pathUtils'
 
 export type RecordConfig = {
     useCheckMark?: boolean

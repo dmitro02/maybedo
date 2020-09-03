@@ -3,7 +3,7 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import { ITask } from '../../types'
 import { RecordConfig } from '../Record/Record'
 import './TaskList.scss'
-import RecordList from '../RecordList/RucordList'
+import RecordList from '../RecordList/RecordList'
 
 const activeRecordConfig: RecordConfig = {
     useCheckMark: true,

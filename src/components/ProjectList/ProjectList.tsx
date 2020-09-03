@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import './ProjectList.scss'
-import RecordList from '../RecordList/RucordList'
+import RecordList from '../RecordList/RecordList'
 import { RecordConfig } from '../Record/Record'
 
 const activeRecordConfig: RecordConfig = {

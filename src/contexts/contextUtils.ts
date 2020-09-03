@@ -1,7 +1,6 @@
 import { IStore } from './TasksContext';
 import { ITask } from './../types';
-
-export const PATH_SEPARATOR = '.' 
+import { pathToArray, addToPath } from '../utils/pathUtils';
 
 export const createItem = (state: IStore, createdItem: ITask) =>
     updateItemChain(state, createdItem, createArrayItem)
@@ -16,11 +15,6 @@ export const moveItem = (state: IStore, movedItemPath: string, siblingPath: stri
     const movedItem = getItemByPath(state.rootProject, movedItemPath)
     return updateItemChain(state, movedItem, 
         (a: ITask[], b: ITask) => moveArrayItem(a, b, siblingPath))
-}
-
-export const initPaths = (root: any) => {
-    root.path = '0'
-    return initPathsRecursively(root)
 }
 
 const createArrayItem = (array: ITask[], createdItem: ITask) =>
@@ -78,29 +72,3 @@ const getItemChain = (root: ITask, updatedItem: ITask): ITask[] => {
         return root = root.tasks.find(it => it.path === addToPath(root.path, path))!
     }).reverse()
 }
-
-const initPathsRecursively = (root: any) => {
-    root.tasks.forEach((item: any, index: number) => {
-        item.path = addToPath(root.path, index)
-        initPathsRecursively(item)
-    })
-    return root
-}
-
-export const constructNewPath = (root: ITask) => {
-    const { path, tasks } = root
-    return tasks.length 
-        ? addToPath(path, tasks
-            .map((t) => parseInt(pathToArray(t.path).reverse()[0]))
-            .reduce((prev, curr) => Math.max(prev, curr)) + 1)
-        : addToPath(path, '0')
-}
-
-export const isTopLevelItem = (item: ITask): boolean => 
-    pathToArray(item.path).length === 2
-
-export const pathToArray = (path: string) => 
-    path.split(PATH_SEPARATOR)
-
-export const addToPath = (path: string, addition: string | number) =>
-    path + PATH_SEPARATOR + addition

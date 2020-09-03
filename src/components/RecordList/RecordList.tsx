@@ -1,19 +1,12 @@
 import React, { useRef, useEffect } from 'react'
-import { 
-    useTasksContext, 
-    createTaskObj
-} from '../../contexts/TasksContext'
+import { useTasksContext } from '../../contexts/TasksContext'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import { ITask } from '../../types'
 import Record, { RecordConfig } from '../Record/Record'
 import Sortable from 'sortablejs'
 import './RecordList.scss'
-import {
-    createTaskAction,
-    moveTaskAction
-} from '../../contexts/actionCreators'
-import { constructNewPath } from '../../contexts/contextUtils'
+import { moveTaskAction } from '../../contexts/actionCreators'
 
 type Props = { 
     classNames?: string[],
@@ -55,11 +48,6 @@ const RecordList = (props: Props) => {
         })
     })
 
-    const createRecord = (text: string) => {
-        const item: ITask = createTaskObj(constructNewPath(root), text)
-        dispatch(createTaskAction(item))
-    }
-
     return (
         <div className={`tasks-box ${classNames.join(' ')}`}>
             <Record 
@@ -79,7 +67,7 @@ const RecordList = (props: Props) => {
                         />
                 )}
             </div>
-            <AddRecord addNewRecord={createRecord}/>
+            <AddRecord root={root}/>
             <Divider isHidden={!completedTasks.length} />
             <div className="completed-tasks">
                 {completedTasks.map(

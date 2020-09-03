@@ -1,12 +1,18 @@
 import React, { memo } from 'react'
 import './Record.scss'
+import { createTaskObj, useTasksContext } from '../../contexts/TasksContext'
+import { constructNewPath } from '../../utils/pathUtils'
+import { ITask } from '../../types'
+import { createTaskAction } from '../../contexts/actionCreators'
 
-type Props = { addNewRecord: Function }
-
-const AddRecord = ({ addNewRecord }: Props) => {
+const AddRecord = ({ root }: { root: ITask }) => {
+    const [ , dispatch ] = useTasksContext()
+    
     const createRecord = (e: any) => {
-        if (!e.target.textContent.trim()) return
-        addNewRecord(e.target.textContent)
+        const taskText = e.target.textContent.trim()
+        if (!taskText) return
+        const item: ITask = createTaskObj(constructNewPath(root), taskText)
+        dispatch(createTaskAction(item))
         e.target.textContent = ''
     }
 

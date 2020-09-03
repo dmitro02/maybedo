@@ -8,9 +8,9 @@ import {
     createItem,
     updateItem,
     deleteItem,
-    moveItem,
-    initPaths
+    moveItem
 } from './contextUtils'
+import { initPaths } from '../utils/pathUtils'
 import { actionTypes } from '../contexts/actionCreators'
 import DATA from '../data'
 
