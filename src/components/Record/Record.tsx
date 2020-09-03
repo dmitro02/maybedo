@@ -41,21 +41,24 @@ const Record = ({ item, config, parent }: Props) => {
     } = config
 
     const [ isDone, setIsDone ] = useState(initialState)
-    const [ caretPos, setCaretPos ] = useState<number|undefined>(undefined)
+    const [ 
+        stateCaretPosition, 
+        setStateCaretPosition
+    ] = useState<number|undefined>(undefined)
 
     const [ store, dispatch ] = useTasksContext()
 
     const recordContentRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        document.activeElement === recordContentRef.current && setCaret()   
+        document.activeElement === recordContentRef.current && loadCaretPositionFromState()  
     })
 
     useEffect(() => {
         if (isJustAdded) {
             setContentEditable(true)
             setFocus()
-            setCaret()
+            loadCaretPositionFromState()
             selectRecord(item)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,7 +94,7 @@ const Record = ({ item, config, parent }: Props) => {
 
     const handleInput = debounceInput((text: string) => {
         item.text = text
-        setCaretPos(getCaretPosition(recordContentRef.current || undefined))
+        saveCaretPositionToState()
         updateRecord(item)
     })
 
@@ -103,16 +106,19 @@ const Record = ({ item, config, parent }: Props) => {
     const setContentEditable = (flag: boolean) => {
         const el = recordContentRef.current
         el?.setAttribute('contenteditable', '' + flag)
-        setCaret()
+        loadCaretPositionFromState()
     }
+
+    const saveCaretPositionToState = () => 
+        setStateCaretPosition(getCaretPosition(recordContentRef.current || undefined))
+
+    const loadCaretPositionFromState = () => 
+        setCaretPosition(recordContentRef.current || undefined, stateCaretPosition)
 
     const handleBlur = () => {
         (useEditBtn || !isEditable) && setContentEditable(false)
     }
-
-    const setCaret = () =>
-        setCaretPosition(recordContentRef.current || undefined, caretPos)
-
+        
     const setFocus = () => recordContentRef.current?.focus()
 
     const isJustAdded = store.addedItemPath === path && !isTitle
@@ -127,7 +133,7 @@ const Record = ({ item, config, parent }: Props) => {
             className={className}
             id={path} 
             onClick={() => {
-                setCaretPos(getCaretPosition(recordContentRef.current || undefined))
+                saveCaretPositionToState()
                 !isTitle && selectRecord(item)
             }}
         >
