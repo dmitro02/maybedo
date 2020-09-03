@@ -1,0 +1,10 @@
+- housekeep setCaret
+- replace all 'f: Function' with 'f(arg: type): void'
+- collapsable completed tasks list
+- change createTaskObj to class
+- add confirmation before delete 
+- move all that possible (constants) out of components functions 
+- move state out of contextUtils
+- add return type to functions
+- BUG (Chrome only): while moving record other record statically displayed as hovered 
+- housekeep styles for Record, RecordList, ProjectList and TaskList

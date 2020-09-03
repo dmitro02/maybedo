@@ -1,10 +1,7 @@
 export interface ITask { 
-    id: number
+    path: string
     text: string
     isDone: boolean
-}
-
-export interface IProject extends ITask {
     tasks: ITask[]
-    justAddedTaskId: number | undefined
-} 
+    selectedTaskPath?: string
+}

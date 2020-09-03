@@ -1,0 +1,10 @@
+.project-list {
+    header .record:hover {
+        background-color: inherit;
+    }
+
+    .add-record > .item-content:empty::before {
+        content: "new project";
+    }
+}
+

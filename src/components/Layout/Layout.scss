@@ -1,0 +1,24 @@
+@import '../../styles/variables';
+
+.main-container {
+    display: flex;
+    min-height: 70vh;
+    margin: 20px 0;
+
+    .left-panel {
+        width: 300px;
+        margin-right: 10px; 
+        margin-left: auto;
+    }
+    
+    .right-panel {
+        width: 900px;
+        margin-right: auto;
+    }
+}
+
+.card {
+    border-radius: 5px;
+    background-color: $background-light;
+    box-shadow: 2px 3px 5px 2px $shadow-color;
+}

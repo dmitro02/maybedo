@@ -1,0 +1,19 @@
+@import '../../styles/variables';
+
+.tasks-box {
+    padding: 10px 5px;
+
+    .active-tasks {
+        margin: 0 auto;
+        padding: 5px;
+    }
+
+    .completed-tasks {
+        margin: 0 auto;
+        padding: 5px;
+        
+        .record {
+            padding-left: 28px;
+        }
+    }
+}

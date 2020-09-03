@@ -1,68 +1,142 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, memo } from 'react'
 import './Record.scss'
 import { ITask } from '../../types'
+import { useTasksContext } from '../../contexts/TasksContext'
 import { 
-    useTasksContext, 
-    setTaskAction,
+    debounceInput, 
+    getCaretPosition,
+    setCaretPosition
+} from '../../utils/textInputUtils'
+import {
+    updateTaskAction,
     deleteTaskAction
-} from '../../contexts/TasksContext'
-import { debounceInput } from '../../utils'
+} from '../../contexts/actionCreators'
+import { isTopLevelItem } from '../../utils/pathUtils'
 
-export interface IRecordConfig {
-    useCheckMark: boolean
-    useDeleteBtn: boolean
-    useDragBtn: boolean
-    useEditBtn: boolean
-    isEditable: boolean
+export type RecordConfig = {
+    useCheckMark?: boolean
+    useDeleteBtn?: boolean
+    useDragBtn?: boolean
+    useEditBtn?: boolean
+    isEditable?: boolean
+    isTitle?: boolean
 }
 
-interface IProps { task: ITask, config: IRecordConfig }
+type Props = { 
+    item: ITask, 
+    config: RecordConfig, 
+    parent: ITask
+}
 
-const Record = ({ task, config }: IProps) => {
-    const { isDone: initialState, text: data, id } = task
+const Record = ({ item, config, parent }: Props) => {
+    const { isDone: initialState, text, path } = item
     
     const {
-        useCheckMark,
-        useDeleteBtn,
-        useDragBtn,
-        useEditBtn,
-        isEditable
+        useCheckMark = false,
+        useDeleteBtn = false,
+        useDragBtn = false,
+        useEditBtn = false,
+        isEditable = false,
+        isTitle = false
     } = config
 
     const [ isDone, setIsDone ] = useState(initialState)
+    const [ 
+        stateCaretPosition, 
+        setStateCaretPosition
+    ] = useState<number|undefined>(undefined)
 
-    const [ context, dispatch ] = useTasksContext()
+    const [ store, dispatch ] = useTasksContext()
 
-    const thisTaskContent = useRef<HTMLElement>(null)
+    const recordContentRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        if (context.justAddedTaskId === id) {
-            const el = thisTaskContent.current
-            el && moveCursorToEndAndFocus(el)
+        document.activeElement === recordContentRef.current && loadCaretPositionFromState()  
+    })
+
+    useEffect(() => {
+        if (isJustAdded) {
+            setContentEditable(true)
+            setFocus()
+            loadCaretPositionFromState()
+            selectRecord(item)
         }
-    }, [context.justAddedTaskId, id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [path, store.addedItemId])
+
+    const updateRecord = (item: ITask) => dispatch(updateTaskAction(item))
+
+    const deleteRecord = (item: ITask) => {    
+        if (isTopLevelItem(item)) {
+            if (parent.tasks.length === 1) {
+                parent.selectedTaskPath = undefined
+            } else if (item === parent.tasks[0]) {
+                parent.selectedTaskPath = parent.tasks[1].path
+            } else {
+                parent.selectedTaskPath = parent.tasks[0].path
+            }
+            dispatch(updateTaskAction(parent))
+        }
+        dispatch(deleteTaskAction(item))
+    }
+
+    const selectRecord = (item: ITask) => {
+        if (parent.selectedTaskPath === item.path) return
+        parent.selectedTaskPath = item.path
+        dispatch(updateTaskAction(parent))
+    }
 
     const handleMouseDownOnCheckbox = () => {
-        setIsDone((prevState) => task.isDone = !prevState)
+        setIsDone((prevState) => item.isDone = !prevState)
     }
 
-    const handleMouseUpOnCheckbox = () => dispatch(setTaskAction(task))
+    const handleMouseUpOnCheckbox = () => updateRecord(item)
 
-    const handleInput = debounceInput((text: string) => task.text = text)
+    const handleInput = debounceInput((text: string) => {
+        item.text = text
+        saveCaretPositionToState()
+        updateRecord(item)
+    })
 
-    const deleteTask = () => dispatch(deleteTaskAction(task))
+    const handleDelete = (e: any) => {
+        e.stopPropagation() // prevent item selection ob click
+        deleteRecord(item)
+    }
 
     const setContentEditable = (flag: boolean) => {
-        if (!useEditBtn) return
-        const el = thisTaskContent.current
-        if (!el) return
-        el.setAttribute('contenteditable', '' + flag)
-        el.focus()
-        moveCursorToEndAndFocus(el)
+        const el = recordContentRef.current
+        el?.setAttribute('contenteditable', '' + flag)
+        loadCaretPositionFromState()
     }
 
+    const saveCaretPositionToState = () => 
+        setStateCaretPosition(getCaretPosition(recordContentRef.current || undefined))
+
+    const loadCaretPositionFromState = () => 
+        setCaretPosition(recordContentRef.current || undefined, stateCaretPosition)
+
+    const handleBlur = () => {
+        (useEditBtn || !isEditable) && setContentEditable(false)
+    }
+        
+    const setFocus = () => recordContentRef.current?.focus()
+
+    const isJustAdded = store.addedItemPath === path && !isTitle
+
+    const isSelected = path === parent.selectedTaskPath && !isTitle
+
+    const className = `record${isSelected ? ' record-selected' : ''}\
+        ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
+
     return (
-        <div className="record" id={'task' + task.id}>
+        <div 
+            className={className}
+            id={path} 
+            onClick={() => {
+                saveCaretPositionToState()
+                !isTitle && selectRecord(item)
+            }}
+        >
             {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
             {useCheckMark && <span
                 onMouseDown={handleMouseDownOnCheckbox} 
@@ -72,33 +146,21 @@ const Record = ({ task, config }: IProps) => {
                 {isDone && <i className="material-icons check-mark">check_box</i>}
             </span>}
             <span 
-                ref={thisTaskContent}
-                className={'task-content' + (isDone ? ' task-done' : '')} 
+                ref={recordContentRef}
+                className={'item-content' + (isDone ? ' item-done' : '')} 
                 contentEditable={isEditable && !useEditBtn}
                 suppressContentEditableWarning={true}
                 onInput={handleInput}
-                onBlur={() => setContentEditable(false)}
+                onBlur={handleBlur}
             >
-                {data}
+                {text}
             </span>
             {useEditBtn && 
                 <i className="material-icons edit-btn" onClick={() => setContentEditable(true)}>edit</i>}
             {useDeleteBtn && 
-                <i className="material-icons delete-btn" onClick={deleteTask}>clear</i>}
+                <i className="material-icons delete-btn" onClick={handleDelete}>clear</i>}
         </div>
     )
 }
 
-const moveCursorToEndAndFocus = (el: HTMLElement) => {
-    const range = document.createRange()
-    const selection = window.getSelection()
-    const elContentNode = el.childNodes[0]
-    if (!elContentNode || !elContentNode.textContent) return
-    range.setStart(elContentNode, elContentNode.textContent.length)
-    range.collapse()
-    selection?.removeAllRanges()
-    selection?.addRange(range)
-    el.focus()
-}
-
-export default Record
+export default memo(Record)

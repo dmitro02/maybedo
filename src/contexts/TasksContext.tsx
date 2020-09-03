@@ -3,8 +3,30 @@ import React, {
     useReducer, 
     useContext 
 } from "react"
-import { DB } from '../mockDB'
-import { ITask, IProject } from '../types'
+import { ITask } from '../types'
+import { 
+    createItem,
+    updateItem,
+    deleteItem,
+    moveItem
+} from './contextUtils'
+import { initPaths } from '../utils/pathUtils'
+import { actionTypes } from '../contexts/actionCreators'
+import DATA from '../data'
+
+export interface IStore {
+    rootProject: ITask
+    addedItemPath: string | undefined
+}
+
+const getInitialState = (): IStore => {
+    const rootProject: ITask = initPaths(DATA)
+    rootProject.selectedTaskPath = rootProject.tasks[0].path
+    return {
+        rootProject,
+        addedItemPath: undefined
+    }
+}
 
 const TasksContext = createContext<any>(undefined)
 
@@ -19,63 +41,37 @@ export function TasksContextProvider({ children }: any) {
 
 export const useTasksContext = () => useContext(TasksContext)
 
-export const setTitleAction = (title: string) => ({
-    type: "SET_TITLE",
-    title
-}) 
-
-export const setTaskAction = (task: ITask) => ({
-    type: "SET_TASK",
-    task
-}) 
-
-export const addTaskAction = (task: ITask) => ({
-    type: "ADD_TASK",
-    task
-}) 
-
-export const deleteTaskAction = (task: ITask) => ({
-    type: "DELETE_TASK",
-    task
-}) 
-
-const tasksReducer = (state: IProject, action: any): IProject => {
-  switch (action.type) {
-    case "SET_TASK": {
-        const { task } = action
-        const tasks = [ ...state.tasks ]
-        const i = tasks.findIndex(t => t.id === task.id)
-        tasks[i] = { ...task }
-        return { ...state, tasks }
+const tasksReducer = (state: IStore, action: any): IStore => {    
+    switch (action.type) {
+        case actionTypes.CREATE_TASK: {
+            const { item } = action 
+            return {
+                ...createItem(state, item),
+                addedItemPath: item.path
+            }
+        }
+        case actionTypes.UPDATE_TASK: {
+            return updateItem(state, action.item)
+        }
+        case actionTypes.DELETE_TASK: {
+            return deleteItem(state, action.item)
+        }
+        case actionTypes.MOVE_TASK: {
+            const { movedItemPath, siblingPath } = action
+            return moveItem(state, movedItemPath, siblingPath)
+        }
+        default:
+            return state;
     }
-    case "ADD_TASK": {
-        const { task } = action
-        const tasks = [ ...state.tasks ]        
-        task.id = generateNextId(tasks)
-        tasks.push(task)
-        return { ...state, tasks, justAddedTaskId: task.id }
-    }
-    case "DELETE_TASK": {
-        const { task } = action
-        const tasks = [ ...state.tasks ].filter(t => t !== task)
-        return { ...state, tasks }
-    }
-    case "SET_TITLE": {
-        const { title } = action
-        return { ...state, text: title }
-    }
-    default:
-        return state;
-  }
 };
 
-const getInitialState = () => DB[0]
-
 export const createTaskObj = (
+    path: string,
     text: string = '', 
     isDone: boolean = false, 
-): ITask => ({id: -1, text, isDone})
-
-const generateNextId = (tasks: ITask[]) => tasks
-    .map((task) => task.id)
-    .reduce((prev, curr) => Math.max(prev, curr)) + 1
+): ITask => ({ 
+    path, 
+    text, 
+    isDone, 
+    tasks: []
+})

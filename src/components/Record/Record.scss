@@ -3,6 +3,12 @@
 .record {
     display: flex;
     font-size: 1.2rem;
+    text-align: justify;
+
+    [contenteditable] {
+        outline: 0px solid transparent;
+        white-space: pre-wrap;
+    }
     
     .delete-btn {
         margin-left: auto;
@@ -27,12 +33,12 @@
         color: black;
     }
 
-    .task-done {
+    .item-done {
         color: $text-gray;
         text-decoration: line-through;
     }
     
-    .task-content {
+    .item-content {
         padding: 4px 4px 6px 4px;
         width: 100%;
         overflow-wrap: anywhere;
@@ -44,13 +50,20 @@
     }
 }
 
+.record-selected {
+    background-color: $record-selected-color;
+}
+
 .record:hover {
     background-color: $record-hover-color;
-    border-radius: 4px;
-
+    
     .delete-btn, .drag-mark, .edit-btn {
         visibility: visible;
     }
+}
+
+.record-selected, .record:hover {
+    border-radius: 4px;
 }
 
 .add-record {
@@ -69,6 +82,31 @@
     }
 }
 
-.add-record > .task-content:empty::before {
-    content: "new task";
+.add-record > .item-content:empty::before {
+    content: "new item";
+}
+
+.record.title  {
+    font-weight: bold;
+    font-size: 1.6rem;
+    text-align: center;
+    color: $text-gray;
+    border: 1px dashed transparent;
+
+    .item-content {
+        border: 1px dashed transparent;
+    }
+
+    .item-content:focus, .item-content:hover{
+        border: 1px dashed $text-gray;
+        border-radius: 4px;
+    }
+}
+
+.record.title:hover {
+    background-color: inherit;
+}
+
+.record.title.read-only:hover .item-content:hover {
+    border: 1px dashed transparent;
 }

@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { memo } from 'react'
 import './Record.scss'
+import { createTaskObj, useTasksContext } from '../../contexts/TasksContext'
+import { constructNewPath } from '../../utils/pathUtils'
+import { ITask } from '../../types'
+import { createTaskAction } from '../../contexts/actionCreators'
 
-interface IProps { addRecord: Function }
-
-const AddRecord = ({ addRecord }: IProps) => {
+const AddRecord = ({ root }: { root: ITask }) => {
+    const [ , dispatch ] = useTasksContext()
+    
     const createRecord = (e: any) => {
-        if (!e.target.textContent.trim()) return
-        addRecord(e)
+        const taskText = e.target.textContent.trim()
+        if (!taskText) return
+        const item: ITask = createTaskObj(constructNewPath(root), taskText)
+        dispatch(createTaskAction(item))
         e.target.textContent = ''
     }
 
@@ -18,7 +24,7 @@ const AddRecord = ({ addRecord }: IProps) => {
         <div className="record add-record">
             <i className="material-icons add-mark">add</i>
             <span 
-                className="task-content" 
+                className="item-content" 
                 contentEditable="true"
                 suppressContentEditableWarning={true}
                 onInput={createRecord}
@@ -28,4 +34,4 @@ const AddRecord = ({ addRecord }: IProps) => {
     )
 }
 
-export default AddRecord
+export default memo(AddRecord)

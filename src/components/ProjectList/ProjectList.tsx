@@ -1,15 +1,13 @@
 import React from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { ITask } from '../../types'
-import { RecordConfig } from '../Record/Record'
-import './TaskList.scss'
+import './ProjectList.scss'
 import RecordList from '../RecordList/RecordList'
+import { RecordConfig } from '../Record/Record'
 
 const activeRecordConfig: RecordConfig = {
     useCheckMark: true,
     useDeleteBtn: true,
-    useDragBtn: true,
-    isEditable: true
+    useDragBtn: true
 }
 
 const completedRecordConfig: RecordConfig = { 
@@ -17,25 +15,16 @@ const completedRecordConfig: RecordConfig = {
     useDragBtn: false
 }
 
-const titleRecordConfig: RecordConfig = {
-    isEditable: true, 
-    isTitle: true
-}
+const titleRecordConfig: RecordConfig = { isTitle: true }
 
-const TaskList = () => {
+const ProjectList = () => {
     const [ store ] = useTasksContext()
 
-    const { tasks } = store.rootProject
-
-    const root = tasks.length 
-        ? tasks.find((p: ITask) => p.path === store.rootProject.selectedTaskPath)
-        : null
-
-    if (!root) return null
+    const root = store.rootProject
 
     return (
         <RecordList 
-            classNames={['task-list']}
+            classNames={['project-list']}
             root={root}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
@@ -44,4 +33,4 @@ const TaskList = () => {
     )
 }
 
-export default TaskList
+export default ProjectList
