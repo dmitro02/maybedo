@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
-import { ITask } from '../../types'
+import { Task } from '../../types'
 import Record, { RecordConfig } from '../Record/Record'
 import Sortable from 'sortablejs'
 import './RecordList.scss'
@@ -10,7 +10,7 @@ import { moveTaskAction } from '../../contexts/actionCreators'
 
 type Props = { 
     classNames?: string[],
-    root: ITask,
+    root: Task,
     activeRecordConfig: RecordConfig,
     completedRecordConfig: RecordConfig,
     titleRecordConfig: RecordConfig
@@ -29,8 +29,8 @@ const RecordList = (props: Props) => {
 
     const { tasks } = root
 
-    const activeTasks = tasks.filter((t: ITask) => !t.isDone)
-    const completedTasks = tasks.filter((t: ITask) => t.isDone)
+    const activeTasks = tasks.filter((t: Task) => !t.isDone)
+    const completedTasks = tasks.filter((t: Task) => t.isDone)
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
@@ -58,7 +58,7 @@ const RecordList = (props: Props) => {
             <Divider />
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(
-                    (task: ITask) => 
+                    (task: Task) => 
                         <Record 
                             key={task.path} 
                             item={task} 
@@ -71,7 +71,7 @@ const RecordList = (props: Props) => {
             <Divider isHidden={!completedTasks.length} />
             <div className="completed-tasks">
                 {completedTasks.map(
-                    (task: ITask) => 
+                    (task: Task) => 
                         <Record 
                             key={task.path}
                             item={task} 

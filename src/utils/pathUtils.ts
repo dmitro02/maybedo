@@ -1,4 +1,4 @@
-import { ITask } from "../types"
+import { Task } from "../types"
 
 const PATH_SEPARATOR = '.' 
 
@@ -7,7 +7,7 @@ export const initPaths = (root: any) => {
     return initPathsRecursively(root)
 }
 
-export const constructNewPath = (root: ITask) => {
+export const constructNewPath = (root: Task) => {
     const { path, tasks } = root
     return tasks.length 
         ? addToPath(path, tasks
@@ -16,7 +16,7 @@ export const constructNewPath = (root: ITask) => {
         : addToPath(path, '0')
 }
 
-export const isTopLevelItem = (item: ITask): boolean => 
+export const isTopLevelItem = (item: Task): boolean => 
     pathToArray(item.path).length === 2
 
 export const pathToArray = (path: string) => 

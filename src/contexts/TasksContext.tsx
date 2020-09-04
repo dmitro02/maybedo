@@ -3,7 +3,7 @@ import React, {
     useReducer, 
     useContext 
 } from "react"
-import { ITask } from '../types'
+import { Task } from '../types'
 import { 
     createItem,
     updateItem,
@@ -15,12 +15,12 @@ import { actionTypes } from '../contexts/actionCreators'
 import DATA from '../data'
 
 export interface IStore {
-    rootProject: ITask
+    rootProject: Task
     addedItemPath: string | undefined
 }
 
 const getInitialState = (): IStore => {
-    const rootProject: ITask = initPaths(DATA)
+    const rootProject: Task = initPaths(DATA)
     rootProject.selectedTaskPath = rootProject.tasks[0].path
     return {
         rootProject,
@@ -74,14 +74,3 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return state;
     }
 };
-
-export const createTaskObj = (
-    path: string,
-    text: string = '', 
-    isDone: boolean = false, 
-): ITask => ({ 
-    path, 
-    text, 
-    isDone, 
-    tasks: []
-})

@@ -1,4 +1,4 @@
-import { ITask } from '../types'
+import { Task } from '../types'
 
 export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',
@@ -7,17 +7,17 @@ export enum actionTypes {
     MOVE_TASK = 'MOVE_TASK'
 }
 
-export const createTaskAction = (item: ITask) => ({
+export const createTaskAction = (item: Task) => ({
     type: actionTypes.CREATE_TASK,
     item
 }) 
 
-export const updateTaskAction = (item: ITask) => ({
+export const updateTaskAction = (item: Task) => ({
     type: actionTypes.UPDATE_TASK,
     item
 }) 
 
-export const deleteTaskAction = (item: ITask) => ({
+export const deleteTaskAction = (item: Task) => ({
     type: actionTypes.DELETE_TASK,
     item
 })

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, memo } from 'react'
 import './Record.scss'
-import { ITask } from '../../types'
+import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { 
     debounceInput, 
@@ -23,9 +23,9 @@ export type RecordConfig = {
 }
 
 type Props = { 
-    item: ITask, 
+    item: Task, 
     config: RecordConfig, 
-    parent: ITask
+    parent: Task
 }
 
 const Record = ({ item, config, parent }: Props) => {
@@ -64,9 +64,9 @@ const Record = ({ item, config, parent }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [path, store.addedItemId])
 
-    const updateRecord = (item: ITask) => dispatch(updateTaskAction(item))
+    const updateRecord = (item: Task) => dispatch(updateTaskAction(item))
 
-    const deleteRecord = (item: ITask) => {    
+    const deleteRecord = (item: Task) => {    
         if (isTopLevelItem(item)) {
             if (parent.tasks.length === 1) {
                 parent.selectedTaskPath = undefined
@@ -80,7 +80,7 @@ const Record = ({ item, config, parent }: Props) => {
         dispatch(deleteTaskAction(item))
     }
 
-    const selectRecord = (item: ITask) => {
+    const selectRecord = (item: Task) => {
         if (parent.selectedTaskPath === item.path) return
         parent.selectedTaskPath = item.path
         dispatch(updateTaskAction(parent))

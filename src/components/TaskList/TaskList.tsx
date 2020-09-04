@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { ITask } from '../../types'
+import { Task } from '../../types'
 import { RecordConfig } from '../Record/Record'
 import './TaskList.scss'
 import RecordList from '../RecordList/RecordList'
@@ -28,7 +28,7 @@ const TaskList = () => {
     const { tasks } = store.rootProject
 
     const root = tasks.length 
-        ? tasks.find((p: ITask) => p.path === store.rootProject.selectedTaskPath)
+        ? tasks.find((p: Task) => p.path === store.rootProject.selectedTaskPath)
         : null
 
     if (!root) return null
