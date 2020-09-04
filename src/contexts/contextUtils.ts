@@ -1,19 +1,18 @@
-import { IStore } from './TasksContext';
 import { ITask } from './../types';
 import { pathToArray, addToPath } from '../utils/pathUtils';
 
-export const createItem = (state: IStore, createdItem: ITask) =>
-    updateItemChain(state, createdItem, createArrayItem)
+export const createItem = (root: ITask, createdItem: ITask) =>
+    updateItemChain(root, createdItem, createArrayItem)
 
-export const updateItem = (state: IStore, updatedItem: ITask) =>
-    updateItemChain(state, updatedItem, updateArrayItem) 
+export const updateItem = (root: ITask, updatedItem: ITask) =>
+    updateItemChain(root, updatedItem, updateArrayItem) 
 
-export const deleteItem = (state: IStore, deletedItem: ITask) =>
-    updateItemChain(state, deletedItem, deleteArrayItem)
+export const deleteItem = (root: ITask, deletedItem: ITask) =>
+    updateItemChain(root, deletedItem, deleteArrayItem)
 
-export const moveItem = (state: IStore, movedItemPath: string, siblingPath: string) => {
-    const movedItem = getItemByPath(state.rootProject, movedItemPath)
-    return updateItemChain(state, movedItem, 
+export const moveItem = (root: ITask, movedItemPath: string, siblingPath: string) => {
+    const movedItem = getItemByPath(root, movedItemPath)
+    return updateItemChain(root, movedItem, 
         (a: ITask[], b: ITask) => moveArrayItem(a, b, siblingPath))
 }
 
@@ -35,12 +34,9 @@ const moveArrayItem = (array: ITask[], movedItem: ITask, siblingPath: string) =>
     return newArray
 }
 
-const updateItemChain = (state: IStore, updatedItem: ITask, whatToDo: Function) => {
-    const itemChain = getItemChain(state.rootProject, updatedItem)
-    return {
-        ...state,
-        rootProject: updateChain(itemChain, whatToDo)
-    }
+const updateItemChain = (root: ITask, updatedItem: ITask, whatToDo: Function) => {
+    const itemChain = getItemChain(root, updatedItem)
+    return updateChain(itemChain, whatToDo)
 }
 
 const updateChain = (chain: ITask[], whatToDo: Function) => {

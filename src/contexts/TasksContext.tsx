@@ -46,19 +46,29 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.CREATE_TASK: {
             const { item } = action 
             return {
-                ...createItem(state, item),
+                ...state,
+                rootProject: createItem(state.rootProject, item),
                 addedItemPath: item.path
             }
         }
         case actionTypes.UPDATE_TASK: {
-            return updateItem(state, action.item)
+            return {
+                ...state,
+                rootProject: updateItem(state.rootProject, action.item)
+            }
         }
         case actionTypes.DELETE_TASK: {
-            return deleteItem(state, action.item)
+            return {
+                ...state,
+                rootProject: deleteItem(state.rootProject, action.item)
+            }
         }
         case actionTypes.MOVE_TASK: {
             const { movedItemPath, siblingPath } = action
-            return moveItem(state, movedItemPath, siblingPath)
+            return {
+                ...state,
+                rootProject: moveItem(state.rootProject, movedItemPath, siblingPath)
+            }
         }
         default:
             return state;
