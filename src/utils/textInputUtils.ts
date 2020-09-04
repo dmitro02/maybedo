@@ -1,4 +1,4 @@
-export const debounceInput = (callback: Function) => {
+export const debounceInput = (callback: (text: string) => void) => {
     let timeout: any
     return (e: any) => {
         const text = e.target.innerText
@@ -7,7 +7,7 @@ export const debounceInput = (callback: Function) => {
     }
 }
 
-export const getCaretPosition = (el?: HTMLElement) => {
+export const getCaretPosition = (el?: HTMLElement): number | undefined => {
     if (!el || !el.isContentEditable) return
     let _range
     try {
@@ -22,7 +22,7 @@ export const getCaretPosition = (el?: HTMLElement) => {
     return range.toString().length
 }
 
-export const setCaretPosition = (el?: HTMLElement, pos?: number) => {
+export const setCaretPosition = (el?: HTMLElement, pos?: number): void => {
     if (!el) return
     const range = document.createRange()
     const selection = window.getSelection()

@@ -34,12 +34,17 @@ const moveArrayItem = (array: Task[], movedItem: Task, siblingPath: string) => {
     return newArray
 }
 
-const updateItemChain = (root: Task, updatedItem: Task, whatToDo: Function) => {
-    const itemChain = getItemChain(root, updatedItem)
-    return updateChain(itemChain, whatToDo)
+const updateItemChain = (
+    root: Task, updatedItem: Task, 
+    whatToDo: (array: Task[], task: Task) => Task[]
+) => {
+    return updateChain(getItemChain(root, updatedItem), whatToDo)
 }
 
-const updateChain = (chain: Task[], whatToDo: Function) => {
+const updateChain = (
+    chain: Task[], 
+    whatToDo: (array: Task[], task: Task) => Task[]
+) => {
     return chain.length === 1
         ? { ...chain[0] }
         : chain.reduce((prev: Task, curr: Task, index: number) => ({
