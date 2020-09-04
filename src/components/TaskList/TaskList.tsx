@@ -28,7 +28,7 @@ const TaskList = () => {
     const { tasks } = store.rootProject
 
     const root = tasks.length 
-        ? tasks.find((p: Task) => p.path === store.rootProject.selectedTaskPath)
+        ? tasks.find((p: Task) => p.path === store.rootProject.selectedSubTaskPath)
         : null
 
     if (!root) return null

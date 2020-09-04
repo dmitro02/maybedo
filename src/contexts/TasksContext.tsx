@@ -21,7 +21,7 @@ export interface IStore {
 
 const getInitialState = (): IStore => {
     const rootProject: Task = initPaths(DATA)
-    rootProject.selectedTaskPath = rootProject.tasks[0].path
+    rootProject.selectedSubTaskPath = rootProject.tasks[0].path
     return {
         rootProject,
         addedItemPath: undefined

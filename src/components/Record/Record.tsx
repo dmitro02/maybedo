@@ -69,11 +69,11 @@ const Record = ({ item, config, parent }: Props) => {
     const deleteRecord = (item: Task) => {    
         if (isTopLevelItem(item)) {
             if (parent.tasks.length === 1) {
-                parent.selectedTaskPath = undefined
+                parent.selectedSubTaskPath = undefined
             } else if (item === parent.tasks[0]) {
-                parent.selectedTaskPath = parent.tasks[1].path
+                parent.selectedSubTaskPath = parent.tasks[1].path
             } else {
-                parent.selectedTaskPath = parent.tasks[0].path
+                parent.selectedSubTaskPath = parent.tasks[0].path
             }
             dispatch(updateTaskAction(parent))
         }
@@ -81,8 +81,8 @@ const Record = ({ item, config, parent }: Props) => {
     }
 
     const selectRecord = (item: Task) => {
-        if (parent.selectedTaskPath === item.path) return
-        parent.selectedTaskPath = item.path
+        if (parent.selectedSubTaskPath === item.path) return
+        parent.selectedSubTaskPath = item.path
         dispatch(updateTaskAction(parent))
     }
 
@@ -123,7 +123,7 @@ const Record = ({ item, config, parent }: Props) => {
 
     const isJustAdded = store.addedItemPath === path && !isTitle
 
-    const isSelected = path === parent.selectedTaskPath && !isTitle
+    const isSelected = path === parent.selectedSubTaskPath && !isTitle
 
     const className = `record${isSelected ? ' record-selected' : ''}\
         ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`

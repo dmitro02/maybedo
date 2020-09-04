@@ -3,7 +3,7 @@ export class Task {
     text: string
     isDone: boolean
     tasks: Task[]
-    selectedTaskPath?: string
+    selectedSubTaskPath?: string
 
     constructor(path: string, text: string, isDone: boolean = false) {
         this.path = path
