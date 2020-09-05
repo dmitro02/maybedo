@@ -16,10 +16,6 @@ const AddRecord = ({ root }: { root: Task }) => {
         e.target.textContent = ''
     }
 
-    const preventEnterOnEmpty = (e: any) => {
-        !e.target.textContent.trim() && e.key === 'Enter' && e.preventDefault()
-    }
-
     return (  
         <div className="record add-record">
             <i className="material-icons add-mark">add</i>
@@ -32,6 +28,10 @@ const AddRecord = ({ root }: { root: Task }) => {
             ></span>
         </div>
     )
+}
+
+const preventEnterOnEmpty = (e: any) => {
+    !e.target.textContent.trim() && e.key === 'Enter' && e.preventDefault()
 }
 
 export default memo(AddRecord)

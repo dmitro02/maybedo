@@ -1,6 +1,4 @@
 - collapsable completed tasks list
 - add confirmation before delete 
-- move all that possible (constants) out of components functions 
 - add return type to all functions
 - BUG (Chrome only): while moving record other record statically displayed as hovered 
-- housekeep styles for Record, RecordList, ProjectList and TaskList
