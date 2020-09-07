@@ -10,7 +10,23 @@ const DATA =
             {
                "isDone":false,
                "text":"make love",
-               "tasks":[]
+               "tasks":[
+                  {
+                     "isDone":false,
+                     "text":"снять трусы",
+                     "tasks":[]
+                  },
+                  {
+                     "isDone":false,
+                     "text":"побрить усы",
+                     "tasks":[]
+                  },
+                  {
+                     "isDone":false,
+                     "text":"сверить часы",
+                     "tasks":[]
+                  },
+               ]
             },
             {
                "isDone":true,

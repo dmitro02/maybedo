@@ -7,13 +7,15 @@ import Record, { RecordConfig } from '../Record/Record'
 import Sortable from 'sortablejs'
 import './RecordList.scss'
 import { moveTaskAction } from '../../contexts/actionCreators'
+import { isTaskLevelItem } from '../../utils/pathUtils'
+import SubTaskList from '../SubTaskList/SubTaskList'
 
 type Props = { 
     classNames?: string[],
     root: Task,
     activeRecordConfig: RecordConfig,
     completedRecordConfig: RecordConfig,
-    titleRecordConfig: RecordConfig
+    titleRecordConfig?: RecordConfig
 }
 
 const RecordList = (props: Props) => {
@@ -49,22 +51,30 @@ const RecordList = (props: Props) => {
     })
 
     return (
-        <div className={`tasks-box ${classNames.join(' ')}`}>
-            <Record 
-                item={root} 
-                config={titleRecordConfig}
-                parent={store.rootProject}
-            />
-            <Divider />
+        <div className={classNames.join(' ')}>
+            {titleRecordConfig && 
+                <Record 
+                    item={root} 
+                    config={titleRecordConfig}
+                    parent={store.rootProject}
+                />
+            }
+            <Divider isHidden={isTaskLevelItem(root)} />
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(
                     (task: Task) => 
-                        <Record 
-                            key={task.path} 
-                            item={task} 
-                            config={activeRecordConfig}
-                            parent={root}
-                        />
+                        <>
+                            <Record 
+                                key={task.path} 
+                                item={task} 
+                                config={activeRecordConfig}
+                                parent={root}
+                            />
+                            {/* <SubTaskList 
+                                task={task}
+                                isDisplayed={true}
+                            /> */}
+                        </>
                 )}
             </div>
             <AddRecord root={root}/>

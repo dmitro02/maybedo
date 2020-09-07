@@ -16,8 +16,11 @@ export const constructNewPath = (root: Task) => {
         : addToPath(path, '0')
 }
 
-export const isTopLevelItem = (item: Task): boolean => 
+export const isProjectLevelItem = (item: Task): boolean => 
     pathToArray(item.path).length === 2
+
+export const isTaskLevelItem = (item: Task): boolean => 
+    pathToArray(item.path).length > 2
 
 export const pathToArray = (path: string) => 
     path.split(PATH_SEPARATOR)

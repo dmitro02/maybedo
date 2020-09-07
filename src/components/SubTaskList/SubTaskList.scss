@@ -1,0 +1,32 @@
+.subtasks-list {
+    padding: 0;
+
+    .active-tasks {
+        padding: 0;
+
+        .record {
+            padding-left: 20px;
+        }
+    }
+
+    .completed-tasks {
+        padding: 0;
+
+        .record {
+            padding-left: 49px;
+        }
+    }
+
+    .add-record {
+        margin-left:0;
+        margin-right: 0;
+    
+        .add-mark {
+            margin-left: 49px;
+        }
+    }
+
+    .add-record > .item-content:empty::before {
+        content: "new subtask";
+    }
+}

@@ -11,13 +11,16 @@ import {
     updateTaskAction,
     deleteTaskAction
 } from '../../contexts/actionCreators'
-import { isTopLevelItem } from '../../utils/pathUtils'
+import { isProjectLevelItem, isTaskLevelItem } from '../../utils/pathUtils'
+import SubTaskList from '../SubTaskList/SubTaskList'
 
 export type RecordConfig = {
     useCheckMark?: boolean
     useDeleteBtn?: boolean
     useDragBtn?: boolean
     useEditBtn?: boolean
+    useExpandBtn?: boolean
+    useAddSubtasksBtn?: boolean
     isEditable?: boolean
     isTitle?: boolean
 }
@@ -36,6 +39,8 @@ const Record = ({ item, config, parent }: Props) => {
         useDeleteBtn = false,
         useDragBtn = false,
         useEditBtn = false,
+        useExpandBtn = false,
+        useAddSubtasksBtn = true,
         isEditable = false,
         isTitle = false
     } = config
@@ -67,7 +72,7 @@ const Record = ({ item, config, parent }: Props) => {
     const updateRecord = (item: Task) => dispatch(updateTaskAction(item))
 
     const deleteRecord = (item: Task) => {    
-        if (isTopLevelItem(item)) {
+        if (isProjectLevelItem(item)) {
             if (parent.tasks.length === 1) {
                 parent.selectedSubTaskPath = undefined
             } else if (item === parent.tasks[0]) {
@@ -129,6 +134,7 @@ const Record = ({ item, config, parent }: Props) => {
         ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
 
     return (
+        <>
         <div 
             className={className}
             id={path} 
@@ -157,9 +163,15 @@ const Record = ({ item, config, parent }: Props) => {
             </span>
             {useEditBtn && 
                 <i className="material-icons edit-btn" onClick={() => setContentEditable(true)}>edit</i>}
+            {useAddSubtasksBtn && 
+                <i className="material-icons add-mark" onClick={() => {}}>add</i>}  
+            {useExpandBtn && 
+                <i className="material-icons" onClick={() => {}}>{'expand_more'}</i>}    
             {useDeleteBtn && 
                 <i className="material-icons delete-btn" onClick={handleDelete}>clear</i>}
         </div>
+        <SubTaskList task={item} isDisplayed={isTaskLevelItem(item) && true} />
+    </>
     )
 }
 

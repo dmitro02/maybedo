@@ -24,7 +24,7 @@ const ProjectList = () => {
 
     return (
         <RecordList 
-            classNames={['project-list']}
+            classNames={['tasks-box', 'project-list']}
             root={root}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}

@@ -4,7 +4,5 @@
         margin-right: 5px;
     }
     
-    .add-record > .item-content:empty::before {
-        content: "new task";
-    }
+
 }
