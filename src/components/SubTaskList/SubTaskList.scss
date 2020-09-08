@@ -1,32 +1,26 @@
 .subtasks-list {
-    padding: 0;
+    padding: 0 0 8px 20px;
 
-    .active-tasks {
+    & > .completed-tasks {
         padding: 0;
 
         .record {
-            padding-left: 20px;
+            padding-left: 29px;
         }
     }
 
-    .completed-tasks {
-        padding: 0;
-
-        .record {
-            padding-left: 49px;
-        }
-    }
-
-    .add-record {
+    & > .add-record {
         margin-left:0;
         margin-right: 0;
-    
-        .add-mark {
-            margin-left: 49px;
-        }
     }
 
     .add-record > .item-content:empty::before {
         content: "new subtask";
+    }
+
+    .divider {
+        box-sizing: content-box;
+        margin: 3px 0 3px 29px;
+        border-top-style: dotted;
     }
 }

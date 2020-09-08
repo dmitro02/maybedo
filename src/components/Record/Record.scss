@@ -10,16 +10,16 @@
         white-space: pre-wrap;
     }
     
-    .delete-btn {
+    .hidden-btn:last-of-type {
         margin-left: auto;
         margin-right: 6px;
     }
 
-    .delete-btn, .check-mark, .edit-btn {
+    .pointer-btn {
         cursor: pointer;
     }
 
-    .delete-btn, .drag-mark, .edit-btn {
+    .hidden-btn {
         visibility: hidden;
     }
 
@@ -57,7 +57,7 @@
 .record:hover {
     background-color: $record-hover-color;
     
-    .delete-btn, .drag-mark, .edit-btn {
+    .hidden-btn {
         visibility: visible;
     }
 }

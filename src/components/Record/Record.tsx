@@ -143,13 +143,13 @@ const Record = ({ item, config, parent }: Props) => {
                 !isTitle && selectRecord(item)
             }}
         >
-            {useDragBtn && <i className="material-icons drag-mark">drag_handle</i>}
+            {useDragBtn && <i className="material-icons hidden-btn drag-mark">drag_handle</i>}
             {useCheckMark && <span
                 onMouseDown={handleMouseDownOnCheckbox} 
                 onMouseUp={handleMouseUpOnCheckbox}
             >
-                {!isDone && <i className="material-icons check-mark">check_box_outline_blank</i>}
-                {isDone && <i className="material-icons check-mark">check_box</i>}
+                {!isDone && <i className="material-icons pointer-btn">check_box_outline_blank</i>}
+                {isDone && <i className="material-icons pointer-btn">check_box</i>}
             </span>}
             <span 
                 ref={recordContentRef}
@@ -162,13 +162,13 @@ const Record = ({ item, config, parent }: Props) => {
                 {text}
             </span>
             {useEditBtn && 
-                <i className="material-icons edit-btn" onClick={() => setContentEditable(true)}>edit</i>}
+                <i className="material-icons hidden-btn pointer-btn" onClick={() => setContentEditable(true)}>edit</i>}
             {useAddSubtasksBtn && 
-                <i className="material-icons add-mark" onClick={() => {}}>add</i>}  
+                <i className="material-icons hidden-btn pointer-btn" onClick={() => {}}>add</i>}  
             {useExpandBtn && 
-                <i className="material-icons" onClick={() => {}}>{'expand_more'}</i>}    
+                <i className="material-icons hidden-btn pointer-btn" onClick={() => {}}>{'expand_more'}</i>}    
             {useDeleteBtn && 
-                <i className="material-icons delete-btn" onClick={handleDelete}>clear</i>}
+                <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>}
         </div>
         <SubTaskList task={item} isDisplayed={isTaskLevelItem(item) && true} />
     </>
