@@ -1,26 +1,12 @@
 .subtasks-list {
-    padding: 0 0 8px 20px;
-
-    & > .completed-tasks {
-        padding: 0;
-
-        .record {
-            padding-left: 29px;
-        }
-    }
-
-    & > .add-record {
-        margin-left:0;
-        margin-right: 0;
-    }
+    margin: 0 0 6px 24px;
 
     .add-record > .item-content:empty::before {
         content: "new subtask";
     }
 
     .divider {
-        box-sizing: content-box;
-        margin: 3px 0 3px 29px;
+        margin: 3px 0 3px;
         border-top-style: dotted;
     }
 }

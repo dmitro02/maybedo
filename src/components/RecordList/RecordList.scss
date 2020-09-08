@@ -1,3 +1,17 @@
 .tasks-box {
     padding: 10px 5px;
+
+    .completed-tasks {
+        .record {
+            padding-left: 30px;
+        }
+
+        .add-record, .drag-mark, .divider {
+            display: none;
+        }
+    }
+
+    .add-record {
+        padding-left: 30px;
+    }
 }
