@@ -8,7 +8,6 @@ import Sortable from 'sortablejs'
 import './RecordList.scss'
 import { moveTaskAction } from '../../contexts/actionCreators'
 import { isTaskLevelItem } from '../../utils/pathUtils'
-import SubTaskList from '../SubTaskList/SubTaskList'
 
 type Props = { 
     classNames?: string[],
@@ -63,18 +62,12 @@ const RecordList = (props: Props) => {
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(
                     (task: Task) => 
-                        <>
-                            <Record 
-                                key={task.path} 
-                                item={task} 
-                                config={activeRecordConfig}
-                                parent={root}
-                            />
-                            {/* <SubTaskList 
-                                task={task}
-                                isDisplayed={true}
-                            /> */}
-                        </>
+                        <Record 
+                            key={task.path} 
+                            item={task} 
+                            config={activeRecordConfig}
+                            parent={root}
+                        />
                 )}
             </div>
             <AddRecord root={root}/>

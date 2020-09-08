@@ -27,10 +27,8 @@ const SubTaskList = (props: Props) => {
         isDisplayed = false
     } = props
 
-    const hasTasksToShow = !!task.tasks.length
-
     return (
-        (hasTasksToShow && isDisplayed)
+        isDisplayed
             ? <RecordList 
                 classNames={['subtasks-list']}
                 root={task}

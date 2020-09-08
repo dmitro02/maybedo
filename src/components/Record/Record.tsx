@@ -39,7 +39,6 @@ const Record = ({ item, config, parent }: Props) => {
         useDeleteBtn = false,
         useDragBtn = false,
         useEditBtn = false,
-        useExpandBtn = false,
         useAddSubtasksBtn = true,
         isEditable = false,
         isTitle = false
@@ -50,6 +49,7 @@ const Record = ({ item, config, parent }: Props) => {
         stateCaretPosition, 
         setStateCaretPosition
     ] = useState<number|undefined>(undefined)
+    const [ showSubtasks, setShowSubtasks ] = useState(false)
 
     const [ store, dispatch ] = useTasksContext()
 
@@ -120,23 +120,41 @@ const Record = ({ item, config, parent }: Props) => {
     const loadCaretPositionFromState = () => 
         setCaretPosition(recordContentRef.current || undefined, stateCaretPosition)
 
-    const handleBlur = () => {
+    const handleBlur = () =>
         (useEditBtn || !isEditable) && setContentEditable(false)
-    }
-        
+
     const setFocus = () => recordContentRef.current?.focus()
 
     const isJustAdded = store.addedItemPath === path && !isTitle
 
     const isSelected = path === parent.selectedSubTaskPath && !isTitle
 
-    const className = `record${isSelected ? ' record-selected' : ''}\
+    const hasSubtasks = !!item.tasks.length
+
+    const recordClassName = `record${isSelected ? ' record-selected' : ''}\
         ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
+
+    const getSubtasksBtn = () => {
+        if (!useAddSubtasksBtn || !isTaskLevelItem(item)) return null
+        let btnClassName = 'material-icons pointer-btn'
+        let btnType
+        if (hasSubtasks) {
+            btnType = showSubtasks ? 'expand_less' : 'expand_more'
+        } else if (!(parent.isDone || isDone)) {
+            btnType = showSubtasks ? 'expand_less' : 'add'
+            btnClassName += ' hidden-btn' 
+        } else {
+            return null
+        }
+        return <i className={btnClassName} onClick={() => {setShowSubtasks(!showSubtasks)}}>
+                    {btnType}
+                </i>
+    }
 
     return (
         <>
         <div 
-            className={className}
+            className={recordClassName}
             id={path} 
             onClick={() => {
                 saveCaretPositionToState()
@@ -163,14 +181,11 @@ const Record = ({ item, config, parent }: Props) => {
             </span>
             {useEditBtn && 
                 <i className="material-icons hidden-btn pointer-btn" onClick={() => setContentEditable(true)}>edit</i>}
-            {useAddSubtasksBtn && 
-                <i className="material-icons hidden-btn pointer-btn" onClick={() => {}}>add</i>}  
-            {useExpandBtn && 
-                <i className="material-icons hidden-btn pointer-btn" onClick={() => {}}>{'expand_more'}</i>}    
+            {getSubtasksBtn()}  
             {useDeleteBtn && 
                 <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>}
         </div>
-        <SubTaskList task={item} isDisplayed={isTaskLevelItem(item) && true} />
+        <SubTaskList task={item} isDisplayed={showSubtasks} />
     </>
     )
 }
