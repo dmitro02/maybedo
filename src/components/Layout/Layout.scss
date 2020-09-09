@@ -9,11 +9,13 @@
         width: 300px;
         margin-right: 10px; 
         margin-left: auto;
+        padding: 6px;
     }
     
     .right-panel {
         width: 900px;
         margin-right: auto;
+        padding: 6px;
     }
 }
 
@@ -21,4 +23,36 @@
     border-radius: 5px;
     background-color: $background-light;
     box-shadow: 2px 3px 5px 2px $shadow-color;
+}
+
+.menu {
+    padding: 0 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: $text-gray;
+
+    .material-icons-outlined {
+        color: $text-gray;
+        position: relative;
+        top: 2px;
+    }
+
+    .menu-item {
+        cursor: pointer;
+        padding: 4px 4px 6px;
+    
+        i {
+            margin-left: 24px;
+            margin-right: 5px;
+        }
+    
+        i, span {
+            vertical-align: top;
+        }
+    }
+    
+    .menu-item:hover {
+        background-color: $record-hover-color;
+        border-radius: 4px;
+    }
 }

@@ -1,4 +1,12 @@
-- collapsable completed tasks list
+- BUG (Chrome only): while moving record other record statically displayed as hovered 
+- BUG: On expand/collapse subtasks - DOMException: Failed to execute 'getRangeAt' on 'Selection': 0 is not a valid index.
 - add confirmation before delete 
 - add return type to all functions
-- BUG (Chrome only): while moving record other record statically displayed as hovered 
+- remove "edit" button 
+- implement trash
+- export/import
+- save to local storage
+- redesign to get rid of card-look
+- mobile version
+- add alt text for buttons
+- do not check/uncheck task with right click
