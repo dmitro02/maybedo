@@ -3,10 +3,11 @@
 - add confirmation before delete 
 - add return type to all functions
 - remove "edit" button 
-- implement trash
 - export/import
 - save to local storage
 - redesign to get rid of card-look
 - mobile version
 - add alt text for buttons
 - do not check/uncheck task with right click
+- handle JSON parsing error on import
+- handle "bad data" on import

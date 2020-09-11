@@ -16,22 +16,19 @@ import DATA from '../data'
 
 export interface IStore {
     rootProject: Task
-    addedItemPath: string | undefined
+    addedItemPath?: string
 }
 
-const getInitialState = (): IStore => {
-    const rootProject: Task = initPaths(DATA)
+const getInitialState = (data: any): IStore => {
+    const rootProject: Task = initPaths(data)
     rootProject.selectedSubTaskPath = rootProject.tasks[0].path
-    return {
-        rootProject,
-        addedItemPath: undefined
-    }
+    return { rootProject }
 }
 
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
-    const context = useReducer(tasksReducer, getInitialState())
+    const context = useReducer(tasksReducer, getInitialState(DATA))
     return (
       <TasksContext.Provider value={context}>
           {children}
@@ -69,6 +66,9 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                 ...state,
                 rootProject: moveItem(state.rootProject, movedItemPath, siblingPath)
             }
+        }
+        case actionTypes.SET_APP_DATA: {
+            return getInitialState(action.rootProject)
         }
         default:
             return state;

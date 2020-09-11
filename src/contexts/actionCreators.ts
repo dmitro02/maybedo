@@ -4,7 +4,8 @@ export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',
     UPDATE_TASK = 'UPDATE_TASK',
     DELETE_TASK = 'DELETE_TASK',
-    MOVE_TASK = 'MOVE_TASK'
+    MOVE_TASK = 'MOVE_TASK',
+    SET_APP_DATA = 'SET_APP_DATA'
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -27,3 +28,8 @@ export const moveTaskAction = (movedItemPath: string, siblingPath: string | null
     movedItemPath,
     siblingPath
 }) 
+
+export const setAppData = (rootProject: Task) => ({
+    type: actionTypes.SET_APP_DATA,
+    rootProject
+})
