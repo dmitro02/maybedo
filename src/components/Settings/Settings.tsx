@@ -3,8 +3,14 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import { setAppData } from '../../contexts/actionCreators'
 import './Settings.scss'
 
-const Settings = () => {
+type Props = {
+    backToTaskList(): void
+}
+
+const Settings = (props: Props) => {
     const [ store, dispatch ] = useTasksContext()
+
+    const { backToTaskList } = props
 
     const excludeKeys = [
         'path',
@@ -28,9 +34,20 @@ const Settings = () => {
     const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
         const reader = new FileReader()
         reader.onload = () => {
-            const dataToImport = JSON.parse(reader.result as string)
             if (window.confirm('Do you want to overwrite existing data?')) {
+                let dataToImport
+                try {
+                    dataToImport = JSON.parse(reader.result as string)
+                } catch(e) {
+                    alert('BAD DATA (JSON)')
+                    return
+                }
+                if (!validateExportedData(dataToImport)) {
+                    alert('BAD DATA (shape)')
+                    return
+                }
                 dispatch(setAppData(dataToImport))
+                backToTaskList()
             } else {
                 return
             }
@@ -47,5 +64,26 @@ const Settings = () => {
         </div>
     )
 }
+
+type ExportedData = {
+    text: string
+    isDone: boolean
+    tasks: ExportedData[]
+}
+
+const isExportedData = (data: any): data is ExportedData => {
+    const dAs = data as ExportedData
+    return dAs.text !== undefined 
+            && dAs.isDone !== undefined 
+            && dAs.tasks !== undefined
+}
+
+const validateExportedData = (data: any): boolean => {
+    if (!isExportedData(data)) return false
+    for (let task of data.tasks) {
+        if(!validateExportedData(task)) return false;
+    }
+    return true
+} 
 
 export default Settings

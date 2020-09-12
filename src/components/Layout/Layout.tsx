@@ -28,7 +28,7 @@ const Layout = () => {
                 </div>
                 <div className="right-panel card">
                     {isSettingsOpened 
-                        ? <Settings />
+                        ? <Settings backToTaskList={toggleSettings}/>
                         : <TaskList />
                     }
                 </div>

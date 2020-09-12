@@ -29,6 +29,7 @@ export const addToPath = (path: string, addition: string | number) =>
     path + PATH_SEPARATOR + addition
 
 const initPathsRecursively = (root: any) => {
+    if (!Array.isArray(root.tasks)) root.tasks = []
     root.tasks.forEach((item: any, index: number) => {
         item.path = addToPath(root.path, index)
         initPathsRecursively(item)
