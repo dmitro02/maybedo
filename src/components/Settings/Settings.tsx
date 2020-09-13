@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { setAppData } from '../../contexts/actionCreators'
 import './Settings.scss'
@@ -11,6 +11,8 @@ const Settings = (props: Props) => {
     const [ store, dispatch ] = useTasksContext()
 
     const { backToTaskList } = props
+
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const excludeKeys = [
         'path',
@@ -56,10 +58,15 @@ const Settings = (props: Props) => {
         files && reader.readAsText(files[0])
     }
 
+    const clickOnFileInput = () => {
+        const node = fileInputRef.current!
+        node.click()
+    }
+
     return (
         <div>
-            <input type="file" id="importData" onChange={importData} />
-            <button onClick={() => {}}>Import</button>
+            <input type="file" onChange={importData} ref={fileInputRef}/>
+            <button onClick={clickOnFileInput}>Import</button>
             <button onClick={exportData}>Export</button>
         </div>
     )
