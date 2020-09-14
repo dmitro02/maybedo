@@ -18,7 +18,6 @@ export type RecordConfig = {
     useCheckMark?: boolean
     useDeleteBtn?: boolean
     useDragBtn?: boolean
-    useEditBtn?: boolean
     useExpandBtn?: boolean
     useAddSubtasksBtn?: boolean
     isEditable?: boolean
@@ -38,7 +37,6 @@ const Record = ({ item, config, parent }: Props) => {
         useCheckMark = false,
         useDeleteBtn = false,
         useDragBtn = false,
-        useEditBtn = false,
         useAddSubtasksBtn = true,
         isEditable = false,
         isTitle = false
@@ -120,8 +118,7 @@ const Record = ({ item, config, parent }: Props) => {
     const loadCaretPositionFromState = () => 
         setCaretPosition(recordContentRef.current || undefined, stateCaretPosition)
 
-    const handleBlur = () =>
-        (useEditBtn || !isEditable) && setContentEditable(false)
+    const handleBlur = () => !isEditable && setContentEditable(false)
 
     const setFocus = () => recordContentRef.current?.focus()
 
@@ -172,15 +169,13 @@ const Record = ({ item, config, parent }: Props) => {
             <span 
                 ref={recordContentRef}
                 className={'item-content' + (isDone ? ' item-done' : '')} 
-                contentEditable={isEditable && !useEditBtn}
+                contentEditable={isEditable}
                 suppressContentEditableWarning={true}
                 onInput={handleInput}
                 onBlur={handleBlur}
             >
                 {text}
             </span>
-            {useEditBtn && 
-                <i className="material-icons hidden-btn pointer-btn" onClick={() => setContentEditable(true)}>edit</i>}
             {getSubtasksBtn()}  
             {useDeleteBtn && 
                 <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>}
