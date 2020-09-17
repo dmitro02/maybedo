@@ -17,6 +17,7 @@ import DATA from '../data'
 export interface IStore {
     rootProject: Task
     addedItemPath?: string
+    modal?: any
 }
 
 const getInitialState = (data: any): IStore => {

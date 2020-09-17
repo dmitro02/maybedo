@@ -15,29 +15,27 @@ const Layout = () => {
     }
 
     return (
-        <>
-            <Modal>DIALOG</Modal>
-            <div className="main-container">   
-                <TasksContextProvider>
-                    <div className="left-panel card">
-                        <ProjectList />
-                        <Divider />
-                        <div className="menu">
-                            <div className="menu-item" onClick={toggleSettings}>
-                                <i className="material-icons-outlined">settings</i>
-                                <span>Settings</span>
-                            </div>
+        <div className="main-container">   
+            <TasksContextProvider>
+                <Modal />
+                <div className="left-panel card">
+                    <ProjectList />
+                    <Divider />
+                    <div className="menu">
+                        <div className="menu-item" onClick={toggleSettings}>
+                            <i className="material-icons-outlined">settings</i>
+                            <span>Settings</span>
                         </div>
                     </div>
-                    <div className="right-panel card">
-                        {isSettingsOpened 
-                            ? <Settings backToTaskList={toggleSettings}/>
-                            : <TaskList />
-                        }
-                    </div>
-                </TasksContextProvider>
-            </div>
-        </>
+                </div>
+                <div className="right-panel card">
+                    {isSettingsOpened 
+                        ? <Settings backToTaskList={toggleSettings}/>
+                        : <TaskList />
+                    }
+                </div>
+            </TasksContextProvider>
+        </div>
     )
 }
 
