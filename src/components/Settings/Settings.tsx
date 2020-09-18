@@ -1,7 +1,8 @@
 import React, { useRef } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { setAppData } from '../../contexts/actionCreators'
+import { setAppData, setModal } from '../../contexts/actionCreators'
 import './Settings.scss'
+import { IModal } from '../../types'
 
 type Props = {
     backToTaskList(): void
@@ -36,31 +37,41 @@ const Settings = (props: Props) => {
     const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
         const reader = new FileReader()
         reader.onload = () => {
-            if (window.confirm('Do you want to overwrite existing data?')) {
-                let dataToImport
-                try {
-                    dataToImport = JSON.parse(reader.result as string)
-                } catch(e) {
-                    alert('BAD DATA (JSON)')
-                    return
-                }
-                if (!validateExportedData(dataToImport)) {
-                    alert('BAD DATA (shape)')
-                    return
-                }
-                dispatch(setAppData(dataToImport))
-                backToTaskList()
-            } else {
-                return
+            const modal: IModal = {
+                text: 'Do you want to overwrite existing data?',
+                okAction: () => doImport(reader)
             }
+            dispatch(setModal(modal))
         };
         const files = e.target.files
         files && reader.readAsText(files[0])
     }
 
+    const doImport = (reader: FileReader) => {
+        clearFileInput()
+        let dataToImport
+        try {
+            dataToImport = JSON.parse(reader.result as string)
+        } catch(err) {
+            console.log('BAD DATA (JSON)')
+            return
+        }
+        if (!validateExportedData(dataToImport)) {
+            console.log('BAD DATA (shape)')
+            return
+        }
+        dispatch(setAppData(dataToImport))
+        backToTaskList()
+    }
+
     const clickOnFileInput = () => {
         const node = fileInputRef.current!
         node.click()
+    }
+
+    const clearFileInput = () => {
+        const node = fileInputRef.current!
+        node.value = ''
     }
 
     return (

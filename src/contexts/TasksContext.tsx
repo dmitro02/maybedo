@@ -71,6 +71,12 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.SET_APP_DATA: {
             return getInitialState(action.rootProject)
         }
+        case actionTypes.SET_MODAL: {
+            return {
+                ...state,
+                modal: action.modal
+            }
+        }
         default:
             return state;
     }

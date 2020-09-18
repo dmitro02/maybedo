@@ -12,3 +12,9 @@ export class Task {
         this.tasks = []
     }
 }
+
+export interface IModal {
+    text: string
+    okAction?: () => void 
+    cancelAction?: () => void
+}

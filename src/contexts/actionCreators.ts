@@ -1,11 +1,12 @@
-import { Task } from '../types'
+import { IModal, Task } from '../types'
 
 export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',
     UPDATE_TASK = 'UPDATE_TASK',
     DELETE_TASK = 'DELETE_TASK',
     MOVE_TASK = 'MOVE_TASK',
-    SET_APP_DATA = 'SET_APP_DATA'
+    SET_APP_DATA = 'SET_APP_DATA',
+    SET_MODAL = 'SET_MODAL'
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -32,4 +33,9 @@ export const moveTaskAction = (movedItemPath: string, siblingPath: string | null
 export const setAppData = (rootProject: Task) => ({
     type: actionTypes.SET_APP_DATA,
     rootProject
+})
+
+export const setModal = (modal: IModal | null) => ({
+    type: actionTypes.SET_MODAL,
+    modal
 })
