@@ -1,8 +1,12 @@
 import React, { useRef } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { setAppData, setModal } from '../../contexts/actionCreators'
+import { 
+    setAppData, 
+    setModal, 
+    setBanner 
+} from '../../contexts/actionCreators'
 import './Settings.scss'
-import { IModal } from '../../types'
+import { BannerTypes, IBanner, IModal } from '../../types'
 
 type Props = {
     backToTaskList(): void
@@ -53,15 +57,28 @@ const Settings = (props: Props) => {
         try {
             dataToImport = JSON.parse(reader.result as string)
         } catch(err) {
-            console.log('BAD DATA (JSON)')
+            const banner: IBanner = {
+                text: 'BAD DATA (JSON)',
+                type: BannerTypes.Failure
+            }
+            dispatch(setBanner(banner))
             return
         }
         if (!validateExportedData(dataToImport)) {
-            console.log('BAD DATA (shape)')
+            const banner: IBanner = {
+                text: 'BAD DATA (shape)',
+                type: BannerTypes.Failure
+            }
+            dispatch(setBanner(banner))
             return
         }
         dispatch(setAppData(dataToImport))
         backToTaskList()
+        const banner: IBanner = {
+            text: 'Data successfully imported',
+            type: BannerTypes.Success
+        }
+        dispatch(setBanner(banner))
     }
 
     const clickOnFileInput = () => {

@@ -1,26 +1,25 @@
 import React from 'react'
 import './Banner.scss'
+import { useTasksContext } from '../../contexts/TasksContext'
+import { setBanner } from '../../contexts/actionCreators'
 
-export enum BannerTypes {
-    Success = "success",
-    Warning = "warning",
-    Failure = "failure"
-}
+const Banner = () => {
+    const [ store, dispatch ] = useTasksContext()
 
-type Props = {
-    type: BannerTypes
-    text: string
-}
+    if (!store.banner) return null
 
-const Banner = (props: Props) => {
     const {
         type,
-        text
-    } = props
+        text,
+        delay,
+    } = store.banner
+
+    const closeBanner = () => dispatch(setBanner(null))
 
     return (
         <div className={`banner banner-${type}`}>
             {text}
+            <i className="material-icons" onClick={closeBanner}>clear</i>
         </div>
     )
 }

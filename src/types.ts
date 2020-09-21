@@ -18,3 +18,15 @@ export interface IModal {
     okAction?: () => void 
     cancelAction?: () => void
 }
+
+export interface IBanner {
+    text: string
+    type: BannerTypes
+    delay?: number
+}
+
+export enum BannerTypes {
+    Success = "success",
+    Warning = "warning",
+    Failure = "failure"
+}

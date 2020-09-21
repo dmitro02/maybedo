@@ -4,7 +4,6 @@ import { Task } from '../../types'
 import { RecordConfig } from '../Record/Record'
 import './TaskList.scss'
 import RecordList from '../RecordList/RecordList'
-import Banner, { BannerTypes } from '../Banner/Banner'
 
 const activeRecordConfig: RecordConfig = {
     useCheckMark: true,
@@ -35,16 +34,13 @@ const TaskList = () => {
     if (!root) return null
 
     return (
-        <>
-            <Banner text="Success" type={BannerTypes.Success}/>
-            <RecordList 
-                classNames={['tasks-box', 'task-list']}
-                root={root}
-                activeRecordConfig={activeRecordConfig}
-                completedRecordConfig={completedRecordConfig}
-                titleRecordConfig={titleRecordConfig}
-            />
-        </>
+        <RecordList 
+            classNames={['tasks-box', 'task-list']}
+            root={root}
+            activeRecordConfig={activeRecordConfig}
+            completedRecordConfig={completedRecordConfig}
+            titleRecordConfig={titleRecordConfig}
+        />
     )
 }
 

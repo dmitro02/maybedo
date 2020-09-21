@@ -3,7 +3,7 @@ import React, {
     useReducer, 
     useContext 
 } from "react"
-import { Task } from '../types'
+import { IBanner, IModal, Task } from '../types'
 import { 
     createItem,
     updateItem,
@@ -17,7 +17,8 @@ import DATA from '../data'
 export interface IStore {
     rootProject: Task
     addedItemPath?: string
-    modal?: any
+    modal?: IModal
+    banner?: IBanner
 }
 
 const getInitialState = (data: any): IStore => {
@@ -72,10 +73,10 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return getInitialState(action.rootProject)
         }
         case actionTypes.SET_MODAL: {
-            return {
-                ...state,
-                modal: action.modal
-            }
+            return { ...state, modal: action.modal }
+        }
+        case actionTypes.SET_BANNER: {
+            return { ...state, banner: action.banner }
         }
         default:
             return state;

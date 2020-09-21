@@ -1,4 +1,4 @@
-import { IModal, Task } from '../types'
+import { IBanner, IModal, Task } from '../types'
 
 export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',
@@ -6,7 +6,8 @@ export enum actionTypes {
     DELETE_TASK = 'DELETE_TASK',
     MOVE_TASK = 'MOVE_TASK',
     SET_APP_DATA = 'SET_APP_DATA',
-    SET_MODAL = 'SET_MODAL'
+    SET_MODAL = 'SET_MODAL',
+    SET_BANNER = 'SET_BANNER'
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -38,4 +39,9 @@ export const setAppData = (rootProject: Task) => ({
 export const setModal = (modal: IModal | null) => ({
     type: actionTypes.SET_MODAL,
     modal
+})
+
+export const setBanner = (banner: IBanner | null) => ({
+    type: actionTypes.SET_BANNER,
+    banner
 })

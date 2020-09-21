@@ -8,13 +8,13 @@ const Modal = () => {
 
     if (!store.modal) return null
 
-    const closeModal = () => dispatch(setModal(null))
-
     const { 
         text, 
         okAction = () => {},
         cancelAction = () => {},
     } = store.modal
+
+    const closeModal = () => dispatch(setModal(null))
 
     const handleClickOk = () => {
         closeModal()

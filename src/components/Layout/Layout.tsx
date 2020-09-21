@@ -6,6 +6,7 @@ import TaskList from '../TaskList/TaskList'
 import Divider from '../Divider/Divider'
 import Settings from '../Settings/Settings'
 import Modal from '../Modal/Modal'
+import Banner from '../Banner/Banner'
 
 const Layout = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
@@ -29,6 +30,7 @@ const Layout = () => {
                     </div>
                 </div>
                 <div className="right-panel card">
+                    <Banner />
                     {isSettingsOpened 
                         ? <Settings backToTaskList={toggleSettings}/>
                         : <TaskList />
