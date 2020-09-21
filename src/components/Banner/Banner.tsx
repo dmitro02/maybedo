@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import './Banner.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { setBanner } from '../../contexts/actionCreators'
@@ -6,15 +6,22 @@ import { setBanner } from '../../contexts/actionCreators'
 const Banner = () => {
     const [ store, dispatch ] = useTasksContext()
 
-    if (!store.banner) return null
+    const { banner } = store
 
-    const {
-        type,
-        text,
-        delay,
-    } = store.banner
+    const closeBanner = useCallback(
+        () => dispatch(setBanner(null)), 
+        [dispatch]
+    )
 
-    const closeBanner = () => dispatch(setBanner(null))
+    useEffect(() => {
+        if (banner && banner.delay && banner.delay > 0) {
+            setInterval(closeBanner, banner.delay * 1000)
+        }
+    }, [banner, closeBanner])
+
+    if (!banner) return null
+
+    const { text, type } = banner
 
     return (
         <div className={`banner banner-${type}`}>

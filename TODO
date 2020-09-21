@@ -2,9 +2,9 @@
 - BUG: On expand/collapse subtasks - DOMException: Failed to execute 'getRangeAt' on 'Selection': 0 is not a valid index.
 - add confirmation before delete 
 - add return type to all functions
-- export/import
 - save to local storage
 - redesign to get rid of card-look
 - mobile version
 - add alt text for buttons
 - do not check/uncheck task with right click
+- add banner dissolution effect

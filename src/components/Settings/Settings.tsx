@@ -76,7 +76,8 @@ const Settings = (props: Props) => {
         backToTaskList()
         const banner: IBanner = {
             text: 'Data successfully imported',
-            type: BannerTypes.Success
+            type: BannerTypes.Success,
+            delay: 5
         }
         dispatch(setBanner(banner))
     }
