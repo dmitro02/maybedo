@@ -1,11 +1,13 @@
 @import '../../styles/_variables.scss';
 
 .record {
+    position: relative;
     display: flex;
     font-size: 1.2rem;
     text-align: justify;
     padding-left: 6px;
     margin-bottom: 1px;
+    border-radius: 4px;
 
     [contenteditable] {
         outline: 0px solid transparent;
@@ -49,6 +51,20 @@
     .drag-mark {
         cursor: move;
     }
+
+    .confirm-delete {
+        position: absolute;
+        right: 0;
+        padding-left: 8px;
+        background-color: inherit;
+        border-radius: inherit;
+
+        button {
+            display: inline;
+            cursor: pointer;
+            margin: 0 8px 0 0;
+        }
+    }
 }
 
 .record-selected {
@@ -61,10 +77,6 @@
     .hidden-btn {
         visibility: visible;
     }
-}
-
-.record-selected, .record:hover {
-    border-radius: 4px;
 }
 
 .add-record {

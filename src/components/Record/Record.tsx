@@ -48,6 +48,7 @@ const Record = ({ item, config, parent }: Props) => {
         setStateCaretPosition
     ] = useState<number|undefined>(undefined)
     const [ showSubtasks, setShowSubtasks ] = useState(false)
+    const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
     const [ store, dispatch ] = useTasksContext()
 
@@ -103,7 +104,7 @@ const Record = ({ item, config, parent }: Props) => {
 
     const handleDelete = (e: any) => {
         e.stopPropagation() // prevent item selection ob click
-        deleteRecord(item)
+        setShowDeleteConfirmation(true)
     }
 
     const setContentEditable = (flag: boolean) => {
@@ -178,11 +179,23 @@ const Record = ({ item, config, parent }: Props) => {
             </span>
             {getSubtasksBtn()}  
             {useDeleteBtn && 
-                <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>}
+                <>
+                    <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>
+                    {showDeleteConfirmation && 
+                        <div className="confirm-delete">
+                            <button onClick={() => deleteRecord(item)}>Yes</button> 
+                            <button onClick={() => setShowDeleteConfirmation(false)}>No</button>   
+                        </div>
+                    }  
+                </> 
+            }
+ 
         </div>
         <SubTaskList task={item} isDisplayed={showSubtasks} />
     </>
     )
+
+    
 }
 
 export default memo(Record)
