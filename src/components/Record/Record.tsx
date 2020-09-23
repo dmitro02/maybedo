@@ -90,12 +90,18 @@ const Record = ({ item, config, parent }: Props) => {
         dispatch(updateTaskAction(parent))
     }
 
-    const handleMouseDownOnCheckbox = () => {
-        setIsDone((prevState) => item.isDone = !prevState)
+    const handleMouseDownOnCheckbox = (e: any) => {
+        if (e.button === 0) { // left click only
+            setIsDone((prevState) => item.isDone = !prevState)
+        }
     }
 
-    const handleMouseUpOnCheckbox = () => updateRecord(item)
-
+    const handleMouseUpOnCheckbox = (e: any) => {
+        if (e.button === 0) { // left click only
+            updateRecord(item)
+        }
+    }
+        
     const handleInput = debounceInput((text: string) => {
         item.text = text
         saveCaretPositionToState()
@@ -151,48 +157,48 @@ const Record = ({ item, config, parent }: Props) => {
 
     return (
         <>
-        <div 
-            className={recordClassName}
-            id={path} 
-            onClick={() => {
-                saveCaretPositionToState()
-                !isTitle && selectRecord(item)
-            }}
-        >
-            {useDragBtn && <i className="material-icons hidden-btn drag-mark">drag_handle</i>}
-            {useCheckMark && <span
-                onMouseDown={handleMouseDownOnCheckbox} 
-                onMouseUp={handleMouseUpOnCheckbox}
+            <div 
+                className={recordClassName}
+                id={path} 
+                onClick={() => {
+                    saveCaretPositionToState()
+                    !isTitle && selectRecord(item)
+                }}
             >
-                {!isDone && <i className="material-icons pointer-btn">check_box_outline_blank</i>}
-                {isDone && <i className="material-icons pointer-btn">check_box</i>}
-            </span>}
-            <span 
-                ref={recordContentRef}
-                className={'item-content' + (isDone ? ' item-done' : '')} 
-                contentEditable={isEditable}
-                suppressContentEditableWarning={true}
-                onInput={handleInput}
-                onBlur={handleBlur}
-            >
-                {text}
-            </span>
-            {getSubtasksBtn()}  
-            {useDeleteBtn && 
-                <>
-                    <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>
-                    {showDeleteConfirmation && 
-                        <div className="confirm-delete">
-                            <button onClick={() => deleteRecord(item)}>Yes</button> 
-                            <button onClick={() => setShowDeleteConfirmation(false)}>No</button>   
-                        </div>
-                    }  
-                </> 
-            }
- 
-        </div>
-        <SubTaskList task={item} isDisplayed={showSubtasks} />
-    </>
+                {useDragBtn && <i className="material-icons hidden-btn drag-mark">drag_handle</i>}
+                {useCheckMark && <span
+                    onMouseDown={handleMouseDownOnCheckbox} 
+                    onMouseUp={handleMouseUpOnCheckbox}
+                >
+                    {!isDone && <i className="material-icons pointer-btn">check_box_outline_blank</i>}
+                    {isDone && <i className="material-icons pointer-btn">check_box</i>}
+                </span>}
+                <span 
+                    ref={recordContentRef}
+                    className={'item-content' + (isDone ? ' item-done' : '')} 
+                    contentEditable={isEditable}
+                    suppressContentEditableWarning={true}
+                    onInput={handleInput}
+                    onBlur={handleBlur}
+                >
+                    {text}
+                </span>
+                {getSubtasksBtn()}  
+                {useDeleteBtn && 
+                    <>
+                        <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>
+                        {showDeleteConfirmation && 
+                            <div className="confirm-delete">
+                                <button onClick={() => deleteRecord(item)}>Yes</button> 
+                                <button onClick={() => setShowDeleteConfirmation(false)}>No</button>   
+                            </div>
+                        }  
+                    </> 
+                }
+    
+            </div>
+            <SubTaskList task={item} isDisplayed={showSubtasks} />
+        </>
     )
 
     

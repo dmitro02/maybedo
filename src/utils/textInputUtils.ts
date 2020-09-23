@@ -9,17 +9,17 @@ export const debounceInput = (callback: (text: string) => void) => {
 
 export const getCaretPosition = (el?: HTMLElement): number | undefined => {
     if (!el || !el.isContentEditable) return
-    let _range
+    let range
     try {
-        _range = document.getSelection()?.getRangeAt(0)
+        range = document.getSelection()?.getRangeAt(0)
     } catch(err) {
-        console.log(err)
+        // do nothing
     }
-    if (!_range) return
-    let range = _range.cloneRange()
-    range.selectNodeContents(el)
-    range.setEnd(_range.endContainer, _range.endOffset)
-    return range.toString().length
+    if (!range) return
+    let rangeClone = range.cloneRange()
+    rangeClone.selectNodeContents(el)
+    rangeClone.setEnd(range.endContainer, range.endOffset)
+    return rangeClone.toString().length
 }
 
 export const setCaretPosition = (el?: HTMLElement, pos?: number): void => {
