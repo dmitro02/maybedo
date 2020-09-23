@@ -2,26 +2,25 @@
 
 .main-container {
     display: flex;
-    min-height: 70vh;
+    min-height: 100vh;
 
     .left-panel {
-        width: 300px;
-        margin-right: 10px; 
-        margin-left: auto;
-        padding: 6px;
+        width: 400px;
+        padding: 50px 6px 20px 6px;
+        border-right: 1px solid $devider-color; 
+        background-color: $background-light;
     }
     
     .right-panel {
-        width: 900px;
-        margin-right: auto;
-        padding: 6px;
-    }
-}
+        width: 100%;
+        background-color: white;
+        position: relative;
 
-.card {
-    border-radius: 5px;
-    background-color: $background-light;
-    box-shadow: 2px 3px 5px 2px $shadow-color;
+        .right-content {
+            margin-top: 50px;
+            padding: 0 300px 0 100px;
+        }
+    }
 }
 
 .menu {

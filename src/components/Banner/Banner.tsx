@@ -15,7 +15,7 @@ const Banner = () => {
 
     useEffect(() => {
         if (banner && banner.delay && banner.delay > 0) {
-            setInterval(closeBanner, banner.delay * 1000)
+            setTimeout(closeBanner, banner.delay * 1000)
         }
     }, [banner, closeBanner])
 

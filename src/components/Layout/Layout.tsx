@@ -19,7 +19,7 @@ const Layout = () => {
         <div className="main-container">   
             <TasksContextProvider>
                 <Modal />
-                <div className="left-panel card">
+                <div className="left-panel">
                     <ProjectList />
                     <Divider />
                     <div className="menu">
@@ -29,12 +29,14 @@ const Layout = () => {
                         </div>
                     </div>
                 </div>
-                <div className="right-panel card">
+                <div className="right-panel">
                     <Banner />
-                    {isSettingsOpened 
-                        ? <Settings backToTaskList={toggleSettings}/>
-                        : <TaskList />
-                    }
+                    <div className="right-content">
+                        {isSettingsOpened 
+                            ? <Settings backToTaskList={toggleSettings}/>
+                            : <TaskList />
+                        }
+                    </div>
                 </div>
             </TasksContextProvider>
         </div>

@@ -1,7 +1,6 @@
 - BUG (Chrome only): while moving record other record statically displayed as hovered 
 - add return type to all functions
 - save to local storage
-- redesign to get rid of card-look
 - mobile version
 - add alt text for buttons
 - add banner dissolution effect
