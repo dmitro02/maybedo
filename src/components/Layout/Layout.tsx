@@ -10,16 +10,28 @@ import Banner from '../Banner/Banner'
 
 const Layout = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
+    const [ showLeftPanel, setShowLeftPanel ] = useState(false)
 
-    const toggleSettings = () => {
+    const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
+
+    const openLeftPanel = () => {
+        if (!showLeftPanel) setShowLeftPanel(true)
+    }
+
+    const closeLeftPanel = () => {
+        if (showLeftPanel) setShowLeftPanel(false)
     }
 
     return (
         <div className="main-container">   
             <TasksContextProvider>
                 <Modal />
-                <div className="left-panel">
+                <i 
+                    className="material-icons menu-btn"
+                    onClick={openLeftPanel}
+                >menu</i>
+                <div className={`left-panel ${showLeftPanel ? ' panel-opened' : ''}`}>
                     <ProjectList />
                     <Divider />
                     <div className="menu">
@@ -29,7 +41,10 @@ const Layout = () => {
                         </div>
                     </div>
                 </div>
-                <div className="right-panel">
+                <div 
+                    className="right-panel"
+                    onClick={closeLeftPanel}
+                >
                     <Banner />
                     <div className="right-content">
                         {isSettingsOpened 

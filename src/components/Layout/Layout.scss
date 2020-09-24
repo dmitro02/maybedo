@@ -5,7 +5,8 @@
     min-height: 100vh;
 
     .left-panel {
-        width: 400px;
+        min-width: 400px;
+        min-height: 100vh;
         padding: 50px 6px 20px 6px;
         border-right: 1px solid $devider-color; 
         background-color: $background-light;
@@ -20,6 +21,13 @@
             margin-top: 50px;
             padding: 0 300px 0 100px;
         }
+    }
+
+    .menu-btn {
+        cursor: pointer;
+        position: absolute;
+        z-index: 1;
+        display: none;
     }
 }
 
@@ -53,4 +61,51 @@
         background-color: $record-hover-color;
         border-radius: 4px;
     }
+}
+
+@media screen and (max-width: 1700px) {
+    .main-container .right-panel .right-content {
+        padding: 0 100px 0 100px;
+    }  
+}
+
+@media screen and (max-width: 1400px) {
+    .main-container .right-panel .right-content {
+        padding: 0 10px 0 10px;
+    }  
+}
+
+@media screen and (max-width: 1200px) {
+    .main-container {
+        .left-panel {
+            position: absolute;
+            left: -410px;
+            transition: left 0.2s;
+            z-index: 2;
+        }
+        .left-panel.panel-opened {
+            left: 0;
+        }
+        .menu-btn {
+            display: block;
+        }
+        .right-panel {
+            .right-content {
+                padding: 0 100px 0 100px;
+            }
+        }  
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .main-container .right-panel .right-content {
+        padding: 0 10px 0 10px;
+    }  
+}
+
+@media screen and (max-width: 400px) {
+    .main-container .left-panel {
+        min-width: 300px;
+        left: -310px;
+    }  
 }
