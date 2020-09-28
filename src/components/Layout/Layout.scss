@@ -7,9 +7,21 @@
     .left-panel {
         min-width: 400px;
         min-height: 100vh;
-        padding: 50px 6px 20px 6px;
+        max-height: 100vh;
+        padding: 30px 6px;
         border-right: 1px solid $devider-color; 
         background-color: $background-light;
+        overflow: auto;
+
+        .close-menu-btn {
+            cursor: pointer;
+            position: absolute;
+            display: none;
+            top: 20px;
+            font-size: 1.8rem;
+            right: 6px;
+            color: $text-gray;
+        }
     }
     
     .right-panel {
@@ -18,16 +30,19 @@
         position: relative;
 
         .right-content {
-            margin-top: 50px;
+            margin-top: 30px;
             padding: 0 300px 0 100px;
         }
-    }
 
-    .menu-btn {
-        cursor: pointer;
-        position: absolute;
-        z-index: 1;
-        display: none;
+        .open-menu-btn {
+            cursor: pointer;
+            position: absolute;
+            z-index: 1;
+            display: none;
+            top: 20px;
+            font-size: 1.8rem;
+            color: $text-gray;
+        }
     }
 }
 
@@ -41,6 +56,7 @@
         color: $text-gray;
         position: relative;
         top: 2px;
+        left: 2px;
     }
 
     .menu-item {
@@ -65,13 +81,13 @@
 
 @media screen and (max-width: 1700px) {
     .main-container .right-panel .right-content {
-        padding: 0 100px 0 100px;
+        padding: 0 100px;
     }  
 }
 
 @media screen and (max-width: 1400px) {
     .main-container .right-panel .right-content {
-        padding: 0 10px 0 10px;
+        padding: 0 10px;
     }  
 }
 
@@ -82,25 +98,37 @@
             left: -410px;
             transition: left 0.2s;
             z-index: 2;
+
+            .close-menu-btn {
+                display: block;
+            }
         }
         .left-panel.panel-opened {
             left: 0;
         }
-        .menu-btn {
-            display: block;
-        }
         .right-panel {
             .right-content {
-                padding: 0 100px 0 100px;
+                padding: 0 100px;
+            }
+            .open-menu-btn {
+                display: block;
+                left: 133px;
             }
         }  
     }
 }
 
 @media screen and (max-width: 1000px) {
-    .main-container .right-panel .right-content {
-        padding: 0 10px 0 10px;
-    }  
+    .main-container {
+        .right-panel {
+            .right-content {
+                padding: 0 10px;
+            }
+            .open-menu-btn {
+                left: 43px;
+            }
+        } 
+    }
 }
 
 @media screen and (max-width: 400px) {

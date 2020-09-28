@@ -16,22 +16,28 @@ const Layout = () => {
         setIsSettingsOpened(!isSettingsOpened)
 
     const openLeftPanel = () => {
-        if (!showLeftPanel) setShowLeftPanel(true)
+        if (!showLeftPanel) {
+            setShowLeftPanel(true)
+            enableBodyScrolling(false)
+        }
     }
 
     const closeLeftPanel = () => {
-        if (showLeftPanel) setShowLeftPanel(false)
+        if (showLeftPanel) {
+            setShowLeftPanel(false)
+            enableBodyScrolling(true)
+        }
     }
 
     return (
         <div className="main-container">   
             <TasksContextProvider>
                 <Modal />
-                <i 
-                    className="material-icons menu-btn"
-                    onClick={openLeftPanel}
-                >menu</i>
                 <div className={`left-panel ${showLeftPanel ? ' panel-opened' : ''}`}>
+                    <i 
+                        className="material-icons close-menu-btn"
+                        onClick={closeLeftPanel}
+                    >arrow_back_ios</i>
                     <ProjectList />
                     <Divider />
                     <div className="menu">
@@ -45,6 +51,10 @@ const Layout = () => {
                     className="right-panel"
                     onClick={closeLeftPanel}
                 >
+                    <i 
+                        className="material-icons open-menu-btn"
+                        onClick={openLeftPanel}
+                    >menu</i>
                     <Banner />
                     <div className="right-content">
                         {isSettingsOpened 
@@ -56,6 +66,10 @@ const Layout = () => {
             </TasksContextProvider>
         </div>
     )
+}
+
+const enableBodyScrolling = (isEnabled: boolean) => {
+    document.body.style.overflow = isEnabled? 'auto' : 'hidden'
 }
 
 export default Layout
