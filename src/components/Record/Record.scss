@@ -3,7 +3,7 @@
 .record {
     position: relative;
     display: flex;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     text-align: justify;
     padding-left: 6px;
     margin-bottom: 1px;
@@ -19,22 +19,9 @@
         margin-right: 6px;
     }
 
-    .pointer-btn {
-        cursor: pointer;
-    }
-
-    .hidden-btn {
-        visibility: hidden;
-    }
-
     .material-icons {
-        color: $text-gray;
         position: relative;
-        top: 6px;
-    }
-
-    .material-icons:hover {
-        color: black;
+        top: 9px;
     }
 
     .item-done {
@@ -50,6 +37,7 @@
 
     .drag-mark {
         cursor: move;
+        top: 11px;
     }
 
     .confirm-delete {
@@ -83,29 +71,19 @@
     color: $text-gray;
 
     .add-mark {
-        top: 7px;
+        top: 11px;
         cursor: default;
-    }
-
-    .add-mark:hover {
-        color: $text-gray;
     }
 }
 
 .record.title  {
     font-weight: bold;
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     text-align: center;
     color: $text-gray;
-    border: 1px dashed transparent;
 
-    .item-content {
-        border: 1px dashed transparent;
-    }
-
-    .item-content:focus, .item-content:hover{
-        border: 1px dashed $text-gray;
-        border-radius: 4px;
+    .item-content:hover, .item-content:focus {
+        text-decoration: underline;
     }
 }
 
@@ -114,5 +92,5 @@
 }
 
 .record.title.read-only:hover .item-content:hover {
-    border: 1px dashed transparent;
+    text-decoration: none;
 }

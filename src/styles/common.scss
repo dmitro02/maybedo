@@ -1,0 +1,14 @@
+@import './_variables.scss';
+
+.commom-btn {
+    cursor: pointer;
+    color: $text-gray;
+}
+
+.commom-btn:hover {
+    color: black;
+}
+
+.hidden-btn {
+    visibility: hidden;
+}

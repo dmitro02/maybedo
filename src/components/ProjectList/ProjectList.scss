@@ -6,5 +6,15 @@
     .add-record > .item-content:empty::before {
         content: "new project";
     }
+
+    .record {
+        .material-icons {
+            top: 7px;
+        }
+
+        .add-mark {
+            top: 11px;
+        }
+    }
 }
 

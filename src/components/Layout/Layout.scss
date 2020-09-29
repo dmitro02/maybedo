@@ -14,13 +14,11 @@
         overflow: auto;
 
         .close-menu-btn {
-            cursor: pointer;
             position: absolute;
             display: none;
             top: 20px;
             font-size: 1.8rem;
             right: 6px;
-            color: $text-gray;
         }
     }
     
@@ -35,27 +33,25 @@
         }
 
         .open-menu-btn {
-            cursor: pointer;
             position: absolute;
             z-index: 1;
             display: none;
             top: 20px;
             font-size: 1.8rem;
-            color: $text-gray;
         }
     }
 }
 
 .menu {
     padding: 0 5px;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: $text-gray;
 
     .material-icons-outlined {
         color: $text-gray;
         position: relative;
-        top: 2px;
+        top: 6px;
         left: 2px;
     }
 

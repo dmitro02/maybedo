@@ -140,7 +140,7 @@ const Record = ({ item, config, parent }: Props) => {
 
     const getSubtasksBtn = () => {
         if (!useAddSubtasksBtn || !isTaskLevelItem(item)) return null
-        let btnClassName = 'material-icons pointer-btn'
+        let btnClassName = 'material-icons commom-btn'
         let btnType
         if (hasSubtasks) {
             btnType = showSubtasks ? 'expand_less' : 'expand_more'
@@ -165,13 +165,13 @@ const Record = ({ item, config, parent }: Props) => {
                     !isTitle && selectRecord(item)
                 }}
             >
-                {useDragBtn && <i className="material-icons hidden-btn drag-mark">drag_handle</i>}
+                {useDragBtn && <i className="material-icons hidden-btn drag-mark commom-btn">drag_handle</i>}
                 {useCheckMark && <span
                     onMouseDown={handleMouseDownOnCheckbox} 
                     onMouseUp={handleMouseUpOnCheckbox}
                 >
-                    {!isDone && <i className="material-icons pointer-btn">check_box_outline_blank</i>}
-                    {isDone && <i className="material-icons pointer-btn">check_box</i>}
+                    {!isDone && <i className="material-icons commom-btn">check_box_outline_blank</i>}
+                    {isDone && <i className="material-icons commom-btn">check_box</i>}
                 </span>}
                 <span 
                     ref={recordContentRef}
@@ -186,7 +186,7 @@ const Record = ({ item, config, parent }: Props) => {
                 {getSubtasksBtn()}  
                 {useDeleteBtn && 
                     <>
-                        <i className="material-icons hidden-btn pointer-btn" onClick={handleDelete}>clear</i>
+                        <i className="material-icons hidden-btn commom-btn" onClick={handleDelete}>clear</i>
                         {showDeleteConfirmation && 
                             <div className="confirm-delete">
                                 <button onClick={() => deleteRecord(item)}>Yes</button> 
