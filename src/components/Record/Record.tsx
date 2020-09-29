@@ -13,6 +13,7 @@ import {
 } from '../../contexts/actionCreators'
 import { isProjectLevelItem, isTaskLevelItem } from '../../utils/pathUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
+import { isMobile } from '../../utils/commonUtils'
 
 export type RecordConfig = {
     useCheckMark?: boolean
@@ -70,7 +71,7 @@ const Record = ({ item, config, parent }: Props) => {
 
     const updateRecord = (item: Task) => dispatch(updateTaskAction(item))
 
-    const deleteRecord = (item: Task) => {    
+    const deleteRecord = (item: Task) => {
         if (isProjectLevelItem(item)) {
             if (parent.tasks.length === 1) {
                 parent.selectedSubTaskPath = undefined
@@ -88,6 +89,7 @@ const Record = ({ item, config, parent }: Props) => {
         if (parent.selectedSubTaskPath === item.path) return
         parent.selectedSubTaskPath = item.path
         dispatch(updateTaskAction(parent))
+        console.log('IS MOBILE', isMobile())
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
@@ -195,7 +197,6 @@ const Record = ({ item, config, parent }: Props) => {
                         }  
                     </> 
                 }
-    
             </div>
             <SubTaskList task={item} isDisplayed={showSubtasks} />
         </>

@@ -3,3 +3,5 @@
 - save to local storage
 - add alt text for buttons
 - add banner dissolution effect
+- find a general way to align buttons vertically
+- do not click on button when it hidden on mobile
