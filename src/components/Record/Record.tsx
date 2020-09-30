@@ -25,6 +25,8 @@ export type RecordConfig = {
     isTitle?: boolean
 }
 
+const IS_MOBILE = isMobile()
+
 type Props = { 
     item: Task, 
     config: RecordConfig, 
@@ -89,7 +91,6 @@ const Record = ({ item, config, parent }: Props) => {
         if (parent.selectedSubTaskPath === item.path) return
         parent.selectedSubTaskPath = item.path
         dispatch(updateTaskAction(parent))
-        console.log('IS MOBILE', isMobile())
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
@@ -140,6 +141,10 @@ const Record = ({ item, config, parent }: Props) => {
     const recordClassName = `record${isSelected ? ' record-selected' : ''}\
         ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
 
+    const hiddenBtnClassName = IS_MOBILE 
+        ? isSelected ? '' : ' mobile-hidden-btn'
+        : ' hidden-btn' 
+
     const getSubtasksBtn = () => {
         if (!useAddSubtasksBtn || !isTaskLevelItem(item)) return null
         let btnClassName = 'material-icons commom-btn'
@@ -148,7 +153,7 @@ const Record = ({ item, config, parent }: Props) => {
             btnType = showSubtasks ? 'expand_less' : 'expand_more'
         } else if (!(parent.isDone || isDone)) {
             btnType = showSubtasks ? 'expand_less' : 'add'
-            btnClassName += ' hidden-btn' 
+            btnClassName += hiddenBtnClassName 
         } else {
             return null
         }
@@ -188,7 +193,10 @@ const Record = ({ item, config, parent }: Props) => {
                 {getSubtasksBtn()}  
                 {useDeleteBtn && 
                     <>
-                        <i className="material-icons hidden-btn commom-btn" onClick={handleDelete}>clear</i>
+                        <i 
+                            className={`material-icons commom-btn ${hiddenBtnClassName}`} 
+                            onClick={handleDelete}
+                        >clear</i>
                         {showDeleteConfirmation && 
                             <div className="confirm-delete">
                                 <button onClick={() => deleteRecord(item)}>Yes</button> 
@@ -201,8 +209,6 @@ const Record = ({ item, config, parent }: Props) => {
             <SubTaskList task={item} isDisplayed={showSubtasks} />
         </>
     )
-
-    
 }
 
 export default memo(Record)
