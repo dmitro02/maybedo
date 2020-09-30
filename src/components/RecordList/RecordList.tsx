@@ -8,6 +8,7 @@ import Sortable from 'sortablejs'
 import './RecordList.scss'
 import { moveTaskAction } from '../../contexts/actionCreators'
 import { isTaskLevelItem } from '../../utils/pathUtils'
+import Record2 from '../Record2/Record2'
 
 type Props = { 
     classNames?: string[],
@@ -70,6 +71,7 @@ const RecordList = (props: Props) => {
                         />
                 )}
             </div>
+            <Record2 />
             <AddRecord root={root}/>
             <Divider isHidden={!completedTasks.length} />
             <div className="completed-tasks">

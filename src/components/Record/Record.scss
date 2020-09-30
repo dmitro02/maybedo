@@ -3,7 +3,7 @@
 .record {
     position: relative;
     display: flex;
-    font-size: 1.5rem;
+    font-size: $font-size-normal;
     text-align: justify;
     padding-left: 6px;
     margin-bottom: 1px;
@@ -22,6 +22,7 @@
     .material-icons {
         position: relative;
         top: 9px;
+        font-size: $font-size-normal;
     }
 
     .item-done {

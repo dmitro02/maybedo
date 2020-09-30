@@ -173,13 +173,15 @@ const Record = ({ item, config, parent }: Props) => {
                 }}
             >
                 {useDragBtn && <i className="material-icons hidden-btn drag-mark commom-btn">drag_handle</i>}
-                {useCheckMark && <span
-                    onMouseDown={handleMouseDownOnCheckbox} 
-                    onMouseUp={handleMouseUpOnCheckbox}
-                >
-                    {!isDone && <i className="material-icons commom-btn">check_box_outline_blank</i>}
-                    {isDone && <i className="material-icons commom-btn">check_box</i>}
-                </span>}
+                {useCheckMark && 
+                    <i 
+                        className="material-icons commom-btn"
+                        onMouseDown={handleMouseDownOnCheckbox} 
+                        onMouseUp={handleMouseUpOnCheckbox}
+                    >
+                        {isDone ? 'check_box' : 'check_box_outline_blank'}
+                    </i>
+                }
                 <span 
                     ref={recordContentRef}
                     className={'item-content' + (isDone ? ' item-done' : '')} 

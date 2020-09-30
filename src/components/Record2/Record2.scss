@@ -1,0 +1,28 @@
+@import '../../styles/_variables.scss';
+
+.record2 {
+    background-color: $record-selected-color;
+    padding: 8px;
+    display: flex;
+    font-size: $font-size-normal;
+    
+    .material-icons {
+        font-size: $font-size-normal;
+    }
+
+    .content {
+        margin: 0 8px;
+    }
+
+    .left-btns, .right-btns {
+        padding-top: $font-size-normal / 5
+    }
+
+    .right-btns {
+        margin-left: auto;
+    }
+}
+
+
+
+
