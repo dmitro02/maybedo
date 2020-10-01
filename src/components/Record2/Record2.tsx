@@ -8,7 +8,7 @@ const Record2 = () => {
         <>
             <div className="record2">
                 <div className="left-btns">
-                    <i className="material-icons">drag_handle</i>
+                    <i className="material-icons">drag_indicator</i>
                     <i className="material-icons">check_box_outline_blank</i>
                 </div>
                 <div className="content" contentEditable>to-do text</div>

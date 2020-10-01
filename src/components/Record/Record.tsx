@@ -14,6 +14,7 @@ import {
 import { isProjectLevelItem, isTaskLevelItem } from '../../utils/pathUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
+import DeleteButton from '../Buttons/DeleteButton'
 
 export type RecordConfig = {
     useCheckMark?: boolean
@@ -74,6 +75,7 @@ const Record = ({ item, config, parent }: Props) => {
     const updateRecord = (item: Task) => dispatch(updateTaskAction(item))
 
     const deleteRecord = (item: Task) => {
+        console.log(item)
         if (isProjectLevelItem(item)) {
             if (parent.tasks.length === 1) {
                 parent.selectedSubTaskPath = undefined
@@ -84,6 +86,7 @@ const Record = ({ item, config, parent }: Props) => {
             }
             dispatch(updateTaskAction(parent))
         }
+        setShowDeleteConfirmation(false)
         dispatch(deleteTaskAction(item))
     }
 
@@ -111,9 +114,19 @@ const Record = ({ item, config, parent }: Props) => {
         updateRecord(item)
     })
 
-    const handleDelete = (e: any) => {
+    const openDeleteConfirmation = (e: any) => {
         e.stopPropagation() // prevent item selection ob click
         setShowDeleteConfirmation(true)
+    }
+
+    const closeDeleteConfirmation = (e: any) => {
+        e.stopPropagation() // prevent item selection ob click
+        setShowDeleteConfirmation(false)
+    }
+
+    const deleteRecordOnConfirm = (e: any) => {
+        e.stopPropagation() // prevent item selection ob click
+        deleteRecord(item);
     }
 
     const setContentEditable = (flag: boolean) => {
@@ -172,7 +185,7 @@ const Record = ({ item, config, parent }: Props) => {
                     !isTitle && selectRecord(item)
                 }}
             >
-                {useDragBtn && <i className="material-icons hidden-btn drag-mark commom-btn">drag_handle</i>}
+                {useDragBtn && <i className="material-icons hidden-btn drag-mark commom-btn">drag_indicator</i>}
                 {useCheckMark && 
                     <i 
                         className="material-icons commom-btn"
@@ -194,15 +207,15 @@ const Record = ({ item, config, parent }: Props) => {
                 </span>
                 {getSubtasksBtn()}  
                 {useDeleteBtn && 
-                    <>
-                        <i 
-                            className={`material-icons commom-btn ${hiddenBtnClassName}`} 
-                            onClick={handleDelete}
-                        >clear</i>
+                    <> 
+                        <DeleteButton 
+                            classNames={hiddenBtnClassName.split(' ')} 
+                            action={openDeleteConfirmation} 
+                        />
                         {showDeleteConfirmation && 
                             <div className="confirm-delete">
-                                <button onClick={() => deleteRecord(item)}>Yes</button> 
-                                <button onClick={() => setShowDeleteConfirmation(false)}>No</button>   
+                                <button onClick={deleteRecordOnConfirm}>Yes</button> 
+                                <button onClick={closeDeleteConfirmation}>No</button>   
                             </div>
                         }  
                     </> 
