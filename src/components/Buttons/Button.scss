@@ -3,6 +3,8 @@
 .common-btn {
     cursor: pointer;
     color: $text-gray;
+    font-size: $font-size-normal;
+    position: relative;
 }
 
 .common-btn:hover {
@@ -11,4 +13,8 @@
 
 .hidden-btn, .mobile-hidden-btn {
     visibility: hidden;
+}
+
+.drag-mark {
+    cursor: move;
 }

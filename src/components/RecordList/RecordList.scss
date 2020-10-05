@@ -6,12 +6,16 @@
             padding-left: 30px;
         }
 
-        .add-record, .drag-mark, .divider {
+        // .add-record, .drag-mark, .divider {
+        //     display: none;
+        // }
+
+        .divider {
             display: none;
         }
     }
 
-    .add-record {
-        padding-left: 30px;
-    }
+    // .add-record {
+    //     padding-left: 30px;
+    // }
 }
