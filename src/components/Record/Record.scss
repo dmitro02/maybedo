@@ -86,6 +86,10 @@
     .item-content:hover, .item-content:focus {
         text-decoration: underline;
     }
+
+    .common-btn {
+        display: none;
+    }
 }
 
 .record.title:hover {

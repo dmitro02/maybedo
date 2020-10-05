@@ -35,7 +35,7 @@ const Layout = () => {
                 <Modal />
                 <div className={`left-panel ${showLeftPanel ? ' panel-opened' : ''}`}>
                     <i 
-                        className="material-icons commom-btn close-menu-btn"
+                        className="material-icons common-btn close-menu-btn"
                         onClick={closeLeftPanel}
                     >arrow_back_ios</i>
                     <ProjectList />
@@ -52,7 +52,7 @@ const Layout = () => {
                     onClick={closeLeftPanel}
                 >
                     <i 
-                        className="material-icons commom-btn open-menu-btn"
+                        className="material-icons common-btn open-menu-btn"
                         onClick={openLeftPanel}
                     >menu</i>
                     <Banner />

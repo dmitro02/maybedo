@@ -6,7 +6,7 @@ type Props = {
     classNames?: String[]
 }
 
-const DeleteButton = (props: Props) => {
+const CollapseButton = (props: Props) => {
     const {
         action,
         classNames = []
@@ -16,8 +16,8 @@ const DeleteButton = (props: Props) => {
         <i 
             className={`material-icons common-btn ${classNames.join(' ')}`} 
             onClick={action}
-        >clear</i>
+        >expand_less</i>
     )
 }
 
-export default memo(DeleteButton)
+export default memo(CollapseButton)

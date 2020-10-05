@@ -11,10 +11,16 @@ import {
     updateTaskAction,
     deleteTaskAction
 } from '../../contexts/actionCreators'
-import { isProjectLevelItem, isTaskLevelItem } from '../../utils/pathUtils'
+import { isProjectLevelItem } from '../../utils/pathUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
 import DeleteButton from '../Buttons/DeleteButton'
+import ExpandButton from '../Buttons/ExpandButton'
+import CollapseButton from '../Buttons/CollapseButton'
+import AddButton from '../Buttons/AddButton'
+import DragButton from '../Buttons/DragButton'
+import CheckmarkButton from '../Buttons/CheckmarkButton'
+import EmptyButton from '../Buttons/EmptyButton'
 
 export type RecordConfig = {
     useCheckMark?: boolean
@@ -158,21 +164,57 @@ const Record = ({ item, config, parent }: Props) => {
         ? isSelected ? '' : ' mobile-hidden-btn'
         : ' hidden-btn' 
 
+    const getCheckmarksBtn = () => {
+        if (!useCheckMark) return null
+
+        return (
+            <CheckmarkButton 
+                actionOnMouseDown={handleMouseDownOnCheckbox} 
+                actionOnMouseUp={handleMouseUpOnCheckbox}
+                isChecked={isDone}
+            />
+        ) 
+    }
+
     const getSubtasksBtn = () => {
-        if (!useAddSubtasksBtn || !isTaskLevelItem(item)) return null
-        let btnClassName = 'material-icons commom-btn'
-        let btnType
-        if (hasSubtasks) {
-            btnType = showSubtasks ? 'expand_less' : 'expand_more'
-        } else if (!(parent.isDone || isDone)) {
-            btnType = showSubtasks ? 'expand_less' : 'add'
-            btnClassName += hiddenBtnClassName 
-        } else {
-            return null
+        if (!useAddSubtasksBtn) return null
+
+        const action = () => setShowSubtasks(!showSubtasks)
+        const classNames = [ 'subtasks-btn' ]
+
+        if (hasSubtasks && !showSubtasks) {
+            return <ExpandButton action={action} classNames={classNames} />
         }
-        return <i className={btnClassName} onClick={() => {setShowSubtasks(!showSubtasks)}}>
-                    {btnType}
-                </i>
+        if (showSubtasks) {
+            return <CollapseButton action={action} classNames={classNames} />
+        }
+        if (!hasSubtasks && !(parent.isDone || isDone)) {
+            return <AddButton action={action} classNames={[...classNames, hiddenBtnClassName]} />
+        }
+
+        return null
+    }
+
+    const getDragmarkBtn = () =>
+        useDragBtn ? <DragButton /> : <EmptyButton />
+
+    const getDeleteBtn = () => {
+        if (!useDeleteBtn) return null
+
+        return (        
+            <> 
+                <DeleteButton 
+                    classNames={[ hiddenBtnClassName ]} 
+                    action={openDeleteConfirmation} 
+                />
+                {showDeleteConfirmation && 
+                    <div className="confirm-delete">
+                        <button onClick={deleteRecordOnConfirm}>Yes</button> 
+                        <button onClick={closeDeleteConfirmation}>No</button>   
+                    </div>
+                }  
+            </> 
+        )
     }
 
     return (
@@ -185,16 +227,8 @@ const Record = ({ item, config, parent }: Props) => {
                     !isTitle && selectRecord(item)
                 }}
             >
-                {useDragBtn && <i className="material-icons hidden-btn drag-mark commom-btn">drag_indicator</i>}
-                {useCheckMark && 
-                    <i 
-                        className="material-icons commom-btn"
-                        onMouseDown={handleMouseDownOnCheckbox} 
-                        onMouseUp={handleMouseUpOnCheckbox}
-                    >
-                        {isDone ? 'check_box' : 'check_box_outline_blank'}
-                    </i>
-                }
+                {getDragmarkBtn()}
+                {getCheckmarksBtn()}
                 <span 
                     ref={recordContentRef}
                     className={'item-content' + (isDone ? ' item-done' : '')} 
@@ -206,20 +240,7 @@ const Record = ({ item, config, parent }: Props) => {
                     {text}
                 </span>
                 {getSubtasksBtn()}  
-                {useDeleteBtn && 
-                    <> 
-                        <DeleteButton 
-                            classNames={hiddenBtnClassName.split(' ')} 
-                            action={openDeleteConfirmation} 
-                        />
-                        {showDeleteConfirmation && 
-                            <div className="confirm-delete">
-                                <button onClick={deleteRecordOnConfirm}>Yes</button> 
-                                <button onClick={closeDeleteConfirmation}>No</button>   
-                            </div>
-                        }  
-                    </> 
-                }
+                {getDeleteBtn()}
             </div>
             <SubTaskList task={item} isDisplayed={showSubtasks} />
         </>
