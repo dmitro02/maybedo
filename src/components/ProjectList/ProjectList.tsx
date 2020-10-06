@@ -4,16 +4,7 @@ import './ProjectList.scss'
 import RecordList from '../RecordList/RecordList'
 import { RecordConfig } from '../Record/Record'
 
-const activeRecordConfig: RecordConfig = {
-    useCheckMark: true,
-    useDeleteBtn: true,
-    useDragBtn: true
-}
-
-const completedRecordConfig: RecordConfig = { 
-    ...activeRecordConfig, 
-    useDragBtn: false
-}
+const activeRecordConfig: RecordConfig = { useDragBtn: true }
 
 const titleRecordConfig: RecordConfig = { isTitle: true }
 
@@ -27,7 +18,7 @@ const ProjectList = () => {
             classNames={['tasks-box', 'project-list']}
             root={root}
             activeRecordConfig={activeRecordConfig}
-            completedRecordConfig={completedRecordConfig}
+            completedRecordConfig={{}}
             titleRecordConfig={titleRecordConfig}
         />
     )

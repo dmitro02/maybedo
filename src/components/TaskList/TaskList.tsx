@@ -6,16 +6,11 @@ import './TaskList.scss'
 import RecordList from '../RecordList/RecordList'
 
 const activeRecordConfig: RecordConfig = {
-    useCheckMark: true,
-    useDeleteBtn: true,
     useDragBtn: true,
     isEditable: true
 }
 
-const completedRecordConfig: RecordConfig = { 
-    ...activeRecordConfig, 
-    useDragBtn: false
-}
+const completedRecordConfig: RecordConfig = { isEditable: true } 
 
 const titleRecordConfig: RecordConfig = {
     isEditable: true, 

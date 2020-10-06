@@ -5,8 +5,6 @@ import { Task } from '../../types'
 import './SubTaskList.scss'
 
 const activeRecordConfig: RecordConfig = {
-    useCheckMark: true,
-    useDeleteBtn: true,
     useDragBtn: true,
     isEditable: true
 }

@@ -12,4 +12,6 @@
 - SettingsButton
 - test hidden buttons on mobile again
 - fix cursor on AddRecord
-- get rid of "use...Btn"
+- style delete confirmation
+- move "Settings" button to the right panel
+- aggregate all buttons to export from a single file

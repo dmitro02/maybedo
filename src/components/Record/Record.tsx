@@ -23,11 +23,7 @@ import CheckmarkButton from '../Buttons/CheckmarkButton'
 import EmptyButton from '../Buttons/EmptyButton'
 
 export type RecordConfig = {
-    useCheckMark?: boolean
-    useDeleteBtn?: boolean
     useDragBtn?: boolean
-    useExpandBtn?: boolean
-    useAddSubtasksBtn?: boolean
     isEditable?: boolean
     isTitle?: boolean
 }
@@ -44,10 +40,7 @@ const Record = ({ item, config, parent }: Props) => {
     const { isDone: initialState, text, path } = item
     
     const {
-        useCheckMark = false,
-        useDeleteBtn = false,
         useDragBtn = false,
-        useAddSubtasksBtn = true,
         isEditable = false,
         isTitle = false
     } = config
@@ -164,21 +157,7 @@ const Record = ({ item, config, parent }: Props) => {
         ? isSelected ? '' : ' mobile-hidden-btn'
         : ' hidden-btn' 
 
-    const getCheckmarksBtn = () => {
-        if (!useCheckMark) return null
-
-        return (
-            <CheckmarkButton 
-                actionOnMouseDown={handleMouseDownOnCheckbox} 
-                actionOnMouseUp={handleMouseUpOnCheckbox}
-                isChecked={isDone}
-            />
-        ) 
-    }
-
     const getSubtasksBtn = () => {
-        if (!useAddSubtasksBtn) return null
-
         const action = () => setShowSubtasks(!showSubtasks)
         const classNames = [ 'subtasks-btn' ]
 
@@ -198,24 +177,20 @@ const Record = ({ item, config, parent }: Props) => {
     const getDragmarkBtn = () =>
         useDragBtn ? <DragButton /> : <EmptyButton />
 
-    const getDeleteBtn = () => {
-        if (!useDeleteBtn) return null
-
-        return (        
-            <> 
-                <DeleteButton 
-                    classNames={[ hiddenBtnClassName ]} 
-                    action={openDeleteConfirmation} 
-                />
-                {showDeleteConfirmation && 
-                    <div className="confirm-delete">
-                        <button onClick={deleteRecordOnConfirm}>Yes</button> 
-                        <button onClick={closeDeleteConfirmation}>No</button>   
-                    </div>
-                }  
-            </> 
-        )
-    }
+    const getDeleteBtn = () => (        
+        <> 
+            <DeleteButton 
+                classNames={[ hiddenBtnClassName ]} 
+                action={openDeleteConfirmation} 
+            />
+            {showDeleteConfirmation && 
+                <div className="confirm-delete">
+                    <button onClick={deleteRecordOnConfirm}>Yes</button> 
+                    <button onClick={closeDeleteConfirmation}>No</button>   
+                </div>
+            }  
+        </> 
+    )
 
     return (
         <>
@@ -229,7 +204,11 @@ const Record = ({ item, config, parent }: Props) => {
             >
                 <div className="left-btns">
                     {getDragmarkBtn()}
-                    {getCheckmarksBtn()}
+                    <CheckmarkButton 
+                        actionOnMouseDown={handleMouseDownOnCheckbox} 
+                        actionOnMouseUp={handleMouseUpOnCheckbox}
+                        isChecked={isDone}
+                    />
                 </div>
                 <div 
                     ref={recordContentRef}
