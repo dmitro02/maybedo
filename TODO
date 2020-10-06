@@ -6,6 +6,10 @@
 - find a general way to align buttons vertically
 - fogging with blackened foreground of the right panel when left panel is opened
 - use DeleteButton in Banner
+- use AddButton in AddRecord
 - OpenMenuButton
 - CloseMenuButton
 - SettingsButton
+- test hidden buttons on mobile again
+- fix cursor on AddRecord
+- get rid of "use...Btn"

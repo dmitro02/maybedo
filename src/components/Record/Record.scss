@@ -1,29 +1,16 @@
 @import '../../styles/_variables.scss';
 
 .record {
-    position: relative;
     display: flex;
     font-size: $font-size-normal;
-    text-align: justify;
-    padding-left: 6px;
     margin-bottom: 1px;
     border-radius: 4px;
+    padding: 2px 8px 6px 4px;
 
     [contenteditable] {
         outline: 0px solid transparent;
         white-space: pre-wrap;
     }
-    
-    // .hidden-btn:last-of-type {
-    //     margin-left: auto;
-    //     margin-right: 6px;
-    // }
-
-    // .material-icons {
-    //     position: relative;
-    //     top: 9px;
-    //     font-size: $font-size-normal;
-    // }
 
     .item-done {
         color: $text-gray;
@@ -31,15 +18,19 @@
     }
     
     .item-content {
-        padding: 4px 4px 6px 4px;
         width: 100%;
         overflow-wrap: anywhere;
+        margin: 0 8px;
     }
 
-    // .drag-mark {
-    //     cursor: move;
-    //     top: 11px;
-    // }
+    .left-btns, .right-btns {
+        display: flex;
+        padding-top: $font-size-normal / 3.6
+    }
+
+    .right-btns {
+        margin-left: auto;
+    }
 
     .confirm-delete {
         position: absolute;
@@ -72,7 +63,6 @@
     color: $text-gray;
 
     .add-mark {
-        // top: 11px;
         cursor: default;
     }
 }

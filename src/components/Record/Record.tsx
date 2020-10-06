@@ -62,7 +62,7 @@ const Record = ({ item, config, parent }: Props) => {
 
     const [ store, dispatch ] = useTasksContext()
 
-    const recordContentRef = useRef<HTMLElement>(null)
+    const recordContentRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         document.activeElement === recordContentRef.current && loadCaretPositionFromState()  
@@ -227,9 +227,11 @@ const Record = ({ item, config, parent }: Props) => {
                     !isTitle && selectRecord(item)
                 }}
             >
-                {getDragmarkBtn()}
-                {getCheckmarksBtn()}
-                <span 
+                <div className="left-btns">
+                    {getDragmarkBtn()}
+                    {getCheckmarksBtn()}
+                </div>
+                <div 
                     ref={recordContentRef}
                     className={'item-content' + (isDone ? ' item-done' : '')} 
                     contentEditable={isEditable}
@@ -238,9 +240,11 @@ const Record = ({ item, config, parent }: Props) => {
                     onBlur={handleBlur}
                 >
                     {text}
-                </span>
-                {getSubtasksBtn()}  
-                {getDeleteBtn()}
+                </div>
+                <div className="right-btns">
+                    {getSubtasksBtn()}  
+                    {getDeleteBtn()}
+                </div>
             </div>
             <SubTaskList task={item} isDisplayed={showSubtasks} />
         </>
