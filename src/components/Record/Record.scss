@@ -23,27 +23,9 @@
         margin: 0 8px;
     }
 
-    .left-btns, .right-btns {
+    .record-btns {
         display: flex;
         padding-top: $font-size-normal / 3.6
-    }
-
-    .right-btns {
-        margin-left: auto;
-    }
-
-    .confirm-delete {
-        position: absolute;
-        right: 0;
-        padding-left: 8px;
-        background-color: inherit;
-        border-radius: inherit;
-
-        button {
-            display: inline;
-            cursor: pointer;
-            margin: 0 8px 0 0;
-        }
     }
 }
 

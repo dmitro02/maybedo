@@ -4,7 +4,7 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import { constructNewPath } from '../../utils/pathUtils'
 import { Task } from '../../types'
 import { createTaskAction } from '../../contexts/actionCreators'
-import EmptyButton from '../Buttons/EmptyButton'
+import { AddButton, EmptyButton } from '../Buttons/Buttons'
 
 const AddRecord = ({ root }: { root: Task }) => {
     const [ , dispatch ] = useTasksContext()
@@ -19,9 +19,9 @@ const AddRecord = ({ root }: { root: Task }) => {
 
     return (  
         <div className="record add-record">
-            <div className="left-btns">
+            <div className="record-btns">
                 <EmptyButton />
-                <i className="material-icons add-mark">add</i>
+                <AddButton />
             </div>
             <span 
                 className="item-content" 

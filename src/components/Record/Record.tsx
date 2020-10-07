@@ -14,13 +14,17 @@ import {
 import { isProjectLevelItem } from '../../utils/pathUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
-import DeleteButton from '../Buttons/DeleteButton'
-import ExpandButton from '../Buttons/ExpandButton'
-import CollapseButton from '../Buttons/CollapseButton'
-import AddButton from '../Buttons/AddButton'
-import DragButton from '../Buttons/DragButton'
-import CheckmarkButton from '../Buttons/CheckmarkButton'
-import EmptyButton from '../Buttons/EmptyButton'
+import { 
+    DeleteButton,
+    ExpandButton,
+    CollapseButton,
+    AddButton,
+    DragButton,
+    CheckmarkButton,
+    EmptyButton,
+    ConfirmButton,
+    CloseButton
+ } from '../Buttons/Buttons'
 
 export type RecordConfig = {
     useDragBtn?: boolean
@@ -174,24 +178,6 @@ const Record = ({ item, config, parent }: Props) => {
         return null
     }
 
-    const getDragmarkBtn = () =>
-        useDragBtn ? <DragButton /> : <EmptyButton />
-
-    const getDeleteBtn = () => (        
-        <> 
-            <DeleteButton 
-                classNames={[ hiddenBtnClassName ]} 
-                action={openDeleteConfirmation} 
-            />
-            {showDeleteConfirmation && 
-                <div className="confirm-delete">
-                    <button onClick={deleteRecordOnConfirm}>Yes</button> 
-                    <button onClick={closeDeleteConfirmation}>No</button>   
-                </div>
-            }  
-        </> 
-    )
-
     return (
         <>
             <div 
@@ -202,8 +188,8 @@ const Record = ({ item, config, parent }: Props) => {
                     !isTitle && selectRecord(item)
                 }}
             >
-                <div className="left-btns">
-                    {getDragmarkBtn()}
+                <div className="record-btns">
+                    {useDragBtn ? <DragButton /> : <EmptyButton />}
                     <CheckmarkButton 
                         actionOnMouseDown={handleMouseDownOnCheckbox} 
                         actionOnMouseUp={handleMouseUpOnCheckbox}
@@ -220,9 +206,22 @@ const Record = ({ item, config, parent }: Props) => {
                 >
                     {text}
                 </div>
-                <div className="right-btns">
-                    {getSubtasksBtn()}  
-                    {getDeleteBtn()}
+                <div className="record-btns">
+                    {showDeleteConfirmation 
+                        ?
+                        <>
+                            <ConfirmButton action={deleteRecordOnConfirm} />
+                            <CloseButton action={closeDeleteConfirmation} />
+                        </>
+                        :
+                        <>
+                            {getSubtasksBtn()}
+                            <DeleteButton 
+                                classNames={[ hiddenBtnClassName ]} 
+                                action={openDeleteConfirmation} 
+                            />
+                        </>
+                    } 
                 </div>
             </div>
             <SubTaskList task={item} isDisplayed={showSubtasks} />

@@ -16,7 +16,7 @@ const DeleteButton = (props: Props) => {
         <i 
             className={`material-icons common-btn ${classNames.join(' ')}`} 
             onClick={action}
-        >clear</i>
+        >delete</i>
     )
 }
 

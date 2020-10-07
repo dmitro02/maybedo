@@ -2,13 +2,13 @@ import React, { memo } from 'react'
 import './Button.scss'
 
 type Props = {
-    action?: (e: any) => void
+    action: (e: any) => void
     classNames?: String[]
 }
 
-const AddButton = (props: Props) => {
+const ConfirmButton = (props: Props) => {
     const {
-        action = () => {},
+        action,
         classNames = []
     } = props
 
@@ -16,8 +16,8 @@ const AddButton = (props: Props) => {
         <i 
             className={`material-icons common-btn ${classNames.join(' ')}`} 
             onClick={action}
-        >add</i>
+        >check</i>
     )
 }
 
-export default memo(AddButton)
+export default memo(ConfirmButton)

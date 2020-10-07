@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import './Banner.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { setBanner } from '../../contexts/actionCreators'
+import { CloseButton } from '../Buttons/Buttons'
 
 const Banner = () => {
     const [ store, dispatch ] = useTasksContext()
@@ -26,7 +27,7 @@ const Banner = () => {
     return (
         <div className={`banner banner-${type}`}>
             {text}
-            <i className="material-icons" onClick={closeBanner}>clear</i>
+            <CloseButton action={closeBanner} />
         </div>
     )
 }
