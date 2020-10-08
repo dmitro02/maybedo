@@ -17,3 +17,17 @@
 .drag-mark {
     cursor: move;
 }
+
+.row-btns {
+    display: flex;
+    padding-top: $font-size-normal / 3.6
+}
+
+.row-btns:first-child {
+    margin-left: 4px;
+}
+
+.row-btns:last-child {
+    margin-right: 8px;
+    margin-left: auto;
+}

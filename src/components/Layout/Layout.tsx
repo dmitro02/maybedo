@@ -8,6 +8,7 @@ import Modal from '../Modal/Modal'
 import Banner from '../Banner/Banner'
 import { 
     ArrowBackButton, 
+    EmptyButton, 
     MenuButton, 
     SettingsButton 
 } from '../Buttons/Buttons'
@@ -38,17 +39,28 @@ const Layout = () => {
             <TasksContextProvider>
                 <Modal />
                 <div className={`left-panel ${showLeftPanel ? ' panel-opened' : ''}`}>
-                    <ArrowBackButton action={closeLeftPanel} classNames={['close-menu-btn']}/>
+                    <div className="top-panel">
+                        <div className="row-btns">
+                            <ArrowBackButton action={closeLeftPanel} classNames={['close-menu-btn']}/>
+                            <EmptyButton />
+                        </div>
+                    </div>
                     <ProjectList />
                 </div>
                 <div 
                     className="right-panel"
                     onClick={closeLeftPanel}
                 >
+                    <Banner />
                     <div className="top-panel">
-                        <MenuButton action={openLeftPanel} classNames={['open-menu-btn']} />
-                        <SettingsButton action={toggleSettings} />
-                        <Banner />
+                        <div className="row-btns">
+                            <EmptyButton />
+                            <MenuButton action={openLeftPanel} classNames={['open-menu-btn']} />
+                        </div>
+                        <div className="row-btns">
+                            <SettingsButton action={toggleSettings} />
+                            <EmptyButton />
+                        </div>
                     </div>
                     <div className="right-content">
                         {isSettingsOpened 

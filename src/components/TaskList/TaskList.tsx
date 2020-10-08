@@ -30,7 +30,7 @@ const TaskList = () => {
 
     return (
         <RecordList 
-            classNames={['tasks-box', 'task-list']}
+            classNames={['task-list']}
             root={root}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}

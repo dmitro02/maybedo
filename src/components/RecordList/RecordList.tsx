@@ -5,7 +5,6 @@ import AddRecord from '../Record/AddRecord'
 import { Task } from '../../types'
 import Record, { RecordConfig } from '../Record/Record'
 import Sortable from 'sortablejs'
-import './RecordList.scss'
 import { moveTaskAction } from '../../contexts/actionCreators'
 import { isTaskLevelItem } from '../../utils/pathUtils'
 

@@ -19,7 +19,7 @@ const AddRecord = ({ root }: { root: Task }) => {
 
     return (  
         <div className="record add-record">
-            <div className="record-btns">
+            <div className="row-btns">
                 <EmptyButton />
                 <AddButton />
             </div>

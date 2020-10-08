@@ -8,17 +8,13 @@
         min-width: 400px;
         min-height: 100vh;
         max-height: 100vh;
-        padding: 30px 6px;
+        padding: 0 6px;
         border-right: 1px solid $devider-color; 
         background-color: $background-light;
         overflow: auto;
 
         .close-menu-btn {
-            position: absolute;
             display: none;
-            top: 20px;
-            font-size: 1.8rem;
-            right: 6px;
         }
     }
     
@@ -27,24 +23,14 @@
         background-color: white;
         position: relative;
         padding: 0 300px 0 100px;
+    }
 
-        .top-panel {
-            display: flex;
-            // justify-content: space-between;
-            padding-bottom: 5px;
+    .top-panel {
+        display: flex;
+        margin-top: 15px;
 
-            .common-btn {
-                font-size: 1.8rem;
-                margin: 15px 6px 0 6px;
-            }
-
-            .common-btn:last-child {
-                margin-left: auto;
-            }
-
-            .open-menu-btn {
-                display: none;
-            }
+        .open-menu-btn {
+            display: none;
         }
     }
 }

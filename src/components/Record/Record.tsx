@@ -188,7 +188,7 @@ const Record = ({ item, config, parent }: Props) => {
                     !isTitle && selectRecord(item)
                 }}
             >
-                <div className="record-btns">
+                <div className="row-btns">
                     {useDragBtn ? <DragButton /> : <EmptyButton />}
                     <CheckmarkButton 
                         actionOnMouseDown={handleMouseDownOnCheckbox} 
@@ -206,7 +206,7 @@ const Record = ({ item, config, parent }: Props) => {
                 >
                     {text}
                 </div>
-                <div className="record-btns">
+                <div className="row-btns">
                     {showDeleteConfirmation 
                         ?
                         <>
