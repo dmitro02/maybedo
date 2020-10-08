@@ -5,8 +5,6 @@
 - add alt text for buttons
 - add banner dissolution effect
 - fogging with blackened foreground of the right panel when left panel is opened
-- OpenMenuButton
-- HideMenuButton
 - SettingsButton
 - test hidden buttons on mobile again
 - fix cursors on AddRecord
@@ -14,3 +12,4 @@
 - style Banner
 - style Modal
 - style Settings panel
+- align left and right panel deviders

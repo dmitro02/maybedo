@@ -3,10 +3,14 @@ import './Layout.scss'
 import { TasksContextProvider } from '../../contexts/TasksContext'
 import ProjectList from '../ProjectList/ProjectList'
 import TaskList from '../TaskList/TaskList'
-import Divider from '../Divider/Divider'
 import Settings from '../Settings/Settings'
 import Modal from '../Modal/Modal'
 import Banner from '../Banner/Banner'
+import { 
+    ArrowBackButton, 
+    MenuButton, 
+    SettingsButton 
+} from '../Buttons/Buttons'
 
 const Layout = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
@@ -34,28 +38,18 @@ const Layout = () => {
             <TasksContextProvider>
                 <Modal />
                 <div className={`left-panel ${showLeftPanel ? ' panel-opened' : ''}`}>
-                    <i 
-                        className="material-icons common-btn close-menu-btn"
-                        onClick={closeLeftPanel}
-                    >arrow_back_ios</i>
+                    <ArrowBackButton action={closeLeftPanel} classNames={['close-menu-btn']}/>
                     <ProjectList />
-                    <Divider />
-                    <div className="menu">
-                        <div className="menu-item" onClick={toggleSettings}>
-                            <i className="material-icons-outlined">settings</i>
-                            <span>Settings</span>
-                        </div>
-                    </div>
                 </div>
                 <div 
                     className="right-panel"
                     onClick={closeLeftPanel}
                 >
-                    <i 
-                        className="material-icons common-btn open-menu-btn"
-                        onClick={openLeftPanel}
-                    >menu</i>
-                    <Banner />
+                    <div className="top-panel">
+                        <MenuButton action={openLeftPanel} classNames={['open-menu-btn']} />
+                        <SettingsButton action={toggleSettings} />
+                        <Banner />
+                    </div>
                     <div className="right-content">
                         {isSettingsOpened 
                             ? <Settings backToTaskList={toggleSettings}/>

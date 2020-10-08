@@ -26,63 +26,37 @@
         width: 100%;
         background-color: white;
         position: relative;
+        padding: 0 300px 0 100px;
 
-        .right-content {
-            margin-top: 30px;
-            padding: 0 300px 0 100px;
+        .top-panel {
+            display: flex;
+            // justify-content: space-between;
+            padding-bottom: 5px;
+
+            .common-btn {
+                font-size: 1.8rem;
+                margin: 15px 6px 0 6px;
+            }
+
+            .common-btn:last-child {
+                margin-left: auto;
+            }
+
+            .open-menu-btn {
+                display: none;
+            }
         }
-
-        .open-menu-btn {
-            position: absolute;
-            z-index: 1;
-            display: none;
-            top: 20px;
-            font-size: 1.8rem;
-        }
-    }
-}
-
-.menu {
-    padding: 0 5px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: $text-gray;
-
-    .material-icons-outlined {
-        color: $text-gray;
-        position: relative;
-        top: 6px;
-        left: 2px;
-    }
-
-    .menu-item {
-        cursor: pointer;
-        padding: 4px 4px 6px;
-    
-        i {
-            margin-left: 24px;
-            margin-right: 5px;
-        }
-    
-        i, span {
-            vertical-align: top;
-        }
-    }
-    
-    .menu-item:hover {
-        background-color: $record-hover-color;
-        border-radius: 4px;
     }
 }
 
 @media screen and (max-width: 1700px) {
-    .main-container .right-panel .right-content {
+    .main-container .right-panel {
         padding: 0 100px;
     }  
 }
 
 @media screen and (max-width: 1400px) {
-    .main-container .right-panel .right-content {
+    .main-container .right-panel {
         padding: 0 5px;
     }  
 }
@@ -103,28 +77,21 @@
             left: 0;
         }
         .right-panel {
-            .right-content {
-                padding: 0 100px;
-            }
-            .open-menu-btn {
-                display: block;
-                left: 133px;
+            padding: 0 100px;
+
+            .top-panel {
+                .open-menu-btn {
+                    display: block;
+                }
             }
         }  
     }
 }
 
 @media screen and (max-width: 1000px) {
-    .main-container {
-        .right-panel {
-            .right-content {
-                padding: 0 5px;
-            }
-            .open-menu-btn {
-                left: 43px;
-            }
-        } 
-    }
+    .main-container .right-panel {
+        padding: 0 5px;
+    } 
 }
 
 @media screen and (max-width: 400px) {
