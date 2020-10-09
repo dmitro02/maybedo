@@ -12,6 +12,7 @@ import {
     MenuButton, 
     SettingsButton 
 } from '../Buttons/Buttons'
+import Divider from '../Divider/Divider'
 
 const Layout = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
@@ -45,6 +46,7 @@ const Layout = () => {
                             <EmptyButton />
                         </div>
                     </div>
+                    <Divider />
                     <ProjectList />
                 </div>
                 <div 
@@ -63,6 +65,7 @@ const Layout = () => {
                             <EmptyButton />
                         </div>
                     </div>
+                    <Divider />
                     <div className="right-content">
                         {isSettingsOpened 
                             ? <Settings backToTaskList={toggleSettings}/>
