@@ -23,6 +23,15 @@
         background-color: white;
         position: relative;
         padding: 0 300px 0 100px;
+
+        .fog {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: black;
+            opacity: 30%;
+            left: 0;
+        }
     }
 
     .top-panel {

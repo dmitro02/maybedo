@@ -38,7 +38,7 @@ const Layout = () => {
         <div className="main-container">   
             <TasksContextProvider>
                 <Modal />
-                <div className={`left-panel ${showLeftPanel ? ' panel-opened' : ''}`}>
+                <div className={`left-panel${showLeftPanel ? ' panel-opened' : ''}`}>
                     <div className="top-panel">
                         <div className="row-btns">
                             <ArrowBackButton action={closeLeftPanel} classNames={['close-menu-btn']}/>
@@ -51,6 +51,7 @@ const Layout = () => {
                     className="right-panel"
                     onClick={closeLeftPanel}
                 >
+                    <div className="fog" style={{display: showLeftPanel ? 'block' : 'none'}}/>
                     <Banner />
                     <div className="top-panel">
                         <div className="row-btns">
