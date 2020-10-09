@@ -3,9 +3,7 @@
 - sync to Dropbox
 - add alt text for buttons
 - test hidden buttons on mobile again
-- fix cursors on AddRecord
 - style Banner
 - style Modal
 - style Settings panel
-- fix empty button cursor
 - add separator above the headers

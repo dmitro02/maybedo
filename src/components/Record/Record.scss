@@ -38,9 +38,14 @@
 
 .add-record {
     color: $text-gray;
+    cursor: text;
 
-    .add-mark {
+    .add-btn {
         cursor: default;
+    }
+
+    .add-btn:hover {
+        color: $text-gray;
     }
 }
 

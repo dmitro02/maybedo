@@ -18,6 +18,10 @@
     cursor: move;
 }
 
+.empty-btn {
+    cursor: default;
+}
+
 .row-btns {
     display: flex;
     padding-top: $font-size-normal / 3.6

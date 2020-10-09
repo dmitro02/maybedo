@@ -14,7 +14,7 @@ const AddButton = (props: Props) => {
 
     return (
         <i 
-            className={`material-icons common-btn ${classNames.join(' ')}`} 
+            className={`material-icons common-btn add-btn${classNames.join(' ')}`} 
             onClick={action}
         >add</i>
     )
