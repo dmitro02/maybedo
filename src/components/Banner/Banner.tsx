@@ -26,7 +26,7 @@ const Banner = () => {
 
     return (
         <div className={`banner banner-${type}`}>
-            {text}
+            <div>{text}</div>
             <CloseButton action={closeBanner} />
         </div>
     )

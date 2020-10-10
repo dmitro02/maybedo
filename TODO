@@ -3,7 +3,8 @@
 - sync to Dropbox
 - add alt text for buttons
 - test hidden buttons on mobile again
-- style Banner
 - style Modal
 - style Settings panel
-- add separator above the headers
+- don't show menu button on settings page
+- back button on settings page
+- export/import banner messages
