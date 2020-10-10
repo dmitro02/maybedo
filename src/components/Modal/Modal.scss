@@ -1,14 +1,5 @@
 @import '../../styles/variables';
 
-.modal-background {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    opacity: 90%;
-    background-color: $background-light;
-    z-index: 1;
-}
-
 .modal-container {
     position: absolute;
     height: 100%;
@@ -16,14 +7,45 @@
 
     .modal-dialog {
         position: absolute;
-        width: 400px;
-        height: 200px;
+        width: 350px;
+        height: 150px;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        border-radius: 3px;
         background-color: $background-light;
-        box-shadow: 2px 3px 9px 2px $shadow-color;
+        box-shadow: 1px 2px 5px 3px $shadow-color;
         z-index: 2;
+        padding: 20px;
+        font-size: $font-size-3;
+        color: $text-gray;    
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        .modal-btns {
+            display: flex;
+            justify-content: flex-end;
+
+            .common-btn {
+                font-size: 2rem;
+                margin-left: 8px;
+            }
+
+            .close-btn {
+                color: lightcoral;
+            }
+
+            .close-btn:hover {
+                color: coral;
+            }
+
+            .confirm-btn {
+                color: forestgreen;
+            }
+
+            .confirm-btn:hover {
+                color: yellowgreen;
+            }
+        }
     }
 }

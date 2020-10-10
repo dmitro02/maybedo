@@ -2,6 +2,8 @@ import React from 'react'
 import './Modal.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { setModal } from '../../contexts/actionCreators'
+import Fog from '../Fog/Fog'
+import { CloseButton, ConfirmButton } from '../Buttons/Buttons'
 
 const Modal = () => {
     const [ store, dispatch ] = useTasksContext()
@@ -28,13 +30,13 @@ const Modal = () => {
 
     return (
         <>
-            <div className="modal-background" />
+            <Fog isDisplayed={true}/>
             <div className="modal-container">
                 <div className="modal-dialog">
                     <div>{text}</div>
-                    <div>
-                        <button onClick={handleClickCancel}>Cancel</button>
-                        <button onClick={handleClickOk}>OK</button>
+                    <div className="modal-btns">
+                        <CloseButton action={handleClickCancel} />
+                        <ConfirmButton action={handleClickOk} />
                     </div>
                 </div>
             </div>

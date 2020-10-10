@@ -43,7 +43,8 @@ const Settings = (props: Props) => {
         reader.onload = () => {
             const modal: IModal = {
                 text: 'Do you want to overwrite existing data?',
-                okAction: () => doImport(reader)
+                okAction: () => doImport(reader),
+                cancelAction: () => clearFileInput()
             }
             dispatch(setModal(modal))
         };

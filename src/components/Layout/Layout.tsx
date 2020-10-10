@@ -13,6 +13,7 @@ import {
     SettingsButton 
 } from '../Buttons/Buttons'
 import Divider from '../Divider/Divider'
+import Fog from '../Fog/Fog'
 
 const Layout = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
@@ -53,7 +54,7 @@ const Layout = () => {
                     className="right-panel"
                     onClick={closeLeftPanel}
                 >
-                    <div className="fog" style={{display: showLeftPanel ? 'block' : 'none'}}/>
+                    <Fog isDisplayed={showLeftPanel}/>
                     <Banner />
                     <div className="top-panel">
                         <div className="row-btns">

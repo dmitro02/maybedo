@@ -14,7 +14,7 @@ const ConfirmButton = (props: Props) => {
 
     return (
         <i 
-            className={`material-icons common-btn ${classNames.join(' ')}`} 
+            className={`material-icons common-btn confirm-btn${classNames.join(' ')}`} 
             onClick={action}
         >check</i>
     )

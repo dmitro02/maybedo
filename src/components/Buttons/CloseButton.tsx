@@ -14,7 +14,7 @@ const CloseButton = (props: Props) => {
 
     return (
         <i 
-            className={`material-icons common-btn ${classNames.join(' ')}`} 
+            className={`material-icons common-btn close-btn${classNames.join(' ')}`} 
             onClick={action}
         >close</i>
     )
