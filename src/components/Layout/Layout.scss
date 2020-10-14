@@ -5,6 +5,7 @@
     min-height: 100vh;
 
     .left-panel {
+        position: relative;
         min-width: 400px;
         min-height: 100vh;
         max-height: 100vh;
@@ -27,7 +28,8 @@
 
     .top-panel {
         display: flex;
-        margin-top: 15px;
+        margin-top: 10px;
+        margin-bottom: 15px;
 
         .open-menu-btn {
             display: none;

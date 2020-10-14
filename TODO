@@ -1,10 +1,6 @@
 - BUG (Chrome only): while moving record other record statically displayed as hovered 
 - save to local storage
 - sync to Dropbox
+- import/export html
 - add alt text for buttons
 - test hidden buttons on mobile again
-- style Modal
-- style Settings panel
-- don't show menu button on settings page
-- back button on settings page
-- export/import banner messages

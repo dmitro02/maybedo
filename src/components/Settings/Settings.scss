@@ -1,6 +1,12 @@
-input, button {
-    display: block;
+@import '../../styles/variables';
+
+button {
+    display: inline-block;
     margin: 10px;
+    font-size: $font-size-3;
+    color: peru;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
 input {

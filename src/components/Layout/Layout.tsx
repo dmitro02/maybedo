@@ -41,6 +41,7 @@ const Layout = () => {
             <TasksContextProvider>
                 <Modal />
                 <div className={`left-panel${showLeftPanel ? ' panel-opened' : ''}`}>
+                    <Fog isDisplayed={isSettingsOpened}/>
                     <div className="top-panel">
                         <div className="row-btns">
                             <ArrowBackButton action={closeLeftPanel} classNames={['close-menu-btn']}/>
@@ -50,19 +51,21 @@ const Layout = () => {
                     <Divider />
                     <ProjectList />
                 </div>
-                <div 
-                    className="right-panel"
-                    onClick={closeLeftPanel}
-                >
+                <div className="right-panel" onClick={closeLeftPanel}>
                     <Fog isDisplayed={showLeftPanel}/>
                     <Banner />
                     <div className="top-panel">
+                        {!isSettingsOpened &&
+                            <div className="row-btns">
+                                <EmptyButton />
+                                <MenuButton action={openLeftPanel} classNames={['open-menu-btn']} />
+                            </div>
+                        }
                         <div className="row-btns">
-                            <EmptyButton />
-                            <MenuButton action={openLeftPanel} classNames={['open-menu-btn']} />
-                        </div>
-                        <div className="row-btns">
-                            <SettingsButton action={toggleSettings} />
+                            {isSettingsOpened 
+                                ? <ArrowBackButton action={toggleSettings} />
+                                : <SettingsButton action={toggleSettings} />
+                            }
                             <EmptyButton />
                         </div>
                     </div>

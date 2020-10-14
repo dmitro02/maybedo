@@ -59,7 +59,7 @@ const Settings = (props: Props) => {
             dataToImport = JSON.parse(reader.result as string)
         } catch(err) {
             const banner: IBanner = {
-                text: 'BAD DATA (JSON)',
+                text: 'Failed to parse JSON file',
                 type: BannerTypes.Failure
             }
             dispatch(setBanner(banner))
@@ -67,7 +67,7 @@ const Settings = (props: Props) => {
         }
         if (!validateExportedData(dataToImport)) {
             const banner: IBanner = {
-                text: 'BAD DATA (shape)',
+                text: 'Some required fields are missing',
                 type: BannerTypes.Failure
             }
             dispatch(setBanner(banner))
@@ -95,6 +95,7 @@ const Settings = (props: Props) => {
 
     return (
         <div>
+            <h2>Import/Export your data</h2>
             <input type="file" onChange={importData} ref={fileInputRef}/>
             <button onClick={clickOnFileInput}>Import</button>
             <button onClick={exportData}>Export</button>
