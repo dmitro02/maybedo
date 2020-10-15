@@ -3,7 +3,7 @@ import './Button.scss'
 
 type Props = {
     action: (e: any) => void
-    classNames?: String[]
+    classNames?: string[]
 }
 
 const ConfirmButton = (props: Props) => {

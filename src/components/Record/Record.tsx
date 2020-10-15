@@ -172,7 +172,11 @@ const Record = ({ item, config, parent }: Props) => {
             return <CollapseButton action={action} classNames={classNames} />
         }
         if (!hasSubtasks && !(parent.isDone || isDone)) {
-            return <AddButton action={action} classNames={[...classNames, hiddenBtnClassName]} />
+            return <AddButton 
+                        action={action} 
+                        classNames={[...classNames, hiddenBtnClassName]} 
+                        title='add subtask'
+                    />
         }
 
         return null

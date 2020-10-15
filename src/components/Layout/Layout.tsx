@@ -44,7 +44,11 @@ const Layout = () => {
                     <Fog isDisplayed={isSettingsOpened}/>
                     <div className="top-panel">
                         <div className="row-btns">
-                            <ArrowBackButton action={closeLeftPanel} classNames={['close-menu-btn']}/>
+                            <ArrowBackButton 
+                                action={closeLeftPanel} 
+                                classNames={['close-menu-btn']} 
+                                title="hide projects list"
+                            />
                             <EmptyButton />
                         </div>
                     </div>
@@ -58,12 +62,16 @@ const Layout = () => {
                         {!isSettingsOpened &&
                             <div className="row-btns">
                                 <EmptyButton />
-                                <MenuButton action={openLeftPanel} classNames={['open-menu-btn']} />
+                                <MenuButton 
+                                    action={openLeftPanel} 
+                                    classNames={['open-menu-btn']}
+                                    title="open projects list"
+                                />
                             </div>
                         }
                         <div className="row-btns">
                             {isSettingsOpened 
-                                ? <ArrowBackButton action={toggleSettings} />
+                                ? <ArrowBackButton action={toggleSettings} title="close settings"/>
                                 : <SettingsButton action={toggleSettings} />
                             }
                             <EmptyButton />

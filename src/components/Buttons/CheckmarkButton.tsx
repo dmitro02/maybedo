@@ -5,7 +5,7 @@ type Props = {
     actionOnMouseDown: (e: any) => void
     actionOnMouseUp: (e: any) => void
     isChecked?: boolean,
-    classNames?: String[]
+    classNames?: string[]
 }
 
 const CheckmarkButton = (props: Props) => {

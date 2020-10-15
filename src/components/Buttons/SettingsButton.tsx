@@ -3,19 +3,22 @@ import './Button.scss'
 
 type Props = {
     action: (e: any) => void
-    classNames?: String[]
+    classNames?: string[]
+    title?: string
 }
 
 const SettingsButton = (props: Props) => {
     const {
         action,
-        classNames = []
+        classNames = [],
+        title = 'settings'
     } = props
 
     return (
         <i 
             className={`material-icons-outlined common-btn ${classNames.join(' ')}`} 
             onClick={action}
+            title={title}
         >settings</i>
     )
 }

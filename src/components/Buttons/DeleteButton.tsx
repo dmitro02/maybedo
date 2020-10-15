@@ -3,19 +3,22 @@ import './Button.scss'
 
 type Props = {
     action: (e: any) => void
-    classNames?: String[]
+    classNames?: string[]
+    title?: string
 }
 
 const DeleteButton = (props: Props) => {
     const {
         action,
-        classNames = []
+        classNames = [],
+        title = 'delete item'
     } = props
 
     return (
         <i 
             className={`material-icons common-btn ${classNames.join(' ')}`} 
             onClick={action}
+            title={title}
         >delete</i>
     )
 }
