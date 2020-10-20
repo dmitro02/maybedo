@@ -66,6 +66,7 @@ const getItemByPath = (root: Task, path: string) => {
 }
 
 const getItemChain = (root: Task, updatedItem: Task): Task[] => {
+    if (root.path === updatedItem.path) return [ updatedItem ]
     const pathArr = pathToArray(updatedItem.path)
     return pathArr.map((path: string, index: number) => {
         if (index === 0) return root 

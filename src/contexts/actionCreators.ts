@@ -7,7 +7,8 @@ export enum actionTypes {
     MOVE_TASK = 'MOVE_TASK',
     SET_APP_DATA = 'SET_APP_DATA',
     SET_MODAL = 'SET_MODAL',
-    SET_BANNER = 'SET_BANNER'
+    SET_BANNER = 'SET_BANNER',
+    SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR'
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -44,4 +45,9 @@ export const setModal = (modal: IModal | null) => ({
 export const setBanner = (banner: IBanner | null) => ({
     type: actionTypes.SET_BANNER,
     banner
+})
+
+export const setShowSidebar = (value: boolean) => ({
+    type: actionTypes.SET_SHOW_SIDEBAR,
+    value
 })

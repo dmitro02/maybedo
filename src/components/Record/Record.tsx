@@ -9,7 +9,8 @@ import {
 } from '../../utils/textInputUtils'
 import {
     updateTaskAction,
-    deleteTaskAction
+    deleteTaskAction,
+    setShowSidebar
 } from '../../contexts/actionCreators'
 import { isProjectLevelItem } from '../../utils/pathUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
@@ -95,8 +96,8 @@ const Record = ({ item, config, parent }: Props) => {
 
     const selectRecord = (item: Task) => {
         if (parent.selectedSubTaskPath === item.path) return
-        parent.selectedSubTaskPath = item.path
-        dispatch(updateTaskAction(parent))
+        const updatedParent = { ...parent, selectedSubTaskPath: item.path }
+        dispatch(updateTaskAction(updatedParent))
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
@@ -189,7 +190,10 @@ const Record = ({ item, config, parent }: Props) => {
                 id={path} 
                 onClick={() => {
                     saveCaretPositionToState()
-                    !isTitle && selectRecord(item)
+                    if (!isTitle) {
+                        selectRecord(item)
+                        dispatch(setShowSidebar(false))
+                    }
                 }}
             >
                 <div className="row-btns">

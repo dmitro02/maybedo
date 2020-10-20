@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './Layout.scss'
-import { TasksContextProvider } from '../../contexts/TasksContext'
+import { useTasksContext } from '../../contexts/TasksContext'
 import ProjectList from '../ProjectList/ProjectList'
 import TaskList from '../TaskList/TaskList'
 import Settings from '../Settings/Settings'
@@ -14,93 +14,80 @@ import {
 } from '../Buttons/Buttons'
 import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
+import { setShowSidebar } from '../../contexts/actionCreators'
 
 const Layout = () => {
+    const [ store, dispatch ] = useTasksContext()
+
+    const { showSidebar } = store
+
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
-    const [ showLeftPanel, setShowLeftPanel ] = useState(false)
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
 
     const openLeftPanel = () => {
-        if (!showLeftPanel) {
-            setShowLeftPanel(true)
+        if (!showSidebar) {
+            dispatch(setShowSidebar(true))
             enableBodyScrolling(false)
         }
     }
 
     const closeLeftPanel = () => {
-        if (showLeftPanel) {
-            setShowLeftPanel(false)
+        if (showSidebar) {
+            dispatch(setShowSidebar(false))
             enableBodyScrolling(true)
-        }
-    }
-
-    const handleProjectClick = (e: any) => {
-        const classes = e.target.classList
-        const parentClasses = e.target.parentElement?.classList
-
-        if (classes.contains('item-content') 
-            && !parentClasses.contains('title')
-            && !parentClasses.contains('add-record')) 
-        {
-            closeLeftPanel()
         }
     }
 
     return (
         <div className="main-container">   
-            <TasksContextProvider>
-                <Modal />
-                <div 
-                    className={`left-panel${showLeftPanel ? ' panel-opened' : ''}`}
-                    onClick={handleProjectClick}
-                >
-                    <Fog isDisplayed={isSettingsOpened}/>
-                    <div className="top-panel">
+            <Modal />
+            <div className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
+                <Fog isDisplayed={isSettingsOpened}/>
+                <div className="top-panel">
+                    <div className="row-btns">
+                        <ArrowBackButton 
+                            action={closeLeftPanel} 
+                            classNames={['close-menu-btn']} 
+                            title="hide projects list"
+                        />
+                        <EmptyButton />
+                    </div>
+                </div>
+                <Divider />
+                <ProjectList />
+            </div>
+            <div className="right-panel" onClick={closeLeftPanel}>
+                <Fog isDisplayed={showSidebar}/>
+                <Banner />
+                <div className="top-panel">
+                    {!isSettingsOpened &&
                         <div className="row-btns">
-                            <ArrowBackButton 
-                                action={closeLeftPanel} 
-                                classNames={['close-menu-btn']} 
-                                title="hide projects list"
+                            <EmptyButton />
+                            <MenuButton 
+                                action={openLeftPanel} 
+                                classNames={['open-menu-btn']}
+                                title="open projects list"
                             />
-                            <EmptyButton />
                         </div>
-                    </div>
-                    <Divider />
-                    <ProjectList />
-                </div>
-                <div className="right-panel" onClick={closeLeftPanel}>
-                    <Fog isDisplayed={showLeftPanel}/>
-                    <Banner />
-                    <div className="top-panel">
-                        {!isSettingsOpened &&
-                            <div className="row-btns">
-                                <EmptyButton />
-                                <MenuButton 
-                                    action={openLeftPanel} 
-                                    classNames={['open-menu-btn']}
-                                    title="open projects list"
-                                />
-                            </div>
-                        }
-                        <div className="row-btns">
-                            {isSettingsOpened 
-                                ? <ArrowBackButton action={toggleSettings} title="close settings"/>
-                                : <SettingsButton action={toggleSettings} />
-                            }
-                            <EmptyButton />
-                        </div>
-                    </div>
-                    <Divider />
-                    <div className="right-content">
+                    }
+                    <div className="row-btns">
                         {isSettingsOpened 
-                            ? <Settings backToTaskList={toggleSettings}/>
-                            : <TaskList />
+                            ? <ArrowBackButton action={toggleSettings} title="close settings"/>
+                            : <SettingsButton action={toggleSettings} />
                         }
+                        <EmptyButton />
                     </div>
                 </div>
-            </TasksContextProvider>
+                <Divider />
+                <div className="right-content">
+                    {isSettingsOpened 
+                        ? <Settings backToTaskList={toggleSettings}/>
+                        : <TaskList />
+                    }
+                </div>
+            </div>
         </div>
     )
 }

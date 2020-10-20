@@ -19,6 +19,7 @@ export interface IStore {
     addedItemPath?: string
     modal?: IModal
     banner?: IBanner
+    showSidebar?: boolean
 }
 
 const getInitialState = (data: any): IStore => {
@@ -57,12 +58,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             }
         }
         case actionTypes.DELETE_TASK: {
-            console.log('action.item', action.item)
-            const newState = {
-                ...state,
-                rootProject: deleteItem(state.rootProject, action.item)
-            }
-            console.log('newState', newState)
             return {
                 ...state,
                 rootProject: deleteItem(state.rootProject, action.item)
@@ -83,6 +78,9 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         }
         case actionTypes.SET_BANNER: {
             return { ...state, banner: action.banner }
+        }
+        case actionTypes.SET_SHOW_SIDEBAR: {
+            return { ...state, showSidebar: action.value }
         }
         default:
             return state;
