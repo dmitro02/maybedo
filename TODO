@@ -2,4 +2,5 @@
 - save to local storage
 - sync to Dropbox
 - import/export html
-- test hidden buttons on mobile again
+- sidebar should hide on project select
+ 

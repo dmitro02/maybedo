@@ -3,7 +3,7 @@
 .common-btn {
     cursor: pointer;
     color: $text-gray;
-    font-size: $font-size-5;
+    font-size: $font-size-7;
 }
 
 .common-btn:hover {
@@ -24,7 +24,8 @@
 
 .row-btns {
     display: flex;
-    padding-top: $font-size-5 / 3.6
+    position: relative;
+    top: 0.3rem;
 }
 
 .row-btns:first-child {
@@ -34,4 +35,8 @@
 .row-btns:last-child {
     margin-right: 8px;
     margin-left: auto;
+
+    .common-btn:first-child {
+        margin-right: 4px;
+    }
 }

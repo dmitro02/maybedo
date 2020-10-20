@@ -6,6 +6,7 @@
     margin-bottom: 1px;
     border-radius: 4px;
     padding: 2px 0 6px 0;
+    align-items: baseline;
 
     [contenteditable] {
         outline: 0px solid transparent;
@@ -39,6 +40,10 @@
 .add-record {
     color: $text-gray;
     cursor: text;
+
+    .row-btns {
+        top: 0.42rem;
+    }
 
     .add-btn {
         cursor: default;
