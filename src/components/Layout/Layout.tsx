@@ -36,11 +36,26 @@ const Layout = () => {
         }
     }
 
+    const handleProjectClick = (e: any) => {
+        const classes = e.target.classList
+        const parentClasses = e.target.parentElement?.classList
+
+        if (classes.contains('item-content') 
+            && !parentClasses.contains('title')
+            && !parentClasses.contains('add-record')) 
+        {
+            closeLeftPanel()
+        }
+    }
+
     return (
         <div className="main-container">   
             <TasksContextProvider>
                 <Modal />
-                <div className={`left-panel${showLeftPanel ? ' panel-opened' : ''}`}>
+                <div 
+                    className={`left-panel${showLeftPanel ? ' panel-opened' : ''}`}
+                    onClick={handleProjectClick}
+                >
                     <Fog isDisplayed={isSettingsOpened}/>
                     <div className="top-panel">
                         <div className="row-btns">
