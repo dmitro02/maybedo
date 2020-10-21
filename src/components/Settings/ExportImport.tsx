@@ -5,7 +5,12 @@ import {
     setModal, 
     setBanner 
 } from '../../contexts/actionCreators'
-import { BannerTypes, IBanner, IModal } from '../../types'
+import { BannerTypes, IBanner, IModal, Task } from '../../types'
+
+enum DataTypes {
+    JSON = 'json',
+    HTML = 'html'
+}
 
 type Props = {
     backToTaskList(): void
@@ -14,27 +19,25 @@ type Props = {
 const ExportImport = (props: Props) => {
     const [ store, dispatch ] = useTasksContext()
 
+    const { rootProject } = store
+
     const { backToTaskList } = props
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    const excludeKeys = [
-        'path',
-        'selectedSubTaskPath'
-    ]
-
-    const replacer = (key: string, value: any) =>
-        excludeKeys.includes(key) ? undefined : value
+    let dataType = DataTypes.JSON
 
     const exportData = () => {
-        const storedData = JSON.stringify(store.rootProject, replacer, 2)
-        const dataToExport = 'data:text/json;charset=utf-8,' + storedData
-        const encodedUri = encodeURI(dataToExport)
-        const timestamp = new Date().toISOString()
-        const link = document.createElement('a')
-        link.setAttribute('href', encodedUri)
-        link.setAttribute('download', `todolist_export_${timestamp}.json`);
-        link.click();
+        switch (dataType) {
+            case DataTypes.JSON:
+                exportDataAsJson(rootProject)
+                break
+            case DataTypes.HTML:
+                exportDataAsHtml(rootProject)
+                break
+            default:
+                exportDataAsJson(rootProject)
+        }
     }
 
     const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,13 +95,28 @@ const ExportImport = (props: Props) => {
         node.value = ''
     }
 
+    const setDataType = (e: any) => {
+        dataType = e.target.value
+    }
+
     return (
-        <>
+        <div className="export-import">
             <h2>Import/Export your data</h2>
-            <input type="file" onChange={importData} ref={fileInputRef}/>
-            <button onClick={clickOnFileInput}>Import</button>
-            <button onClick={exportData}>Export</button>
-        </>
+            <button className="export-btn" onClick={exportData}>Export</button>
+            <span className="words-between">as</span>
+            <select className="data-types-select" onChange={setDataType}>
+                <option value={DataTypes.JSON}>{DataTypes.JSON.toUpperCase()}</option>
+                <option value={DataTypes.HTML}>{DataTypes.HTML.toUpperCase()}</option>
+            </select>
+            <button className="import-btn" onClick={clickOnFileInput}>Import JSON</button>
+            <input 
+                className="input-hidden" 
+                type="file" 
+                accept=".json" 
+                onChange={importData} 
+                ref={fileInputRef} 
+            />
+        </div>
     )
 }
 
@@ -106,6 +124,45 @@ type ExportedData = {
     text: string
     isDone: boolean
     tasks: ExportedData[]
+}
+
+const excludeKeys = [
+    'path',
+    'selectedSubTaskPath'
+]
+
+const doExport = (data: string, type: DataTypes) => {
+    const dataToExport = `data:text/${type};charset=utf-8,${data}`
+    const encodedUri = encodeURI(dataToExport)
+    const timestamp = new Date().toISOString()
+    const link = document.createElement('a')
+    link.setAttribute('href', encodedUri)
+    link.setAttribute('download', `todolist_export_${timestamp}.${type}`);
+    link.click();
+}
+
+const replacer = (key: string, value: any) =>
+excludeKeys.includes(key) ? undefined : value
+
+const exportDataAsJson = (root: Task) => {
+    const data = JSON.stringify(root, replacer, 2)
+    doExport(data, DataTypes.JSON)
+}
+
+const convertDataToHtml = (root: Task): string => {
+    const textDecoration = root.isDone 
+        ? 'style="text-decoration: line-through"' : ''
+    const subtasks = root.tasks.length 
+        ? `<ul>${root.tasks.map(task => convertDataToHtml(task))}</ul>` : ''
+    const item = `<li ${textDecoration}>${root.text + subtasks}</li>` 
+    return item.replace(/>,</g, '><')
+}
+
+const exportDataAsHtml = (root: Task) => {
+    const content = convertDataToHtml(root)
+    const styles = 'body { font-family: sans-serif; font-size: 16px; } ul, li { margin-top: 6px }'
+    const data = `<html><head><style>${styles}</style></head><body>${content}</body></html>`
+    doExport(data, DataTypes.HTML)
 }
 
 const isExportedData = (data: any): data is ExportedData => {

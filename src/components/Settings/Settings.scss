@@ -1,14 +1,44 @@
 @import '../../styles/variables';
 
-button {
-    display: inline-block;
-    margin: 10px;
+.export-import {
     font-size: $font-size-3;
-    color: peru;
-    padding: 5px 10px;
-    cursor: pointer;
+    color: $text-gray;
+    margin-left: 10px;
+
+    * {
+        font-size: inherit;
+        color: inherit;
+    }
+
+    h2 {
+        font-size: $font-size-7;
+        margin: 12px 0;
+    }
+
+    button {
+        margin: 10px 0;
+        color: peru;
+        padding: 5px 10px;
+        cursor: pointer;
+        height: 40px;
+    }
+    
+    .input-hidden {
+        display: none;
+    }
+    
+    .import-btn {
+        display: block;
+    }
+
+    .words-between {
+        margin: 0 10px;
+    }
+    
+    .data-types-select {
+        padding: 5px;
+        height: 40px;
+    }
 }
 
-input {
-    display: none;
-}
+

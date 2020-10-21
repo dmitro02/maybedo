@@ -1,4 +1,3 @@
 - BUG (Chrome only): while moving record other record statically displayed as hovered 
 - save to local storage
 - sync to Dropbox
-- import/export html
