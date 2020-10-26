@@ -13,6 +13,7 @@ import {
 import { initPaths } from '../utils/pathUtils'
 import { actionTypes } from '../contexts/actionCreators'
 import DATA from '../data'
+import { validateExportedData } from '../components/Settings/ExportImport'
 
 export interface IStore {
     rootProject: Task
@@ -20,6 +21,15 @@ export interface IStore {
     modal?: IModal
     banner?: IBanner
     showSidebar?: boolean
+}
+
+const getInitialAppData = () => {
+    const lsData = JSON.parse(localStorage.getItem('data')!)
+    if (validateExportedData(lsData)) {
+        return lsData.tasklist
+    } else {
+        return DATA
+    }
 }
 
 const getInitialState = (data: any): IStore => {
@@ -31,7 +41,7 @@ const getInitialState = (data: any): IStore => {
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
-    const context = useReducer(tasksReducer, getInitialState(DATA))
+    const context = useReducer(tasksReducer, getInitialState(getInitialAppData()))
     return (
       <TasksContext.Provider value={context}>
           {children}

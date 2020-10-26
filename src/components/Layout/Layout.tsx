@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Layout.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import ProjectList from '../ProjectList/ProjectList'
@@ -15,13 +15,20 @@ import {
 import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
 import { setShowSidebar } from '../../contexts/actionCreators'
+import { convertDataToJson } from '../Settings/ExportImport'
+import { Task } from '../../types'
 
 const Layout = () => {
     const [ store, dispatch ] = useTasksContext()
 
-    const { showSidebar } = store
+    const { showSidebar, rootProject } = store
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
+
+    useEffect(() => {
+        window.addEventListener('unload', () => saveToLocalStorage(rootProject))
+        window.addEventListener('blur', () => saveToLocalStorage(rootProject))
+    })
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
@@ -92,8 +99,10 @@ const Layout = () => {
     )
 }
 
-const enableBodyScrolling = (isEnabled: boolean) => {
+const enableBodyScrolling = (isEnabled: boolean) =>
     document.body.style.overflow = isEnabled? 'auto' : 'hidden'
-}
+
+const saveToLocalStorage = (root: Task) => 
+    localStorage.setItem('data', convertDataToJson(root))
 
 export default Layout

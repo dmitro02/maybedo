@@ -5,7 +5,13 @@ import {
     setModal, 
     setBanner 
 } from '../../contexts/actionCreators'
-import { BannerTypes, IBanner, IModal, Task } from '../../types'
+import { 
+    BannerTypes, 
+    IBanner, 
+    IModal, 
+    Task, 
+    ExportedData 
+} from '../../types'
 
 enum DataTypes {
     JSON = 'json',
@@ -120,17 +126,6 @@ const ExportImport = (props: Props) => {
     )
 }
 
-type ExportedData = {
-    text: string
-    isDone: boolean
-    tasks: ExportedData[]
-}
-
-const excludeKeys = [
-    'path',
-    'selectedSubTaskPath'
-]
-
 const doExport = (data: string, type: DataTypes) => {
     const dataToExport = `data:text/${type};charset=utf-8,${data}`
     const encodedUri = encodeURI(dataToExport)
@@ -141,12 +136,22 @@ const doExport = (data: string, type: DataTypes) => {
     link.click();
 }
 
-const replacer = (key: string, value: any) =>
-excludeKeys.includes(key) ? undefined : value
-
 const exportDataAsJson = (root: Task) => {
-    const data = JSON.stringify(root, replacer, 2)
-    doExport(data, DataTypes.JSON)
+    doExport(convertDataToJson(root), DataTypes.JSON)
+}
+
+export const convertDataToJson = (root: Task) => {
+    const excludeKeys = [
+        'path',
+        'selectedSubTaskPath'
+    ]
+    const replacer = (key: string, value: any) =>
+        excludeKeys.includes(key) ? undefined : value
+    const data = { 
+        timestamp: Date.now(),
+        tasklist: root
+     }
+    return JSON.stringify(data, replacer, 2)
 }
 
 const convertDataToHtml = (root: Task): string => {
@@ -165,19 +170,31 @@ const exportDataAsHtml = (root: Task) => {
     doExport(data, DataTypes.HTML)
 }
 
-const isExportedData = (data: any): data is ExportedData => {
-    const dAs = data as ExportedData
-    return dAs.text !== undefined 
-            && dAs.isDone !== undefined 
-            && dAs.tasks !== undefined
+export const isExportedData = (data: any): data is ExportedData => {
+    if (!data) return false
+    const dataToValidate = data as ExportedData
+    return dataToValidate.timestamp !== undefined
+            && dataToValidate.tasklist !== undefined 
 }
 
-const validateExportedData = (data: any): boolean => {
-    if (!isExportedData(data)) return false
+const isTask = (data: any): data is Task => {
+    const dataToValidate = data as Task
+    return dataToValidate.text !== undefined 
+            && dataToValidate.isDone !== undefined 
+            && dataToValidate.tasks !== undefined
+}
+
+const validateTaks = (data: any): boolean => {
+    if (!isTask(data)) return false
     for (let task of data.tasks) {
-        if(!validateExportedData(task)) return false;
+        if(!validateTaks(task)) return false;
     }
     return true
+} 
+
+export const validateExportedData = (data: any): boolean => {
+    if (!isExportedData(data)) return false
+    return validateTaks(data.tasklist)
 } 
 
 export default ExportImport

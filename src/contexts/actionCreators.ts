@@ -1,4 +1,9 @@
-import { IBanner, IModal, Task } from '../types'
+import { 
+    IBanner, 
+    IModal, 
+    Task, 
+    ExportedData 
+} from '../types'
 
 export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',
@@ -32,9 +37,9 @@ export const moveTaskAction = (movedItemPath: string, siblingPath: string | null
     siblingPath
 }) 
 
-export const setAppData = (rootProject: Task) => ({
+export const setAppData = (exportedData: ExportedData) => ({
     type: actionTypes.SET_APP_DATA,
-    rootProject
+    rootProject: exportedData.tasklist
 })
 
 export const setModal = (modal: IModal | null) => ({

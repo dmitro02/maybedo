@@ -30,3 +30,8 @@ export enum BannerTypes {
     Warning = "warning",
     Failure = "failure"
 }
+
+export type ExportedData = {
+    timestamp: number
+    tasklist: Task
+}
