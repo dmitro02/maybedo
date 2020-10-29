@@ -106,7 +106,7 @@ const ExportImport = (props: Props) => {
     }
 
     return (
-        <div className="export-import">
+        <div className="settings-block">
             <h2>Import/Export your data</h2>
             <button className="export-btn" onClick={exportData}>Export</button>
             <span className="words-between">as</span>
@@ -129,10 +129,9 @@ const ExportImport = (props: Props) => {
 const doExport = (data: string, type: DataTypes) => {
     const dataToExport = `data:text/${type};charset=utf-8,${data}`
     const encodedUri = encodeURI(dataToExport)
-    const timestamp = new Date().toISOString()
     const link = document.createElement('a')
     link.setAttribute('href', encodedUri)
-    link.setAttribute('download', `todolist_export_${timestamp}.${type}`);
+    link.setAttribute('download', getExportFileName(type));
     link.click();
 }
 
@@ -169,6 +168,13 @@ const exportDataAsHtml = (root: Task) => {
     const data = `<html><head><style>${styles}</style></head><body>${content}</body></html>`
     doExport(data, DataTypes.HTML)
 }
+
+const getExportFileName = (type: DataTypes) => {
+    const timestamp = new Date().toISOString()
+    return `todolist_export_${timestamp}.${type}`
+}
+
+export const getExportFileNameJson = () => getExportFileName(DataTypes.JSON)
 
 export const isExportedData = (data: any): data is ExportedData => {
     if (!data) return false

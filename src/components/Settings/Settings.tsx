@@ -1,7 +1,8 @@
 import React from 'react'
 import './Settings.scss'
 import ExportImport from './ExportImport' 
-import { getCurrentAccount } from '../../utils/dropBoxUtils'
+import DropboxSync from './DropboxSync'
+import Divider from '../Divider/Divider'
 
 type Props = {
     backToTaskList(): void
@@ -14,7 +15,8 @@ const Settings = (props: Props) => {
     return (
         <>
             <ExportImport backToTaskList={backToTaskList} />
-            <button onClick={getCurrentAccount}>getCurrentAccount</button>
+            <Divider />
+            <DropboxSync />
         </>
     )
 }
