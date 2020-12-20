@@ -1,2 +1,7 @@
-- BUG (Chrome only): while moving record other record statically displayed as hovered 
-- sync to Dropbox
+- BUG: (Chrome only): while moving record other record statically displayed as hovered 
+- show already authorized message in dropbox settings 
+- BUG: app crashes when all projects deleted
+- convert Dropbox Utils into class
+- show spinner Dropbox setup requests
+- show success/failure banner on Dropbox setup
+- BUG: fog doesn't work in local version (no server)

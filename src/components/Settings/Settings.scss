@@ -16,12 +16,19 @@
         margin: 12px 0;
     }
 
+    button, input {
+        height: 40px;
+    }
+
     button {
         margin: 10px 0;
         color: peru;
         padding: 5px 10px;
         cursor: pointer;
-        height: 40px;
+    }
+
+    input {
+        margin-right: 5px;
     }
     
     .input-hidden {
@@ -39,6 +46,15 @@
     .data-types-select {
         padding: 5px;
         height: 40px;
+    }
+
+    input::placeholder {
+        font-style: italic;
+        color: rgb(200, 200, 200);
+    }
+
+    a {
+        color: peru;
     }
 }
 
