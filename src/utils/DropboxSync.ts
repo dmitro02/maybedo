@@ -3,7 +3,7 @@ import { Task } from './../types';
 import { 
     convertDataToJson, 
     getExportFileNameJson 
-} from './exportImportUtils';
+} from './persistDataUtils';
 
 const CLIENT_ID = 'lxn28fv9hhsn7id'
 

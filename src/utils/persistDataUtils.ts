@@ -1,8 +1,15 @@
-import { ExportedData, Task } from './../types';
+import { ExportedData, Task } from '../types';
 
 export enum DataTypes {
     JSON = 'json',
     HTML = 'html'
+}
+
+export const saveToLocalStorage = (root: Task) => {
+    const savedData = localStorage.getItem('data')
+    const newData = convertDataToJson(root)
+    if (savedData === newData) return
+    localStorage.setItem('data', newData)
 }
 
 export const convertDataToJson = (root: Task) => {

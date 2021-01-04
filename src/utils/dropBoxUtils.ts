@@ -2,7 +2,7 @@ import { Task } from './../types';
 import { Dropbox } from 'dropbox'
 import fetch from 'isomorphic-fetch'
 import { nanoid } from 'nanoid'
-import { convertDataToJson, getExportFileNameJson } from './exportImportUtils';
+import { convertDataToJson, getExportFileNameJson } from './persistDataUtils';
 
 const CLIENT_ID = 'lxn28fv9hhsn7id' 
 const AUTH_URL = 'https://www.dropbox.com/oauth2/authorize'

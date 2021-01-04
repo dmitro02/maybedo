@@ -13,7 +13,7 @@ import {
 import { initPaths } from '../utils/pathUtils'
 import { actionTypes } from '../contexts/actionCreators'
 import DATA from '../data'
-import { validateExportedData } from '../components/Settings/ExportImport'
+import { validateExportedData } from "../utils/persistDataUtils"
 
 export interface IStore {
     rootProject: Task

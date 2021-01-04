@@ -7,3 +7,4 @@
 ☐ BUG: fog doesn't work in local version (no server)
 ☐ save opened and selected tasks state
 ☐ move "New task" to the top
+☐ implement config (with dropbox client ID)

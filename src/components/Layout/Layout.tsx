@@ -15,8 +15,7 @@ import {
 import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
 import { setShowSidebar } from '../../contexts/actionCreators'
-import { convertDataToJson } from '../Settings/ExportImport'
-import { Task } from '../../types'
+import { saveToLocalStorage } from '../../utils/persistDataUtils'
 
 const Layout = () => {
     const [ store, dispatch ] = useTasksContext()
@@ -101,13 +100,5 @@ const Layout = () => {
 
 const enableBodyScrolling = (isEnabled: boolean) =>
     document.body.style.overflow = isEnabled? 'auto' : 'hidden'
-
-const saveToLocalStorage = (root: Task) => {
-    const savedData = localStorage.getItem('data')
-    const newData = convertDataToJson(root)
-    if (savedData === newData) return
-    localStorage.setItem('data', newData)
-}
-    
 
 export default Layout

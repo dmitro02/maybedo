@@ -17,7 +17,7 @@ import {
     DataTypes, 
     getExportFileName,
     validateExportedData
-} from '../../utils/exportImportUtils'
+} from '../../utils/persistDataUtils'
 
 type Props = {
     backToTaskList(): void
