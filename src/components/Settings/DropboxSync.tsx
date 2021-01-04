@@ -7,8 +7,7 @@ import {
     getDropboxAuthUrl,
     getAndSaveAccessToken
 } from '../../utils/dropBoxUtils'
-
-export const DROPBOX_ACCESS_TOKEN_LS_ITEM_NAME = 'dropboxAccessToken'
+import DropboxConnector from '../../utils/DropboxConnector'
 
 const DropboxSync = () => {
     const [ store ] = useTasksContext()
@@ -38,9 +37,17 @@ const DropboxSync = () => {
             <div>
                 <button onClick={() => uploadToDropBox(rootProject)}>Upload</button>
                 <button onClick={downloadFromDropBox}>Download</button>
+                <button onClick={testDropboxConnector}>Test</button>
             </div>
         </div>
     )
+}
+
+const testDropboxConnector  = async () => {
+    console.log('testDropboxConnector')
+    const dbx = new DropboxConnector('lxn28fv9hhsn7id')
+    const res = await dbx.listAppFolder()
+    console.log(res)
 }
 
 export default DropboxSync

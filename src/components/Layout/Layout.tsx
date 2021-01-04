@@ -102,7 +102,12 @@ const Layout = () => {
 const enableBodyScrolling = (isEnabled: boolean) =>
     document.body.style.overflow = isEnabled? 'auto' : 'hidden'
 
-const saveToLocalStorage = (root: Task) => 
-    localStorage.setItem('data', convertDataToJson(root))
+const saveToLocalStorage = (root: Task) => {
+    const savedData = localStorage.getItem('data')
+    const newData = convertDataToJson(root)
+    if (savedData === newData) return
+    localStorage.setItem('data', newData)
+}
+    
 
 export default Layout
