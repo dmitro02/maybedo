@@ -44,14 +44,12 @@ export default class DropboxConnector {
 
     async listAppFolder() {
         this.validateConnection()
-        const response: any = await this.dropbox!.filesListFolder({ path: '' })
-        return response.result.entries
+        return await this.dropbox!.filesListFolder({ path: '' })
     }
 
     async downloadFile(path: string) {
         this.validateConnection()
-        const response: any = await this.dropbox!.filesDownload({ path })
-        return response.result
+        return await this.dropbox!.filesDownload({ path })
     } 
     
     async uploadFile(contents: Object, path: string) {
