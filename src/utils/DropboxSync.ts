@@ -18,7 +18,8 @@ export default class DropboxSync {
         return this.dropboxCon.authUrl
     }
 
-    async auhtorize(authorizationCode: string)  {
+    async auhtorize(authorizationCode: string | undefined)  {
+        if (!authorizationCode) return
         await this.dropboxCon.authorize(authorizationCode)
     }
 

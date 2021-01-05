@@ -1,10 +1,10 @@
 ☐ BUG: (Chrome only): while moving record other record statically displayed as hovered 
-☐ show already authorized message in dropbox settings 
 ☐ BUG: app crashes when all projects deleted
+☐ BUG: fog doesn't work in local version (no server)
 ☐ convert Dropbox Utils into class
 ☐ show spinner Dropbox setup requests
+☐ show already authorized message in dropbox settings 
 ☐ show success/failure banner on Dropbox setup
-☐ BUG: fog doesn't work in local version (no server)
-☐ save opened and selected tasks state
+☐ persist opened and selected tasks state
 ☐ move "New task" to the top
 ☐ implement config (with dropbox client ID)
