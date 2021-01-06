@@ -1,5 +1,17 @@
 @import '../../styles/variables';
 
+.spinner {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    z-index: 100;
+}
+
 .lds-ring {
     display: inline-block;
     position: relative;
@@ -31,7 +43,7 @@
     .type1 {
         width: 64px;
         height: 64px;
-        border-color: $text-gray transparent transparent transparent;
+        border-color: $dark-gray transparent transparent transparent;
     }
 }
 

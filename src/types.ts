@@ -35,3 +35,25 @@ export type ExportedData = {
     timestamp: number
     tasklist: Task
 }
+
+export class FailureBanner implements IBanner {
+    text: string
+    type: BannerTypes
+
+    constructor(text: string) {
+        this.text = text
+        this.type = BannerTypes.Failure
+    }
+}
+
+export class SuccessBanner implements IBanner {
+    text: string
+    type: BannerTypes
+    delay: number
+
+    constructor(text: string, delay: number = 5) {
+        this.text = text
+        this.type = BannerTypes.Success
+        this.delay = delay
+    }
+}

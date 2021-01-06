@@ -21,6 +21,7 @@ export interface IStore {
     modal?: IModal
     banner?: IBanner
     showSidebar?: boolean
+    spinner?: boolean
 }
 
 const getInitialAppData = () => {
@@ -91,6 +92,9 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         }
         case actionTypes.SET_SHOW_SIDEBAR: {
             return { ...state, showSidebar: action.value }
+        }
+        case actionTypes.SET_SPINNER: {
+            return { ...state, spinner: action.isVisible }
         }
         default:
             return state;

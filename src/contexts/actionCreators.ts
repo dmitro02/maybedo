@@ -13,7 +13,8 @@ export enum actionTypes {
     SET_APP_DATA = 'SET_APP_DATA',
     SET_MODAL = 'SET_MODAL',
     SET_BANNER = 'SET_BANNER',
-    SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR'
+    SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR',
+    SET_SPINNER = 'SET_SPINNER'
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -55,4 +56,9 @@ export const setBanner = (banner: IBanner | null) => ({
 export const setShowSidebar = (value: boolean) => ({
     type: actionTypes.SET_SHOW_SIDEBAR,
     value
+})
+
+export const setSpinner = (isVisible: boolean) => ({
+    type: actionTypes.SET_SPINNER,
+    isVisible
 })

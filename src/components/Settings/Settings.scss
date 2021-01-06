@@ -1,61 +1,70 @@
 @import '../../styles/variables';
 
-.settings-block {
-    font-size: $font-size-3;
-    color: $text-gray;
-    margin-left: 10px;
-    margin-bottom: 40px;
+.settings {
+    position: relative;
 
-    * {
-        font-size: inherit;
-        color: inherit;
-    }
-
-    h2 {
-        font-size: $font-size-7;
-        margin: 12px 0;
-    }
-
-    button, input {
-        height: 40px;
-    }
-
-    button {
-        margin: 10px 0;
-        color: peru;
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-
-    input {
-        margin-right: 5px;
-    }
+    .settings-block {
+        font-size: $font-size-3;
+        color: $text-gray;
+        margin-left: 10px;
+        margin-bottom: 40px;
     
-    .input-hidden {
-        display: none;
-    }
+        * {
+            font-size: inherit;
+            color: inherit;
+        }
     
-    .import-btn {
-        display: block;
-    }
-
-    .words-between {
-        margin: 0 10px;
-    }
+        h2 {
+            font-size: $font-size-7;
+            margin: 12px 0;
+        }
     
-    .data-types-select {
-        padding: 5px;
-        height: 40px;
-    }
-
-    input::placeholder {
-        font-style: italic;
-        color: rgb(200, 200, 200);
-    }
-
-    a {
-        color: peru;
+        button, input {
+            height: 40px;
+        }
+    
+        button {
+            margin: 10px 0;
+            color: peru;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    
+        input {
+            margin-right: 5px;
+        }
+        
+        .input-hidden {
+            display: none;
+        }
+        
+        .import-btn {
+            display: block;
+        }
+    
+        .words-between {
+            margin: 0 10px;
+        }
+        
+        .data-types-select {
+            padding: 5px;
+            height: 40px;
+        }
+    
+        input::placeholder {
+            font-style: italic;
+            color: rgb(200, 200, 200);
+        }
+    
+        a {
+            color: peru;
+        }
+    
+        .already-authorized {
+            color: lightseagreen;
+            font-size: 2rem;
+            margin-left: 15px;
+            cursor: help;
+        }
     }
 }
-
-

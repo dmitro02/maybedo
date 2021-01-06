@@ -30,7 +30,7 @@ const Modal = () => {
 
     return (
         <>
-            <Fog isDisplayed={true}/>
+            <Fog isDisplayed={true} />
             <div className="modal-container">
                 <div className="modal-dialog">
                     <div>{text}</div>

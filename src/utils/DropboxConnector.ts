@@ -17,7 +17,16 @@ export default class DropboxConnector {
         this.initDropbox(null)
     }
 
-    async authorize(authorizationCode: string) {
+    async checkUser() {
+        this.validateConfiguration()
+        try {
+            await this.dropbox!.checkUser({ query: 'todom' })
+        } catch(e) {
+            throw new Error("Failed to access Dropbox")
+        }
+    }
+
+    async authorize(authorizationCode: string = '') {
         const body = new URLSearchParams({
             code: authorizationCode,
             grant_type: 'authorization_code',
@@ -34,6 +43,10 @@ export default class DropboxConnector {
         })
     
         const resData = await response.json()
+
+        if (!response.ok) {
+            throw new Error(resData.error_description)
+        }
     
         const accessToken = resData.access_token
 
@@ -43,17 +56,17 @@ export default class DropboxConnector {
     }
 
     async listAppFolder() {
-        this.validateConnection()
+        this.validateConfiguration()
         return await this.dropbox!.filesListFolder({ path: '' })
     }
 
     async downloadFile(path: string) {
-        this.validateConnection()
+        this.validateConfiguration()
         return await this.dropbox!.filesDownload({ path })
     } 
     
     async uploadFile(contents: Object, path: string) {
-        this.validateConnection()
+        this.validateConfiguration()
         return await this.dropbox!.filesUpload({ contents, path })
     }
 
@@ -80,7 +93,7 @@ export default class DropboxConnector {
         return localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
     }
 
-    private validateConnection() {
+    private validateConfiguration() {
         if (!this.dropbox) throw new NotConfiguredError()
     }
 }
