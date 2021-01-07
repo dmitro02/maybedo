@@ -11,9 +11,9 @@ import {
 } from '../../types'
 
 const DropboxSettings = () => {
-    const [ store, dispatch ] = useTasksContext()
+    const [, dispatch ] = useTasksContext()
 
-    const { rootProject } = store
+    // const { rootProject } = store
 
     const dbx = new DropboxSync()
 
@@ -42,10 +42,12 @@ const DropboxSettings = () => {
     return (
         <div className="settings-block">
             <h2>
-                Dropbox Synchronization 
-                <span className="already-authorized" title="Already configured">
-                    &#10004;
-                </span>
+                Dropbox Synchronization
+                {dbx.isConfigured && 
+                    <span className="already-authorized" title="Already configured">
+                        &#10004;
+                    </span>
+                }
             </h2>
             <p>
                 Get authorization code <a href={dbx.authUrl} target="_black">here</a>
@@ -56,6 +58,7 @@ const DropboxSettings = () => {
                 size={48} 
                 placeholder="authorizarion code"
                 ref={authTokenRef}
+                className="auth-code"
             />
             <button onClick={authorizeApp}>Authorize</button>
             <button onClick={checkConnection}>Check</button>

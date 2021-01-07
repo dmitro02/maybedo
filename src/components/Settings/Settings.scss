@@ -24,7 +24,7 @@
         }
     
         button {
-            margin: 10px 0;
+            margin: 10px 5px 10px 0;
             color: peru;
             padding: 5px 10px;
             cursor: pointer;
@@ -37,13 +37,17 @@
         .input-hidden {
             display: none;
         }
+
+        input.auth-code {
+            max-width: 100%;
+        }
         
         .import-btn {
             display: block;
         }
     
         .words-between {
-            margin: 0 10px;
+            margin: 0 10px 0 5px;
         }
         
         .data-types-select {

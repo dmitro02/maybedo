@@ -18,6 +18,10 @@ export default class DropboxSync {
         return this.dropboxCon.authUrl
     }
 
+    get isConfigured(): boolean {
+        return this.dropboxCon.isConfigured
+    }
+
     async check() {
         await this.dropboxCon.checkUser()
     }

@@ -74,7 +74,7 @@ export default class DropboxConnector {
         return `${AUTH_URL}?client_id=${this.clientId}&response_type=code&code_challenge_method=plain&code_challenge=${this.codeVerifier}`
     }
 
-    get isAuthorized(): boolean {
+    get isConfigured(): boolean {
         return !!this.dropbox
     }
 
@@ -93,7 +93,7 @@ export default class DropboxConnector {
         return localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
     }
 
-    private validateConfiguration() {
+    validateConfiguration() {
         if (!this.dropbox) throw new NotConfiguredError()
     }
 }
