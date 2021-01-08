@@ -1,0 +1,26 @@
+@import '../../styles/variables';
+
+.spinner {
+    margin: 8px;
+    border-radius: 50%;
+    border-style: solid;
+    animation: lds-dual-ring 1.2s linear infinite;
+    width: 64px;
+    height: 64px;
+    border-width: 8px;
+    border-color: $dark-gray transparent $dark-gray transparent;
+}
+
+@keyframes lds-dual-ring {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner2 {
+    width: 26px;
+    height: 26px;
+    border-width: 4px;
+    border-color: $text-gray;
+    border-top-color: transparent;
+}

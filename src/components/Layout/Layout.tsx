@@ -16,12 +16,16 @@ import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
 import { setShowSidebar } from '../../contexts/actionCreators'
 import { saveToLocalStorage } from '../../utils/persistDataUtils'
-import Spinner from '../Spinner/Spinner'
+import Loading from '../Statuses/Loading'
 
 const Layout = () => {
     const [ store, dispatch ] = useTasksContext()
 
-    const { showSidebar, rootProject } = store
+    const { 
+        showSidebar, 
+        rootProject, 
+        loading 
+    } = store
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
@@ -50,7 +54,7 @@ const Layout = () => {
     return (
         <div className="main-container">   
             <Modal />
-            <Spinner />
+            {loading && <Loading />}
             <div className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
                 <Fog isDisplayed={isSettingsOpened}/>
                 <div className="top-panel">
