@@ -12,8 +12,8 @@ import {
     Task
 } from '../../types'
 import { 
-    convertDataToHtml,
-    convertDataToJson, 
+    convertDataToHtmlString,
+    convertDataToJsonString, 
     DataTypes, 
     getExportFileName,
     validateExportedData
@@ -137,11 +137,11 @@ const doExport = (data: string, type: DataTypes) => {
 }
 
 const exportDataAsJson = (root: Task) => {
-    doExport(convertDataToJson(root), DataTypes.JSON)
+    doExport(convertDataToJsonString(root), DataTypes.JSON)
 }
 
 const exportDataAsHtml = (root: Task) => {
-    const content = convertDataToHtml(root)
+    const content = convertDataToHtmlString(root)
     const styles = 'body { font-family: sans-serif; font-size: 16px; } ul, li { margin-top: 6px }'
     const data = `<html><head><style>${styles}</style></head><body>${content}</body></html>`
     doExport(data, DataTypes.HTML)

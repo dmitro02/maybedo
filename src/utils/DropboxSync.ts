@@ -1,7 +1,7 @@
 import DropboxConnector from './DropboxConnector'
 import { Task } from './../types';
 import { 
-    convertDataToJson, 
+    convertDataToJsonString, 
     getExportFileNameJson 
 } from './persistDataUtils';
 
@@ -37,7 +37,7 @@ export default class DropboxSync {
     } 
     
     async upload(root: Task) {
-        const contents = convertDataToJson(root)
+        const contents = convertDataToJsonString(root)
         const path = '/' + getExportFileNameJson()
         return await this.dropboxCon.uploadFile(contents, path)
     }

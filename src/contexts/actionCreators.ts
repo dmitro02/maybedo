@@ -14,7 +14,9 @@ export enum actionTypes {
     SET_MODAL = 'SET_MODAL',
     SET_BANNER = 'SET_BANNER',
     SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR',
-    SET_SPINNER = 'SET_SPINNER'
+    SET_LOADING = 'SET_LOADING',
+    SET_SYNCING = 'SET_SYNCING',
+    SELECT_TASK = 'SELECT_TASK'
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -38,6 +40,11 @@ export const moveTaskAction = (movedItemPath: string, siblingPath: string | null
     siblingPath
 }) 
 
+export const selectTaskAction = (parentItem: Task) => ({
+    type: actionTypes.SELECT_TASK,
+    parentItem
+})
+
 export const setAppData = (exportedData: ExportedData) => ({
     type: actionTypes.SET_APP_DATA,
     rootProject: exportedData.tasklist
@@ -58,7 +65,12 @@ export const setShowSidebar = (value: boolean) => ({
     value
 })
 
-export const setSpinner = (isVisible: boolean) => ({
-    type: actionTypes.SET_SPINNER,
-    isVisible
+export const setLoading = (value: boolean) => ({
+    type: actionTypes.SET_LOADING,
+    value
+})
+
+export const setSyncing = (value: boolean) => ({
+    type: actionTypes.SET_SYNCING,
+    value
 })

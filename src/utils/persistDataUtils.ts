@@ -1,3 +1,4 @@
+import { IStore } from './../contexts/TasksContext';
 import { ExportedData, Task } from '../types';
 
 export enum DataTypes {
@@ -7,12 +8,12 @@ export enum DataTypes {
 
 export const saveToLocalStorage = (root: Task) => {
     const savedData = localStorage.getItem('data')
-    const newData = convertDataToJson(root)
+    const newData = convertDataToJsonString(root)
     if (savedData === newData) return
     localStorage.setItem('data', newData)
 }
 
-export const convertDataToJson = (root: Task) => {
+export const convertDataToJsonString = (root: Task): string => {
     const excludeKeys = [
         'path',
         'selectedSubTaskPath'
@@ -26,11 +27,11 @@ export const convertDataToJson = (root: Task) => {
     return JSON.stringify(data, replacer, 2)
 }
 
-export const convertDataToHtml = (root: Task): string => {
+export const convertDataToHtmlString = (root: Task): string => {
     const textDecoration = root.isDone 
         ? 'style="text-decoration: line-through"' : ''
     const subtasks = root.tasks.length 
-        ? `<ul>${root.tasks.map(task => convertDataToHtml(task))}</ul>` : ''
+        ? `<ul>${root.tasks.map(task => convertDataToHtmlString(task))}</ul>` : ''
     const item = `<li ${textDecoration}>${root.text + subtasks}</li>` 
     return item.replace(/>,</g, '><')
 }

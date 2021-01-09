@@ -3,7 +3,7 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import DropboxSync from '../../utils/DropboxSync'
 import { 
     setBanner, 
-    setSpinner 
+    setLoading 
 } from '../../contexts/actionCreators'
 import { 
     FailureBanner, 
@@ -20,14 +20,14 @@ const DropboxSettings = () => {
     const authTokenRef = useRef<HTMLInputElement>(null)
 
     const authorizeApp = async () => {
-        dispatch(setSpinner(true))
+        dispatch(setLoading(true))
         try {
             await dbx.auhtorize(authTokenRef.current?.value)
             dispatch(setBanner(new SuccessBanner('Application successfully authorized')))
         } catch(e) {
             dispatch(setBanner(new FailureBanner('Error: ' + e.message)))
         }
-        dispatch(setSpinner(false))   
+        dispatch(setLoading(false))   
     }
 
     const checkConnection = async () => {

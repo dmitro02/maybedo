@@ -22,6 +22,8 @@ export interface IStore {
     banner?: IBanner
     showSidebar?: boolean
     loading?: boolean
+    syncing?: boolean
+    updatedAt?: number
 }
 
 const getInitialAppData = () => {
@@ -58,6 +60,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             const { item } = action 
             return {
                 ...state,
+                updatedAt: Date.now(),
                 rootProject: createItem(state.rootProject, item),
                 addedItemPath: item.path
             }
@@ -65,12 +68,20 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.UPDATE_TASK: {
             return {
                 ...state,
+                updatedAt: Date.now(),
                 rootProject: updateItem(state.rootProject, action.item)
+            }
+        }
+        case actionTypes.SELECT_TASK: {
+            return {
+                ...state,
+                rootProject: updateItem(state.rootProject, action.parentItem)
             }
         }
         case actionTypes.DELETE_TASK: {
             return {
                 ...state,
+                updatedAt: Date.now(),
                 rootProject: deleteItem(state.rootProject, action.item)
             }
         }
@@ -78,6 +89,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             const { movedItemPath, siblingPath } = action
             return {
                 ...state,
+                updatedAt: Date.now(),
                 rootProject: moveItem(state.rootProject, movedItemPath, siblingPath)
             }
         }
@@ -93,8 +105,11 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.SET_SHOW_SIDEBAR: {
             return { ...state, showSidebar: action.value }
         }
-        case actionTypes.SET_SPINNER: {
-            return { ...state, loading: action.isVisible }
+        case actionTypes.SET_LOADING: {
+            return { ...state, loading: action.value }
+        }
+        case actionTypes.SET_SYNCING: {
+            return { ...state, syncing: action.value }
         }
         default:
             return state;

@@ -23,8 +23,8 @@ const Layout = () => {
 
     const { 
         showSidebar, 
-        rootProject, 
-        loading 
+        loading,
+        rootProject
     } = store
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)

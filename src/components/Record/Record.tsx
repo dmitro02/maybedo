@@ -9,6 +9,7 @@ import {
 } from '../../utils/textInputUtils'
 import {
     updateTaskAction,
+    selectTaskAction,
     deleteTaskAction,
     setShowSidebar
 } from '../../contexts/actionCreators'
@@ -97,7 +98,7 @@ const Record = ({ item, config, parent }: Props) => {
     const selectRecord = (item: Task) => {
         if (parent.selectedSubTaskPath === item.path) return
         const updatedParent = { ...parent, selectedSubTaskPath: item.path }
-        dispatch(updateTaskAction(updatedParent))
+        dispatch(selectTaskAction(updatedParent))
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
