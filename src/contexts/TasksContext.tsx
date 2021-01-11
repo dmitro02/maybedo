@@ -14,6 +14,7 @@ import { initPaths } from '../utils/pathUtils'
 import { actionTypes } from '../contexts/actionCreators'
 import DATA from '../data'
 import { validateExportedData } from "../utils/persistDataUtils"
+import Syncer from "../utils/Syncer"
 
 export interface IStore {
     rootProject: Task
@@ -26,10 +27,12 @@ export interface IStore {
     updatedAt?: number
 }
 
+const syncer = new Syncer()
+
 const getInitialAppData = () => {
-    const lsData = JSON.parse(localStorage.getItem('data')!)
-    if (validateExportedData(lsData)) {
-        return lsData.tasklist
+    const taskList = JSON.parse(localStorage.getItem('taskList')!)
+    if (validateExportedData(taskList)) {
+        return taskList
     } else {
         return DATA
     }
@@ -110,6 +113,9 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         }
         case actionTypes.SET_SYNCING: {
             return { ...state, syncing: action.value }
+        }
+        case actionTypes.SYNC_DATA: {
+            return syncer.synchronize(state)
         }
         default:
             return state;

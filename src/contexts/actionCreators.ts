@@ -1,8 +1,7 @@
 import { 
     IBanner, 
     IModal, 
-    Task, 
-    ExportedData 
+    Task
 } from '../types'
 
 export enum actionTypes {
@@ -16,7 +15,8 @@ export enum actionTypes {
     SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR',
     SET_LOADING = 'SET_LOADING',
     SET_SYNCING = 'SET_SYNCING',
-    SELECT_TASK = 'SELECT_TASK'
+    SELECT_TASK = 'SELECT_TASK',
+    SYNC_DATA = 'SYNC_DATA'
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -45,9 +45,9 @@ export const selectTaskAction = (parentItem: Task) => ({
     parentItem
 })
 
-export const setAppData = (exportedData: ExportedData) => ({
+export const setAppData = (data: Task) => ({
     type: actionTypes.SET_APP_DATA,
-    rootProject: exportedData.tasklist
+    rootProject: data
 })
 
 export const setModal = (modal: IModal | null) => ({
@@ -73,4 +73,8 @@ export const setLoading = (value: boolean) => ({
 export const setSyncing = (value: boolean) => ({
     type: actionTypes.SET_SYNCING,
     value
+})
+
+export const syncData = () => ({
+    type: actionTypes.SYNC_DATA,
 })

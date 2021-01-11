@@ -14,8 +14,7 @@ import {
 } from '../Buttons/Buttons'
 import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
-import { setShowSidebar } from '../../contexts/actionCreators'
-import { saveToLocalStorage } from '../../utils/persistDataUtils'
+import { setShowSidebar, syncData } from '../../contexts/actionCreators'
 import Loading from '../Statuses/Loading'
 
 const Layout = () => {
@@ -23,16 +22,20 @@ const Layout = () => {
 
     const { 
         showSidebar, 
-        loading,
-        rootProject
+        loading
     } = store
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
     useEffect(() => {
-        window.addEventListener('unload', () => saveToLocalStorage(rootProject))
-        window.addEventListener('blur', () => saveToLocalStorage(rootProject))
-    })
+        window.addEventListener('unload', synchronize)
+        window.addEventListener('blur', synchronize)
+        window.addEventListener('focus', synchronize)
+        setInterval(synchronize, 300000) // 5 min
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const synchronize = () => dispatch(syncData())
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)

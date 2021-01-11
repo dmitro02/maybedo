@@ -1,106 +1,82 @@
-import { Dropbox } from 'dropbox'
-import fetch from 'isomorphic-fetch'
-import { nanoid } from 'nanoid'
+import DropboxClient from './DropboxClient'
+import { Task } from '../types';
 
-const AUTH_URL = 'https://www.dropbox.com/oauth2/authorize'
-const TOKEN_URL = 'https://api.dropbox.com/oauth2/token'
-const ACCESS_TOKEN_LOCAL_STORAGE_NAME = 'dropboxAccessToken'
+const CLIENT_ID = 'lxn28fv9hhsn7id'
+
+const DATA_FOLDER_PATH = '/data'
+const METADATA_FILE_PATH = '/metadata.json'
 
 export default class DropboxConnector {
-    private clientId: string
-    private codeVerifier: string
-    private dropbox: Dropbox | null | undefined
+    private dropboxCon: DropboxClient
 
-    constructor(clientId: string) {
-        this.clientId = clientId
-        this.codeVerifier = nanoid(43)
-        this.initDropbox(null)
-    }
-
-    async checkUser() {
-        this.validateConfiguration()
-        try {
-            await this.dropbox!.checkUser({ query: 'todom' })
-        } catch(e) {
-            throw new Error("Failed to access Dropbox")
-        }
-    }
-
-    async authorize(authorizationCode: string = '') {
-        const body = new URLSearchParams({
-            code: authorizationCode,
-            grant_type: 'authorization_code',
-            client_id: this.clientId,
-            code_verifier: this.codeVerifier
-        })
-    
-        const response = await fetch(TOKEN_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body
-        })
-    
-        const resData = await response.json()
-
-        if (!response.ok) {
-            throw new Error(resData.error_description)
-        }
-    
-        const accessToken = resData.access_token
-
-        this.saveAccessTokenToLS(accessToken)
-
-        this.initDropbox(accessToken)
-    }
-
-    async listAppFolder() {
-        this.validateConfiguration()
-        return await this.dropbox!.filesListFolder({ path: '' })
-    }
-
-    async downloadFile(path: string) {
-        this.validateConfiguration()
-        return await this.dropbox!.filesDownload({ path })
-    } 
-    
-    async uploadFile(contents: Object, path: string) {
-        this.validateConfiguration()
-        return await this.dropbox!.filesUpload({ contents, path })
+    constructor() {
+        this.dropboxCon = new DropboxClient(CLIENT_ID)
     }
 
     get authUrl(): string {
-        return `${AUTH_URL}?client_id=${this.clientId}&response_type=code&code_challenge_method=plain&code_challenge=${this.codeVerifier}`
+        return this.dropboxCon.authUrl
     }
 
     get isConfigured(): boolean {
-        return !!this.dropbox
+        return this.dropboxCon.isConfigured
     }
 
-    private initDropbox(token: string | null) {
-        const accessToken = token || this.getAccessTokenFromLS()
-        this.dropbox = accessToken 
-            ? new Dropbox({ accessToken, fetch })
-            : null
+    async check() {
+        await this.dropboxCon.checkUser()
     }
 
-    private saveAccessTokenToLS(accessToken: string) {
-        localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME, accessToken!)
+    async auhtorize(authorizationCode?: string)  {
+        await this.dropboxCon.authorize(authorizationCode)
     }
+
+    async getMetadata() {
+        const response: any = await this.dropboxCon.downloadFile(METADATA_FILE_PATH)
+        return response.result
+    }
+
+    async uploadMetadata(metadata: any) {
+        const contents = JSON.stringify(metadata)
+        return await this.dropboxCon.uploadFile(contents, METADATA_FILE_PATH)
+    }
+
+    async downloadTaskList(): Promise<Task> {
+        const latestExport = await this.getLatestExport()
+        const latestExportJson = await this.readFile(latestExport.fileBlob)
+        return JSON.parse(latestExportJson as string)
+    } 
     
-    private getAccessTokenFromLS() {
-        return localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
+    async uploadTaskList(taskList: Task) {
+        const contents = JSON.stringify(taskList)
+        const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`
+        return await this.dropboxCon.uploadFile(contents, path)
     }
 
-    validateConfiguration() {
-        if (!this.dropbox) throw new NotConfiguredError()
+    private async getSortedExports() {
+        const response: any = await this.dropboxCon.listFolder(DATA_FOLDER_PATH)
+        return response.result.entries.sort((a: any, b: any) => {
+            const clientModifiedA = new Date(a.client_modified)
+            const clientModifiedB = new Date(b.client_modified)
+            if (clientModifiedA < clientModifiedB)
+                return -1
+            if (clientModifiedA > clientModifiedB)
+                return 1
+            return 0
+        })
+    }
+
+    private async getLatestExport() {
+        const sortedExports = await this.getSortedExports()
+        const path = sortedExports.pop().path_lower
+        const response: any = await this.dropboxCon.downloadFile(path)
+        return response.result
+    }
+
+    private readFile(blob: Blob) {
+        return new Promise((resolve, reject) => {
+            const fr = new FileReader()
+            fr.onerror = reject
+            fr.onload = () => resolve(fr.result)
+            fr.readAsText(blob)
+        })
     }
 }
-
-class NotConfiguredError extends Error {
-    constructor() {
-        super('Dropbox connection is not configured')
-        this.name = 'NotConfigured'
-    }
-} 

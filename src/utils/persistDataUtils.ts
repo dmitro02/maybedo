@@ -1,16 +1,8 @@
-import { IStore } from './../contexts/TasksContext';
-import { ExportedData, Task } from '../types';
+import { Task } from '../types';
 
 export enum DataTypes {
     JSON = 'json',
     HTML = 'html'
-}
-
-export const saveToLocalStorage = (root: Task) => {
-    const savedData = localStorage.getItem('data')
-    const newData = convertDataToJsonString(root)
-    if (savedData === newData) return
-    localStorage.setItem('data', newData)
 }
 
 export const convertDataToJsonString = (root: Task): string => {
@@ -43,16 +35,17 @@ export const getExportFileName = (type: DataTypes) => {
 
 export const getExportFileNameJson = () => getExportFileName(DataTypes.JSON)
 
-export const isExportedData = (data: any): data is ExportedData => {
+export const isExportedData = (data: any): data is Task => {
     if (!data) return false
-    const dataToValidate = data as ExportedData
-    return dataToValidate.timestamp !== undefined
-            && dataToValidate.tasklist !== undefined 
+    const dataToValidate = data as Task
+    return dataToValidate.text !== undefined
+            && dataToValidate.isDone !== undefined 
+            && dataToValidate.tasks !== undefined 
 }
 
 export const validateExportedData = (data: any): boolean => {
     if (!isExportedData(data)) return false
-    return validateTaks(data.tasklist)
+    return validateTaks(data)
 }
 
 const isTask = (data: any): data is Task => {

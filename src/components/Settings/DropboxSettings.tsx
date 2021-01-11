@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
-import DropboxSync from '../../utils/DropboxSync'
+import DropboxConnector from '../../utils/DropboxConnector'
 import { 
     setBanner, 
     setLoading 
@@ -15,7 +15,7 @@ const DropboxSettings = () => {
 
     // const { rootProject } = store
 
-    const dbx = new DropboxSync()
+    const dbx = new DropboxConnector()
 
     const authTokenRef = useRef<HTMLInputElement>(null)
 

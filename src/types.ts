@@ -31,11 +31,6 @@ export enum BannerTypes {
     Failure = "failure"
 }
 
-export type ExportedData = {
-    timestamp: number
-    tasklist: Task
-}
-
 export class FailureBanner implements IBanner {
     text: string
     type: BannerTypes
