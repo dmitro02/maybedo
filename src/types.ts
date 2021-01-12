@@ -13,6 +13,14 @@ export class Task {
     }
 }
 
+export class Metadata {
+    updatedAt: number | undefined
+
+    constructor(updatedAt?: number) {
+        this.updatedAt = updatedAt
+    }
+}
+
 export interface IModal {
     text: string
     okAction?: () => void 

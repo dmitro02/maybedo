@@ -68,7 +68,7 @@ export default class DropboxClient {
     
     async uploadFile(contents: Object, path: string) {
         this.validateConfiguration()
-        return await this.dropbox!.filesUpload({ contents, path })
+        return await this.dropbox!.filesUpload({ contents, path, mode: {'.tag': 'overwrite'} })
     }
 
     get authUrl(): string {

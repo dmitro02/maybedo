@@ -30,7 +30,6 @@ const Layout = () => {
     useEffect(() => {
         window.addEventListener('unload', synchronize)
         window.addEventListener('blur', synchronize)
-        window.addEventListener('focus', synchronize)
         setInterval(synchronize, 300000) // 5 min
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

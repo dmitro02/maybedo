@@ -62,10 +62,9 @@ const DropboxSettings = () => {
             />
             <button onClick={authorizeApp}>Authorize</button>
             <button onClick={checkConnection}>Check</button>
-            {/* <div>
-                <button onClick={() => dbx.upload(rootProject)}>Upload</button>
-                <button onClick={() => dbx.download()}>Download</button>
-            </div> */}
+
+            <button onClick={() => dbx.getMetadata()}>TEST1</button>
+            <button onClick={() => dbx.uploadMetadata({ updatedAt: Date.now() })}>TEST2</button>
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import DropboxClient from './DropboxClient'
-import { Task } from '../types';
+import { Metadata, Task } from '../types';
 
 const CLIENT_ID = 'lxn28fv9hhsn7id'
 
@@ -29,26 +29,50 @@ export default class DropboxConnector {
         await this.dropboxCon.authorize(authorizationCode)
     }
 
-    async getMetadata() {
-        const response: any = await this.dropboxCon.downloadFile(METADATA_FILE_PATH)
-        return response.result
+    async getMetadata(): Promise<Metadata> {
+        try {
+            const response: any = await this.dropboxCon.downloadFile(METADATA_FILE_PATH)
+            const fileContent = await this.readFile(response.result.fileBlob)
+            console.log(JSON.parse(fileContent as string))
+            return JSON.parse(fileContent as string)
+        } catch(e) {
+            console.error(e)
+            return new Metadata()
+        }
     }
 
-    async uploadMetadata(metadata: any) {
-        const contents = JSON.stringify(metadata)
-        return await this.dropboxCon.uploadFile(contents, METADATA_FILE_PATH)
+    async uploadMetadata(metadata: Metadata): Promise<boolean> {
+        try {
+            const contents = JSON.stringify(metadata)
+            await this.dropboxCon.uploadFile(contents, METADATA_FILE_PATH)
+            return true
+        } catch(e) {
+            console.error(e)
+            return false
+        }
     }
 
-    async downloadTaskList(): Promise<Task> {
-        const latestExport = await this.getLatestExport()
-        const latestExportJson = await this.readFile(latestExport.fileBlob)
-        return JSON.parse(latestExportJson as string)
+    async downloadTaskList(): Promise<Task | null> {
+        try {
+            const latestExport = await this.getLatestExport()
+            const latestExportJson = await this.readFile(latestExport.fileBlob)
+            return JSON.parse(latestExportJson as string)            
+        } catch(e) {
+            console.error(e)
+            return null
+        }
     } 
     
-    async uploadTaskList(taskList: Task) {
-        const contents = JSON.stringify(taskList)
-        const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`
-        return await this.dropboxCon.uploadFile(contents, path)
+    async uploadTaskList(taskList: Task): Promise<boolean> {
+        try {
+            const contents = JSON.stringify(taskList)
+            const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`
+            await this.dropboxCon.uploadFile(contents, path)
+            return true
+        } catch(e) {
+            console.error(e)
+            return false
+        }
     }
 
     private async getSortedExports() {

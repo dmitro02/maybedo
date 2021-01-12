@@ -1,16 +1,14 @@
 import { IStore } from "../contexts/TasksContext"
+import DATA from "../data"
 import { Task } from "../types"
+import DropboxConnector from "./DropboxConnector"
 
 export default class Syncer {
-    private cloudConnector: any
+    private cloudConnector: any = new DropboxConnector()
     private memoryUpdatedAt: number = 0
     private lsUpdatedAt: number = 0
     private cloudUpdatedAt: number = 0
     private isOnline: boolean = false
-
-    constructor(cloudConnector?: any) {
-        this.cloudConnector = cloudConnector
-    }
 
     synchronize(store: IStore): IStore {
         this.memoryUpdatedAt = store.updatedAt || 0
@@ -23,6 +21,8 @@ export default class Syncer {
         } catch(e) {
             this.isOnline = false
         }
+
+        console.log('IS_ONLINE', this.isOnline)
 
         if (this.cloudUpdatedAt > this.lsUpdatedAt) {
             return this.updateFromCloud(store)
@@ -64,7 +64,7 @@ export default class Syncer {
     }
       
     private updateMemoryFromLocalStorage(store: IStore): IStore {
-        const taskList = this.getLsTaskList()
+        const taskList = this.getLsTaskList() || DATA
         return { 
             ...store,
             updatedAt: this.lsUpdatedAt,

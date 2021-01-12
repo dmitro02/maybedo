@@ -2,9 +2,14 @@
 ☐ BUG: app crashes when all projects deleted
 ☐ BUG: fog doesn't work in local version (no server)
 ☐ convert Dropbox Utils into class
-☐ show spinner Dropbox setup requests
+☐ show spinner on Dropbox setup requests
 ☐ show already authorized message in dropbox settings 
 ☐ show success/failure banner on Dropbox setup
 ☐ persist opened and selected tasks state
 ☐ move "New task" to the top
 ☐ implement config (with dropbox client ID)
+☐ BUG: Unhandled Rejection (NotConfigured): Dropbox connection is not configured
+☐ CloudConnector interface
+☐ Exporter class
+☐ dropbox files rotation
+☐ show loading soinner on initial load
