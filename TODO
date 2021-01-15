@@ -13,3 +13,9 @@
 ☐ Exporter class
 ☐ dropbox files rotation
 ☐ show loading soinner on initial load
+☐ rework actionCreators with dispatch
+☐ indicator that sync is not configured on projects page
+☐ rename rootProject to taskList
+☐ decrease usage of useContext using props instead
+☐ move initializeSynchronization to Syncer
+☐ rename Layout to MainContainer

@@ -1,3 +1,4 @@
+import { IStore } from './TasksContext';
 import { 
     IBanner, 
     IModal, 
@@ -16,7 +17,7 @@ export enum actionTypes {
     SET_LOADING = 'SET_LOADING',
     SET_SYNCING = 'SET_SYNCING',
     SELECT_TASK = 'SELECT_TASK',
-    SYNC_DATA = 'SYNC_DATA'
+    SAVE_TO_LS = 'SAVE_TO_LS',
 }
 
 export const createTaskAction = (item: Task) => ({
@@ -45,9 +46,9 @@ export const selectTaskAction = (parentItem: Task) => ({
     parentItem
 })
 
-export const setAppData = (data: Task) => ({
+export const setAppData = (state: IStore) => ({
     type: actionTypes.SET_APP_DATA,
-    rootProject: data
+    state
 })
 
 export const setModal = (modal: IModal | null) => ({
@@ -75,6 +76,6 @@ export const setSyncing = (value: boolean) => ({
     value
 })
 
-export const syncData = () => ({
-    type: actionTypes.SYNC_DATA,
+export const saveToLocalStorage = () => ({
+    type: actionTypes.SAVE_TO_LS
 })

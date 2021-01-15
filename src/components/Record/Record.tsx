@@ -80,7 +80,6 @@ const Record = ({ item, config, parent }: Props) => {
     const updateRecord = (item: Task) => dispatch(updateTaskAction(item))
 
     const deleteRecord = (item: Task) => {
-        console.log(item)
         if (isProjectLevelItem(item)) {
             if (parent.tasks.length === 1) {
                 parent.selectedSubTaskPath = undefined

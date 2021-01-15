@@ -29,14 +29,16 @@ export default class DropboxConnector {
         await this.dropboxCon.authorize(authorizationCode)
     }
 
-    async getMetadata(): Promise<Metadata> {
+    async uploadData(metadata: Metadata, taskList: Task): Promise<boolean> {
+        return this.uploadMetadata(metadata) && this.uploadTaskList(taskList)
+    }
+
+    async downloadMetadata(): Promise<Metadata> {        
         try {
             const response: any = await this.dropboxCon.downloadFile(METADATA_FILE_PATH)
             const fileContent = await this.readFile(response.result.fileBlob)
-            console.log(JSON.parse(fileContent as string))
             return JSON.parse(fileContent as string)
         } catch(e) {
-            console.error(e)
             return new Metadata()
         }
     }
@@ -64,6 +66,7 @@ export default class DropboxConnector {
     } 
     
     async uploadTaskList(taskList: Task): Promise<boolean> {
+        if (!taskList) return false
         try {
             const contents = JSON.stringify(taskList)
             const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`

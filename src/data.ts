@@ -2,6 +2,7 @@ const DATA =
 {
    "text":"Projects",
    "isDone":false,
+   "selectedSubTaskPath": "0.0",
    "tasks":[
       {
          "text":"Project 1",

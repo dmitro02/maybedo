@@ -14,8 +14,9 @@ import {
 } from '../Buttons/Buttons'
 import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
-import { setShowSidebar, syncData } from '../../contexts/actionCreators'
+import { setShowSidebar } from '../../contexts/actionCreators'
 import Loading from '../Statuses/Loading'
+import Syncer from '../../utils/Syncer'
 
 const Layout = () => {
     const [ store, dispatch ] = useTasksContext()
@@ -27,14 +28,19 @@ const Layout = () => {
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
+    const syncer = new Syncer(dispatch)
+
     useEffect(() => {
-        window.addEventListener('unload', synchronize)
-        window.addEventListener('blur', synchronize)
-        setInterval(synchronize, 300000) // 5 min
+        initializeSynchronization()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const synchronize = () => dispatch(syncData())
+    const initializeSynchronization = () => {
+        syncer.onLoad()
+        window.addEventListener('unload', () => syncer.saveToLS())
+        window.addEventListener('blur', () => syncer.saveToLS())
+        setInterval(() => syncer.onDemand(), 300000) // every 5 min
+    }
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
@@ -87,6 +93,7 @@ const Layout = () => {
                         </div>
                     }
                     <div className="row-btns">
+                        <button onClick={() => syncer.onDemand()}>SYNC</button>
                         {isSettingsOpened 
                             ? <ArrowBackButton action={toggleSettings} title="close settings"/>
                             : <SettingsButton action={toggleSettings} />

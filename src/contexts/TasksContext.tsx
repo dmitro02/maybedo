@@ -1,7 +1,7 @@
 import React, { 
     createContext, 
-    useReducer, 
-    useContext 
+    useContext, 
+    useReducer
 } from "react"
 import { IBanner, IModal, Task } from '../types'
 import { 
@@ -13,8 +13,7 @@ import {
 import { initPaths } from '../utils/pathUtils'
 import { actionTypes } from '../contexts/actionCreators'
 import DATA from '../data'
-import { validateExportedData } from "../utils/persistDataUtils"
-import Syncer from "../utils/Syncer"
+import LsConnector from "../utils/LsConnector"
 
 export interface IStore {
     rootProject: Task
@@ -27,27 +26,14 @@ export interface IStore {
     updatedAt?: number
 }
 
-const syncer = new Syncer()
-
-const getInitialAppData = () => {
-    const taskList = JSON.parse(localStorage.getItem('taskList')!)
-    if (validateExportedData(taskList)) {
-        return taskList
-    } else {
-        return DATA
-    }
-}
-
-const getInitialState = (data: any): IStore => {
-    const rootProject: Task = initPaths(data)
-    rootProject.selectedSubTaskPath = rootProject.tasks[0].path
-    return { rootProject }
+export const getInitialState = (data: any): IStore => {
+    return { rootProject: initPaths(data) }
 }
 
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
-    const context = useReducer(tasksReducer, getInitialState(getInitialAppData()))
+    const context = useReducer(tasksReducer, getInitialState(DATA))
     return (
       <TasksContext.Provider value={context}>
           {children}
@@ -60,6 +46,7 @@ export const useTasksContext = () => useContext(TasksContext)
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
         case actionTypes.CREATE_TASK: {
+            console.log('CREATE_TASK', state);
             const { item } = action 
             return {
                 ...state,
@@ -69,6 +56,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             }
         }
         case actionTypes.UPDATE_TASK: {
+            console.log('UPDATE_TASK', state);
             return {
                 ...state,
                 updatedAt: Date.now(),
@@ -97,7 +85,10 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             }
         }
         case actionTypes.SET_APP_DATA: {
-            return getInitialState(action.rootProject)
+            return {
+                ...state,
+                ...action.state
+            }
         }
         case actionTypes.SET_MODAL: {
             return { ...state, modal: action.modal }
@@ -114,10 +105,15 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.SET_SYNCING: {
             return { ...state, syncing: action.value }
         }
-        case actionTypes.SYNC_DATA: {
-            return syncer.synchronize(state)
+        case actionTypes.SAVE_TO_LS: {
+            const { updatedAt = 0, rootProject } = state
+
+            if (rootProject) {
+                LsConnector.saveToLocalStorage(updatedAt, rootProject)
+            }
+            return state
         }
         default:
-            return state;
+            return state
     }
 };
