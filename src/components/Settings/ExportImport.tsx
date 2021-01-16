@@ -26,7 +26,7 @@ type Props = {
 const ExportImport = (props: Props) => {
     const [ store, dispatch ] = useTasksContext()
 
-    const { rootProject } = store
+    const { taskList } = store
 
     const { backToTaskList } = props
 
@@ -37,13 +37,13 @@ const ExportImport = (props: Props) => {
     const exportData = () => {
         switch (dataType) {
             case DataTypes.JSON:
-                exportDataAsJson(rootProject)
+                exportDataAsJson(taskList)
                 break
             case DataTypes.HTML:
-                exportDataAsHtml(rootProject)
+                exportDataAsHtml(taskList)
                 break
             default:
-                exportDataAsJson(rootProject)
+                exportDataAsJson(taskList)
         }
     }
 

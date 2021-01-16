@@ -20,10 +20,10 @@ const titleRecordConfig: RecordConfig = {
 const TaskList = () => {
     const [ store ] = useTasksContext()
 
-    const { tasks } = store.rootProject
+    const { tasks } = store.taskList
 
     const root = tasks.length 
-        ? tasks.find((p: Task) => p.path === store.rootProject.selectedSubTaskPath)
+        ? tasks.find((p: Task) => p.path === store.taskList.selectedSubTaskPath)
         : null
 
     if (!root) return null

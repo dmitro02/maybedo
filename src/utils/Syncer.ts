@@ -62,10 +62,7 @@ export default class Syncer {
 
     loadToStore(updatedAt: number, taskList: Task | null) {
         if (!taskList) return
-        this.dispatch(setAppData({
-            rootProject: taskList,
-            updatedAt
-        }))
+        this.dispatch(setAppData({ taskList, updatedAt }))
     }
 
     private async getCloudUpdatedAt() {

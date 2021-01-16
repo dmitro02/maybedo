@@ -1,5 +1,5 @@
 export interface IStore {
-    rootProject: Task
+    taskList: Task
     addedItemPath?: string
     modal?: IModal
     banner?: IBanner

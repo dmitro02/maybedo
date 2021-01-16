@@ -11,7 +11,7 @@ const titleRecordConfig: RecordConfig = { isTitle: true }
 const ProjectList = () => {
     const [ store ] = useTasksContext()
 
-    const root = store.rootProject
+    const root = store.taskList
 
     return (
         <RecordList 

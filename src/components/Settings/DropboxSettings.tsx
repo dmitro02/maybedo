@@ -13,8 +13,6 @@ import {
 const DropboxSettings = () => {
     const [, dispatch ] = useTasksContext()
 
-    // const { rootProject } = store
-
     const dbx = new DropboxConnector()
 
     const authTokenRef = useRef<HTMLInputElement>(null)

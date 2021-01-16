@@ -14,7 +14,7 @@ import { actionTypes } from '../contexts/actionCreators'
 import LsConnector from "../utils/LsConnector"
 
 const initialState: IStore = {
-    rootProject: new Task('0', 'Projects')
+    taskList: new Task('0', 'Projects')
 }
 
 const TasksContext = createContext<any>(undefined)
@@ -37,7 +37,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return {
                 ...state,
                 updatedAt: Date.now(),
-                rootProject: createItem(state.rootProject, item),
+                taskList: createItem(state.taskList, item),
                 addedItemPath: item.path
             }
         }
@@ -45,20 +45,20 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return {
                 ...state,
                 updatedAt: Date.now(),
-                rootProject: updateItem(state.rootProject, action.item)
+                taskList: updateItem(state.taskList, action.item)
             }
         }
         case actionTypes.SELECT_TASK: {
             return {
                 ...state,
-                rootProject: updateItem(state.rootProject, action.parentItem)
+                taskList: updateItem(state.taskList, action.parentItem)
             }
         }
         case actionTypes.DELETE_TASK: {
             return {
                 ...state,
                 updatedAt: Date.now(),
-                rootProject: deleteItem(state.rootProject, action.item)
+                taskList: deleteItem(state.taskList, action.item)
             }
         }
         case actionTypes.MOVE_TASK: {
@@ -66,7 +66,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return {
                 ...state,
                 updatedAt: Date.now(),
-                rootProject: moveItem(state.rootProject, movedItemPath, siblingPath)
+                taskList: moveItem(state.taskList, movedItemPath, siblingPath)
             }
         }
         case actionTypes.SET_APP_DATA: {
@@ -91,10 +91,10 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             return { ...state, syncing: action.value }
         }
         case actionTypes.SAVE_TO_LS: {
-            const { updatedAt = 0, rootProject } = state
+            const { updatedAt = 0, taskList } = state
 
-            if (rootProject) {
-                LsConnector.saveToLocalStorage(updatedAt, rootProject)
+            if (taskList) {
+                LsConnector.saveToLocalStorage(updatedAt, taskList)
             }
             return state
         }

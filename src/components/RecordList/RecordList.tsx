@@ -54,7 +54,7 @@ const RecordList = (props: Props) => {
                 <Record 
                     item={root} 
                     config={titleRecordConfig}
-                    parent={store.rootProject}
+                    parent={store.taskList}
                 />
             }
             <Divider isHidden={isTaskLevelItem(root)} />
