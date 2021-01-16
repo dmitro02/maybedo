@@ -3,37 +3,24 @@ import React, {
     useContext, 
     useReducer
 } from "react"
-import { IBanner, IModal, Task } from '../types'
+import { IStore, Task } from '../types'
 import { 
     createItem,
     updateItem,
     deleteItem,
     moveItem
 } from './contextUtils'
-import { initPaths } from '../utils/pathUtils'
 import { actionTypes } from '../contexts/actionCreators'
-import DATA from '../data'
 import LsConnector from "../utils/LsConnector"
 
-export interface IStore {
-    rootProject: Task
-    addedItemPath?: string
-    modal?: IModal
-    banner?: IBanner
-    showSidebar?: boolean
-    loading?: boolean
-    syncing?: boolean
-    updatedAt?: number
-}
-
-export const getInitialState = (data: any): IStore => {
-    return { rootProject: initPaths(data) }
+const initialState: IStore = {
+    rootProject: new Task('0', 'Projects')
 }
 
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
-    const context = useReducer(tasksReducer, getInitialState(DATA))
+    const context = useReducer(tasksReducer, initialState)
     return (
       <TasksContext.Provider value={context}>
           {children}

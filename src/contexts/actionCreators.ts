@@ -1,7 +1,7 @@
-import { IStore } from './TasksContext';
 import { 
     IBanner, 
     IModal, 
+    IStore, 
     Task
 } from '../types'
 

@@ -1,17 +1,17 @@
 ☐ BUG: (Chrome only): while moving record other record statically displayed as hovered 
 ☐ BUG: app crashes when all projects deleted
 ☐ BUG: fog doesn't work in local version (no server)
-☐ convert Dropbox Utils into class
-☐ show spinner on Dropbox setup requests
-☐ show already authorized message in dropbox settings 
-☐ show success/failure banner on Dropbox setup
+✔ convert Dropbox Utils into class @done(21-01-16 19:54)
+✔ show spinner on Dropbox setup requests @done(21-01-16 19:54)
+✔ show already authorized message in dropbox settings @done(21-01-16 19:54)
+✔ show success/failure banner on Dropbox setup @done(21-01-16 19:53)
 ☐ persist opened and selected tasks state
 ☐ move "New task" to the top
-☐ implement config (with dropbox client ID)
+☐ implement config (with dropbox client ID, rotation number, ect)
 ☐ BUG: Unhandled Rejection (NotConfigured): Dropbox connection is not configured
 ☐ CloudConnector interface
 ☐ Exporter class
-☐ dropbox files rotation
+✔ dropbox files rotation @done(21-01-16 19:53)
 ☐ show loading soinner on initial load
 ☐ rework actionCreators with dispatch
 ☐ indicator that sync is not configured on projects page
@@ -19,4 +19,5 @@
 ☐ decrease usage of useContext using props instead
 ☐ move initializeSynchronization to Syncer
 ☐ rename Layout to MainContainer
-☐ convert IStore to Store with cobstructor of default emapty store
+✔ convert IStore to Store with cobstructor of default emapty store @done(21-01-16 21:47)
+☐ replace item moving with setting priority and 'move to top' 

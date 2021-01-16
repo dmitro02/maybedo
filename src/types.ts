@@ -1,3 +1,14 @@
+export interface IStore {
+    rootProject: Task
+    addedItemPath?: string
+    modal?: IModal
+    banner?: IBanner
+    showSidebar?: boolean
+    loading?: boolean
+    syncing?: boolean
+    updatedAt?: number
+}
+
 export class Task {
     path: string
     text: string

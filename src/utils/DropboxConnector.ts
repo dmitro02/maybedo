@@ -5,7 +5,7 @@ const CLIENT_ID = 'lxn28fv9hhsn7id'
 
 const DATA_FOLDER_PATH = '/data'
 const METADATA_FILE_PATH = '/metadata.json'
-const MAX_EXPORTS_NUMBER_TO_KEEP = 5
+const MAX_EXPORTS_NUMBER_TO_KEEP = 10
 
 export default class DropboxConnector {
     private dropboxCon: DropboxClient
