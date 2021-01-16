@@ -71,3 +71,11 @@ export class SuccessBanner implements IBanner {
         this.delay = delay
     }
 }
+
+export interface ICloudConnector {
+    authorize(): any
+    check(): any
+    downloadMetadata(): Promise<Metadata>
+    downloadTaskList(): Promise<Task | null>
+    uploadData(metadata: Metadata, taskList: Task): Promise<boolean>
+}

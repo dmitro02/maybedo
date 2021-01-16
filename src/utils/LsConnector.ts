@@ -1,7 +1,7 @@
 import { Task } from '../types';
 
 export default class LsConnector {
-    public static saveToLocalStorage = (updatedAt: number, taskList: Task): void => {
+    public static saveToLocalStorage = (updatedAt: number, taskList: Task | null): void => {
         if (!taskList) return
         LsConnector.setLsUpdatedAt(updatedAt)
         LsConnector.setLsTaskList(taskList)

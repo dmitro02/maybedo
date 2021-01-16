@@ -22,7 +22,7 @@ const DropboxSettings = () => {
     const authorizeApp = async () => {
         dispatch(setLoading(true))
         try {
-            await dbx.auhtorize(authTokenRef.current?.value)
+            await dbx.authorize(authTokenRef.current?.value)
             dispatch(setBanner(new SuccessBanner('Application successfully authorized')))
         } catch(e) {
             dispatch(setBanner(new FailureBanner('Error: ' + e.message)))

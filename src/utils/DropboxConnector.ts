@@ -1,3 +1,4 @@
+import { ICloudConnector } from './../types';
 import DropboxClient from './DropboxClient'
 import { Metadata, Task } from '../types';
 
@@ -7,7 +8,7 @@ const DATA_FOLDER_PATH = '/data'
 const METADATA_FILE_PATH = '/metadata.json'
 const MAX_EXPORTS_NUMBER_TO_KEEP = 10
 
-export default class DropboxConnector {
+export default class DropboxConnector implements ICloudConnector {
     private dropboxCon: DropboxClient
 
     constructor() {
@@ -22,12 +23,12 @@ export default class DropboxConnector {
         return this.dropboxCon.isConfigured
     }
 
-    async check() {
-        await this.dropboxCon.checkUser()
+    async authorize(authorizationCode?: string)  {
+        await this.dropboxCon.authorize(authorizationCode)
     }
 
-    async auhtorize(authorizationCode?: string)  {
-        await this.dropboxCon.authorize(authorizationCode)
+    async check() {
+        await this.dropboxCon.checkUser()
     }
 
     async uploadData(metadata: Metadata, taskList: Task): Promise<boolean> {
