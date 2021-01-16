@@ -71,6 +71,11 @@ export default class DropboxClient {
         return await this.dropbox!.filesUpload({ contents, path, mode: {'.tag': 'overwrite'} })
     }
 
+    async deleteFile(path: string) {
+        this.validateConfiguration()
+        return await this.dropbox!.filesDeleteV2({ path })
+    }
+
     get authUrl(): string {
         return `${AUTH_URL}?client_id=${this.clientId}&response_type=code&code_challenge_method=plain&code_challenge=${this.codeVerifier}`
     }

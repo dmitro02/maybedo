@@ -46,7 +46,6 @@ export const useTasksContext = () => useContext(TasksContext)
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
         case actionTypes.CREATE_TASK: {
-            console.log('CREATE_TASK', state);
             const { item } = action 
             return {
                 ...state,
@@ -56,7 +55,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             }
         }
         case actionTypes.UPDATE_TASK: {
-            console.log('UPDATE_TASK', state);
             return {
                 ...state,
                 updatedAt: Date.now(),

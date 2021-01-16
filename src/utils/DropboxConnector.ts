@@ -5,6 +5,7 @@ const CLIENT_ID = 'lxn28fv9hhsn7id'
 
 const DATA_FOLDER_PATH = '/data'
 const METADATA_FILE_PATH = '/metadata.json'
+const MAX_EXPORTS_NUMBER_TO_KEEP = 5
 
 export default class DropboxConnector {
     private dropboxCon: DropboxClient
@@ -70,7 +71,11 @@ export default class DropboxConnector {
         try {
             const contents = JSON.stringify(taskList)
             const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`
+
             await this.dropboxCon.uploadFile(contents, path)
+
+            await this.deleteOldestExports()
+
             return true
         } catch(e) {
             console.error(e)
@@ -78,7 +83,7 @@ export default class DropboxConnector {
         }
     }
 
-    private async getSortedExports() {
+    private async getSortedExports(): Promise<any[]> {
         const response: any = await this.dropboxCon.listFolder(DATA_FOLDER_PATH)
         return response.result.entries.sort((a: any, b: any) => {
             const clientModifiedA = new Date(a.client_modified)
@@ -96,6 +101,14 @@ export default class DropboxConnector {
         const path = sortedExports.pop().path_lower
         const response: any = await this.dropboxCon.downloadFile(path)
         return response.result
+    }
+
+    private async deleteOldestExports() {
+        const sortedExports = await this.getSortedExports()
+
+        for (let i = 0; i < sortedExports.length - MAX_EXPORTS_NUMBER_TO_KEEP; i++) {            
+            await this.dropboxCon.deleteFile(sortedExports[i].path_lower)
+        }
     }
 
     private readFile(blob: Blob) {

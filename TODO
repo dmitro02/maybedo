@@ -19,3 +19,4 @@
 ☐ decrease usage of useContext using props instead
 ☐ move initializeSynchronization to Syncer
 ☐ rename Layout to MainContainer
+☐ convert IStore to Store with cobstructor of default emapty store
