@@ -18,6 +18,8 @@ export default class Syncer {
     }
 
     async onLoad() {
+        this.actions.setLoading(true)
+
         const lsUpdatedAt = LsConnector.getLsUpdatedAt()
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
                 
@@ -38,9 +40,13 @@ export default class Syncer {
         } else {
             this.saveToLS()
         }
+
+        this.actions.setLoading(false)
     }
 
     async onDemand() {
+        this.actions.setSyncing(true)
+
         this.saveToLS()
         
         const lsUpdatedAt = LsConnector.getLsUpdatedAt()
@@ -56,6 +62,8 @@ export default class Syncer {
 
             await this.cloudConnector.uploadData({ updatedAt: lsUpdatedAt }, taskList)
         }
+
+        this.actions.setSyncing(false)
     }
 
     saveToLS() {        
@@ -67,8 +75,8 @@ export default class Syncer {
         this.actions.setAppData({ taskList, updatedAt })
     }
 
-    initSync = () => {
-        this.onLoad()
+    async initSync() {
+        await this.onLoad()
         window.addEventListener('unload', () => this.saveToLS())
         window.addEventListener('blur', () => this.saveToLS())
         setInterval(() => this.onDemand(), 60000 * SYNC_INTERVAL_IN_MINUTES)
