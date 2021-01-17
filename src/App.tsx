@@ -1,10 +1,10 @@
 import React from 'react'
-import Layout from './components/Layout/Layout';
+import MainContainer from './components/MainContainer/MainContainer';
 import { TasksContextProvider } from './contexts/TasksContext';
 
 const App = () => (
     <TasksContextProvider>
-        <Layout />
+        <MainContainer />
     </TasksContextProvider>
 )
 

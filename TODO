@@ -5,20 +5,4 @@
 ☐ Exporter class
 ☐ indicator that sync is not configured on projects page
 ☐ decrease usage of useContext using props instead
-☐ rename Layout to MainContainer
 ☐ replace item moving with setting priority and 'move to top' 
-Archive:
-  ✔ BUG: app crashes when all projects deleted @done(21-01-17 23:28)
-  ✔ convert Dropbox Utils into class @done(21-01-16 19:54)
-  ✔ show spinner on Dropbox setup requests @done(21-01-16 19:54)
-  ✔ show already authorized message in dropbox settings @done(21-01-16 19:54)
-  ✔ show success/failure banner on Dropbox setup @done(21-01-16 19:53)
-  ✔ persist opened and selected tasks state @done(21-01-17 23:30)
-  ✔ move "New task" to the top @done(21-01-17 23:31)
-  ✔ CloudConnector interface @done(21-01-16 22:10)
-  ✔ dropbox files rotation @done(21-01-16 19:53)
-  ✔ show loading spinner on initial load @done(21-01-17 23:31)
-  ✔ rework actionCreators with dispatch @done(21-01-17 21:41)
-  ✔ rename taskList to taskList @done(21-01-16 23:40)
-  ✔ move initializeSynchronization to Syncer @done(21-01-17 23:31)
-  ✔ convert IStore to Store with cobstructor of default emapty store @done(21-01-16 21:47)

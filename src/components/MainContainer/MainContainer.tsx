@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './Layout.scss'
+import './MainContainer.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import ProjectList from '../ProjectList/ProjectList'
 import TaskList from '../TaskList/TaskList'
@@ -17,7 +17,7 @@ import Fog from '../Fog/Fog'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 
-const Layout = () => {
+const MainContainer = () => {
     const { store, actions } = useTasksContext()
 
     const { 
@@ -108,4 +108,4 @@ const Layout = () => {
 const enableBodyScrolling = (isEnabled: boolean) =>
     document.body.style.overflow = isEnabled? 'auto' : 'hidden'
 
-export default Layout
+export default MainContainer
