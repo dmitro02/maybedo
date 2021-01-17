@@ -4,14 +4,14 @@
     margin: 8px;
     border-radius: 50%;
     border-style: solid;
-    animation: lds-dual-ring 1.2s linear infinite;
+    animation: rotation 1.2s linear infinite;
     width: 64px;
     height: 64px;
     border-width: 8px;
     border-color: $dark-gray transparent $dark-gray transparent;
 }
 
-@keyframes lds-dual-ring {
+@keyframes rotation {
     100% {
         transform: rotate(360deg);
     }

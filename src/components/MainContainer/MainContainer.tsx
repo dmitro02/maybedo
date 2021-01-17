@@ -16,6 +16,7 @@ import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
+import SyncStatus from '../Statuses/SyncStatus'
 
 const MainContainer = () => {
     const { store, actions } = useTasksContext()
@@ -99,6 +100,7 @@ const MainContainer = () => {
                         ? <Settings backToTaskList={toggleSettings}/>
                         : <TaskList />
                     }
+                    <SyncStatus />
                 </div>
             </div>
         </div>

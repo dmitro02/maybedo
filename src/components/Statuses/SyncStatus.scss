@@ -1,0 +1,9 @@
+.syncing {
+    animation: rotation 2s infinite linear;
+}
+  
+@keyframes rotation {
+    100% {
+        transform: rotate(-360deg);
+    }
+}
