@@ -6,6 +6,8 @@ import {
 import DropboxConnector from "./DropboxConnector"
 import LsConnector from "./LsConnector"
 
+const SYNC_INTERVAL_IN_MINUTES = 5 
+
 export default class Syncer {
     private cloudConnector: ICloudConnector
     private actions: IActions
@@ -63,6 +65,13 @@ export default class Syncer {
     loadToStore(updatedAt: number, taskList: Task | null) {        
         if (!taskList) return
         this.actions.setAppData({ taskList, updatedAt })
+    }
+
+    initSync = () => {
+        this.onLoad()
+        window.addEventListener('unload', () => this.saveToLS())
+        window.addEventListener('blur', () => this.saveToLS())
+        setInterval(() => this.onDemand(), 60000 * SYNC_INTERVAL_IN_MINUTES)
     }
 
     private async getCloudUpdatedAt() {

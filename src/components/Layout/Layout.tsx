@@ -30,16 +30,9 @@ const Layout = () => {
     const syncer = new Syncer(actions)
 
     useEffect(() => {
-        initializeSynchronization()
+        syncer.initSync()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const initializeSynchronization = () => {
-        syncer.onLoad()
-        window.addEventListener('unload', () => syncer.saveToLS())
-        window.addEventListener('blur', () => syncer.saveToLS())
-        setInterval(() => syncer.onDemand(), 300000) // every 5 min
-    }
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
