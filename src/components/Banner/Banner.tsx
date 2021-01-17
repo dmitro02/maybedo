@@ -1,18 +1,14 @@
 import React, { useCallback, useEffect } from 'react'
 import './Banner.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { setBanner } from '../../contexts/actionCreators'
 import { CloseButton } from '../Buttons/Buttons'
 
 const Banner = () => {
-    const [ store, dispatch ] = useTasksContext()
+    const { store, actions } = useTasksContext()
 
     const { banner } = store
 
-    const closeBanner = useCallback(
-        () => dispatch(setBanner(null)), 
-        [dispatch]
-    )
+    const closeBanner = useCallback(() => actions.setBanner(null), [actions])
 
     useEffect(() => {
         if (banner && banner.delay && banner.delay > 0) {

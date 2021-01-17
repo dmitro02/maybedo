@@ -2,8 +2,25 @@ import {
     IBanner, 
     IModal, 
     IStore, 
-    Task
+    Task,
+    IActions
 } from '../types'
+
+export const createActions = (dispatch: Function): IActions => ({
+    setAppData: (state: IStore) => dispatch(setAppData(state)),
+    createTaskAction: (item: Task) => dispatch(createTaskAction(item)),
+    updateTaskAction: (item: Task) => dispatch(updateTaskAction(item)),
+    deleteTaskAction: (item: Task) => dispatch(deleteTaskAction(item)),
+    selectTaskAction: (parentItem: Task) => dispatch(selectTaskAction(parentItem)),
+    setModal: (modal: IModal | null) => dispatch(setModal(modal)),
+    setBanner: (banner: IBanner | null) => dispatch(setBanner(banner)),
+    setShowSidebar: (value: boolean) => dispatch(setShowSidebar(value)),
+    setLoading: (value: boolean) => dispatch(setLoading(value)),
+    setSyncing: (value: boolean) => dispatch(setSyncing(value)),
+    saveToLocalStorage: () => dispatch(saveToLocalStorage()),
+    moveTaskAction: (movedItemPath: string, siblingPath: string | null) => 
+        dispatch(moveTaskAction(movedItemPath, siblingPath)),
+})
 
 export enum actionTypes {
     CREATE_TASK = 'CREATE_TASK',

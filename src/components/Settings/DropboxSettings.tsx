@@ -2,38 +2,34 @@ import React, { useRef } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import DropboxConnector from '../../utils/DropboxConnector'
 import { 
-    setBanner, 
-    setLoading 
-} from '../../contexts/actionCreators'
-import { 
     FailureBanner, 
     SuccessBanner 
 } from '../../types'
 
 const DropboxSettings = () => {
-    const [, dispatch ] = useTasksContext()
+    const { actions } = useTasksContext()
 
     const dbx = new DropboxConnector()
 
     const authTokenRef = useRef<HTMLInputElement>(null)
 
     const authorizeApp = async () => {
-        dispatch(setLoading(true))
+        actions.setLoading(true)
         try {
             await dbx.authorize(authTokenRef.current?.value)
-            dispatch(setBanner(new SuccessBanner('Application successfully authorized')))
+            actions.setBanner(new SuccessBanner('Application successfully authorized'))
         } catch(e) {
-            dispatch(setBanner(new FailureBanner('Error: ' + e.message)))
+            actions.setBanner(new FailureBanner('Error: ' + e.message))
         }
-        dispatch(setLoading(false))   
+        actions.setLoading(false)
     }
 
     const checkConnection = async () => {
         try {
             await dbx.check()
-            dispatch(setBanner(new SuccessBanner('Successfully accessed Dropbox')))
+            actions.setBanner(new SuccessBanner('Successfully accessed Dropbox'))
         } catch(e) {
-            dispatch(setBanner(new FailureBanner(e.message)))
+            actions.setBanner(new FailureBanner(e.message))
         } 
     }
 
@@ -60,9 +56,6 @@ const DropboxSettings = () => {
             />
             <button onClick={authorizeApp}>Authorize</button>
             <button onClick={checkConnection}>Check</button>
-
-            <button onClick={() => dbx.downloadMetadata()}>TEST1</button>
-            <button onClick={() => dbx.uploadMetadata({ updatedAt: Date.now() })}>TEST2</button>
         </div>
     )
 }

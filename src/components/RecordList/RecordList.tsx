@@ -5,7 +5,6 @@ import AddRecord from '../Record/AddRecord'
 import { Task } from '../../types'
 import Record, { RecordConfig } from '../Record/Record'
 import Sortable from 'sortablejs'
-import { moveTaskAction } from '../../contexts/actionCreators'
 import { isTaskLevelItem } from '../../utils/pathUtils'
 
 type Props = { 
@@ -17,7 +16,7 @@ type Props = {
 }
 
 const RecordList = (props: Props) => {
-    const [ store, dispatch ] = useTasksContext()
+    const { store, actions } = useTasksContext()
 
     const {
         classNames = [],
@@ -38,7 +37,7 @@ const RecordList = (props: Props) => {
         const movedItemPath = e.item.id
         const sibling = e.item.previousSibling
         const siblingPath = sibling ? sibling.id : null
-        dispatch(moveTaskAction(movedItemPath, siblingPath))
+        actions.moveTaskAction(movedItemPath, siblingPath)
     }
 
     useEffect(() => {

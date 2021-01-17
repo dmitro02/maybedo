@@ -14,21 +14,20 @@ import {
 } from '../Buttons/Buttons'
 import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
-import { setShowSidebar } from '../../contexts/actionCreators'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 
 const Layout = () => {
-    const [ store, dispatch ] = useTasksContext()
+    const { store, actions } = useTasksContext()
 
     const { 
-        showSidebar, 
+        showSidebar = false, 
         loading
     } = store
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
-    const syncer = new Syncer(dispatch)
+    const syncer = new Syncer(actions)
 
     useEffect(() => {
         initializeSynchronization()
@@ -47,14 +46,14 @@ const Layout = () => {
 
     const openLeftPanel = () => {
         if (!showSidebar) {
-            dispatch(setShowSidebar(true))
+            actions.setShowSidebar(true)
             enableBodyScrolling(false)
         }
     }
 
     const closeLeftPanel = () => {
         if (showSidebar) {
-            dispatch(setShowSidebar(false))
+            actions.setShowSidebar(false)
             enableBodyScrolling(true)
         }
     }
@@ -79,7 +78,7 @@ const Layout = () => {
                 <ProjectList />
             </div>
             <div className="right-panel" onClick={closeLeftPanel}>
-                <Fog isDisplayed={showSidebar}/>
+                <Fog isDisplayed={showSidebar} />
                 <Banner />
                 <div className="top-panel">
                     {!isSettingsOpened &&

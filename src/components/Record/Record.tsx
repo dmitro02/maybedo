@@ -7,12 +7,6 @@ import {
     getCaretPosition,
     setCaretPosition
 } from '../../utils/textInputUtils'
-import {
-    updateTaskAction,
-    selectTaskAction,
-    deleteTaskAction,
-    setShowSidebar
-} from '../../contexts/actionCreators'
 import { isProjectLevelItem } from '../../utils/pathUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
@@ -52,14 +46,17 @@ const Record = ({ item, config, parent }: Props) => {
     } = config
 
     const [ isDone, setIsDone ] = useState(initialState)
+
     const [ 
         stateCaretPosition, 
         setStateCaretPosition
     ] = useState<number|undefined>(undefined)
+
     const [ showSubtasks, setShowSubtasks ] = useState(false)
+    
     const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
-    const [ store, dispatch ] = useTasksContext()
+    const { store, actions } = useTasksContext()
 
     const recordContentRef = useRef<HTMLDivElement>(null)
 
@@ -75,9 +72,9 @@ const Record = ({ item, config, parent }: Props) => {
             selectRecord(item)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [path, store.addedItemId])
+    }, [path, store.addedItemPath])
 
-    const updateRecord = (item: Task) => dispatch(updateTaskAction(item))
+    const updateRecord = (item: Task) => actions.updateTaskAction(item)
 
     const deleteRecord = (item: Task) => {
         if (isProjectLevelItem(item)) {
@@ -88,16 +85,16 @@ const Record = ({ item, config, parent }: Props) => {
             } else {
                 parent.selectedSubTaskPath = parent.tasks[0].path
             }
-            dispatch(updateTaskAction(parent))
+            actions.updateTaskAction(parent)
         }
         setShowDeleteConfirmation(false)
-        dispatch(deleteTaskAction(item))
+        actions.deleteTaskAction(item)
     }
 
     const selectRecord = (item: Task) => {
         if (parent.selectedSubTaskPath === item.path) return
         const updatedParent = { ...parent, selectedSubTaskPath: item.path }
-        dispatch(selectTaskAction(updatedParent))
+        actions.selectTaskAction(updatedParent)
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
@@ -192,7 +189,7 @@ const Record = ({ item, config, parent }: Props) => {
                     saveCaretPositionToState()
                     if (!isTitle) {
                         selectRecord(item)
-                        dispatch(setShowSidebar(false))
+                        actions.setShowSidebar(false)
                     }
                 }}
             >

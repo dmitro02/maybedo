@@ -18,7 +18,7 @@ const titleRecordConfig: RecordConfig = {
 }
 
 const TaskList = () => {
-    const [ store ] = useTasksContext()
+    const { store } = useTasksContext()
 
     const { tasks } = store.taskList
 

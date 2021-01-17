@@ -1,12 +1,11 @@
 import React from 'react'
 import './Modal.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { setModal } from '../../contexts/actionCreators'
 import Fog from '../Fog/Fog'
 import { CloseButton, ConfirmButton } from '../Buttons/Buttons'
 
 const Modal = () => {
-    const [ store, dispatch ] = useTasksContext()
+    const { store, actions } = useTasksContext()
 
     if (!store.modal) return null
 
@@ -16,7 +15,7 @@ const Modal = () => {
         cancelAction = () => {},
     } = store.modal
 
-    const closeModal = () => dispatch(setModal(null))
+    const closeModal = () => actions.setModal(null)
 
     const handleClickOk = () => {
         closeModal()

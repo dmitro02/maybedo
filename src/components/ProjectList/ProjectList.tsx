@@ -9,7 +9,7 @@ const activeRecordConfig: RecordConfig = { useDragBtn: true }
 const titleRecordConfig: RecordConfig = { isTitle: true }
 
 const ProjectList = () => {
-    const [ store ] = useTasksContext()
+    const { store } = useTasksContext()
 
     const root = store.taskList
 

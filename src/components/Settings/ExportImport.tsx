@@ -1,11 +1,6 @@
 import React, { useRef } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { 
-    setAppData, 
-    setModal, 
-    setBanner 
-} from '../../contexts/actionCreators'
-import { 
     BannerTypes, 
     IBanner, 
     IModal, 
@@ -24,7 +19,7 @@ type Props = {
 }
 
 const ExportImport = (props: Props) => {
-    const [ store, dispatch ] = useTasksContext()
+    const { store, actions } = useTasksContext()
 
     const { taskList } = store
 
@@ -55,7 +50,7 @@ const ExportImport = (props: Props) => {
                 okAction: () => doImport(reader),
                 cancelAction: () => clearFileInput()
             }
-            dispatch(setModal(modal))
+            actions.setModal(modal)
         };
         const files = e.target.files
         files && reader.readAsText(files[0])
@@ -71,7 +66,7 @@ const ExportImport = (props: Props) => {
                 text: 'Failed to parse JSON file',
                 type: BannerTypes.Failure
             }
-            dispatch(setBanner(banner))
+            actions.setBanner(banner)
             return
         }
         if (!validateExportedData(dataToImport)) {
@@ -79,17 +74,17 @@ const ExportImport = (props: Props) => {
                 text: 'Some required fields are missing',
                 type: BannerTypes.Failure
             }
-            dispatch(setBanner(banner))
+            actions.setBanner(banner)
             return
         }
-        dispatch(setAppData(dataToImport))
+        actions.setAppData(dataToImport)
         backToTaskList()
         const banner: IBanner = {
             text: 'Data successfully imported',
             type: BannerTypes.Success,
             delay: 5
         }
-        dispatch(setBanner(banner))
+        actions.setBanner(banner)
     }
 
     const clickOnFileInput = () => {

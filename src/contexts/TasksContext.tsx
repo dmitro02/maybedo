@@ -3,14 +3,20 @@ import React, {
     useContext, 
     useReducer
 } from "react"
-import { IStore, Task } from '../types'
+import { 
+    IContext, 
+    IStore, 
+    Task } from '../types'
 import { 
     createItem,
     updateItem,
     deleteItem,
     moveItem
 } from './contextUtils'
-import { actionTypes } from '../contexts/actionCreators'
+import { 
+    createActions, 
+    actionTypes 
+} from '../contexts/actionCreators'
 import LsConnector from "../utils/LsConnector"
 
 const initialState: IStore = {
@@ -20,7 +26,13 @@ const initialState: IStore = {
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
-    const context = useReducer(tasksReducer, initialState)
+    const [ store, dispatch ] = useReducer(tasksReducer, initialState)
+
+    const context: IContext = {
+        store,
+        actions: createActions(dispatch)
+    }
+
     return (
       <TasksContext.Provider value={context}>
           {children}
@@ -28,7 +40,7 @@ export function TasksContextProvider({ children }: any) {
     )
   }
 
-export const useTasksContext = () => useContext(TasksContext)
+export const useTasksContext = (): IContext => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {

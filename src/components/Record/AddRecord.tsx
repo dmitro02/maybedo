@@ -3,17 +3,16 @@ import './Record.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { constructNewPath } from '../../utils/pathUtils'
 import { Task } from '../../types'
-import { createTaskAction } from '../../contexts/actionCreators'
 import { AddButton, EmptyButton } from '../Buttons/Buttons'
 
 const AddRecord = ({ root }: { root: Task }) => {
-    const [ , dispatch ] = useTasksContext()
+    const { actions } = useTasksContext()
     
     const createRecord = (e: any) => {
         const taskText = e.target.textContent.trim()
         if (!taskText) return
         const item: Task = new Task(constructNewPath(root), taskText)
-        dispatch(createTaskAction(item))
+        actions.createTaskAction(item)
         e.target.textContent = ''
     }
 

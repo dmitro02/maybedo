@@ -1,18 +1,18 @@
-import { Task, ICloudConnector } from './../types';
+import { 
+    Task, 
+    ICloudConnector, 
+    IActions 
+} from './../types';
 import DropboxConnector from "./DropboxConnector"
 import LsConnector from "./LsConnector"
-import { 
-    saveToLocalStorage, 
-    setAppData 
-} from '../contexts/actionCreators'
 
 export default class Syncer {
     private cloudConnector: ICloudConnector
-    private dispatch: Function
+    private actions: IActions
 
-    constructor(dispatch: Function, cloudConnector?: ICloudConnector) {
+    constructor(actions: IActions, cloudConnector?: ICloudConnector) {
         this.cloudConnector = cloudConnector || new DropboxConnector()
-        this.dispatch = dispatch
+        this.actions = actions
     }
 
     async onLoad() {
@@ -57,12 +57,14 @@ export default class Syncer {
     }
 
     saveToLS() {        
-        this.dispatch(saveToLocalStorage())
+        this.actions.saveToLocalStorage()
     }
 
     loadToStore(updatedAt: number, taskList: Task | null) {
+        console.log('taskList', taskList);
+        
         if (!taskList) return
-        this.dispatch(setAppData({ taskList, updatedAt }))
+        this.actions.setAppData({ taskList, updatedAt })
     }
 
     private async getCloudUpdatedAt() {

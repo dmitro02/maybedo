@@ -79,3 +79,23 @@ export interface ICloudConnector {
     downloadTaskList(): Promise<Task | null>
     uploadData(metadata: Metadata, taskList: Task): Promise<boolean>
 }
+
+export interface IActions {
+    setAppData: (state: IStore) => IStore,
+    createTaskAction: (item: Task) => IStore,
+    updateTaskAction: (item: Task) => IStore,
+    deleteTaskAction: (item: Task) => IStore,
+    selectTaskAction: (parentItem: Task) => IStore,
+    setModal: (modal: IModal | null) => IStore,
+    setBanner: (banner: IBanner | null) => IStore,
+    setShowSidebar: (value: boolean) => IStore,
+    setLoading: (value: boolean) => IStore,
+    setSyncing: (value: boolean) => IStore,
+    saveToLocalStorage: () => IStore,
+    moveTaskAction: (movedItemPath: string, siblingPath: string | null) => IStore
+}
+
+export interface IContext {
+    store: IStore,
+    actions: IActions
+}
