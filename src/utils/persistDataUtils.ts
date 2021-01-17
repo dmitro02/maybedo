@@ -5,26 +5,23 @@ export enum DataTypes {
     HTML = 'html'
 }
 
-export const convertDataToJsonString = (root: Task): string => {
+export const convertDataToJsonString = (taskList: Task): string => {
     const excludeKeys = [
         'path',
         'selectedSubTaskPath'
     ]
     const replacer = (key: string, value: any) =>
         excludeKeys.includes(key) ? undefined : value
-    const data = { 
-        timestamp: Date.now(),
-        tasklist: root
-     }
-    return JSON.stringify(data, replacer, 2)
+
+    return JSON.stringify(taskList, replacer, 2)
 }
 
-export const convertDataToHtmlString = (root: Task): string => {
-    const textDecoration = root.isDone 
+export const convertDataToHtmlString = (taskList: Task): string => {
+    const textDecoration = taskList.isDone 
         ? 'style="text-decoration: line-through"' : ''
-    const subtasks = root.tasks.length 
-        ? `<ul>${root.tasks.map(task => convertDataToHtmlString(task))}</ul>` : ''
-    const item = `<li ${textDecoration}>${root.text + subtasks}</li>` 
+    const subtasks = taskList.tasks.length 
+        ? `<ul>${taskList.tasks.map(task => convertDataToHtmlString(task))}</ul>` : ''
+    const item = `<li ${textDecoration}>${taskList.text + subtasks}</li>` 
     return item.replace(/>,</g, '><')
 }
 

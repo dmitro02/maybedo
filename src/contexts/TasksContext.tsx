@@ -82,10 +82,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
             }
         }
         case actionTypes.SET_APP_DATA: {
-            return {
-                ...state,
-                ...action.state
-            }
+            return { ...action.state }
         }
         case actionTypes.SET_MODAL: {
             return { ...state, modal: action.modal }

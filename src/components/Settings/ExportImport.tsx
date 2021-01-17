@@ -6,6 +6,7 @@ import {
     IModal, 
     Task
 } from '../../types'
+import { initPaths } from '../../utils/pathUtils'
 import { 
     convertDataToHtmlString,
     convertDataToJsonString, 
@@ -58,9 +59,10 @@ const ExportImport = (props: Props) => {
 
     const doImport = (reader: FileReader) => {
         clearFileInput()
-        let dataToImport
+        let taskList: Task
         try {
-            dataToImport = JSON.parse(reader.result as string)
+            taskList = JSON.parse(reader.result as string)
+            taskList = initPaths(taskList)
         } catch(err) {
             const banner: IBanner = {
                 text: 'Failed to parse JSON file',
@@ -69,7 +71,7 @@ const ExportImport = (props: Props) => {
             actions.setBanner(banner)
             return
         }
-        if (!validateExportedData(dataToImport)) {
+        if (!validateExportedData(taskList)) {
             const banner: IBanner = {
                 text: 'Some required fields are missing',
                 type: BannerTypes.Failure
@@ -77,7 +79,7 @@ const ExportImport = (props: Props) => {
             actions.setBanner(banner)
             return
         }
-        actions.setAppData(dataToImport)
+        actions.setAppData({ updatedAt: Date.now(), taskList })
         backToTaskList()
         const banner: IBanner = {
             text: 'Data successfully imported',

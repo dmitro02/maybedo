@@ -60,9 +60,7 @@ export default class Syncer {
         this.actions.saveToLocalStorage()
     }
 
-    loadToStore(updatedAt: number, taskList: Task | null) {
-        console.log('taskList', taskList);
-        
+    loadToStore(updatedAt: number, taskList: Task | null) {        
         if (!taskList) return
         this.actions.setAppData({ taskList, updatedAt })
     }

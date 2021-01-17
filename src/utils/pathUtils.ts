@@ -2,13 +2,16 @@ import { Task } from "../types"
 
 const PATH_SEPARATOR = '.' 
 
-export const initPaths = (root: any) => {
-    root.path = '0'
-    return initPathsRecursively(root)
+export const initPaths = (taskList: Task) => {
+    taskList.path = '0'
+    if (taskList.tasks.length > 0) {
+        taskList.selectedSubTaskPath = '0.0'
+    }
+    return initPathsRecursively(taskList)
 }
 
-export const constructNewPath = (root: Task) => {
-    const { path, tasks } = root
+export const constructNewPath = (taskList: Task) => {
+    const { path, tasks } = taskList
     return tasks.length 
         ? addToPath(path, tasks
             .map((t) => parseInt(pathToArray(t.path).reverse()[0]))
@@ -28,11 +31,11 @@ export const pathToArray = (path: string) =>
 export const addToPath = (path: string, addition: string | number) =>
     path + PATH_SEPARATOR + addition
 
-const initPathsRecursively = (root: any) => {
-    if (!Array.isArray(root.tasks)) root.tasks = []
-    root.tasks.forEach((item: any, index: number) => {
-        item.path = addToPath(root.path, index)
+const initPathsRecursively = (taskList: any) => {
+    if (!Array.isArray(taskList.tasks)) taskList.tasks = []
+    taskList.tasks.forEach((item: any, index: number) => {
+        item.path = addToPath(taskList.path, index)
         initPathsRecursively(item)
     })
-    return root
+    return taskList
 }
