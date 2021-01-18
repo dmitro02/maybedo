@@ -1,3 +1,4 @@
+import { SyncStatuses } from './../components/Statuses/SyncStatus';
 import { 
     IBanner, 
     IModal, 
@@ -5,6 +6,7 @@ import {
     Task,
     IActions
 } from '../types'
+// import { SyncTargets } from '../utils/Syncer';
 
 export const createActions = (dispatch: Function): IActions => ({
     setAppData: (state: IStore) => dispatch(setAppData(state)),
@@ -16,7 +18,8 @@ export const createActions = (dispatch: Function): IActions => ({
     setBanner: (banner: IBanner | null) => dispatch(setBanner(banner)),
     setShowSidebar: (value: boolean) => dispatch(setShowSidebar(value)),
     setLoading: (value: boolean) => dispatch(setLoading(value)),
-    setSyncing: (value: boolean) => dispatch(setSyncing(value)),
+    setSyncStatus: (status: SyncStatuses) => dispatch(setSyncStatus(status)),
+    // setSyncTarget: (target: SyncTargets) => dispatch(setSyncTarget(target)),
     saveToLocalStorage: () => dispatch(saveToLocalStorage()),
     moveTaskAction: (movedItemPath: string, siblingPath: string | null) => 
         dispatch(moveTaskAction(movedItemPath, siblingPath)),
@@ -32,7 +35,8 @@ export enum actionTypes {
     SET_BANNER = 'SET_BANNER',
     SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR',
     SET_LOADING = 'SET_LOADING',
-    SET_SYNCING = 'SET_SYNCING',
+    SET_SYNC_STATUS = 'SET_SYNC_STATUS',
+    // SET_SYNC_TARGET = 'SET_SYNC_TARGET',
     SELECT_TASK = 'SELECT_TASK',
     SAVE_TO_LS = 'SAVE_TO_LS',
 }
@@ -88,10 +92,15 @@ export const setLoading = (value: boolean) => ({
     value
 })
 
-export const setSyncing = (value: boolean) => ({
-    type: actionTypes.SET_SYNCING,
-    value
+export const setSyncStatus = (status: SyncStatuses) => ({
+    type: actionTypes.SET_SYNC_STATUS,
+    status
 })
+
+// export const setSyncTarget = (target: SyncTargets) => ({
+//     type: actionTypes.SET_SYNC_TARGET,
+//     target
+// })
 
 export const saveToLocalStorage = () => ({
     type: actionTypes.SAVE_TO_LS

@@ -1,3 +1,4 @@
+import { SyncTargets } from './Syncer';
 import { ICloudConnector } from './../types';
 import DropboxClient from './DropboxClient'
 import { Metadata, Task } from '../types';
@@ -10,6 +11,8 @@ const MAX_EXPORTS_NUMBER_TO_KEEP = 10
 
 export default class DropboxConnector implements ICloudConnector {
     private dropboxCon: DropboxClient
+
+    syncTarget = SyncTargets.Dropbox
 
     constructor() {
         this.dropboxCon = new DropboxClient(CLIENT_ID)
@@ -28,11 +31,12 @@ export default class DropboxConnector implements ICloudConnector {
     }
 
     async check() {
-        await this.dropboxCon.checkUser()
+        await this.dropboxCon.check()
     }
 
-    async uploadData(metadata: Metadata, taskList: Task): Promise<boolean> {
-        return this.uploadMetadata(metadata) && this.uploadTaskList(taskList)
+    async uploadData(metadata: Metadata, taskList: Task) {
+        await this.uploadMetadata(metadata)
+        await this.uploadTaskList(taskList)
     }
 
     async downloadMetadata(): Promise<Metadata> {        
@@ -45,15 +49,9 @@ export default class DropboxConnector implements ICloudConnector {
         }
     }
 
-    async uploadMetadata(metadata: Metadata): Promise<boolean> {
-        try {
-            const contents = JSON.stringify(metadata)
-            await this.dropboxCon.uploadFile(contents, METADATA_FILE_PATH)
-            return true
-        } catch(e) {
-            console.error(e)
-            return false
-        }
+    async uploadMetadata(metadata: Metadata) {
+        const contents = JSON.stringify(metadata)
+        await this.dropboxCon.uploadFile(contents, METADATA_FILE_PATH)
     }
 
     async downloadTaskList(): Promise<Task | null> {
@@ -67,21 +65,14 @@ export default class DropboxConnector implements ICloudConnector {
         }
     } 
     
-    async uploadTaskList(taskList: Task): Promise<boolean> {
-        if (!taskList) return false
-        try {
-            const contents = JSON.stringify(taskList)
-            const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`
+    async uploadTaskList(taskList: Task) {
+        if (!taskList) return
 
-            await this.dropboxCon.uploadFile(contents, path)
+        const contents = JSON.stringify(taskList)
+        const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`
+        await this.dropboxCon.uploadFile(contents, path)
 
-            await this.deleteOldestExports()
-
-            return true
-        } catch(e) {
-            console.error(e)
-            return false
-        }
+        await this.deleteOldestExports()
     }
 
     private async getSortedExports(): Promise<any[]> {

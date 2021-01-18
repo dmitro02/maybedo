@@ -17,13 +17,9 @@ export default class DropboxClient {
         this.initDropbox(null)
     }
 
-    async checkUser() {
+    async check() {
         this.validateConfiguration()
-        try {
-            await this.dropbox!.checkUser({ query: 'todom' })
-        } catch(e) {
-            throw new Error("Failed to access Dropbox")
-        }
+        await this.dropbox!.checkUser({ query: 'todom' })
     }
 
     async authorize(authorizationCode: string = '') {
@@ -100,13 +96,6 @@ export default class DropboxClient {
     }
 
     validateConfiguration() {
-        if (!this.dropbox) throw new NotConfiguredError()
+        if (!this.dropbox) throw new Error('not_configured')
     }
 }
-
-class NotConfiguredError extends Error {
-    constructor() {
-        super('Dropbox connection is not configured')
-        this.name = 'NotConfigured'
-    }
-} 

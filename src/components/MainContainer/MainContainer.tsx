@@ -23,15 +23,14 @@ const MainContainer = () => {
 
     const { 
         showSidebar = false, 
-        loading
+        loading,
+        syncStatus
     } = store
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
-    const syncer = new Syncer(actions)
-
     useEffect(() => {
-        syncer.initSync()
+        Syncer.getInstance(actions).initSync()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -57,7 +56,7 @@ const MainContainer = () => {
             <Modal />
             {loading && <Loading />}
             <div className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
-                <Fog isDisplayed={isSettingsOpened}/>
+                <Fog isDisplayed={isSettingsOpened} />
                 <div className="top-panel">
                     <div className="row-btns">
                         <ArrowBackButton 
@@ -86,9 +85,9 @@ const MainContainer = () => {
                         </div>
                     }
                     <div className="row-btns">
-                        <button onClick={() => syncer.onDemand()}>SYNC</button>
+                    <SyncStatus status={syncStatus} />
                         {isSettingsOpened 
-                            ? <ArrowBackButton action={toggleSettings} title="close settings"/>
+                            ? <ArrowBackButton action={toggleSettings} title="close settings" />
                             : <SettingsButton action={toggleSettings} />
                         }
                         <EmptyButton />
@@ -97,10 +96,9 @@ const MainContainer = () => {
                 <Divider />
                 <div className="right-content">
                     {isSettingsOpened 
-                        ? <Settings backToTaskList={toggleSettings}/>
+                        ? <Settings backToTaskList={toggleSettings} />
                         : <TaskList />
                     }
-                    <SyncStatus />
                 </div>
             </div>
         </div>

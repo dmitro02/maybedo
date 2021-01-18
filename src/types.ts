@@ -1,3 +1,6 @@
+import { SyncStatuses } from './components/Statuses/SyncStatus';
+import { SyncTargets } from './utils/Syncer';
+// import { SyncTargets } from './utils/Syncer';
 export interface IStore {
     taskList: Task
     addedItemPath?: string
@@ -5,7 +8,8 @@ export interface IStore {
     banner?: IBanner
     showSidebar?: boolean
     loading?: boolean
-    syncing?: boolean
+    syncStatus?: SyncStatuses
+    // syncTarget?: SyncTargets
     updatedAt?: number
 }
 
@@ -73,11 +77,12 @@ export class SuccessBanner implements IBanner {
 }
 
 export interface ICloudConnector {
-    authorize(): any
-    check(): any
-    downloadMetadata(): Promise<Metadata>
-    downloadTaskList(): Promise<Task | null>
-    uploadData(metadata: Metadata, taskList: Task): Promise<boolean>
+    syncTarget: SyncTargets
+    authorize: () => any
+    check: () => any
+    downloadMetadata: () => Promise<Metadata>
+    downloadTaskList: () => Promise<Task | null>
+    uploadData: (metadata: Metadata, taskList: Task) => any
 }
 
 export interface IActions {
@@ -90,7 +95,8 @@ export interface IActions {
     setBanner: (banner: IBanner | null) => IStore,
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,
-    setSyncing: (value: boolean) => IStore,
+    setSyncStatus: (status: SyncStatuses) => IStore,
+    // setSyncTarget: (target: SyncTargets) => IStore,
     saveToLocalStorage: () => IStore,
     moveTaskAction: (movedItemPath: string, siblingPath: string | null) => IStore
 }

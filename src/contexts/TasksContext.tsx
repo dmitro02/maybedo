@@ -96,8 +96,8 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.SET_LOADING: {
             return { ...state, loading: action.value }
         }
-        case actionTypes.SET_SYNCING: {
-            return { ...state, syncing: action.value }
+        case actionTypes.SET_SYNC_STATUS: {
+            return { ...state, syncStatus: action.status }
         }
         case actionTypes.SAVE_TO_LS: {
             const { updatedAt = 0, taskList } = state

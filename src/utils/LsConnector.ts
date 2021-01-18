@@ -1,4 +1,6 @@
+import { SyncTargets } from './Syncer';
 import { Task } from '../types';
+
 
 export default class LsConnector {
     public static saveToLocalStorage = (updatedAt: number, taskList: Task | null): void => {
@@ -23,5 +25,13 @@ export default class LsConnector {
     
     public static setLsTaskList(taskList: Task): void {
         localStorage.setItem('taskList', JSON.stringify(taskList))
+    }
+
+    public static getSyncTarget(): SyncTargets {
+        return localStorage.getItem('syncTarget') as SyncTargets
+    }
+
+    public static setSyncTarget(syncTarget: SyncTargets): void {
+        localStorage.setItem('syncTarget', syncTarget)
     }
 }

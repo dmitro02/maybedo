@@ -5,6 +5,7 @@ import {
     FailureBanner, 
     SuccessBanner 
 } from '../../types'
+import Syncer from '../../utils/Syncer'
 
 const DropboxSettings = () => {
     const { actions } = useTasksContext()
@@ -17,9 +18,12 @@ const DropboxSettings = () => {
         actions.setLoading(true)
         try {
             await dbx.authorize(authTokenRef.current?.value)
+
+            Syncer.getInstance(actions).initSync(dbx)
+
             actions.setBanner(new SuccessBanner('Application successfully authorized'))
         } catch(e) {
-            actions.setBanner(new FailureBanner('Error: ' + e.message))
+            actions.setBanner(new FailureBanner('Application is not authorized'))
         }
         actions.setLoading(false)
     }
