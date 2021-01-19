@@ -1,10 +1,10 @@
 ☐ BUG: (Chrome only): while moving record other record statically displayed as hovered 
-☐ BUG: fog doesn't work in local version (no server)
+✔ BUG: fog doesn't work in local version (no server) @done(21-01-19 20:00)
 ✔ BUG: Unhandled Rejection (NotConfigured): Dropbox connection is not configured @done(21-01-18 20:53)
-☐ implement config file (with dropbox client ID, rotation number, ect)
 ☐ Exporter class
 ✔ indicator that sync is not configured on projects page @done(21-01-18 20:52)
 ☐ decrease usage of useContext using props instead
-☐ replace item moving with setting priority and 'move to top' 
+☐ replace item moving with setting priority (and 'move to top'?)
 ☐ add sync inteval to Dropbox config UI
 ☐ add sync target select to Settings UI
+☐ add number of sync files to keep to Dropbox config UI
