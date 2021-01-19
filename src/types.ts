@@ -1,6 +1,5 @@
 import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
-// import { SyncTargets } from './utils/Syncer';
 export interface IStore {
     taskList: Task
     addedItemPath?: string
@@ -9,7 +8,6 @@ export interface IStore {
     showSidebar?: boolean
     loading?: boolean
     syncStatus?: SyncStatuses
-    // syncTarget?: SyncTargets
     updatedAt?: number
 }
 
@@ -96,7 +94,6 @@ export interface IActions {
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,
     setSyncStatus: (status: SyncStatuses) => IStore,
-    // setSyncTarget: (target: SyncTargets) => IStore,
     saveToLocalStorage: () => IStore,
     moveTaskAction: (movedItemPath: string, siblingPath: string | null) => IStore
 }

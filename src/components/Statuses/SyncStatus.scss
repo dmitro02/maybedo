@@ -1,12 +1,29 @@
-.syncing {
-    animation: rotation 2s reverse infinite linear;
-}
-  
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
+@import '../../styles/variables';
+
+.sync-status {
+    .no-hover:hover {
+        color: $text-gray;
+        cursor: default;
     }
-    100% {
-        transform: rotate(360deg);
+
+    .failure {
+        color: $red2;
+    }
+
+    .failure:hover {
+        color: $red3;
+    }
+
+    .syncing {
+        animation: rotation 2s reverse infinite linear;
+    }
+      
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
 }

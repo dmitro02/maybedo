@@ -85,7 +85,7 @@ const MainContainer = () => {
                         </div>
                     }
                     <div className="row-btns">
-                    <SyncStatus status={syncStatus} />
+                        <SyncStatus status={syncStatus} />
                         {isSettingsOpened 
                             ? <ArrowBackButton action={toggleSettings} title="close settings" />
                             : <SettingsButton action={toggleSettings} />

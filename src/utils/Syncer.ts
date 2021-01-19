@@ -29,7 +29,9 @@ export default class Syncer {
         this.onDemandLocal = this.onDemandLocal.bind(this)
     }
 
-    public static getInstance(actions: IActions): Syncer {
+    public static getInstance(actions?: IActions): Syncer {
+        if (!actions) return Syncer.instance;
+
         if (!Syncer.instance) {
             Syncer.instance = new Syncer(actions);
         }
@@ -83,9 +85,9 @@ export default class Syncer {
         this.isSyncFaild = false
         this.actions.setSyncStatus(SyncStatuses.InProgress)
 
-        const lsUpdatedAt = LsConnector.getLsUpdatedAt()
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
-                
+        const lsUpdatedAt = LsConnector.getLsUpdatedAt()
+        
         if (cloudUpdatedAt > lsUpdatedAt) {
             const taskList = await this.getCloudTaskList()
    
@@ -104,9 +106,7 @@ export default class Syncer {
             this.saveToLS()
         }
 
-        this.isSyncFaild 
-            ? this.actions.setSyncStatus(SyncStatuses.Failure)
-            : this.actions.setSyncStatus(SyncStatuses.Success)
+        this.setSyncResultStatus()
     }
 
     private onLoadLocal() {
@@ -126,8 +126,8 @@ export default class Syncer {
 
         this.saveToLS()
         
-        const lsUpdatedAt = LsConnector.getLsUpdatedAt()
-        const cloudUpdatedAt = await this.getCloudUpdatedAt()     
+        const cloudUpdatedAt = await this.getCloudUpdatedAt()
+        const lsUpdatedAt = LsConnector.getLsUpdatedAt()     
         
         if (cloudUpdatedAt > lsUpdatedAt) {
             const taskList = await this.getCloudTaskList()
@@ -140,16 +140,14 @@ export default class Syncer {
             await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
         }
 
-        this.isSyncFaild 
-            ? this.actions.setSyncStatus(SyncStatuses.Failure)
-            : this.actions.setSyncStatus(SyncStatuses.Success)
+        this.setSyncResultStatus()
     }
 
-    onDemandLocal() {
+    private onDemandLocal() {
         this.saveToLS()
     }
 
-    saveToLS() {        
+    private saveToLS() {        
         this.actions.saveToLocalStorage()
     }
 
@@ -206,6 +204,15 @@ export default class Syncer {
                 return new DropboxConnector()
             default:
                 return null
+        }
+    }
+
+    private setSyncResultStatus() {
+        if (this.isSyncFaild) {
+            this.actions.setSyncStatus(SyncStatuses.Failure)
+        } else {
+            this.actions.setSyncStatus(SyncStatuses.Success)
+            setTimeout(() => this.actions.setSyncStatus(SyncStatuses.Idle), 4000)
         }
     }
 }

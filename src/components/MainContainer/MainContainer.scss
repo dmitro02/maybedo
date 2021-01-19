@@ -34,6 +34,10 @@
         .open-menu-btn {
             display: none;
         }
+
+        .row-btns:last-child .common-btn:first-child {
+            margin-right: 10px;
+        }
     }
 }
 

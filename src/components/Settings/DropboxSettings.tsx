@@ -23,7 +23,7 @@ const DropboxSettings = () => {
 
             actions.setBanner(new SuccessBanner('Application successfully authorized'))
         } catch(e) {
-            actions.setBanner(new FailureBanner('Application is not authorized'))
+            actions.setBanner(new FailureBanner('Error: ' + e.message))
         }
         actions.setLoading(false)
     }

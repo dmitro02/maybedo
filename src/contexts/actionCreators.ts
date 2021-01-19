@@ -6,7 +6,6 @@ import {
     Task,
     IActions
 } from '../types'
-// import { SyncTargets } from '../utils/Syncer';
 
 export const createActions = (dispatch: Function): IActions => ({
     setAppData: (state: IStore) => dispatch(setAppData(state)),
@@ -19,7 +18,6 @@ export const createActions = (dispatch: Function): IActions => ({
     setShowSidebar: (value: boolean) => dispatch(setShowSidebar(value)),
     setLoading: (value: boolean) => dispatch(setLoading(value)),
     setSyncStatus: (status: SyncStatuses) => dispatch(setSyncStatus(status)),
-    // setSyncTarget: (target: SyncTargets) => dispatch(setSyncTarget(target)),
     saveToLocalStorage: () => dispatch(saveToLocalStorage()),
     moveTaskAction: (movedItemPath: string, siblingPath: string | null) => 
         dispatch(moveTaskAction(movedItemPath, siblingPath)),
@@ -36,7 +34,6 @@ export enum actionTypes {
     SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR',
     SET_LOADING = 'SET_LOADING',
     SET_SYNC_STATUS = 'SET_SYNC_STATUS',
-    // SET_SYNC_TARGET = 'SET_SYNC_TARGET',
     SELECT_TASK = 'SELECT_TASK',
     SAVE_TO_LS = 'SAVE_TO_LS',
 }
@@ -96,11 +93,6 @@ export const setSyncStatus = (status: SyncStatuses) => ({
     type: actionTypes.SET_SYNC_STATUS,
     status
 })
-
-// export const setSyncTarget = (target: SyncTargets) => ({
-//     type: actionTypes.SET_SYNC_TARGET,
-//     target
-// })
 
 export const saveToLocalStorage = () => ({
     type: actionTypes.SAVE_TO_LS
