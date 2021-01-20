@@ -29,15 +29,6 @@ const DropboxSettings = () => {
         actions.setLoading(false)
     }
 
-    const checkConnection = async () => {
-        try {
-            await dbx.check()
-            actions.setBanner(new SuccessBanner('Successfully accessed Dropbox'))
-        } catch(e) {
-            actions.setBanner(new FailureBanner(e.message))
-        } 
-    }
-
     return (
         <>
             <h3>
@@ -60,8 +51,6 @@ const DropboxSettings = () => {
                 />
                 <GoArrowRight className="arrow-right" />
                 <button onClick={authorizeApp}>Authorize</button>
-                <GoArrowRight className="arrow-right" />
-                <button onClick={checkConnection}>Check</button>
             </div>
         </>
     )

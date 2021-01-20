@@ -28,11 +28,17 @@
             height: 40px;
         }
 
+        select {
+            padding: 5px;
+            margin: 10px 0;
+        }
+
         button {
             margin: 10px 0px 10px 0;
             color: peru;
             padding: 0px 6px;
             cursor: pointer;
+            white-space: nowrap;
         }
         
         .input-hidden {
@@ -49,13 +55,12 @@
         }
     
         .words-between {
-            margin: 0 10px 0 5px;
+            margin: 0 10px;
         }
         
         .data-types-select {
             padding: 5px;
             height: 40px;
-
         }
     
         input::placeholder {
@@ -82,10 +87,7 @@
         .dropbox-flow {
             display: flex;
             align-items: center;
-
-            button: {
-                margin-right: 0;
-            }
+            flex-wrap: wrap;
         }
     }
 }

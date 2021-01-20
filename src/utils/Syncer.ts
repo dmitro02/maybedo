@@ -12,7 +12,7 @@ const SYNC_INTERVAL_IN_MINUTES = 5
 
 export enum SyncTargets {
     Dropbox = 'DROPBOX',
-    LocalOnly = 'LOCAL_ONLY'
+    Disabled = 'DISABLED'
 }
 
 export default class Syncer {
