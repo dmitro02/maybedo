@@ -17,6 +17,7 @@
     "nanoid": "^3.1.20",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^4.1.0",
     "react-scripts": "3.4.1",
     "sortablejs": "^1.10.2",
     "typescript": "^3.7.5"

@@ -4,7 +4,7 @@
     position: relative;
 
     .settings-block {
-        font-size: $font-size-3;
+        font-size: $font-size-1;
         color: $text-gray;
         margin-left: 10px;
         margin-bottom: 40px;
@@ -18,20 +18,21 @@
             font-size: $font-size-7;
             margin: 12px 0;
         }
+
+        h3 {
+            font-size: $font-size-5;
+            margin: 12px 0;
+        }
     
         button, input {
             height: 40px;
         }
-    
+
         button {
-            margin: 10px 5px 10px 0;
+            margin: 10px 0px 10px 0;
             color: peru;
-            padding: 5px 10px;
+            padding: 0px 6px;
             cursor: pointer;
-        }
-    
-        input {
-            margin-right: 5px;
         }
         
         .input-hidden {
@@ -40,6 +41,7 @@
 
         input.auth-code {
             max-width: 100%;
+            padding: 0 6px;
         }
         
         .import-btn {
@@ -53,6 +55,7 @@
         .data-types-select {
             padding: 5px;
             height: 40px;
+
         }
     
         input::placeholder {
@@ -69,6 +72,20 @@
             font-size: 2rem;
             margin-left: 15px;
             cursor: help;
+        }
+
+        .arrow-right {
+            font-size: $font-size-5;
+            color: peru;
+        }
+
+        .dropbox-flow {
+            display: flex;
+            align-items: center;
+
+            button: {
+                margin-right: 0;
+            }
         }
     }
 }

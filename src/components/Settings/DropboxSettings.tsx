@@ -6,6 +6,7 @@ import {
     SuccessBanner 
 } from '../../types'
 import Syncer from '../../utils/Syncer'
+import { GoArrowRight } from "react-icons/go";
 
 const DropboxSettings = () => {
     const { actions } = useTasksContext()
@@ -38,29 +39,31 @@ const DropboxSettings = () => {
     }
 
     return (
-        <div className="settings-block">
-            <h2>
-                Dropbox Synchronization
+        <>
+            <h3>
+                Connect Dropbox
                 {dbx.isConfigured && 
                     <span className="already-authorized" title="Already configured">
                         &#10004;
                     </span>
                 }
-            </h2>
-            <p>
-                Get authorization code <a href={dbx.authUrl} target="_black">here</a>
-                , insert it into the input below and click "Authorize" button. 
-            </p>
-            <input 
-                type="text" 
-                size={48} 
-                placeholder="authorizarion code"
-                ref={authTokenRef}
-                className="auth-code"
-            />
-            <button onClick={authorizeApp}>Authorize</button>
-            <button onClick={checkConnection}>Check</button>
-        </div>
+            </h3>
+            <div className="dropbox-flow">
+                <button onClick={()=> window.open(dbx.authUrl, "_blank")} type="button">Get Code</button>
+                <GoArrowRight className="arrow-right" />
+                <input 
+                    type="text" 
+                    size={48} 
+                    placeholder="insert authorizarion code here"
+                    ref={authTokenRef}
+                    className="auth-code"
+                />
+                <GoArrowRight className="arrow-right" />
+                <button onClick={authorizeApp}>Authorize</button>
+                <GoArrowRight className="arrow-right" />
+                <button onClick={checkConnection}>Check</button>
+            </div>
+        </>
     )
 }
 

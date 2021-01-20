@@ -16,7 +16,10 @@ const Settings = (props: Props) => {
         <div className="settings">
             <ExportImport backToTaskList={backToTaskList} />
             <Divider />
-            <DropboxSync />
+            <div className="settings-block">
+                <h2>Cloud Synchronization</h2>
+                <DropboxSync />
+            </div>
         </div>
     )
 }
