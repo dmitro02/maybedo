@@ -1,4 +1,4 @@
-## 2-d part libraries
+## 2-d party libraries
 https://github.com/SortableJS/Sortable 
 
 
