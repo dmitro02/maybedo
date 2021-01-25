@@ -96,8 +96,10 @@ export default class Syncer {
         } else if (cloudUpdatedAt < lsUpdatedAt) {
             const taskList = LsConnector.getLsTaskList()
 
-            this.loadToStore(lsUpdatedAt, taskList)
-            await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
+            if (taskList) {
+                this.loadToStore(lsUpdatedAt, taskList)
+                await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
+            }
         } else if (cloudUpdatedAt === lsUpdatedAt) {
             const taskList = LsConnector.getLsTaskList()
 
@@ -137,7 +139,9 @@ export default class Syncer {
         } else if (cloudUpdatedAt < lsUpdatedAt) {
             const taskList = LsConnector.getLsTaskList()
 
-            await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
+            if (taskList) {
+                await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
+            }
         }
 
         this.setSyncResultStatus()

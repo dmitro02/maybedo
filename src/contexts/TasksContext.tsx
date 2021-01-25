@@ -8,19 +8,14 @@ import {
     IStore, 
     Task } from '../types'
 import { 
-    createItem,
-    updateItem,
-    deleteItem,
-    moveItem
-} from './contextUtils'
-import { 
     createActions, 
     actionTypes 
 } from '../contexts/actionCreators'
 import LsConnector from "../utils/LsConnector"
+import * as tree from '../utils/TaskTree'
 
 const initialState: IStore = {
-    taskList: new Task('0', 'Projects')
+    taskList: tree.getLinkedTree(new Task('Projects', null))
 }
 
 const TasksContext = createContext<any>(undefined)
@@ -44,43 +39,52 @@ export const useTasksContext = (): IContext => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
-        case actionTypes.CREATE_TASK: {
-            const { item } = action 
+        case actionTypes.CASCADING_UPDATE: {
             return {
                 ...state,
                 updatedAt: Date.now(),
-                taskList: createItem(state.taskList, item),
-                addedItemPath: item.path
             }
         }
-        case actionTypes.UPDATE_TASK: {
-            return {
-                ...state,
-                updatedAt: Date.now(),
-                taskList: updateItem(state.taskList, action.item)
-            }
-        }
-        case actionTypes.SELECT_TASK: {
-            return {
-                ...state,
-                taskList: updateItem(state.taskList, action.parentItem)
-            }
-        }
-        case actionTypes.DELETE_TASK: {
-            return {
-                ...state,
-                updatedAt: Date.now(),
-                taskList: deleteItem(state.taskList, action.item)
-            }
-        }
-        case actionTypes.MOVE_TASK: {
-            const { movedItemPath, siblingPath } = action
-            return {
-                ...state,
-                updatedAt: Date.now(),
-                taskList: moveItem(state.taskList, movedItemPath, siblingPath)
-            }
-        }
+        // case actionTypes.CREATE_TASK: {
+        //     tree.createTask(action.item)
+        //     return {
+        //         ...state,
+        //         updatedAt: Date.now(),
+        //         // taskList: tree.createTask(action.item)
+        //     }
+        // }
+        // case actionTypes.UPDATE_TASK: {
+        //     tree.updateTask(action.item)
+        //     return {
+        //         ...state,
+        //         updatedAt: Date.now(),
+        //         // taskList: tree.updateTask(action.item)
+        //     }
+        // }
+        // case actionTypes.SELECT_TASK: {
+        //     tree.selectTask(action.item)
+        //     return {
+        //         ...state,
+        //         updatedAt: Date.now(),
+        //         // taskList: tree.selectTask(action.item)
+        //     }
+        // }
+        // case actionTypes.DELETE_TASK: {
+        //     tree.deleteTask(action.item)
+        //     return {
+        //         ...state,
+        //         updatedAt: Date.now(),
+        //         // taskList: tree.deleteTask(action.item)
+        //     }
+        // }
+        // case actionTypes.MOVE_TASK: {
+        //     const { movedItemPath, siblingPath } = action
+        //     return {
+        //         ...state,
+        //         updatedAt: Date.now(),
+        //         taskList: moveItem(state.taskList, movedItemPath, siblingPath)
+        //     }
+        // }
         case actionTypes.SET_APP_DATA: {
             return { ...action.state }
         }

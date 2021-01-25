@@ -4,27 +4,16 @@ import { RecordConfig } from '../Record/Record'
 import { Task } from '../../types'
 import './SubTaskList.scss'
 
-const activeRecordConfig: RecordConfig = {
-    useDragBtn: true,
-    isEditable: true
-}
+const activeRecordConfig: RecordConfig = { isEditable: true }
 
-const completedRecordConfig: RecordConfig = { 
-    ...activeRecordConfig, 
-    useDragBtn: false
-}
+const completedRecordConfig: RecordConfig = { isEditable: true }
 
 type Props = { 
     task: Task,
     isDisplayed?: boolean
 }
 
-const SubTaskList = (props: Props) => {
-    const {
-        task,
-        isDisplayed = false
-    } = props
-
+const SubTaskList = ({ task, isDisplayed = false }: Props) => {
     return (
         isDisplayed
             ? <RecordList 

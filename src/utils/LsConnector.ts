@@ -1,12 +1,12 @@
 import { SyncTargets } from './Syncer';
 import { Task } from '../types';
-
+import { getLinkedTree, toJSON } from './TaskTree';
 
 export default class LsConnector {
     public static saveToLocalStorage = (updatedAt: number, taskList: Task | null): void => {
         if (!taskList) return
         LsConnector.setLsUpdatedAt(updatedAt)
-        LsConnector.setLsTaskList(taskList)
+        LsConnector.setLsTaskList(getLinkedTree(taskList))
     }
     
     public static getLsUpdatedAt(): number {
@@ -18,13 +18,13 @@ export default class LsConnector {
         localStorage.setItem('updatedAt', updatedAt.toString())
     }
     
-    public static getLsTaskList(): Task {
+    public static getLsTaskList(): Task | null {
         const item = localStorage.getItem('taskList')
-        return item && item !== '{}' ? JSON.parse(item) : null
+        return (item && item !== '{}') ? getLinkedTree(JSON.parse(item)) : null
     }
     
     public static setLsTaskList(taskList: Task): void {
-        localStorage.setItem('taskList', JSON.stringify(taskList))
+        localStorage.setItem('taskList', toJSON(taskList))
     }
 
     public static getSyncTarget(): SyncTargets {

@@ -1,23 +1,20 @@
 import React from 'react'
-import { useTasksContext } from '../../contexts/TasksContext'
 import './ProjectList.scss'
 import RecordList from '../RecordList/RecordList'
 import { RecordConfig } from '../Record/Record'
-
-const activeRecordConfig: RecordConfig = { useDragBtn: true }
+import { Task } from '../../types'
 
 const titleRecordConfig: RecordConfig = { isTitle: true }
 
-const ProjectList = () => {
-    const { store } = useTasksContext()
+type Props = {
+    rootTask: Task
+}
 
-    const root = store.taskList
-
+const ProjectList = ({ rootTask }: Props ) => {
     return (
         <RecordList 
             classNames={['project-list']}
-            root={root}
-            activeRecordConfig={activeRecordConfig}
+            root={rootTask}
             completedRecordConfig={{}}
             titleRecordConfig={titleRecordConfig}
         />

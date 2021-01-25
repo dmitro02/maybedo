@@ -7,7 +7,6 @@ import {
     getCaretPosition,
     setCaretPosition
 } from '../../utils/textInputUtils'
-import { isProjectLevelItem } from '../../utils/pathUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
 import { 
@@ -15,15 +14,13 @@ import {
     ExpandButton,
     CollapseButton,
     AddButton,
-    DragButton,
     CheckmarkButton,
-    EmptyButton,
     ConfirmButton,
     CloseButton
  } from '../Buttons/Buttons'
+ import * as tree from '../../utils/TaskTree'
 
 export type RecordConfig = {
-    useDragBtn?: boolean
     isEditable?: boolean
     isTitle?: boolean
 }
@@ -32,15 +29,19 @@ const IS_MOBILE = isMobile()
 
 type Props = { 
     item: Task, 
-    config: RecordConfig, 
-    parent: Task
+    config?: RecordConfig, 
 }
 
-const Record = ({ item, config, parent }: Props) => {
-    const { isDone: initialState, text, path } = item
+const Record = ({ item, config = {}}: Props) => {
+    const {
+        id, 
+        isDone: initialState, 
+        text, 
+        isNew, 
+        parent 
+    } = item
     
     const {
-        useDragBtn = false,
         isEditable = false,
         isTitle = false
     } = config
@@ -56,7 +57,7 @@ const Record = ({ item, config, parent }: Props) => {
     
     const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
-    const { store, actions } = useTasksContext()
+    const { actions } = useTasksContext()
 
     const recordContentRef = useRef<HTMLDivElement>(null)
 
@@ -65,36 +66,27 @@ const Record = ({ item, config, parent }: Props) => {
     })
 
     useEffect(() => {
-        if (isJustAdded) {
+        if (isNew) {            
             setContentEditable(true)
             setFocus()
             loadCaretPositionFromState()
-            selectRecord(item)
+            item.isNew = false
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [path, store.addedItemPath])
+    }, [])
 
-    const updateRecord = (item: Task) => actions.updateTaskAction(item)
+    const updateRecord = () => actions.cascadingUpdate()
 
     const deleteRecord = (item: Task) => {
-        if (isProjectLevelItem(item)) {
-            if (parent.tasks.length === 1) {
-                parent.selectedSubTaskPath = undefined
-            } else if (item === parent.tasks[0]) {
-                parent.selectedSubTaskPath = parent.tasks[1].path
-            } else {
-                parent.selectedSubTaskPath = parent.tasks[0].path
-            }
-            actions.updateTaskAction(parent)
-        }
         setShowDeleteConfirmation(false)
-        actions.deleteTaskAction(item)
+        tree.deleteTask(item)
+        actions.cascadingUpdate()
     }
 
-    const selectRecord = (item: Task) => {
-        if (parent.selectedSubTaskPath === item.path) return
-        const updatedParent = { ...parent, selectedSubTaskPath: item.path }
-        actions.selectTaskAction(updatedParent)
+    const selectRecord = (item: Task) => {   
+        if (parent && parent.selectedSubTaskId === id) return
+        tree.selectTask(item)
+        actions.cascadingUpdate()
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
@@ -105,14 +97,14 @@ const Record = ({ item, config, parent }: Props) => {
 
     const handleMouseUpOnCheckbox = (e: any) => {
         if (e.button === 0) { // left click only
-            updateRecord(item)
+            updateRecord()
         }
     }
         
     const handleInput = debounceInput((text: string) => {
         item.text = text
         saveCaretPositionToState()
-        updateRecord(item)
+        updateRecord()
     })
 
     const openDeleteConfirmation = (e: any) => {
@@ -146,9 +138,7 @@ const Record = ({ item, config, parent }: Props) => {
 
     const setFocus = () => recordContentRef.current?.focus()
 
-    const isJustAdded = store.addedItemPath === path && !isTitle
-
-    const isSelected = path === parent.selectedSubTaskPath && !isTitle
+    const isSelected = parent && id === parent.selectedSubTaskId && !isTitle
 
     const hasSubtasks = !!item.tasks.length
 
@@ -169,10 +159,10 @@ const Record = ({ item, config, parent }: Props) => {
         if (showSubtasks) {
             return <CollapseButton action={action} classNames={classNames} />
         }
-        if (!hasSubtasks && !(parent.isDone || isDone)) {
+        if (parent && !hasSubtasks && !(parent!.isDone || isDone)) {
             return <AddButton 
                         action={action} 
-                        classNames={[...classNames, hiddenBtnClassName]} 
+                        classNames={[...classNames, hiddenBtnClassName]}
                         title='add subtask'
                     />
         }
@@ -184,7 +174,7 @@ const Record = ({ item, config, parent }: Props) => {
         <>
             <div 
                 className={recordClassName}
-                id={path} 
+                id={id} 
                 onClick={() => {
                     saveCaretPositionToState()
                     if (!isTitle) {
@@ -194,7 +184,6 @@ const Record = ({ item, config, parent }: Props) => {
                 }}
             >
                 <div className="row-btns">
-                    {useDragBtn ? <DragButton /> : <EmptyButton />}
                     <CheckmarkButton 
                         actionOnMouseDown={handleMouseDownOnCheckbox} 
                         actionOnMouseUp={handleMouseUpOnCheckbox}

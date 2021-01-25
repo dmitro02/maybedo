@@ -1,23 +1,18 @@
-import React, { useRef, useEffect } from 'react'
-import { useTasksContext } from '../../contexts/TasksContext'
+import React, { useRef } from 'react'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import { Task } from '../../types'
 import Record, { RecordConfig } from '../Record/Record'
-import Sortable from 'sortablejs'
-import { isTaskLevelItem } from '../../utils/pathUtils'
 
 type Props = { 
     classNames?: string[],
     root: Task,
-    activeRecordConfig: RecordConfig,
-    completedRecordConfig: RecordConfig,
+    activeRecordConfig?: RecordConfig,
+    completedRecordConfig?: RecordConfig,
     titleRecordConfig?: RecordConfig
 }
 
 const RecordList = (props: Props) => {
-    const { store, actions } = useTasksContext()
-
     const {
         classNames = [],
         root,
@@ -33,38 +28,24 @@ const RecordList = (props: Props) => {
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
-    const handleItemMove = (e: any) => {
-        const movedItemPath = e.item.id
-        const sibling = e.item.previousSibling
-        const siblingPath = sibling ? sibling.id : null
-        actions.moveTaskAction(movedItemPath, siblingPath)
-    }
-
-    useEffect(() => {
-        new Sortable(activeItemListRef.current!, {
-            animation: 150, 
-            onEnd: handleItemMove
-        })
-    })
-
     return (
         <div className={classNames.join(' ')}>
             {titleRecordConfig && 
-                <Record 
-                    item={root} 
-                    config={titleRecordConfig}
-                    parent={store.taskList}
-                />
+                <>
+                    <Record 
+                        item={root} 
+                        config={titleRecordConfig}
+                    />
+                    <Divider />
+                </>
             }
-            <Divider isHidden={isTaskLevelItem(root)} />
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(
                     (task: Task) => 
                         <Record 
-                            key={task.path} 
+                            key={task.id} 
                             item={task} 
                             config={activeRecordConfig}
-                            parent={root}
                         />
                 )}
             </div>
@@ -74,10 +55,9 @@ const RecordList = (props: Props) => {
                 {completedTasks.map(
                     (task: Task) => 
                         <Record 
-                            key={task.path}
+                            key={task.id}
                             item={task} 
                             config={completedRecordConfig}
-                            parent={root}
                         />
                 )}
             </div>

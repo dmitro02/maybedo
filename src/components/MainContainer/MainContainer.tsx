@@ -17,6 +17,7 @@ import Fog from '../Fog/Fog'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import SyncStatus from '../Statuses/SyncStatus'
+import { Task } from '../../types'
 
 const MainContainer = () => {
     const { store, actions } = useTasksContext()
@@ -24,7 +25,11 @@ const MainContainer = () => {
     const { 
         showSidebar = false, 
         loading,
-        syncStatus
+        syncStatus,
+        taskList: rootTask,
+        taskList: {
+            tasks: projectList
+        }
     } = store
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
@@ -51,6 +56,10 @@ const MainContainer = () => {
         }
     }
 
+    const selectedProject = projectList.length 
+        ? projectList.find((task: Task) => task.id === rootTask.selectedSubTaskId) || projectList[0]
+        : null
+
     return (
         <div className="main-container">   
             <Modal />
@@ -64,11 +73,10 @@ const MainContainer = () => {
                             classNames={['close-menu-btn']} 
                             title="hide projects list"
                         />
-                        <EmptyButton />
                     </div>
                 </div>
                 <Divider />
-                <ProjectList />
+                <ProjectList rootTask={rootTask}/>
             </div>
             <div className="right-panel" onClick={closeLeftPanel}>
                 <Fog isDisplayed={showSidebar} />
@@ -76,7 +84,6 @@ const MainContainer = () => {
                 <div className="top-panel">
                     {!isSettingsOpened &&
                         <div className="row-btns">
-                            <EmptyButton />
                             <MenuButton 
                                 action={openLeftPanel} 
                                 classNames={['open-menu-btn']}
@@ -97,7 +104,7 @@ const MainContainer = () => {
                 <div className="right-content">
                     {isSettingsOpened 
                         ? <Settings backToTaskList={toggleSettings} />
-                        : <TaskList />
+                        : <TaskList rootTask={selectedProject} />
                     }
                 </div>
             </div>

@@ -1,8 +1,9 @@
+import { nanoid } from 'nanoid';
 import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
+
 export interface IStore {
     taskList: Task
-    addedItemPath?: string
     modal?: IModal
     banner?: IBanner
     showSidebar?: boolean
@@ -12,17 +13,22 @@ export interface IStore {
 }
 
 export class Task {
-    path: string
+    id: string
     text: string
     isDone: boolean
     tasks: Task[]
-    selectedSubTaskPath?: string
+    selectedSubTaskId?: string
+    isNew: boolean
+    parent: Task | null
+    updatedAt?: number
 
-    constructor(path: string, text: string, isDone: boolean = false) {
-        this.path = path
+    constructor(text: string, parent: Task | null, isDone: boolean = false, ) {
+        this.id = nanoid()
         this.text = text
         this.isDone = isDone
         this.tasks = []
+        this.isNew = false
+        this.parent = parent
     }
 }
 
@@ -47,9 +53,9 @@ export interface IBanner {
 }
 
 export enum BannerTypes {
-    Success = "success",
-    Warning = "warning",
-    Failure = "failure"
+    Success = "SUCCESS",
+    Warning = "WARNING",
+    Failure = "FAILURE"
 }
 
 export class FailureBanner implements IBanner {
@@ -85,17 +91,13 @@ export interface ICloudConnector {
 
 export interface IActions {
     setAppData: (state: IStore) => IStore,
-    createTaskAction: (item: Task) => IStore,
-    updateTaskAction: (item: Task) => IStore,
-    deleteTaskAction: (item: Task) => IStore,
-    selectTaskAction: (parentItem: Task) => IStore,
     setModal: (modal: IModal | null) => IStore,
     setBanner: (banner: IBanner | null) => IStore,
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,
     setSyncStatus: (status: SyncStatuses) => IStore,
     saveToLocalStorage: () => IStore,
-    moveTaskAction: (movedItemPath: string, siblingPath: string | null) => IStore
+    cascadingUpdate: () => IStore
 }
 
 export interface IContext {

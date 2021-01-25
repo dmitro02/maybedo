@@ -6,7 +6,7 @@ import {
     IModal, 
     Task
 } from '../../types'
-import { initPaths } from '../../utils/pathUtils'
+// import { initPaths } from '../../utils/pathUtils'
 import { 
     convertDataToHtmlString,
     convertDataToJsonString, 
@@ -14,6 +14,7 @@ import {
     getExportFileName,
     validateExportedData
 } from '../../utils/persistDataUtils'
+import { getLinkedTree } from '../../utils/TaskTree'
 
 type Props = {
     backToTaskList(): void
@@ -62,7 +63,7 @@ const ExportImport = (props: Props) => {
         let taskList: Task
         try {
             taskList = JSON.parse(reader.result as string)
-            taskList = initPaths(taskList)
+            taskList = getLinkedTree(taskList)
         } catch(err) {
             const banner: IBanner = {
                 text: 'Failed to parse JSON file',

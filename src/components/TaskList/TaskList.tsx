@@ -1,14 +1,10 @@
 import React from 'react'
-import { useTasksContext } from '../../contexts/TasksContext'
 import { Task } from '../../types'
 import { RecordConfig } from '../Record/Record'
 import './TaskList.scss'
 import RecordList from '../RecordList/RecordList'
 
-const activeRecordConfig: RecordConfig = {
-    useDragBtn: true,
-    isEditable: true
-}
+const activeRecordConfig: RecordConfig = { isEditable: true }
 
 const completedRecordConfig: RecordConfig = { isEditable: true } 
 
@@ -17,21 +13,17 @@ const titleRecordConfig: RecordConfig = {
     isTitle: true
 }
 
-const TaskList = () => {
-    const { store } = useTasksContext()
+type Props = {
+    rootTask: Task | null
+}
 
-    const { tasks } = store.taskList
-
-    const root = tasks.length 
-        ? tasks.find((p: Task) => p.path === store.taskList.selectedSubTaskPath)
-        : null
-
-    if (!root) return null
+const TaskList = ({ rootTask }: Props) => {
+    if (!rootTask) return null
 
     return (
         <RecordList 
             classNames={['task-list']}
-            root={root}
+            root={rootTask}
             activeRecordConfig={activeRecordConfig}
             completedRecordConfig={completedRecordConfig}
             titleRecordConfig={titleRecordConfig}

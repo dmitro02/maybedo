@@ -9,25 +9,16 @@ import {
 
 export const createActions = (dispatch: Function): IActions => ({
     setAppData: (state: IStore) => dispatch(setAppData(state)),
-    createTaskAction: (item: Task) => dispatch(createTaskAction(item)),
-    updateTaskAction: (item: Task) => dispatch(updateTaskAction(item)),
-    deleteTaskAction: (item: Task) => dispatch(deleteTaskAction(item)),
-    selectTaskAction: (parentItem: Task) => dispatch(selectTaskAction(parentItem)),
     setModal: (modal: IModal | null) => dispatch(setModal(modal)),
     setBanner: (banner: IBanner | null) => dispatch(setBanner(banner)),
     setShowSidebar: (value: boolean) => dispatch(setShowSidebar(value)),
     setLoading: (value: boolean) => dispatch(setLoading(value)),
     setSyncStatus: (status: SyncStatuses) => dispatch(setSyncStatus(status)),
     saveToLocalStorage: () => dispatch(saveToLocalStorage()),
-    moveTaskAction: (movedItemPath: string, siblingPath: string | null) => 
-        dispatch(moveTaskAction(movedItemPath, siblingPath)),
+    cascadingUpdate: () => dispatch(cascadingUpdateAction()) 
 })
 
 export enum actionTypes {
-    CREATE_TASK = 'CREATE_TASK',
-    UPDATE_TASK = 'UPDATE_TASK',
-    DELETE_TASK = 'DELETE_TASK',
-    MOVE_TASK = 'MOVE_TASK',
     SET_APP_DATA = 'SET_APP_DATA',
     SET_MODAL = 'SET_MODAL',
     SET_BANNER = 'SET_BANNER',
@@ -36,32 +27,16 @@ export enum actionTypes {
     SET_SYNC_STATUS = 'SET_SYNC_STATUS',
     SELECT_TASK = 'SELECT_TASK',
     SAVE_TO_LS = 'SAVE_TO_LS',
+    CASCADING_UPDATE = 'CASCADING_UPDATE'
 }
 
-export const createTaskAction = (item: Task) => ({
-    type: actionTypes.CREATE_TASK,
-    item
+export const cascadingUpdateAction = () => ({
+    type: actionTypes.CASCADING_UPDATE,
 }) 
 
-export const updateTaskAction = (item: Task) => ({
-    type: actionTypes.UPDATE_TASK,
-    item
-}) 
-
-export const deleteTaskAction = (item: Task) => ({
-    type: actionTypes.DELETE_TASK,
-    item
-})
-
-export const moveTaskAction = (movedItemPath: string, siblingPath: string | null) => ({
-    type: actionTypes.MOVE_TASK,
-    movedItemPath,
-    siblingPath
-}) 
-
-export const selectTaskAction = (parentItem: Task) => ({
+export const selectTaskAction = (item: Task) => ({
     type: actionTypes.SELECT_TASK,
-    parentItem
+    item
 })
 
 export const setAppData = (state: IStore) => ({

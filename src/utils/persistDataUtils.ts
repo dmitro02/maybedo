@@ -8,7 +8,8 @@ export enum DataTypes {
 export const convertDataToJsonString = (taskList: Task): string => {
     const excludeKeys = [
         'path',
-        'selectedSubTaskPath'
+        'selectedSubTaskPath',
+        'parent'
     ]
     const replacer = (key: string, value: any) =>
         excludeKeys.includes(key) ? undefined : value

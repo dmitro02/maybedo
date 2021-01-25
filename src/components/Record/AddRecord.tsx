@@ -1,9 +1,10 @@
 import React, { memo } from 'react'
 import './Record.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { constructNewPath } from '../../utils/pathUtils'
+// import { constructNewPath } from '../../utils/pathUtils'
 import { Task } from '../../types'
 import { AddButton, EmptyButton } from '../Buttons/Buttons'
+import { createTask, selectTask } from '../../utils/TaskTree'
 
 const AddRecord = ({ root }: { root: Task }) => {
     const { actions } = useTasksContext()
@@ -11,15 +12,17 @@ const AddRecord = ({ root }: { root: Task }) => {
     const createRecord = (e: any) => {
         const taskText = e.target.textContent.trim()
         if (!taskText) return
-        const item: Task = new Task(constructNewPath(root), taskText)
-        actions.createTaskAction(item)
+        const task: Task = new Task(taskText, root)
+        task.isNew = true
+        createTask(task)
+        selectTask(task)
         e.target.textContent = ''
+        actions.cascadingUpdate()
     }
 
     return (  
         <div className="record add-record">
             <div className="row-btns">
-                <EmptyButton />
                 <AddButton />
             </div>
             <span 
