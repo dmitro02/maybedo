@@ -1,9 +1,8 @@
 import React, { memo } from 'react'
 import './Record.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
-// import { constructNewPath } from '../../utils/pathUtils'
 import { Task } from '../../types'
-import { AddButton, EmptyButton } from '../Buttons/Buttons'
+import { AddButton } from '../Buttons/Buttons'
 import { createTask, selectTask } from '../../utils/TaskTree'
 
 const AddRecord = ({ root }: { root: Task }) => {

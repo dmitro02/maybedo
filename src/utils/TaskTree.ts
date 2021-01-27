@@ -29,6 +29,7 @@ const linkTasks = (task: Task, parentTask: Task | null): void => {
 
 export const toJSON = (taskList: Task) => {
     const excludeKeys = [
+        // TODO: remove path when no longer exists
         'path',
         'parent'
     ]

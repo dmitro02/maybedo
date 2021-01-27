@@ -45,46 +45,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
                 updatedAt: Date.now(),
             }
         }
-        // case actionTypes.CREATE_TASK: {
-        //     tree.createTask(action.item)
-        //     return {
-        //         ...state,
-        //         updatedAt: Date.now(),
-        //         // taskList: tree.createTask(action.item)
-        //     }
-        // }
-        // case actionTypes.UPDATE_TASK: {
-        //     tree.updateTask(action.item)
-        //     return {
-        //         ...state,
-        //         updatedAt: Date.now(),
-        //         // taskList: tree.updateTask(action.item)
-        //     }
-        // }
-        // case actionTypes.SELECT_TASK: {
-        //     tree.selectTask(action.item)
-        //     return {
-        //         ...state,
-        //         updatedAt: Date.now(),
-        //         // taskList: tree.selectTask(action.item)
-        //     }
-        // }
-        // case actionTypes.DELETE_TASK: {
-        //     tree.deleteTask(action.item)
-        //     return {
-        //         ...state,
-        //         updatedAt: Date.now(),
-        //         // taskList: tree.deleteTask(action.item)
-        //     }
-        // }
-        // case actionTypes.MOVE_TASK: {
-        //     const { movedItemPath, siblingPath } = action
-        //     return {
-        //         ...state,
-        //         updatedAt: Date.now(),
-        //         taskList: moveItem(state.taskList, movedItemPath, siblingPath)
-        //     }
-        // }
         case actionTypes.SET_APP_DATA: {
             return { ...action.state }
         }
@@ -105,10 +65,7 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         }
         case actionTypes.SAVE_TO_LS: {
             const { updatedAt = 0, taskList } = state
-
-            if (taskList) {
-                LsConnector.saveToLocalStorage(updatedAt, taskList)
-            }
+            LsConnector.saveToLocalStorage(updatedAt, taskList)
             return state
         }
         default:
