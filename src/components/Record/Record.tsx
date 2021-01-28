@@ -18,7 +18,7 @@ import {
     ConfirmButton,
     CloseButton
  } from '../Buttons/Buttons'
- import * as tree from '../../utils/TaskTree'
+ import taskStore from '../../utils/taskStore'
 
 export type RecordConfig = {
     isEditable?: boolean
@@ -75,18 +75,18 @@ const Record = ({ item, config = {}}: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const updateRecord = () => actions.cascadingUpdate()
+    const updateRecord = () => actions.triggerCascadingUpdate()
 
     const deleteRecord = (item: Task) => {
         setShowDeleteConfirmation(false)
-        tree.deleteTask(item)
-        actions.cascadingUpdate()
+        taskStore.deleteTask(item)
+        actions.triggerCascadingUpdate()
     }
 
     const selectRecord = (item: Task) => {   
         if (parent && parent.selectedSubTaskId === id) return
-        tree.selectTask(item)
-        actions.cascadingUpdate()
+        taskStore.selectTask(item)
+        actions.triggerCascadingUpdate()
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {

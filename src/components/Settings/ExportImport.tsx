@@ -6,7 +6,6 @@ import {
     IModal, 
     Task
 } from '../../types'
-// import { initPaths } from '../../utils/pathUtils'
 import { 
     convertDataToHtmlString,
     convertDataToJsonString, 
@@ -14,16 +13,16 @@ import {
     getExportFileName,
     validateExportedData
 } from '../../utils/persistDataUtils'
-import { getLinkedTree } from '../../utils/TaskTree'
+import taskStore from '../../utils/taskStore'
 
 type Props = {
     backToTaskList(): void
 }
 
 const ExportImport = (props: Props) => {
-    const { store, actions } = useTasksContext()
+    const { actions } = useTasksContext()
 
-    const { taskList } = store
+    const { taskList } = taskStore
 
     const { backToTaskList } = props
 
@@ -63,7 +62,6 @@ const ExportImport = (props: Props) => {
         let taskList: Task
         try {
             taskList = JSON.parse(reader.result as string)
-            taskList = getLinkedTree(taskList)
         } catch(err) {
             const banner: IBanner = {
                 text: 'Failed to parse JSON file',
@@ -80,7 +78,8 @@ const ExportImport = (props: Props) => {
             actions.setBanner(banner)
             return
         }
-        actions.setAppData({ updatedAt: Date.now(), taskList })
+        taskStore.setData(taskList, Date.now())
+        // TODO: need to trigger update?
         backToTaskList()
         const banner: IBanner = {
             text: 'Data successfully imported',

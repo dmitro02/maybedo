@@ -4,9 +4,7 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import { CloseButton } from '../Buttons/Buttons'
 
 const Banner = () => {
-    const { store, actions } = useTasksContext()
-
-    const { banner } = store
+    const { store: { banner } , actions } = useTasksContext()
 
     const closeBanner = useCallback(() => actions.setBanner(null), [actions])
 

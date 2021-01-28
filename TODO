@@ -1,8 +1,10 @@
-☐ BUG: (Chrome only): while moving record other record statically displayed as hovered 
+✔ BUG: (Chrome only): while moving record other record statically displayed as hovered @done(21-01-28 20:39)
 ☐ Exporter class
-☐ decrease usage of useContext using props instead
+✔ decrease usage of useContext using props instead @done(21-01-28 20:39)
 ☐ replace item moving with setting priority (and 'move to top'?)
 ☐ add sync inteval to Dropbox config UI
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ replace all icons with ones from react-icons
 ☐ delete all completed
+✔ upload string from LS to cloud without parse-serialize @done(21-01-28 21:49)
+☐ tooltip for sync status

@@ -5,15 +5,15 @@ import Fog from '../Fog/Fog'
 import { CloseButton, ConfirmButton } from '../Buttons/Buttons'
 
 const Modal = () => {
-    const { store, actions } = useTasksContext()
+    const { store: { modal }, actions } = useTasksContext()
 
-    if (!store.modal) return null
+    if (!modal) return null
 
     const { 
         text, 
         okAction = () => {},
         cancelAction = () => {},
-    } = store.modal
+    } = modal
 
     const closeModal = () => actions.setModal(null)
 

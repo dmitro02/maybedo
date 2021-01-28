@@ -3,7 +3,7 @@ import './Record.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { Task } from '../../types'
 import { AddButton } from '../Buttons/Buttons'
-import { createTask, selectTask } from '../../utils/TaskTree'
+import taskStore from '../../utils/taskStore'
 
 const AddRecord = ({ root }: { root: Task }) => {
     const { actions } = useTasksContext()
@@ -13,10 +13,10 @@ const AddRecord = ({ root }: { root: Task }) => {
         if (!taskText) return
         const task: Task = new Task(taskText, root)
         task.isNew = true
-        createTask(task)
-        selectTask(task)
+        taskStore.createTask(task)
+        taskStore.selectTask(task)
         e.target.textContent = ''
-        actions.cascadingUpdate()
+        actions.triggerCascadingUpdate()
     }
 
     return (  

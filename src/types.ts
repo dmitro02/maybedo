@@ -3,13 +3,11 @@ import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
 
 export interface IStore {
-    taskList: Task
     modal?: IModal
     banner?: IBanner
     showSidebar?: boolean
     loading?: boolean
     syncStatus?: SyncStatuses
-    updatedAt?: number
 }
 
 export class Task {
@@ -85,19 +83,17 @@ export interface ICloudConnector {
     authorize: () => any
     check: () => any
     downloadMetadata: () => Promise<Metadata>
-    downloadTaskList: () => Promise<Task | null>
-    uploadData: (metadata: Metadata, taskList: Task) => any
+    downloadTaskList: () => Promise<string | null>
+    uploadData: (metadata: Metadata, taskList: string) => any
 }
 
 export interface IActions {
-    setAppData: (state: IStore) => IStore,
     setModal: (modal: IModal | null) => IStore,
     setBanner: (banner: IBanner | null) => IStore,
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,
     setSyncStatus: (status: SyncStatuses) => IStore,
-    saveToLocalStorage: () => IStore,
-    cascadingUpdate: () => IStore
+    triggerCascadingUpdate: () => IStore
 }
 
 export interface IContext {

@@ -18,19 +18,24 @@ import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import SyncStatus from '../Statuses/SyncStatus'
 import { Task } from '../../types'
+import taskStore from '../../utils/taskStore'
 
 const MainContainer = () => {
-    const { store, actions } = useTasksContext()
-
     const { 
-        showSidebar = false, 
-        loading,
-        syncStatus,
+        store : {
+            showSidebar = false, 
+            loading,
+            syncStatus
+        }, 
+        actions 
+    } = useTasksContext()
+
+    const {       
         taskList: rootTask,
         taskList: {
             tasks: projectList
         }
-    } = store
+    } = taskStore
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 

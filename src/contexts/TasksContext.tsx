@@ -5,23 +5,17 @@ import React, {
 } from "react"
 import { 
     IContext, 
-    IStore, 
-    Task } from '../types'
+    IStore
+} from '../types'
 import { 
     createActions, 
     actionTypes 
 } from '../contexts/actionCreators'
-import LsConnector from "../utils/LsConnector"
-import * as tree from '../utils/TaskTree'
-
-const initialState: IStore = {
-    taskList: tree.getLinkedTree(new Task('Projects', null))
-}
 
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
-    const [ store, dispatch ] = useReducer(tasksReducer, initialState)
+    const [ store, dispatch ] = useReducer(tasksReducer, {})
 
     const context: IContext = {
         store,
@@ -39,14 +33,8 @@ export const useTasksContext = (): IContext => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
-        case actionTypes.CASCADING_UPDATE: {
-            return {
-                ...state,
-                updatedAt: Date.now(),
-            }
-        }
-        case actionTypes.SET_APP_DATA: {
-            return { ...action.state }
+        case actionTypes.TRIGGER_CASCADING_UPDATE: {
+            return { ...state }
         }
         case actionTypes.SET_MODAL: {
             return { ...state, modal: action.modal }
@@ -62,11 +50,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         }
         case actionTypes.SET_SYNC_STATUS: {
             return { ...state, syncStatus: action.status }
-        }
-        case actionTypes.SAVE_TO_LS: {
-            const { updatedAt = 0, taskList } = state
-            LsConnector.saveToLocalStorage(updatedAt, taskList)
-            return state
         }
         default:
             return state

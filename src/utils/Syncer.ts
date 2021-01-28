@@ -1,12 +1,12 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import { 
-    Task, 
     ICloudConnector, 
     IActions, 
     Metadata
 } from './../types';
 import DropboxConnector from './DropboxConnector';
 import LsConnector from "./LsConnector"
+import taskStore from "./taskStore"
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
 
@@ -151,13 +151,14 @@ export default class Syncer {
         this.saveToLS()
     }
 
-    private saveToLS() {        
-        this.actions.saveToLocalStorage()
+    private saveToLS() {
+        const { updatedAt, taskListJSON } =  taskStore  
+        LsConnector.saveToLocalStorage(updatedAt, taskListJSON)    
     }
 
-    private loadToStore(updatedAt: number, taskList: Task | null) {        
+    private loadToStore(updatedAt: number, taskList: string | null) {        
         if (!taskList) return
-        this.actions.setAppData({ taskList, updatedAt })
+        taskStore.setData(taskList, updatedAt)
     }
 
     private async check(): Promise<boolean> {
@@ -185,7 +186,7 @@ export default class Syncer {
         }
     }
 
-    private async getCloudTaskList(): Promise<Task | null> {
+    private async getCloudTaskList(): Promise<string | null> {
         try {
             return await this.cloudConnector!.downloadTaskList()
         } catch {
@@ -194,7 +195,7 @@ export default class Syncer {
         }
     }
 
-    private async setCloudData(metadata: Metadata, taskList: Task) {
+    private async setCloudData(metadata: Metadata, taskList: string) {
         try {
             await this.cloudConnector!.uploadData(metadata, taskList)
         } catch {
