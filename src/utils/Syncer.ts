@@ -5,7 +5,7 @@ import {
     Metadata
 } from './../types';
 import DropboxConnector from './DropboxConnector';
-import LsConnector from "./LsConnector"
+import * as lsUtils from "./localStorageUtils"
 import taskStore from "./taskStore"
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
@@ -43,9 +43,9 @@ export default class Syncer {
 
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
-            LsConnector.setSyncTarget(cloudConnector.syncTarget)
+            lsUtils.setSyncTarget(cloudConnector.syncTarget)
         } else {
-            const syncTarget = LsConnector.getSyncTarget()
+            const syncTarget = lsUtils.getSyncTarget()
             this.cloudConnector = this.createCloudConnector(syncTarget)
         }
         
@@ -86,22 +86,22 @@ export default class Syncer {
         this.actions.setSyncStatus(SyncStatuses.InProgress)
 
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
-        const lsUpdatedAt = LsConnector.getLsUpdatedAt()
+        const lsUpdatedAt = lsUtils.getLsUpdatedAt()
         
         if (cloudUpdatedAt > lsUpdatedAt) {
             const taskList = await this.getCloudTaskList()
    
-            LsConnector.saveToLocalStorage(cloudUpdatedAt, taskList)
+            lsUtils.saveToLocalStorage(cloudUpdatedAt, taskList)
             this.loadToStore(cloudUpdatedAt, taskList)
         } else if (cloudUpdatedAt < lsUpdatedAt) {
-            const taskList = LsConnector.getLsTaskList()
+            const taskList = lsUtils.getLsTaskList()
 
             if (taskList) {
                 this.loadToStore(lsUpdatedAt, taskList)
                 await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
             }
         } else if (cloudUpdatedAt === lsUpdatedAt) {
-            const taskList = LsConnector.getLsTaskList()
+            const taskList = lsUtils.getLsTaskList()
 
             this.loadToStore(lsUpdatedAt, taskList)
         } else {
@@ -112,10 +112,10 @@ export default class Syncer {
     }
 
     private onLoadLocal() {
-        const lsUpdatedAt = LsConnector.getLsUpdatedAt()
+        const lsUpdatedAt = lsUtils.getLsUpdatedAt()
 
         if (lsUpdatedAt) {
-            const taskList = LsConnector.getLsTaskList()
+            const taskList = lsUtils.getLsTaskList()
             this.loadToStore(lsUpdatedAt, taskList)
         } else {
             this.saveToLS()
@@ -129,15 +129,15 @@ export default class Syncer {
         this.saveToLS()
         
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
-        const lsUpdatedAt = LsConnector.getLsUpdatedAt()     
+        const lsUpdatedAt = lsUtils.getLsUpdatedAt()     
         
         if (cloudUpdatedAt > lsUpdatedAt) {
             const taskList = await this.getCloudTaskList()
 
-            LsConnector.saveToLocalStorage(cloudUpdatedAt, taskList)
+            lsUtils.saveToLocalStorage(cloudUpdatedAt, taskList)
             this.loadToStore(cloudUpdatedAt, taskList)
         } else if (cloudUpdatedAt < lsUpdatedAt) {
-            const taskList = LsConnector.getLsTaskList()
+            const taskList = lsUtils.getLsTaskList()
 
             if (taskList) {
                 await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
@@ -153,7 +153,7 @@ export default class Syncer {
 
     private saveToLS() {
         const { updatedAt, taskListJSON } =  taskStore  
-        LsConnector.saveToLocalStorage(updatedAt, taskListJSON)    
+        lsUtils.saveToLocalStorage(updatedAt, taskListJSON)    
     }
 
     private loadToStore(updatedAt: number, taskList: string | null) {        

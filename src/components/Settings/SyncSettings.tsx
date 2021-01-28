@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
-import LsConnector from '../../utils/LsConnector'
+import * as lsUtils from '../../utils/localStorageUtils'
 import Syncer, { SyncTargets } from '../../utils/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSync from './DropboxSettings'
 
 function SyncSettings() {
-    const [ target, setTarget ] = useState(LsConnector.getSyncTarget())
+    const [ target, setTarget ] = useState(lsUtils.getSyncTarget())
 
     const { actions } = useTasksContext()
 
@@ -22,7 +22,7 @@ function SyncSettings() {
     const handleTargetChange = (e: any) => {
         const value = e.target.value as SyncTargets
         
-        LsConnector.setSyncTarget(value)
+        lsUtils.setSyncTarget(value)
 
         if (value === SyncTargets.Disabled) {
             actions.setSyncStatus(SyncStatuses.NotConfigured)
