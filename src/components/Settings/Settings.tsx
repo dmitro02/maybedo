@@ -1,4 +1,3 @@
-import React from 'react'
 import './Settings.scss'
 import ExportImport from './ExportImport' 
 import Divider from '../Divider/Divider'

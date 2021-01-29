@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import './Record.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { Task } from '../../types'

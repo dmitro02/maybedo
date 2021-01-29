@@ -1,4 +1,3 @@
-import React from 'react'
 import { Task } from '../../types'
 import { RecordConfig } from '../Record/Record'
 import './TaskList.scss'

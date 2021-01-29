@@ -1,4 +1,3 @@
-import React from 'react'
 import './ProjectList.scss'
 import RecordList from '../RecordList/RecordList'
 import { RecordConfig } from '../Record/Record'

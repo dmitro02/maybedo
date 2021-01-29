@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import * as lsUtils from '../../utils/localStorageUtils'
 import Syncer, { SyncTargets } from '../../utils/Syncer'

@@ -1,4 +1,3 @@
-import React from 'react'
 import Fog from '../Fog/Fog'
 import Spinner from './Spinner'
 import './Loading.scss'

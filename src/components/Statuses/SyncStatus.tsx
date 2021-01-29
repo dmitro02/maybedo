@@ -1,4 +1,3 @@
-import React from 'react'
 import Syncer from '../../utils/Syncer'
 import './SyncStatus.scss'
 

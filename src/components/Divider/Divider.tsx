@@ -1,4 +1,4 @@
-import React, {memo} from 'react'
+import {memo} from 'react'
 import './Divider.scss'
 
 type Props = { isHidden?: boolean }

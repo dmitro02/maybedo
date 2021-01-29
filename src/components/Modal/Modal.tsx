@@ -1,4 +1,3 @@
-import React from 'react'
 import './Modal.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import Fog from '../Fog/Fog'

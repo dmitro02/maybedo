@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import './Banner.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { CloseButton } from '../Buttons/Buttons'

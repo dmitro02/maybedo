@@ -1,7 +1,3 @@
-## 2-d party libraries
-https://github.com/SortableJS/Sortable 
-
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

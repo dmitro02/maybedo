@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './MainContainer.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import ProjectList from '../ProjectList/ProjectList'

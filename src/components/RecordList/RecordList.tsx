@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import { Task } from '../../types'
