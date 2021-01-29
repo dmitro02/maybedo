@@ -1,0 +1,39 @@
+@import '../../styles/variables';
+
+.priotity-box {
+    position: relative;
+    width: 32px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.priotity-switch {
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 3px;
+    overflow: visible;
+    width: 32px;
+    background-color: $record-selected-color;
+    text-align: center;
+    font-size: $font-size-3;
+    z-index: 1;
+
+    div:hover {
+        background-color: $record-hover-color;
+    }
+}
+
+.priotity-current {
+    border: 1px solid black;
+    border-radius: 3px;
+    width: 32px;
+    height: 27px;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-1;
+}

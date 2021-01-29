@@ -19,6 +19,7 @@ export class Task {
     isNew: boolean
     parent: Task | null
     updatedAt?: number
+    priority: Priorities
 
     constructor(text: string, parent: Task | null, isDone: boolean = false, ) {
         this.id = nanoid()
@@ -27,7 +28,16 @@ export class Task {
         this.tasks = []
         this.isNew = false
         this.parent = parent
+        this.priority = 0
     }
+}
+
+export enum Priorities {
+    Trivial,
+    Minor,
+    Normal,
+    Major,
+    Critical
 }
 
 export class Metadata {

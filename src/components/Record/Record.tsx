@@ -18,6 +18,7 @@ import {
     ConfirmButton,
     CloseButton
  } from '../Buttons/Buttons'
+ import Priority from '../Priority/Priority'
  import taskStore from '../../utils/taskStore'
 
 export type RecordConfig = {
@@ -75,8 +76,6 @@ const Record = ({ item, config = {}}: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const updateRecord = () => actions.triggerCascadingUpdate()
-
     const deleteRecord = (item: Task) => {
         setShowDeleteConfirmation(false)
         taskStore.deleteTask(item)
@@ -97,14 +96,13 @@ const Record = ({ item, config = {}}: Props) => {
 
     const handleMouseUpOnCheckbox = (e: any) => {
         if (e.button === 0) { // left click only
-            updateRecord()
+            actions.triggerCascadingUpdate()
         }
     }
         
     const handleInput = debounceInput((text: string) => {
         item.text = text
         saveCaretPositionToState()
-        updateRecord()
     })
 
     const openDeleteConfirmation = (e: any) => {
@@ -214,6 +212,7 @@ const Record = ({ item, config = {}}: Props) => {
                                 classNames={[ hiddenBtnClassName ]} 
                                 action={openDeleteConfirmation} 
                             />
+                            <Priority task={item} />
                         </>
                     } 
                 </div>
