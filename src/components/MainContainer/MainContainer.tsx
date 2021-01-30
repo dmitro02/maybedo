@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react'
+import { 
+    useEffect, 
+    useState, 
+    useRef 
+} from 'react'
 import './MainContainer.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import ProjectList from '../ProjectList/ProjectList'
@@ -19,6 +23,7 @@ import Syncer from '../../utils/Syncer'
 import SyncStatus from '../Statuses/SyncStatus'
 import { Task } from '../../types'
 import taskStore from '../../utils/taskStore'
+import { useOutsideClickDetector } from '../../utils/customHooks'
 
 const MainContainer = () => {
     const { 
@@ -61,6 +66,9 @@ const MainContainer = () => {
         }
     }
 
+    const leftPanelRef = useRef(null)
+    useOutsideClickDetector(leftPanelRef, closeLeftPanel, showSidebar)
+
     const selectedProject = projectList.length 
         ? projectList.find((task: Task) => task.id === rootTask.selectedSubTaskId) || projectList[0]
         : null
@@ -69,7 +77,7 @@ const MainContainer = () => {
         <div className="main-container">   
             <Modal />
             {loading && <Loading />}
-            <div className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
+            <div ref={leftPanelRef} className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
                 <Fog isDisplayed={isSettingsOpened} />
                 <div className="top-panel">
                     <div className="row-btns">

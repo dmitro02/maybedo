@@ -1,4 +1,9 @@
-import { useState, useRef, useEffect, memo } from 'react'
+import React, { 
+    useState, 
+    useRef, 
+    useEffect, 
+    memo 
+} from 'react'
 import './Record.scss'
 import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
@@ -18,12 +23,13 @@ import {
     ConfirmButton,
     CloseButton
  } from '../Buttons/Buttons'
- import Priority from '../Priority/Priority'
  import taskStore from '../../utils/taskStore'
+import RecordMenu from '../RecordMenu/RecordMenu'
 
 export type RecordConfig = {
     isEditable?: boolean
     isTitle?: boolean
+    isProject?: boolean
 }
 
 const IS_MOBILE = isMobile()
@@ -44,7 +50,8 @@ const Record = ({ item, config = {}}: Props) => {
     
     const {
         isEditable = false,
-        isTitle = false
+        isTitle = false,
+        isProject = false
     } = config
 
     const [ isDone, setIsDone ] = useState(initialState)
@@ -84,6 +91,7 @@ const Record = ({ item, config = {}}: Props) => {
 
     const selectRecord = (item: Task) => {   
         if (parent && parent.selectedSubTaskId === id) return
+        saveCaretPositionToState()
         taskStore.selectTask(item)
         actions.triggerCascadingUpdate()
     }
@@ -111,7 +119,7 @@ const Record = ({ item, config = {}}: Props) => {
     }
 
     const closeDeleteConfirmation = (e: any) => {
-        e.stopPropagation() // prevent item selection ob click
+        e && e.stopPropagation() // prevent item selection ob click
         setShowDeleteConfirmation(false)
     }
 
@@ -174,11 +182,8 @@ const Record = ({ item, config = {}}: Props) => {
                 className={recordClassName}
                 id={id} 
                 onClick={() => {
-                    saveCaretPositionToState()
-                    if (!isTitle) {
-                        selectRecord(item)
-                        actions.setShowSidebar(false)
-                    }
+                    !isTitle && selectRecord(item)
+                    isProject && actions.setShowSidebar(false)
                 }}
             >
                 <div className="row-btns">
@@ -201,10 +206,10 @@ const Record = ({ item, config = {}}: Props) => {
                 <div className="row-btns">
                     {showDeleteConfirmation 
                         ?
-                        <>
+                        <div className="confirm-delete-btns">
                             <ConfirmButton action={deleteRecordOnConfirm} />
                             <CloseButton action={closeDeleteConfirmation} />
-                        </>
+                        </div>
                         :
                         <>
                             {getSubtasksBtn()}
@@ -212,9 +217,9 @@ const Record = ({ item, config = {}}: Props) => {
                                 classNames={[ hiddenBtnClassName ]} 
                                 action={openDeleteConfirmation} 
                             />
-                            <Priority task={item} />
                         </>
-                    } 
+                    }
+                    <RecordMenu task={item} actions={actions}/> 
                 </div>
             </div>
             <SubTaskList task={item} isDisplayed={showSubtasks} />

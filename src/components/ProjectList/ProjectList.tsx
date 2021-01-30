@@ -4,6 +4,7 @@ import { RecordConfig } from '../Record/Record'
 import { Task } from '../../types'
 
 const titleRecordConfig: RecordConfig = { isTitle: true }
+const projectRecordConfig: RecordConfig = { isProject: true }
 
 type Props = {
     rootTask: Task
@@ -14,7 +15,8 @@ const ProjectList = ({ rootTask }: Props ) => {
         <RecordList 
             classNames={['project-list']}
             root={rootTask}
-            completedRecordConfig={{}}
+            activeRecordConfig={projectRecordConfig}
+            completedRecordConfig={projectRecordConfig}
             titleRecordConfig={titleRecordConfig}
         />
     )

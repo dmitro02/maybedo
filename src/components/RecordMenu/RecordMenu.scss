@@ -1,0 +1,31 @@
+@import '../../styles/variables';
+
+.record-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $background-light;
+    padding: 4px 8px 4px 4px;
+    border: 2px solid $text-gray;
+    border-radius: 5px;
+
+    .record-menu-row {
+        display: flex;
+        align-items: center;
+        color: $text-gray;
+        font-weight: bold;
+        cursor: pointer;
+
+        div:first-child {
+            font-size: $font-size-7; 
+        }
+
+        div:nth-child(2) {
+            font-size: $font-size-1; 
+        }
+    }
+    
+    .record-menu-row:hover {
+        color: $dark-gray;
+    }
+}

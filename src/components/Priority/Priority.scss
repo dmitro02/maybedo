@@ -2,38 +2,58 @@
 
 .priotity-box {
     position: relative;
-    width: 32px;
-    height: 27px;
+    // height: 27px;
     display: flex;
     align-items: center;
     cursor: pointer;
     font-weight: bold;
+    font-size: $font-size-1;
 }
 
 .priotity-switch {
+    display: flex;
     position: absolute;
-    border: 1px solid black;
-    border-radius: 3px;
-    overflow: visible;
-    width: 32px;
+    right: 0;
     background-color: $record-selected-color;
     text-align: center;
-    font-size: $font-size-3;
     z-index: 1;
+    border-bottom: 2px solid $text-gray; 
+    border-left: 2px solid $text-gray; 
 
-    div:hover {
-        background-color: $record-hover-color;
+    & > div {
+        height: 24px;
+        width: 24px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $text-gray;
+    }
+
+    & > div:hover {
+        background-color: $text-gray;
+        color: $record-selected-color;
+        border-radius: 3px;
     }
 }
 
+.priotity-switch:hover {
+    background-color: $record-hover-color;
+}
+
 .priotity-current {
-    border: 1px solid black;
+    background-color: $text-gray;
+    color: $record-selected-color;
     border-radius: 3px;
-    width: 32px;
-    height: 27px;
-    z-index: 0;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-1;
+    z-index: 0;
+}
+
+.priotity-current:hover {
+    background-color: black;
 }

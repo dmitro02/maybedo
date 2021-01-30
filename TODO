@@ -7,8 +7,9 @@
 ☐ replace all icons with ones from react-icons
 ☐ delete all completed
 ✔ upload string from LS to cloud without parse-serialize @done(21-01-28 21:49)
-☐ tooltips for sync status, priority
+☐ tooltips for sync status
 ✔ upgrade react version @done(21-01-29 19:07)
 ☐ HTML export with collaps/expand projects and checkboxes
-☐ handle outer ckick for delete confirmation and priority switcher
-☐ akign top panel butons with record ones on the right and slide-out panels
+✔ handle outer ckick for delete confirmation and priority switcher @done(21-01-31 00:16)
+☐ align top panel butons with record ones on the right and slide-out panels
+✔ use out click detector for closing left panel @done(21-01-31 00:17)
