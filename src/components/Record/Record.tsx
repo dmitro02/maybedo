@@ -15,13 +15,9 @@ import {
 import SubTaskList from '../SubTaskList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
 import { 
-    DeleteButton,
     ExpandButton,
     CollapseButton,
-    AddButton,
-    CheckmarkButton,
-    ConfirmButton,
-    CloseButton
+    CheckmarkButton
  } from '../Buttons/Buttons'
  import taskStore from '../../utils/taskStore'
 import RecordMenu from '../RecordMenu/RecordMenu'
@@ -63,8 +59,6 @@ const Record = ({ item, config = {}}: Props) => {
 
     const [ showSubtasks, setShowSubtasks ] = useState(false)
     
-    const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
-
     const { actions } = useTasksContext()
 
     const recordContentRef = useRef<HTMLDivElement>(null)
@@ -82,12 +76,6 @@ const Record = ({ item, config = {}}: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const deleteRecord = (item: Task) => {
-        setShowDeleteConfirmation(false)
-        taskStore.deleteTask(item)
-        actions.triggerCascadingUpdate()
-    }
 
     const selectRecord = (item: Task) => {   
         if (parent && parent.selectedSubTaskId === id) return
@@ -112,21 +100,6 @@ const Record = ({ item, config = {}}: Props) => {
         item.text = text
         saveCaretPositionToState()
     })
-
-    const openDeleteConfirmation = (e: any) => {
-        e.stopPropagation() // prevent item selection ob click
-        setShowDeleteConfirmation(true)
-    }
-
-    const closeDeleteConfirmation = (e: any) => {
-        e && e.stopPropagation() // prevent item selection ob click
-        setShowDeleteConfirmation(false)
-    }
-
-    const deleteRecordOnConfirm = (e: any) => {
-        e.stopPropagation() // prevent item selection ob click
-        deleteRecord(item);
-    }
 
     const setContentEditable = (flag: boolean) => {
         const el = recordContentRef.current
@@ -155,24 +128,17 @@ const Record = ({ item, config = {}}: Props) => {
         ? isSelected ? '' : ' mobile-hidden-btn'
         : ' hidden-btn' 
 
-    const getSubtasksBtn = () => {
-        const action = () => setShowSubtasks(!showSubtasks)
-        const classNames = [ 'subtasks-btn' ]
+    const openSubtasks = () => setShowSubtasks(true)
+    const closeSubtasks = () => setShowSubtasks(false)
 
+    const getSubtasksBtn = () => {
+        const classNames = [ 'subtasks-btn' ]
         if (hasSubtasks && !showSubtasks) {
-            return <ExpandButton action={action} classNames={classNames} />
+            return <ExpandButton action={openSubtasks} classNames={classNames} />
         }
         if (showSubtasks) {
-            return <CollapseButton action={action} classNames={classNames} />
+            return <CollapseButton action={closeSubtasks} classNames={classNames} />
         }
-        if (parent && !hasSubtasks && !(parent!.isDone || isDone)) {
-            return <AddButton 
-                        action={action} 
-                        classNames={[...classNames, hiddenBtnClassName]}
-                        title='add subtask'
-                    />
-        }
-
         return null
     }
 
@@ -204,22 +170,13 @@ const Record = ({ item, config = {}}: Props) => {
                     {text}
                 </div>
                 <div className="row-btns">
-                    {showDeleteConfirmation 
-                        ?
-                        <div className="confirm-delete-btns">
-                            <ConfirmButton action={deleteRecordOnConfirm} />
-                            <CloseButton action={closeDeleteConfirmation} />
-                        </div>
-                        :
-                        <>
-                            {getSubtasksBtn()}
-                            <DeleteButton 
-                                classNames={[ hiddenBtnClassName ]} 
-                                action={openDeleteConfirmation} 
-                            />
-                        </>
-                    }
-                    <RecordMenu task={item} actions={actions}/> 
+                    {getSubtasksBtn()}
+                    <RecordMenu 
+                        task={item} 
+                        actions={actions}
+                        showSubtasks={() => setShowSubtasks(true)}
+                        classes={[ hiddenBtnClassName ]}
+                    /> 
                 </div>
             </div>
             <SubTaskList task={item} isDisplayed={showSubtasks} />

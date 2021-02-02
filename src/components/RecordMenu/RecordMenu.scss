@@ -5,23 +5,51 @@
     top: 0;
     right: 0;
     background-color: $background-light;
-    padding: 4px 8px 4px 4px;
+    padding: 4px 6px;
     border: 2px solid $text-gray;
     border-radius: 5px;
+    z-index: 1;
 
     .record-menu-row {
         display: flex;
         align-items: center;
+        justify-content: left;
         color: $text-gray;
         font-weight: bold;
         cursor: pointer;
+        white-space: nowrap;
+        margin: 4px 0;
+        height: 24px;
+        width: 90px;
+        box-sizing: border-box;
 
-        div:first-child {
-            font-size: $font-size-7; 
+        .menu-item-icon {
+            font-size: $font-size-5; 
         }
 
-        div:nth-child(2) {
+        .menu-item-text {
             font-size: $font-size-1; 
+            margin-left: 4px;
+        }
+
+        .inline-menu-btn {
+            text-align: center;
+            flex-grow: 1;
+            height: 24px;
+            line-height: 24px;
+        }
+
+        .inline-menu-btn:first-child:hover {
+            border-radius: 5px 0 0 5px;
+        }
+
+        .inline-menu-btn:last-child:hover {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .inline-menu-btn:hover {
+            background-color: $text-gray;
+            color: $record-selected-color;
         }
     }
     

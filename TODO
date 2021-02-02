@@ -13,3 +13,11 @@
 ✔ handle outer ckick for delete confirmation and priority switcher @done(21-01-31 00:16)
 ☐ align top panel butons with record ones on the right and slide-out panels
 ✔ use out click detector for closing left panel @done(21-01-31 00:17)
+✔ focus on new task on "Add subtask" click @done(21-02-02 16:40)
+☐ do not show "add" for projects and completed
+☐ add "New Project" to the right empty panel if there no projects yet
+☐ styles for standard buttons (settings), on mobile looks ugly
+☐ smaller main font on mobile
+☐ bigger record menu on mobile
+☐ select a source of data (local or remote) when setting up cloud sync or doing force sync
+☐ when settings closed focus goes to "new task", on mibile keyboard is opened, bad

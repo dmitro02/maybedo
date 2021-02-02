@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import './Record.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { Task } from '../../types'
@@ -7,6 +7,12 @@ import taskStore from '../../utils/taskStore'
 
 const AddRecord = ({ root }: { root: Task }) => {
     const { actions } = useTasksContext()
+
+    const editableRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        editableRef.current?.focus()
+    }, [])
     
     const createRecord = (e: any) => {
         const taskText = e.target.textContent.trim()
@@ -30,6 +36,7 @@ const AddRecord = ({ root }: { root: Task }) => {
                 suppressContentEditableWarning={true}
                 onInput={createRecord}
                 onKeyPress={preventEnterOnEmpty}
+                ref={editableRef}
             ></span>
         </div>
     )
