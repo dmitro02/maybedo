@@ -56,4 +56,10 @@
     .record-menu-row:hover {
         color: $dark-gray;
     }
+
+    .priority-switch {
+        .inline-menu-btn {
+            font-size: $font-size-1;
+        }
+    }
 }

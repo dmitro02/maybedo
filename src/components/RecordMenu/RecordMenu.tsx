@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { MdMoreVert } from "react-icons/md"
 import { IActions, Task } from '../../types'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import './RecordMenu.scss'
 import { RiDeleteBinFill, RiFileAddFill } from 'react-icons/ri'
-import DeleteRecord from '../Record/DeleteRecord'
+import DeleteRecord from './DeleteRecord'
+import Priority from './Priority'
 
 type Props = {
     task: Task,
@@ -42,6 +43,7 @@ const RecordMenu = (props: Props) => {
         <div className={'record-menu-box ' + classes.join(' ')}>
             <MdMoreVert className="common-btn" onClick={openMenu}/>
             {showMenu && <div className="record-menu" ref={menuRef}>
+                <Priority task={task} />
                 <div 
                     className="record-menu-row" 
                     title="Add subtasks" 

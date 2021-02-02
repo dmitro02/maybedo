@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { IActions, Task } from "../../types"
 import { RiDeleteBin7Fill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import taskStore from "../../utils/taskStore"
+import { useOutsideClickDetector } from '../../utils/customHooks'
 
 type Props = {
     task: Task,
@@ -26,11 +27,14 @@ const DeleteRecord = ({ task, actions }: Props) => {
         setShowDeleteConfirmation(false)
     }
 
+    const confirmRef = useRef(null)
+    useOutsideClickDetector(confirmRef, closeDeleteConfirmation, showDeleteConfirmation)
+
     return (
         <>
             {showDeleteConfirmation 
                 ?
-                <div className="record-menu-row" >
+                <div className="record-menu-row" ref={confirmRef}>
                     <div className="inline-menu-btn">
                         <MdCheck onClick={deleteRecord} />
                     </div>
