@@ -40,6 +40,11 @@ class TaskStore {
         this.setUpdatedAt()
     }
 
+    deleteCompletedSubtasks(task: Task): void {
+        task.tasks = task.tasks.filter((it) => !it.isDone)
+        this.setUpdatedAt()
+    }
+
     selectTask(selectedTask: Task): void {
         const { parent } = selectedTask
         parent!.selectedSubTaskId = selectedTask.id

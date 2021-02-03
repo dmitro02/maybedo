@@ -14,4 +14,8 @@
 ☐ bigger record menu on mobile
 ☐ select a source of data (local or remote) when setting up cloud sync or doing force sync
 ☐ when settings closed focus goes to "new task", on mibile keyboard is opened, bad
-☐ open menu record on hover on dots; close it on blure with delay
+✔ open menu record on hover on dots; close it on blure with delay @done(21-02-03 14:36)
+☐ do not show "Clear" if there is no subtasks
+☐ "Add subtasks" menu item component
+☐ sort by proirities
+☐ colorize by priorities

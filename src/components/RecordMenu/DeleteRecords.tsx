@@ -1,22 +1,37 @@
-import { useState, useRef } from "react"
+import React, { useState, useRef } from "react"
 import { IActions, Task } from "../../types"
-import { RiDeleteBin7Fill } from 'react-icons/ri'
+import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import taskStore from "../../utils/taskStore"
 import { useOutsideClickDetector } from '../../utils/customHooks'
 
 type Props = {
     task: Task,
-    actions: IActions
+    actions: IActions,
+    isBulk?: boolean,
+    closeMenu?: () => void
 }
 
-const DeleteRecord = ({ task, actions }: Props) => {
+const DeleteRecords = (props: Props) => {
+    const { 
+        task, 
+        actions, 
+        isBulk = false, 
+        closeMenu = () => {}
+     } = props
+
     const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
     const deleteRecord = () => {
         setShowDeleteConfirmation(false)
         taskStore.deleteTask(task)
         actions.triggerCascadingUpdate()
+    }
+
+    const deleteCompleted = () => {
+        setShowDeleteConfirmation(false)
+        taskStore.deleteCompletedSubtasks(task)
+        closeMenu()
     }
 
     const openDeleteConfirmation = () => {
@@ -30,13 +45,34 @@ const DeleteRecord = ({ task, actions }: Props) => {
     const confirmRef = useRef(null)
     useOutsideClickDetector(confirmRef, closeDeleteConfirmation, showDeleteConfirmation)
 
+    const configSingle = {
+        icon: <RiDeleteBin7Fill />,
+        text: 'Delete',
+        tooltip: 'Delete task',
+        deleteAction: deleteRecord
+    }
+    
+    const configBulk = {
+        icon: <RiDeleteBinFill />,
+        text: 'Clear',
+        tooltip: 'Delete completed subtasks',
+        deleteAction: deleteCompleted
+    }
+
+    const { 
+        icon, 
+        text, 
+        tooltip, 
+        deleteAction 
+    } = isBulk ? configBulk : configSingle
+
     return (
         <>
             {showDeleteConfirmation 
                 ?
                 <div className="record-menu-row" ref={confirmRef}>
                     <div className="inline-menu-btn">
-                        <MdCheck onClick={deleteRecord} />
+                        <MdCheck onClick={deleteAction} />
                     </div>
                     <div className="inline-menu-btn">
                         <MdClose onClick={closeDeleteConfirmation} />
@@ -45,15 +81,15 @@ const DeleteRecord = ({ task, actions }: Props) => {
                 :
                 <div 
                     onClick={openDeleteConfirmation} 
-                    title="Delete task" 
+                    title={tooltip} 
                     className="record-menu-row"
                 >
-                    <RiDeleteBin7Fill />
-                    <div className="menu-item-text">Delete</div>
+                    {icon}
+                    <div className="menu-item-text">{text}</div>
                 </div>
             }
         </>
     )
 }
 
-export default DeleteRecord
+export default DeleteRecords
