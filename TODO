@@ -3,19 +3,21 @@
 ☐ add sync inteval to Dropbox config UI
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ replace all icons with ones from react-icons
-☐ delete all completed
 ☐ tooltips for sync status
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ align top panel butons with record ones on the right and slide-out panels
-☐ do not show "add" for projects and completed
+✔ do not show "add" for projects and completed @done(21-02-03 22:22)
 ☐ add "New Project" to the right empty panel if there no projects yet
 ☐ styles for standard buttons (settings), on mobile looks ugly
 ☐ smaller main font on mobile
 ☐ bigger record menu on mobile
 ☐ select a source of data (local or remote) when setting up cloud sync or doing force sync
 ☐ when settings closed focus goes to "new task", on mibile keyboard is opened, bad
-✔ open menu record on hover on dots; close it on blure with delay @done(21-02-03 14:36)
-☐ do not show "Clear" if there is no subtasks
+✔ do not show "Clear" if there is no subtasks @done(21-02-03 22:17)
 ☐ "Add subtasks" menu item component
-☐ sort by proirities
+✔ sort by proirities @done(21-02-03 22:09)
 ☐ colorize by priorities
+☐ BUG: banners are tranparent
+☐ BUG: after import selected project is not highlighted
+☐ do not "selsect" non-project records, just hilight editable
+☐ persist opened state 

@@ -10,6 +10,14 @@ export interface IStore {
     syncStatus?: SyncStatuses
 }
 
+export enum Priorities {
+    Trivial,
+    Minor,
+    Normal,
+    Major,
+    Critical
+}
+
 export class Task {
     id: string
     text: string
@@ -28,16 +36,8 @@ export class Task {
         this.tasks = []
         this.isNew = false
         this.parent = parent
-        this.priority = 0
+        this.priority = Priorities.Trivial
     }
-}
-
-export enum Priorities {
-    Trivial,
-    Minor,
-    Normal,
-    Major,
-    Critical
 }
 
 export class Metadata {

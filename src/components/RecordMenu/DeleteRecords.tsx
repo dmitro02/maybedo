@@ -19,7 +19,7 @@ const DeleteRecords = (props: Props) => {
         isBulk = false, 
         closeMenu = () => {}
      } = props
-
+     
     const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
     const deleteRecord = () => {
@@ -34,11 +34,13 @@ const DeleteRecords = (props: Props) => {
         closeMenu()
     }
 
-    const openDeleteConfirmation = () => {
+    const openDeleteConfirmation = (e: any) => {
+        e.stopPropagation()
         setShowDeleteConfirmation(true)
     }
 
-    const closeDeleteConfirmation = () => {
+    const closeDeleteConfirmation = (e: any) => {
+        e.stopPropagation()
         setShowDeleteConfirmation(false)
     }
 

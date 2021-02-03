@@ -11,7 +11,8 @@ type Props = {
     task: Task,
     classes: string[],
     actions: IActions,
-    showSubtasks: () => void
+    showSubtasks: () => void,
+    isProject: boolean
 }
 
 const RecordMenu = (props: Props) => {
@@ -19,7 +20,8 @@ const RecordMenu = (props: Props) => {
         task,
         classes,
         actions,
-        showSubtasks
+        showSubtasks,
+        isProject
     } = props
 
     const [ showMenu, setShowMenu ] = useState(false)
@@ -43,16 +45,25 @@ const RecordMenu = (props: Props) => {
         <div className={'record-menu-box ' + classes.join(' ')}>
             <MdMoreVert className="common-btn" onClick={openMenu} />
             {showMenu && <div className="record-menu" ref={menuRef}>
-                <Priority task={task} />
-                <div 
+                {!task.isDone && <Priority 
+                    task={task} 
+                    actions={actions} 
+                    closeMenu={closeMenu} 
+                />}
+                {(!isProject && !task.isDone) && <div 
                     className="record-menu-row" 
                     title="Add subtask" 
                     onClick={handleClickOnAddSubtask}
                 >
                     <RiFileAddFill className="menu-item-icon" />
                     <div className="menu-item-text">Add</div>
-                </div>
-                <DeleteRecords task={task} actions={actions} isBulk closeMenu={closeMenu}/>
+                </div>}
+                {!!task.tasks.length && <DeleteRecords 
+                    task={task} 
+                    actions={actions} 
+                    isBulk 
+                    closeMenu={closeMenu}
+                />}
                 <DeleteRecords task={task} actions={actions} />
             </div>}
         </div>

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Task, Priorities } from '../../types'
+import { Task, Priorities, IActions } from '../../types'
 import { RiFilePptFill } from 'react-icons/ri'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 
@@ -9,23 +9,43 @@ const PRIORITY_NAMES = new Map([
     [Priorities.Normal, 'Normal'],
     [Priorities.Major, 'Major'],
     [Priorities.Critical, 'Critical'],
+    [undefined, 'Trivial'],
 ])
 
-type Props = { task: Task }
+type Props = { 
+    task: Task,
+    actions: IActions,
+    closeMenu: () => void
+}
 
-const Priority = ({ task }: Props) => {
+const Priority = (props: Props) => {
+    const {
+        task,
+        actions,
+        closeMenu
+    } = props
+
     const [ showSelector, setShowSelector ] = useState(false)
 
-    const openSelector = () => setShowSelector(true)
+    const openSelector = (e: any) => {
+        e.stopPropagation()
+        setShowSelector(true)
+    }
     const closeSelector = () => setShowSelector(false)
 
     const switchRef = useRef(null)
     useOutsideClickDetector(switchRef, closeSelector, showSelector)
 
     const handleClickOnSwitch = (e: any) => {
-        const el = e.target as HTMLDivElement        
-        task.priority = parseInt(el.textContent!)
-        closeSelector()
+        e.stopPropagation()
+        
+        const el = e.target as HTMLDivElement   
+        const newPrio = parseInt(el.textContent!)     
+        if (newPrio !== task.priority) {
+            task.priority = newPrio
+            actions.triggerCascadingUpdate()
+        }
+        closeMenu() 
     }
 
     return (
@@ -36,11 +56,11 @@ const Priority = ({ task }: Props) => {
                     onClick={handleClickOnSwitch}
                     ref={switchRef} 
                 >
-                    <div className="inline-menu-btn"><div>{Priorities.Critical}</div></div>
-                    <div className="inline-menu-btn"><div>{Priorities.Major}</div></div>
-                    <div className="inline-menu-btn"><div>{Priorities.Normal}</div></div>
-                    <div className="inline-menu-btn"><div>{Priorities.Minor}</div></div>
                     <div className="inline-menu-btn"><div>{Priorities.Trivial}</div></div>
+                    <div className="inline-menu-btn"><div>{Priorities.Minor}</div></div>
+                    <div className="inline-menu-btn"><div>{Priorities.Normal}</div></div>
+                    <div className="inline-menu-btn"><div>{Priorities.Major}</div></div>
+                    <div className="inline-menu-btn"><div>{Priorities.Critical}</div></div>
                 </div> 
                 : <div 
                     className="record-menu-row" 

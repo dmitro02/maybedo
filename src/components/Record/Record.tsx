@@ -176,6 +176,7 @@ const Record = ({ item, config = {}}: Props) => {
                         actions={actions}
                         showSubtasks={() => setShowSubtasks(true)}
                         classes={[ hiddenBtnClassName ]}
+                        isProject={isProject}
                     /> 
                 </div>
             </div>
