@@ -79,7 +79,7 @@ const ExportImport = (props: Props) => {
             return
         }
         taskStore.setData(taskList, Date.now())
-        // TODO: need to trigger update?
+        
         backToTaskList()
         const banner: IBanner = {
             text: 'Data successfully imported',

@@ -64,8 +64,6 @@ class TaskStore {
 
     get taskListJSON() {
         const excludeKeys = [
-            // TODO: remove path when no longer exists
-            'path',
             'parent',
             'isNew'
         ]

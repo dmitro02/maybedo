@@ -69,9 +69,13 @@ const MainContainer = () => {
     const leftPanelRef = useRef(null)
     useOutsideClickDetector(leftPanelRef, closeLeftPanel, showSidebar)
 
+    // select project
     const selectedProject = projectList.length 
         ? projectList.find((task: Task) => task.id === rootTask.selectedSubTaskId) || projectList[0]
         : null
+    if (!rootTask.selectedSubTaskId && selectedProject) {
+        rootTask.selectedSubTaskId = selectedProject.id
+    }
 
     return (
         <div className="main-container">   
