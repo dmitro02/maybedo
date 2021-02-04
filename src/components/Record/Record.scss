@@ -14,7 +14,7 @@
     }
 
     .item-done {
-        color: $text-gray;
+        color: $grey5;
         text-decoration: line-through;
     }
     
@@ -23,14 +23,30 @@
         overflow-wrap: anywhere;
         margin: 0 8px;
     }
+
+    .prio-0 {
+        color: $grey5;
+    }
+    .prio-1 {
+        color: $green2;
+    }
+    .prio-2 {
+        color: $yellow2;
+    }
+    .prio-3 {
+        color: $orange1;
+    }
+    .prio-4 {
+        color: $red4;
+    }
 }
 
 .record-selected {
-    background-color: $record-selected-color;
+    background-color: $grey2;
 }
 
 .record:hover {
-    background-color: $record-hover-color;
+    background-color: $grey3;
     
     .hidden-btn {
         visibility: visible;
@@ -38,7 +54,7 @@
 }
 
 .add-record {
-    color: $text-gray;
+    color: $grey5;
     cursor: text;
 
     .row-btns {
@@ -50,7 +66,7 @@
     }
 
     .add-btn:hover {
-        color: $text-gray;
+        color: $grey5;
     }
 }
 
@@ -58,7 +74,7 @@
     font-weight: bold;
     font-size: 1.7rem;
     text-align: center;
-    color: $text-gray;
+    color: $grey5;
 
     .item-content:hover, .item-content:focus {
         text-decoration: underline;

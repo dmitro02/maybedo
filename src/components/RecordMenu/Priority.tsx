@@ -38,7 +38,7 @@ const Priority = (props: Props) => {
 
     const handleClickOnSwitch = (e: any) => {
         e.stopPropagation()
-        
+
         const el = e.target as HTMLDivElement   
         const newPrio = parseInt(el.textContent!)     
         if (newPrio !== task.priority) {

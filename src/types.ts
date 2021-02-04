@@ -61,9 +61,9 @@ export interface IBanner {
 }
 
 export enum BannerTypes {
-    Success = "SUCCESS",
-    Warning = "WARNING",
-    Failure = "FAILURE"
+    Success = "success",
+    Warning = "warning",
+    Failure = "failure"
 }
 
 export class FailureBanner implements IBanner {

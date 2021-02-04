@@ -52,6 +52,8 @@ const Record = ({ item, config = {}}: Props) => {
 
     const [ isDone, setIsDone ] = useState(initialState)
 
+    const [ isEdited, setIsEdited ] = useState(false)
+
     const [ 
         stateCaretPosition, 
         setStateCaretPosition
@@ -80,8 +82,10 @@ const Record = ({ item, config = {}}: Props) => {
     const selectRecord = (item: Task) => {   
         if (parent && parent.selectedSubTaskId === id) return
         saveCaretPositionToState()
-        taskStore.selectTask(item)
-        actions.triggerCascadingUpdate()
+        if (isProject) {
+            taskStore.selectTask(item)
+            actions.triggerCascadingUpdate() 
+        }
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
@@ -113,7 +117,14 @@ const Record = ({ item, config = {}}: Props) => {
     const loadCaretPositionFromState = () => 
         setCaretPosition(recordContentRef.current || undefined, stateCaretPosition)
 
-    const handleBlur = () => !isEditable && setContentEditable(false)
+    const handleBlur = () => {
+        !isEditable && setContentEditable(false)
+        setIsEdited(false)
+    }
+
+    const handleFocus = () => {
+        setIsEdited(true)
+    }
 
     const setFocus = () => recordContentRef.current?.focus()
 
@@ -121,7 +132,7 @@ const Record = ({ item, config = {}}: Props) => {
 
     const hasSubtasks = !!item.tasks.length
 
-    const recordClassName = `record${isSelected ? ' record-selected' : ''}\
+    const recordClassName = `record${isSelected || isEdited ? ' record-selected' : ''}\
         ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
 
     const hiddenBtnClassName = IS_MOBILE 
@@ -157,6 +168,7 @@ const Record = ({ item, config = {}}: Props) => {
                         actionOnMouseDown={handleMouseDownOnCheckbox} 
                         actionOnMouseUp={handleMouseUpOnCheckbox}
                         isChecked={isDone}
+                        classes={[ isDone ? 'prio-0' : 'prio-' + item.priority ]}
                     />
                 </div>
                 <div 
@@ -166,6 +178,7 @@ const Record = ({ item, config = {}}: Props) => {
                     suppressContentEditableWarning={true}
                     onInput={handleInput}
                     onBlur={handleBlur}
+                    onFocus={handleFocus}
                 >
                     {text}
                 </div>
