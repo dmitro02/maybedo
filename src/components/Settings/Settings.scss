@@ -72,11 +72,18 @@
             color: peru;
         }
     
-        .already-authorized {
-            color: lightseagreen;
+        .is-authorized {
             font-size: 2rem;
             margin-left: 15px;
             cursor: help;
+        }
+
+        .already-authorized {
+            color: lightseagreen;
+        }
+
+        .not-authorized {
+            color: $red4;
         }
 
         .arrow-right {

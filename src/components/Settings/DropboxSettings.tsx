@@ -35,9 +35,12 @@ const DropboxSettings = ({ source }: Props) => {
         <>
             <h3>
                 Connect Dropbox
-                {dbx.isConfigured && 
-                    <span className="already-authorized" title="Already configured">
+                {dbx.isConfigured
+                    ? <span className="is-authorized already-authorized" title="Already configured">
                         &#10004;
+                    </span>
+                    : <span className="is-authorized not-authorized" title="Not configured">
+                        !
                     </span>
                 }
             </h3>

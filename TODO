@@ -15,6 +15,7 @@
 ☐ "Add subtasks" menu item component
 ✔ BUG: after import selected project is not highlighted @done(21-02-04 15:04)
 ☐ persist opened state 
-☐ close modal on escape
-☐ "not cofigured" icon for sync targerts
+✘ close modal on escape @cancelled(21-02-06 00:00)
+✔ "not cofigured" icon for sync targerts @done(21-02-06 00:11)
 ✔ set sync to disabled workd wrong @done(21-02-05 23:24)
+☐ set focus on modal; keyboard navigation
