@@ -1,17 +1,18 @@
 ☐ Exporter class
-☐ replace item moving with setting priority (and 'move to top'?)
+✔ replace item moving with setting priority (and 'move to top'?) @done(21-02-04 15:06)
 ☐ add sync inteval to Dropbox config UI
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ replace all icons with ones from react-icons
 ☐ tooltips for sync status
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ align top panel butons with record ones on the right and slide-out panels
-☐ add "New Project" to the right empty panel if there no projects yet
+☐ add "New Project" to the right empty panel if there no projects yet (mobile only?)
 ☐ styles for standard buttons (in settings), on mobile looks ugly
 ☐ smaller main font on mobile
 ☐ bigger record menu on mobile
 ☐ select a source of data (local or remote) when setting up cloud sync or doing force sync
 ☐ when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad
 ☐ "Add subtasks" menu item component
-☐ BUG: after import selected project is not highlighted
+✔ BUG: after import selected project is not highlighted @done(21-02-04 15:04)
 ☐ persist opened state 
+☐ close modal on escape

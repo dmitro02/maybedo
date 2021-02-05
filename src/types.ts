@@ -3,7 +3,7 @@ import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
 
 export interface IStore {
-    modal?: IModal
+    modal?: JSX.Element
     banner?: IBanner
     showSidebar?: boolean
     loading?: boolean
@@ -46,12 +46,6 @@ export class Metadata {
     constructor(updatedAt?: number) {
         this.updatedAt = updatedAt
     }
-}
-
-export interface IModal {
-    text: string
-    okAction?: () => void 
-    cancelAction?: () => void
 }
 
 export interface IBanner {
@@ -98,7 +92,7 @@ export interface ICloudConnector {
 }
 
 export interface IActions {
-    setModal: (modal: IModal | null) => IStore,
+    setModal: (modal: JSX.Element | null) => IStore,
     setBanner: (banner: IBanner | null) => IStore,
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,

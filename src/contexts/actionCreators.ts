@@ -1,12 +1,8 @@
 import { SyncStatuses } from './../components/Statuses/SyncStatus';
-import { 
-    IBanner, 
-    IModal,
-    IActions
-} from '../types'
+import { IBanner, IActions } from '../types'
 
 export const createActions = (dispatch: Function): IActions => ({
-    setModal: (modal: IModal | null) => dispatch(setModal(modal)),
+    setModal: (modal: JSX.Element | null) => dispatch(setModal(modal)),
     setBanner: (banner: IBanner | null) => dispatch(setBanner(banner)),
     setShowSidebar: (value: boolean) => dispatch(setShowSidebar(value)),
     setLoading: (value: boolean) => dispatch(setLoading(value)),
@@ -27,7 +23,7 @@ export const triggerCascadingUpdateAction = () => ({
     type: actionTypes.TRIGGER_CASCADING_UPDATE,
 }) 
 
-export const setModal = (modal: IModal | null) => ({
+export const setModal = (modal: JSX.Element | null) => ({
     type: actionTypes.SET_MODAL,
     modal
 })

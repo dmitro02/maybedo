@@ -3,7 +3,6 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import { 
     BannerTypes, 
     IBanner, 
-    IModal, 
     Task
 } from '../../types'
 import { 
@@ -14,6 +13,7 @@ import {
     validateExportedData
 } from '../../utils/persistDataUtils'
 import taskStore from '../../utils/taskStore'
+import { CloseButton, ConfirmButton } from '../Buttons/Buttons'
 
 type Props = {
     backToTaskList(): void
@@ -43,14 +43,32 @@ const ExportImport = (props: Props) => {
         }
     }
 
+    const importModal = (reader: FileReader) => {
+        const onClose = () => {
+            actions.setModal(null) 
+            clearFileInput()
+        }
+
+        const onConfirm = () => {
+            actions.setModal(null)
+            doImport(reader)
+        }
+
+        return (
+            <>
+                <div>Do you want to overwrite existing data?</div>
+                <div className="modal-btns">
+                    <CloseButton action={onClose} />
+                    <ConfirmButton action={onConfirm} />
+                </div>
+            </>
+        )
+    }
+
     const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
         const reader = new FileReader()
         reader.onload = () => {
-            const modal: IModal = {
-                text: 'Do you want to overwrite existing data?',
-                okAction: () => doImport(reader),
-                cancelAction: () => clearFileInput()
-            }
+            const modal = importModal(reader)
             actions.setModal(modal)
         };
         const files = e.target.files
