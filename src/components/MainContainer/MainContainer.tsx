@@ -114,7 +114,6 @@ const MainContainer = () => {
                             ? <ArrowBackButton action={toggleSettings} title="close settings" />
                             : <SettingsButton action={toggleSettings} />
                         }
-                        <EmptyButton />
                     </div>
                 </div>
                 <Divider />
