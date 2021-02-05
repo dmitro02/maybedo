@@ -10,9 +10,11 @@
 ☐ styles for standard buttons (in settings), on mobile looks ugly
 ☐ smaller main font on mobile
 ☐ bigger record menu on mobile
-☐ select a source of data (local or remote) when setting up cloud sync or doing force sync
+✔ select a source of data (local or remote) when setting up cloud sync or doing force sync @done(21-02-05 23:24)
 ☐ when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad
 ☐ "Add subtasks" menu item component
 ✔ BUG: after import selected project is not highlighted @done(21-02-04 15:04)
 ☐ persist opened state 
 ☐ close modal on escape
+☐ "not cofigured" icon for sync targerts
+✔ set sync to disabled workd wrong @done(21-02-05 23:24)
