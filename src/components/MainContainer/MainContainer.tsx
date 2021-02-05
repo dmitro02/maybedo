@@ -12,7 +12,6 @@ import Modal from '../Modal/Modal'
 import Banner from '../Banner/Banner'
 import { 
     ArrowBackButton, 
-    EmptyButton, 
     MenuButton, 
     SettingsButton 
 } from '../Buttons/Buttons'
@@ -56,18 +55,22 @@ const MainContainer = () => {
         if (!showSidebar) {
             actions.setShowSidebar(true)
             enableBodyScrolling(false)
+            window.addEventListener('resize', closeLeftPanel)
         }
     }
 
-    const closeLeftPanel = () => {
-        if (showSidebar) {
-            actions.setShowSidebar(false)
-            enableBodyScrolling(true)
-        }
+    const closeLeftPanel = () => {        
+        actions.setShowSidebar(false)
+        enableBodyScrolling(true)
+        window.removeEventListener('resize', closeLeftPanel)
+    }
+
+    const closeLeftPanelIfOpened = () => {
+        showSidebar && closeLeftPanel()
     }
 
     const leftPanelRef = useRef(null)
-    useOutsideClickDetector(leftPanelRef, closeLeftPanel, showSidebar)
+    useOutsideClickDetector(leftPanelRef, closeLeftPanelIfOpened, showSidebar)
 
     // select project
     const selectedProject = projectList.length 
@@ -86,7 +89,7 @@ const MainContainer = () => {
                 <div className="top-panel">
                     <div className="row-btns">
                         <ArrowBackButton 
-                            action={closeLeftPanel} 
+                            action={closeLeftPanelIfOpened} 
                             classNames={['close-menu-btn']} 
                             title="hide projects list"
                         />
@@ -95,7 +98,7 @@ const MainContainer = () => {
                 <Divider />
                 <ProjectList rootTask={rootTask}/>
             </div>
-            <div className="right-panel" onClick={closeLeftPanel}>
+            <div className="right-panel" onClick={closeLeftPanelIfOpened}>
                 <Fog isDisplayed={showSidebar} />
                 <Banner />
                 <div className="top-panel">

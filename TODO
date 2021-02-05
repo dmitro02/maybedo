@@ -19,3 +19,4 @@
 ✔ "not cofigured" icon for sync targerts @done(21-02-06 00:11)
 ✔ set sync to disabled workd wrong @done(21-02-05 23:24)
 ☐ set focus on modal; keyboard navigation
+☐ no-singleton Syncer
