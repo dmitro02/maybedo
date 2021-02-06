@@ -20,7 +20,7 @@ const AddRecord = ({ root }: { root: Task }) => {
         const task: Task = new Task(taskText, root)
         task.isNew = true
         taskStore.createTask(task)
-        taskStore.selectTask(task)
+        task.isProject && taskStore.selectTask(task)
         e.target.textContent = ''
         actions.triggerCascadingUpdate()
     }

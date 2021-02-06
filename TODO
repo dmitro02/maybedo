@@ -20,3 +20,8 @@
 ✔ set sync to disabled workd wrong @done(21-02-05 23:24)
 ☐ set focus on modal; keyboard navigation
 ☐ no-singleton Syncer
+✔ BUG: click on record => caret position set to string end @done(21-02-06 22:15)
+☐ implement Modal HOC and portal
+☐ BUG: left panel height is less then big task list
+☐ BUG: edited project name doesn't update title or vice versa 
+☐ get rid of record configs

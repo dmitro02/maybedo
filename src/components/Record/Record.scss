@@ -13,15 +13,15 @@
         white-space: pre-wrap;
     }
 
-    .item-done {
-        color: $grey5;
-        text-decoration: line-through;
-    }
-    
     .item-content {
         width: 100%;
         overflow-wrap: anywhere;
         margin: 0 8px;
+    }
+
+    &.item-done .item-content {
+        color: $grey5;
+        text-decoration: line-through;
     }
 
     .prio-0 {

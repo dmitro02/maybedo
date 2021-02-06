@@ -1,17 +1,7 @@
-import React, { 
-    useState, 
-    useRef, 
-    useEffect, 
-    memo 
-} from 'react'
+import React, { useState, memo } from 'react'
 import './Record.scss'
 import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { 
-    debounceInput, 
-    getCaretPosition,
-    setCaretPosition
-} from '../../utils/textInputUtils'
 import SubTaskList from '../SubTaskList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
 import { 
@@ -21,11 +11,11 @@ import {
  } from '../Buttons/Buttons'
  import taskStore from '../../utils/taskStore'
 import RecordMenu from '../RecordMenu/RecordMenu'
+import Editable from './Editable'
 
 export type RecordConfig = {
     isEditable?: boolean
     isTitle?: boolean
-    isProject?: boolean
 }
 
 const IS_MOBILE = isMobile()
@@ -39,50 +29,24 @@ const Record = ({ item, config = {}}: Props) => {
     const {
         id, 
         isDone: initialState, 
-        text, 
-        isNew, 
-        parent 
+        parent
     } = item
     
     const {
         isEditable = false,
-        isTitle = false,
-        isProject = false
+        isTitle = false
     } = config
 
     const [ isDone, setIsDone ] = useState(initialState)
-
-    const [ isEdited, setIsEdited ] = useState(false)
-
-    const [ 
-        stateCaretPosition, 
-        setStateCaretPosition
-    ] = useState<number|undefined>(undefined)
 
     const [ showSubtasks, setShowSubtasks ] = useState(false)
     
     const { actions } = useTasksContext()
 
-    const recordContentRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        document.activeElement === recordContentRef.current && loadCaretPositionFromState()  
-    })
-
-    useEffect(() => {
-        if (isNew) {            
-            setContentEditable(true)
-            setFocus()
-            loadCaretPositionFromState()
-            item.isNew = false
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const selectRecord = (item: Task) => {   
+    const selectRecord = (item: Task) => {          
         if (parent && parent.selectedSubTaskId === id) return
-        saveCaretPositionToState()
         if (isProject) {
+
             taskStore.selectTask(item)
             actions.triggerCascadingUpdate() 
         }
@@ -99,41 +63,20 @@ const Record = ({ item, config = {}}: Props) => {
             actions.triggerCascadingUpdate()
         }
     }
-        
-    const handleInput = debounceInput((text: string) => {
-        item.text = text
-        saveCaretPositionToState()
-    })
-
-    const setContentEditable = (flag: boolean) => {
-        const el = recordContentRef.current
-        el?.setAttribute('contenteditable', '' + flag)
-        loadCaretPositionFromState()
-    }
-
-    const saveCaretPositionToState = () => 
-        setStateCaretPosition(getCaretPosition(recordContentRef.current || undefined))
-
-    const loadCaretPositionFromState = () => 
-        setCaretPosition(recordContentRef.current || undefined, stateCaretPosition)
-
-    const handleBlur = () => {
-        !isEditable && setContentEditable(false)
-        setIsEdited(false)
-    }
-
-    const handleFocus = () => {
-        setIsEdited(true)
-    }
-
-    const setFocus = () => recordContentRef.current?.focus()
 
     const isSelected = parent && id === parent.selectedSubTaskId && !isTitle
 
     const hasSubtasks = !!item.tasks.length
 
-    const recordClassName = `record${isSelected || isEdited ? ' record-selected' : ''}\
-        ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
+    const isProject = !!!item.parent?.parent
+
+    const recordClassName = [
+        'record', 
+        isSelected ? 'record-selected' : '',
+        !isEditable ? 'read-only' : '',
+        isTitle ? 'title' : '',
+        isDone ? 'item-done' : ''
+    ].join(' ')
 
     const hiddenBtnClassName = IS_MOBILE 
         ? isSelected ? '' : ' mobile-hidden-btn'
@@ -171,17 +114,7 @@ const Record = ({ item, config = {}}: Props) => {
                         classes={[ isDone ? 'prio-0' : 'prio-' + item.priority ]}
                     />
                 </div>
-                <div 
-                    ref={recordContentRef}
-                    className={'item-content' + (isDone ? ' item-done' : '')} 
-                    contentEditable={isEditable}
-                    suppressContentEditableWarning={true}
-                    onInput={handleInput}
-                    onBlur={handleBlur}
-                    onFocus={handleFocus}
-                >
-                    {text}
-                </div>
+                <Editable task={item} isEditable={isEditable} />
                 <div className="row-btns">
                     {getSubtasksBtn()}
                     <RecordMenu 

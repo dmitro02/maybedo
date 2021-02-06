@@ -38,6 +38,10 @@ export class Task {
         this.parent = parent
         this.priority = Priorities.Trivial
     }
+
+    get isProject() {        
+        return !!!this.parent?.parent
+    }
 }
 
 export class Metadata {
