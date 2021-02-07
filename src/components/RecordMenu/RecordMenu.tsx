@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, memo } from 'react'
 import { MdMoreVert } from "react-icons/md"
 import { IActions, Task } from '../../types'
 import { useOutsideClickDetector } from '../../utils/customHooks'
@@ -70,4 +70,4 @@ const RecordMenu = (props: Props) => {
     )
 }
 
-export default RecordMenu
+export default memo(RecordMenu)

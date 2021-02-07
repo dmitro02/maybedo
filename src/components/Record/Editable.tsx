@@ -1,24 +1,35 @@
 import { useRef, useEffect, memo } from 'react'
-import { Task } from '../../types'
+import { IActions, Task } from '../../types'
 
 type Props = { 
     task: Task, 
-    isEditable: boolean
+    isEditable: boolean,
+    isProject: boolean,
+    actions: IActions
 }
 
-const Editable = ({ task, isEditable }: Props) => {
+const Editable = ({ task, isEditable, actions, isProject }: Props) => {
     const { isNew, text } = task
 
     const editableRef = useRef<HTMLDivElement>(null)
+
+    const caretPosRef = useRef<number | undefined>(undefined)
 
     useEffect(() => {
         if (isNew) {            
             setContentEditable(true)
             setCaretPosition(editableRef.current, text.length)
             task.isNew = false
+            editableRef.current?.focus()
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        if (document.activeElement === editableRef.current) {
+            setCaretPosition(editableRef.current, caretPosRef.current)
+        }
+    })
         
     const setContentEditable = (flag: boolean) => {
         const el = editableRef.current
@@ -27,7 +38,13 @@ const Editable = ({ task, isEditable }: Props) => {
 
     const handleInput = debounceInput((text: string) => {
         task.text = text
+        caretPosRef.current = getCaretPosition(editableRef.current)
+        isProject && actions.triggerCascadingUpdate()
     })
+
+    const handleBlur = () => {
+        !isEditable && setContentEditable(false)
+    }
 
     return (
         <div 
@@ -36,6 +53,7 @@ const Editable = ({ task, isEditable }: Props) => {
             contentEditable={isEditable}
             suppressContentEditableWarning={true}
             onInput={handleInput}
+            onBlur={handleBlur}
         >
             {text}
         </div>
@@ -49,6 +67,21 @@ const debounceInput = (callback: (text: string) => void) => {
         clearTimeout(timeout)
         timeout = setTimeout(() => callback(text), 700)
     }
+}
+
+const getCaretPosition = (el: HTMLElement | null): number | undefined => {
+    if (!el || !el.isContentEditable) return
+    let range
+    try {
+        range = document.getSelection()?.getRangeAt(0)
+    } catch(err) {
+        // do nothing
+    }
+    if (!range) return
+    let rangeClone = range.cloneRange()
+    rangeClone.selectNodeContents(el)
+    rangeClone.setEnd(range.endContainer, range.endOffset)
+    return rangeClone.toString().length
 }
 
 const setCaretPosition = (el: HTMLElement | null, pos?: number): void => {
@@ -65,7 +98,6 @@ const setCaretPosition = (el: HTMLElement | null, pos?: number): void => {
     range.collapse()
     selection?.removeAllRanges()
     selection?.addRange(range)
-    el.focus()
 }
 
 export default memo(Editable)

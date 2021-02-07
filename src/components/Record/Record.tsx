@@ -41,15 +41,17 @@ const Record = ({ item, config = {}}: Props) => {
 
     const [ showSubtasks, setShowSubtasks ] = useState(false)
     
-    const { actions } = useTasksContext()
+    const { store, actions } = useTasksContext()
 
-    const selectRecord = (item: Task) => {          
-        if (parent && parent.selectedSubTaskId === id) return
-        if (isProject) {
+    const handleClickOnRecord = () => { 
+        if (!isProject) return
 
+        if (parent && parent.selectedSubTaskId !== id) {
             taskStore.selectTask(item)
             actions.triggerCascadingUpdate() 
         }
+
+        store.showSidebar && actions.setShowSidebar(false)
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
@@ -101,10 +103,7 @@ const Record = ({ item, config = {}}: Props) => {
             <div 
                 className={recordClassName}
                 id={id} 
-                onClick={() => {
-                    !isTitle && selectRecord(item)
-                    isProject && actions.setShowSidebar(false)
-                }}
+                onClick={handleClickOnRecord}
             >
                 <div className="row-btns">
                     <CheckmarkButton 
@@ -114,7 +113,12 @@ const Record = ({ item, config = {}}: Props) => {
                         classes={[ isDone ? 'prio-0' : 'prio-' + item.priority ]}
                     />
                 </div>
-                <Editable task={item} isEditable={isEditable} />
+                <Editable 
+                    task={item} 
+                    isEditable={isEditable}
+                    isProject={isProject}
+                    actions={actions}
+                 />
                 <div className="row-btns">
                     {getSubtasksBtn()}
                     <RecordMenu 
