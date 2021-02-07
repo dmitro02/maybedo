@@ -18,7 +18,7 @@ const CheckmarkButton = (props: Props) => {
 
     return (
         <i
-            className={`material-icons common-btn ${classes.join(' ')}`} 
+            className={`material-icons common-btn checkmark-btn ${classes.join(' ')}`} 
             onMouseDown={actionOnMouseDown}
             onMouseUp={actionOnMouseUp}
         >{isChecked ? 'check_box' : 'check_box_outline_blank'}</i>

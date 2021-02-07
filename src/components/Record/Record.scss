@@ -21,12 +21,12 @@
     }
 
     &.item-done .item-content {
-        color: $grey5;
+        color: $grey6;
         text-decoration: line-through;
     }
 
     .prio-0 {
-        color: $grey5;
+        color: $grey6;
     }
     .prio-1 {
         color: $green2;
@@ -63,7 +63,7 @@
 }
 
 .add-record {
-    color: $grey5;
+    color: $grey6;
     cursor: text;
 
     .row-btns {
@@ -75,7 +75,7 @@
     }
 
     .add-btn:hover {
-        color: $grey5;
+        color: $grey6;
     }
 }
 
@@ -83,23 +83,33 @@
     font-weight: bold;
     font-size: 1.7rem;
     text-align: center;
-    color: $grey5;
+    color: $grey6;
     border-bottom: 1px solid $grey4;
     align-items: center;
     height: 56px;
     margin-bottom: 6px;
+    border-radius: 0;
+
+    .item-content {
+        margin-left: 40px;
+    }
 
     .item-content:hover, .item-content:focus {
         text-decoration: underline;
     }
 
-    .common-btn {
+    .subtasks-btn, .checkmark-btn {
         display: none;
     }
 }
 
 .record.title:hover {
     background-color: inherit;
+}
+
+.record.title:focus-within {
+    border-color: transparent;
+    border-bottom-color: $grey3;
 }
 
 .record.title.read-only:hover .item-content:hover {

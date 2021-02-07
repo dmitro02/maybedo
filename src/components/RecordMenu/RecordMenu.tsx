@@ -9,7 +9,7 @@ import './RecordMenu.scss'
 
 type Props = {
     task: Task,
-    classes: string[],
+    classes?: string[],
     actions: IActions,
     showSubtasks: () => void,
     isProject: boolean
@@ -18,7 +18,7 @@ type Props = {
 const RecordMenu = (props: Props) => {
     const {
         task,
-        classes,
+        classes = [],
         actions,
         showSubtasks,
         isProject
@@ -45,16 +45,18 @@ const RecordMenu = (props: Props) => {
 
     const hasCompleted = !!task.tasks.filter((it) => it.isDone).length
 
+    const isRoot = !!!task.parent
+
     return (
         <div className={'record-menu-box ' + classes.join(' ')}>
             <MdMoreVert className="common-btn" onClick={openMenu} />
             {showMenu && <div className="record-menu" ref={menuRef}>
-                {!task.isDone && <Priority 
+                {!task.isDone && !isRoot && <Priority 
                     task={task} 
                     actions={actions} 
                     closeMenu={closeMenu} 
                 />}
-                {(!isProject && !task.isDone) && <div 
+                {!isProject && !task.isDone && !isRoot && <div 
                     className="record-menu-row" 
                     title="Add subtask" 
                     onClick={handleClickOnAddSubtask}
@@ -62,13 +64,14 @@ const RecordMenu = (props: Props) => {
                     <RiFileAddFill className="menu-item-icon" />
                     <div className="menu-item-text">Add</div>
                 </div>}
-                {hasSubtasks && hasCompleted && <DeleteRecords 
+                <DeleteRecords
                     task={task} 
                     actions={actions} 
-                    isBulk 
+                    isBulk
+                    isDisabled={!hasCompleted || !hasSubtasks}
                     closeMenu={closeMenu}
-                />}
-                <DeleteRecords task={task} actions={actions} />
+                />
+                {!isRoot && <DeleteRecords task={task} actions={actions} />}
             </div>}
         </div>
     )

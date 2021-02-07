@@ -6,7 +6,7 @@
     right: 0;
     background-color: $grey1;
     padding: 4px 6px;
-    border: 2px solid $grey5;
+    border: 2px solid $grey6;
     border-radius: 5px;
     z-index: 1;
 
@@ -14,7 +14,7 @@
         display: flex;
         align-items: center;
         justify-content: left;
-        color: $grey5;
+        color: $grey6;
         font-weight: bold;
         cursor: pointer;
         white-space: nowrap;
@@ -48,13 +48,13 @@
         }
 
         .inline-menu-btn:hover {
-            background-color: $grey5;
+            background-color: $grey6;
             color: $grey2;
         }
     }
     
     .record-menu-row:hover {
-        color: $grey7;
+        color: $grey8;
     }
 
     .priority-switch {
@@ -62,4 +62,13 @@
             font-size: $font-size-1;
         }
     }
+
+    .record-menu-row.disabled {
+        color: $grey5;
+        cursor: default;
+    }
+}
+
+.record-menu.hidden {
+    visibility: hidden;
 }

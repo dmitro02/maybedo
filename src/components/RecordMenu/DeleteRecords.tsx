@@ -9,6 +9,7 @@ type Props = {
     task: Task,
     actions: IActions,
     isBulk?: boolean,
+    isDisabled?: boolean,
     closeMenu?: () => void
 }
 
@@ -17,6 +18,7 @@ const DeleteRecords = (props: Props) => {
         task, 
         actions, 
         isBulk = false, 
+        isDisabled = false,
         closeMenu = () => {}
      } = props
      
@@ -36,6 +38,7 @@ const DeleteRecords = (props: Props) => {
     }
 
     const openDeleteConfirmation = (e: any) => {
+        if (isDisabled) return
         e && e.stopPropagation()
         setShowDeleteConfirmation(true)
     }
@@ -69,6 +72,9 @@ const DeleteRecords = (props: Props) => {
         deleteAction 
     } = isBulk ? configBulk : configSingle
 
+    const classNames = [ 'record-menu-row' ]
+    isDisabled && classNames.push('disabled')
+
     return (
         <>
             {showDeleteConfirmation 
@@ -85,7 +91,7 @@ const DeleteRecords = (props: Props) => {
                 <div 
                     onClick={openDeleteConfirmation} 
                     title={tooltip} 
-                    className="record-menu-row"
+                    className={classNames.join(' ')}
                 >
                     {icon}
                     <div className="menu-item-text">{text}</div>

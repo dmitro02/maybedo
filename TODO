@@ -16,4 +16,4 @@
 ☐ set focus on modal; keyboard navigation
 ☐ implement Modal HOC and portal
 ☐ get rid of record configs
-☐ delete all completed projects
+☐ close record menu on mouse out
