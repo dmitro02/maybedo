@@ -1,10 +1,11 @@
+☐ implement PWA
+☐ implement reactive taskStore
+☐ no-singleton Syncer
 ☐ Exporter class
 ☐ add sync inteval to Dropbox config UI
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ replace all icons with ones from react-icons
-☐ tooltips for sync status
 ☐ HTML export with collaps/expand projects and checkboxes
-☐ align top panel butons with record ones on the right and slide-out panels
 ☐ add "New Project" to the right empty panel if there no projects yet (mobile only?)
 ☐ styles for standard buttons (in settings), on mobile looks ugly
 ☐ smaller main font on mobile
@@ -13,7 +14,6 @@
 ☐ "Add subtasks" menu item component
 ☐ persist opened state 
 ☐ set focus on modal; keyboard navigation
-☐ no-singleton Syncer
 ☐ implement Modal HOC and portal
 ☐ get rid of record configs
 ☐ delete all completed projects

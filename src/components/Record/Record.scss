@@ -54,6 +54,10 @@
     }
 }
 
+.record.project:hover {
+    background-color: $grey2;
+}
+
 .record:focus-within {
     border: 1px solid $grey2;
 }

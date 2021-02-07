@@ -77,6 +77,7 @@ const Record = ({ item, config = {}}: Props) => {
         isSelected ? 'record-selected' : '',
         !isEditable ? 'read-only' : '',
         isTitle ? 'title' : '',
+        isProject? 'project' : '',
         isDone ? 'item-done' : ''
     ].join(' ')
 
