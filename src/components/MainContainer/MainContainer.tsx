@@ -54,14 +54,12 @@ const MainContainer = () => {
     const openLeftPanel = () => {
         if (!showSidebar) {
             actions.setShowSidebar(true)
-            enableBodyScrolling(false)
             window.addEventListener('resize', closeLeftPanel)
         }
     }
 
     const closeLeftPanel = () => {        
         actions.setShowSidebar(false)
-        enableBodyScrolling(true)
         window.removeEventListener('resize', closeLeftPanel)
     }
 
@@ -81,7 +79,7 @@ const MainContainer = () => {
     }
 
     return (
-        <div className="main-container">   
+        <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
             <Modal />
             {loading && <Loading />}
             <div ref={leftPanelRef} className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
@@ -130,8 +128,5 @@ const MainContainer = () => {
         </div>
     )
 }
-
-const enableBodyScrolling = (isEnabled: boolean) =>
-    document.body.style.overflow = isEnabled? 'auto' : 'hidden'
 
 export default MainContainer

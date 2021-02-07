@@ -2,13 +2,11 @@
 
 .main-container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
 
     .left-panel {
         position: relative;
         min-width: 400px;
-        min-height: 100vh;
-        max-height: 100vh;
         padding: 0 6px;
         border-right: 1px solid $grey4; 
         background-color: $grey1;
@@ -24,6 +22,7 @@
         background-color: white;
         position: relative;
         padding: 0 300px 0 100px;
+        overflow: auto;
     }
 
     .top-panel {
@@ -38,6 +37,16 @@
 
         .row-btns:last-child .common-btn:first-child {
             margin-right: 10px;
+        }
+    }
+
+    &.sidebar-opened {
+        .right-panel {
+            overflow: hidden;
+        }
+
+        .left-panel {
+            height: 100%;
         }
     }
 }

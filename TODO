@@ -22,6 +22,12 @@
 ☐ no-singleton Syncer
 ✔ BUG: click on record => caret position set to string end @done(21-02-06 22:15)
 ☐ implement Modal HOC and portal
-☐ BUG: left panel height is less then big task list
-☐ BUG: edited project name doesn't update title or vice versa 
+✔ BUG: left panel height is less then big task list - max-height: 100vh @done(21-02-07 15:12)
+✔ BUG: edit new project name => caret jumps to the 0 @done(21-02-06 23:37)
 ☐ get rid of record configs
+☐ BUG: click delete, do not confirm/deny, click clear => error
+☐ do not show "Clear" if there are no completed subtasks
+☐ delete all completed projects
+✔ BUG: select project, click on project again => all rerenders @done(21-02-06 23:37)
+✔ BUG: clicking on project or right panel doesn't activate document scroll @done(21-02-07 16:56)
+☐ top panel should be fixed
