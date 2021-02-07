@@ -1,5 +1,4 @@
 ☐ Exporter class
-✔ replace item moving with setting priority (and 'move to top'?) @done(21-02-04 15:06)
 ☐ add sync inteval to Dropbox config UI
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ replace all icons with ones from react-icons
@@ -10,24 +9,14 @@
 ☐ styles for standard buttons (in settings), on mobile looks ugly
 ☐ smaller main font on mobile
 ☐ bigger record menu on mobile
-✔ select a source of data (local or remote) when setting up cloud sync or doing force sync @done(21-02-05 23:24)
 ☐ when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad
 ☐ "Add subtasks" menu item component
-✔ BUG: after import selected project is not highlighted @done(21-02-04 15:04)
 ☐ persist opened state 
-✘ close modal on escape @cancelled(21-02-06 00:00)
-✔ "not cofigured" icon for sync targerts @done(21-02-06 00:11)
-✔ set sync to disabled workd wrong @done(21-02-05 23:24)
 ☐ set focus on modal; keyboard navigation
 ☐ no-singleton Syncer
-✔ BUG: click on record => caret position set to string end @done(21-02-06 22:15)
 ☐ implement Modal HOC and portal
-✔ BUG: left panel height is less then big task list - max-height: 100vh @done(21-02-07 15:12)
-✔ BUG: edit new project name => caret jumps to the 0 @done(21-02-06 23:37)
 ☐ get rid of record configs
 ☐ BUG: click delete, do not confirm/deny, click clear => error
 ☐ do not show "Clear" if there are no completed subtasks
 ☐ delete all completed projects
-✔ BUG: select project, click on project again => all rerenders @done(21-02-06 23:37)
-✔ BUG: clicking on project or right panel doesn't activate document scroll @done(21-02-07 16:56)
-☐ top panel should be fixed
+☐ try to higlight edited record using :focus selector

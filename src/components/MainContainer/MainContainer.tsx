@@ -15,7 +15,6 @@ import {
     MenuButton, 
     SettingsButton 
 } from '../Buttons/Buttons'
-import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
@@ -94,7 +93,6 @@ const MainContainer = () => {
                         />
                     </div>
                 </div>
-                <Divider />
                 <ProjectList rootTask={rootTask}/>
             </div>
             <div className="right-panel" onClick={closeLeftPanelIfOpened}>
@@ -118,7 +116,6 @@ const MainContainer = () => {
                         }
                     </div>
                 </div>
-                <Divider />
                 <div className="right-content">
                     {isSettingsOpened 
                         ? <Settings backToTaskList={toggleSettings} />

@@ -3,6 +3,11 @@
 .settings {
     position: relative;
 
+    .divider {
+        margin: 10px auto;
+        border-top: 1px solid $grey4;
+    }
+
     .settings-block {
         font-size: $font-size-1;
         color: $grey5;

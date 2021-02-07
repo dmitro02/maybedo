@@ -75,6 +75,10 @@
     font-size: 1.7rem;
     text-align: center;
     color: $grey5;
+    border-bottom: 1px solid $grey4;
+    align-items: center;
+    height: 56px;
+    margin-bottom: 6px;
 
     .item-content:hover, .item-content:focus {
         text-decoration: underline;

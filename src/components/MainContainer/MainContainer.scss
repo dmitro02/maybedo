@@ -23,13 +23,25 @@
         position: relative;
         padding: 0 300px 0 100px;
         overflow: auto;
+
+        .top-panel {
+            position: sticky;
+            top: 0px;
+            background-color: inherit;
+            z-index: 1;
+        }
     }
 
     .top-panel {
         display: flex;
-        margin: 10px 0 18px 0;
         padding-left: 6px;
-        height: 31px;
+        height: 56px;
+        border-bottom: 1px solid $grey4;
+        align-items: center;
+
+        .row-btns {
+            top: 0;
+        }
 
         .open-menu-btn {
             display: none;

@@ -1,8 +1,8 @@
 import { useRef } from 'react'
-import Divider from '../Divider/Divider'
 import AddRecord from '../Record/AddRecord'
 import { Priorities, Task } from '../../types'
 import Record, { RecordConfig } from '../Record/Record'
+import './RecordList.scss'
 
 type Props = { 
     classNames?: string[],
@@ -47,7 +47,6 @@ const RecordList = (props: Props) => {
                         item={root} 
                         config={titleRecordConfig}
                     />
-                    <Divider />
                 </>
             }
             <div className="active-tasks" ref={activeItemListRef}>
@@ -61,8 +60,7 @@ const RecordList = (props: Props) => {
                 )}
             </div>
             <AddRecord root={root}/>
-            <Divider isHidden={!completedTasks.length} />
-            <div className="completed-tasks">
+            {!!completedTasks.length && <div className="completed-tasks">
                 {completedTasks.map(
                     (task: Task) => 
                         <Record 
@@ -71,7 +69,7 @@ const RecordList = (props: Props) => {
                             config={completedRecordConfig}
                         />
                 )}
-            </div>
+            </div>}
         </div>
     )
 }
