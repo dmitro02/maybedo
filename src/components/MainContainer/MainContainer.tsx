@@ -29,7 +29,8 @@ const MainContainer = () => {
         store : {
             showSidebar = false, 
             loading,
-            syncStatus
+            syncStatus,
+            modal
         }, 
         actions 
     } = useTasksContext()
@@ -80,7 +81,7 @@ const MainContainer = () => {
 
     return (
         <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
-            <Modal />
+            {modal && <Modal />}
             {loading && <Loading />}
             <div ref={leftPanelRef} className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
                 <Fog isDisplayed={isSettingsOpened} />

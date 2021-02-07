@@ -13,10 +13,10 @@ const CloseButton = (props: Props) => {
     } = props
 
     return (
-        <i 
+        <button 
             className={`material-icons common-btn close-btn${classNames.join(' ')}`} 
             onClick={action}
-        >close</i>
+        >close</button>
     )
 }
 

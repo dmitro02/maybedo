@@ -5,8 +5,6 @@ import Fog from '../Fog/Fog'
 const Modal = () => {
     const { store: { modal } } = useTasksContext()
 
-    if (!modal) return null
-
     return (
         <>
             <Fog isDisplayed={true} />
