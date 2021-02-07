@@ -41,6 +41,10 @@ const RecordMenu = (props: Props) => {
         showSubtasks()
     }
 
+    const hasSubtasks = !!task.tasks.length
+
+    const hasCompleted = !!task.tasks.filter((it) => it.isDone).length
+
     return (
         <div className={'record-menu-box ' + classes.join(' ')}>
             <MdMoreVert className="common-btn" onClick={openMenu} />
@@ -58,7 +62,7 @@ const RecordMenu = (props: Props) => {
                     <RiFileAddFill className="menu-item-icon" />
                     <div className="menu-item-text">Add</div>
                 </div>}
-                {!!task.tasks.length && <DeleteRecords 
+                {hasSubtasks && hasCompleted && <DeleteRecords 
                     task={task} 
                     actions={actions} 
                     isBulk 

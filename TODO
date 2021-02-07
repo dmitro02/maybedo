@@ -16,7 +16,4 @@
 ☐ no-singleton Syncer
 ☐ implement Modal HOC and portal
 ☐ get rid of record configs
-☐ BUG: click delete, do not confirm/deny, click clear => error
-☐ do not show "Clear" if there are no completed subtasks
 ☐ delete all completed projects
-☐ try to higlight edited record using :focus selector

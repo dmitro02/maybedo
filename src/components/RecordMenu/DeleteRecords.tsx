@@ -32,15 +32,16 @@ const DeleteRecords = (props: Props) => {
         setShowDeleteConfirmation(false)
         taskStore.deleteCompletedSubtasks(task)
         closeMenu()
+        actions.triggerCascadingUpdate()
     }
 
     const openDeleteConfirmation = (e: any) => {
-        e.stopPropagation()
+        e && e.stopPropagation()
         setShowDeleteConfirmation(true)
     }
 
     const closeDeleteConfirmation = (e: any) => {
-        e.stopPropagation()
+        e && e.stopPropagation()
         setShowDeleteConfirmation(false)
     }
 

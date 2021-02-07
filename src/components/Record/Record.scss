@@ -7,6 +7,7 @@
     border-radius: 4px;
     padding: 2px 0 6px 6px;
     align-items: baseline;
+    border: 1px solid transparent;
 
     [contenteditable] {
         outline: 0px solid transparent;
@@ -46,11 +47,15 @@
 }
 
 .record:hover {
-    background-color: $grey3;
+    background-color: $grey1;
     
     .hidden-btn {
         visibility: visible;
     }
+}
+
+.record:focus-within {
+    border: 1px solid $grey2;
 }
 
 .add-record {
