@@ -11,7 +11,7 @@
 ☐ smaller main font on mobile
 ☐ bigger record menu on mobile
 ☐ when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad
-☐ "Add subtasks" menu item component
+✔ "Add subtasks" menu item component @done(21-02-08 19:27)
 ☐ persist opened state 
 ☐ implement Modal HOC and portal
 ☐ set focus on modal; keyboard navigation

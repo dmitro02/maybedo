@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import { useState, useRef } from "react"
 import { IActions, Task } from "../../types"
 import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"

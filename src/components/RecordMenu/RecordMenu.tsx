@@ -1,11 +1,11 @@
-import React, { useRef, useState, memo } from 'react'
+import { useRef, useState, memo } from 'react'
 import { MdMoreVert } from "react-icons/md"
 import { IActions, Task } from '../../types'
 import { useOutsideClickDetector } from '../../utils/customHooks'
-import { RiFileAddFill } from 'react-icons/ri'
 import DeleteRecords from './DeleteRecords'
 import Priority from './Priority'
 import './RecordMenu.scss'
+import AddSubtask from './AddSubtask'
 
 type Props = {
     task: Task,
@@ -36,11 +36,6 @@ const RecordMenu = (props: Props) => {
     const menuRef = useRef(null)
     useOutsideClickDetector(menuRef, closeMenu, showMenu)
 
-    const handleClickOnAddSubtask = () => {
-        closeMenu()
-        showSubtasks()
-    }
-
     let closeTimeout: any
     const handleMouseLeave = () => {
         closeTimeout = setTimeout(closeMenu, 500)
@@ -69,14 +64,10 @@ const RecordMenu = (props: Props) => {
                     actions={actions} 
                     closeMenu={closeMenu} 
                 />}
-                {!isProject && !task.isDone && !isRoot && <div 
-                    className="record-menu-row" 
-                    title="Add subtask" 
-                    onClick={handleClickOnAddSubtask}
-                >
-                    <RiFileAddFill className="menu-item-icon" />
-                    <div className="menu-item-text">Add</div>
-                </div>}
+                {!isProject && !task.isDone && !isRoot && <AddSubtask 
+                    closeMenu={closeMenu}
+                    showSubtasks={showSubtasks}
+                />}
                 <DeleteRecords
                     task={task} 
                     actions={actions} 
