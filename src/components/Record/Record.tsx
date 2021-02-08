@@ -2,7 +2,7 @@ import React, { useState, memo } from 'react'
 import './Record.scss'
 import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
-import SubTaskList from '../SubTaskList/SubTaskList'
+import SubTaskList from '../RecordList/SubTaskList'
 import { isMobile } from '../../utils/commonUtils'
 import { 
     ExpandButton,
@@ -13,29 +13,25 @@ import {
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 
-export type RecordConfig = {
-    isEditable?: boolean
-    isTitle?: boolean
-}
-
 const IS_MOBILE = isMobile()
 
 type Props = { 
     item: Task, 
-    config?: RecordConfig, 
+    isEditable?: boolean,
+    isTitle?: boolean
 }
 
-const Record = ({ item, config = {}}: Props) => {
+const Record = (props: Props) => {
     const {
-        id, 
-        isDone: initialState, 
-        parent
-    } = item
-    
-    const {
-        isEditable = false,
-        isTitle = false
-    } = config
+        isEditable = true,
+        isTitle = false,
+        item,
+        item: {
+            id, 
+            isDone: initialState, 
+            parent 
+        }
+    } = props
 
     const [ isDone, setIsDone ] = useState(initialState)
 

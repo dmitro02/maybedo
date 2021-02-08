@@ -1,24 +1,22 @@
 import { useRef } from 'react'
 import AddRecord from '../Record/AddRecord'
 import { Priorities, Task } from '../../types'
-import Record, { RecordConfig } from '../Record/Record'
+import Record from '../Record/Record'
 import './RecordList.scss'
 
 type Props = { 
     classNames?: string[],
     root: Task,
-    activeRecordConfig?: RecordConfig,
-    completedRecordConfig?: RecordConfig,
-    titleRecordConfig?: RecordConfig
+    hasTitle?: boolean,
+    isEditable?: boolean
 }
 
 const RecordList = (props: Props) => {
     const {
         classNames = [],
         root,
-        activeRecordConfig,
-        completedRecordConfig,
-        titleRecordConfig
+        hasTitle = false,
+        isEditable = true
     } = props
 
     const { tasks } = root
@@ -41,11 +39,12 @@ const RecordList = (props: Props) => {
 
     return (
         <div className={classNames.join(' ')}>
-            {titleRecordConfig && 
+            {hasTitle && 
                 <>
                     <Record 
                         item={root} 
-                        config={titleRecordConfig}
+                        isTitle
+                        isEditable={isEditable}
                     />
                 </>
             }
@@ -54,8 +53,8 @@ const RecordList = (props: Props) => {
                     (task: Task) => 
                         <Record 
                             key={task.id} 
-                            item={task} 
-                            config={activeRecordConfig}
+                            item={task}
+                            isEditable={isEditable}
                         />
                 )}
             </div>
@@ -65,8 +64,8 @@ const RecordList = (props: Props) => {
                     (task: Task) => 
                         <Record 
                             key={task.id}
-                            item={task} 
-                            config={completedRecordConfig}
+                            item={task}
+                            isEditable={isEditable}
                         />
                 )}
             </div>}

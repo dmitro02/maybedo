@@ -1,5 +1,45 @@
 @import '../../styles/variables';
 
+.project-list {
+    header .record:hover {
+        background-color: inherit;
+    }
+
+    .add-record > .item-content:empty::before {
+        content: "new project";
+    }
+
+    .record {
+        .subtasks-btn {
+            display: none;
+        }
+    }
+}
+
+.task-list {
+    header .record {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    & > .add-record > .item-content:empty::before {
+        content: "new task";
+    } 
+}
+
+.subtasks-list {
+    margin: 0 0 6px 30px;
+
+    .add-record > .item-content:empty::before {
+        content: "new subtask";
+    }
+
+    .divider {
+        margin: 3px 0 3px;
+        border-top-style: dotted;
+    }
+}
+
 .completed-tasks {
     margin-top: 8px;    
     padding-top: 6px;
