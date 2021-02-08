@@ -13,7 +13,7 @@
 ☐ when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad
 ☐ "Add subtasks" menu item component
 ☐ persist opened state 
-☐ set focus on modal; keyboard navigation
 ☐ implement Modal HOC and portal
+☐ set focus on modal; keyboard navigation
 ☐ get rid of record configs
-☐ close record menu on mouse out
+✔ close record menu on mouse out @done(21-02-08 19:03)

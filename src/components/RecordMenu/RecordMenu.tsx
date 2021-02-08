@@ -41,6 +41,14 @@ const RecordMenu = (props: Props) => {
         showSubtasks()
     }
 
+    let closeTimeout: any
+    const handleMouseLeave = () => {
+        closeTimeout = setTimeout(closeMenu, 500)
+    }
+    const handleMouseEnter = () => {
+        clearTimeout(closeTimeout)
+    }
+    
     const hasSubtasks = !!task.tasks.length
 
     const hasCompleted = !!task.tasks.filter((it) => it.isDone).length
@@ -50,7 +58,12 @@ const RecordMenu = (props: Props) => {
     return (
         <div className={'record-menu-box ' + classes.join(' ')}>
             <MdMoreVert className="common-btn" onClick={openMenu} />
-            {showMenu && <div className="record-menu" ref={menuRef}>
+            {showMenu && <div 
+                className="record-menu"
+                ref={menuRef} 
+                onMouseLeave={handleMouseLeave}
+                onMouseEnter={handleMouseEnter}
+            >
                 {!task.isDone && !isRoot && <Priority 
                     task={task} 
                     actions={actions} 
