@@ -1,3 +1,4 @@
+import { readFile } from './commonUtils';
 import { SyncTargets } from './Syncer';
 import { ICloudConnector } from './../types';
 import DropboxClient from './DropboxClient'
@@ -42,7 +43,7 @@ export default class DropboxConnector implements ICloudConnector {
     async downloadMetadata(): Promise<Metadata> {        
         try {
             const response: any = await this.dropboxCon.downloadFile(METADATA_FILE_PATH)
-            const fileContent = await this.readFile(response.result.fileBlob)
+            const fileContent = await readFile(response.result.fileBlob)
             return JSON.parse(fileContent as string)
         } catch(e) {
             return new Metadata()
@@ -57,7 +58,7 @@ export default class DropboxConnector implements ICloudConnector {
     async downloadTaskList(): Promise<string | null> {
         try {
             const latestExport = await this.getLatestExport()
-            const latestExportJson = await this.readFile(latestExport.fileBlob)
+            const latestExportJson = await readFile(latestExport.fileBlob)
             return latestExportJson as string           
         } catch(e) {
             console.error(e)
@@ -100,14 +101,5 @@ export default class DropboxConnector implements ICloudConnector {
         for (let i = 0; i < sortedExports.length - MAX_EXPORTS_NUMBER_TO_KEEP; i++) {            
             await this.dropboxCon.deleteFile(sortedExports[i].path_lower)
         }
-    }
-
-    private readFile(blob: Blob) {
-        return new Promise((resolve, reject) => {
-            const fr = new FileReader()
-            fr.onerror = reject
-            fr.onload = () => resolve(fr.result)
-            fr.readAsText(blob)
-        })
     }
 }

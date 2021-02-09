@@ -8,7 +8,6 @@ import { useTasksContext } from '../../contexts/TasksContext'
 import ProjectList from '../RecordList/ProjectList'
 import TaskList from '../RecordList/TaskList'
 import Settings from '../Settings/Settings'
-import Modal from '../Modal/Modal'
 import Banner from '../Banner/Banner'
 import { 
     ArrowBackButton, 
@@ -28,8 +27,7 @@ const MainContainer = () => {
         store : {
             showSidebar = false, 
             loading,
-            syncStatus,
-            modal
+            syncStatus
         }, 
         actions 
     } = useTasksContext()
@@ -80,7 +78,6 @@ const MainContainer = () => {
 
     return (
         <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
-            {modal && <Modal />}
             {loading && <Loading />}
             <div ref={leftPanelRef} className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
                 <Fog isDisplayed={isSettingsOpened} />

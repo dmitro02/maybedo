@@ -3,7 +3,6 @@ import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
 
 export interface IStore {
-    modal?: JSX.Element
     banner?: IBanner
     showSidebar?: boolean
     loading?: boolean
@@ -96,7 +95,6 @@ export interface ICloudConnector {
 }
 
 export interface IActions {
-    setModal: (modal: JSX.Element | null) => IStore,
     setBanner: (banner: IBanner | null) => IStore,
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,

@@ -36,9 +36,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.TRIGGER_CASCADING_UPDATE: {
             return { ...state }
         }
-        case actionTypes.SET_MODAL: {
-            return { ...state, modal: action.modal }
-        }
         case actionTypes.SET_BANNER: {
             return { ...state, banner: action.banner }
         }

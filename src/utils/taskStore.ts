@@ -15,7 +15,9 @@ class TaskStore {
         this.linkTasks(this._taskList, null)
     }
 
-    setData(taskList: string | Task, updatedAt: number) {
+    setData(taskList: string | Task | null, updatedAt: number) {
+        if (!taskList) return
+        
         const data: Task = typeof taskList === 'string'
             ? JSON.parse(taskList)
             : taskList 

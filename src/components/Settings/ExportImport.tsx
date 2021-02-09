@@ -1,10 +1,11 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { 
     BannerTypes, 
     IBanner, 
     Task
 } from '../../types'
+import { readFile } from '../../utils/commonUtils'
 import { 
     convertDataToHtmlString,
     convertDataToJsonString, 
@@ -13,7 +14,8 @@ import {
     validateExportedData
 } from '../../utils/persistDataUtils'
 import taskStore from '../../utils/taskStore'
-import { CloseButton, ConfirmButton } from '../Buttons/Buttons'
+import Portal from '../../HOCs/Portal'
+import ImportModal from './ImportModal'
 
 type Props = {
     backToTaskList(): void
@@ -21,6 +23,8 @@ type Props = {
 
 const ExportImport = (props: Props) => {
     const { actions } = useTasksContext()
+
+    const [ showModal, setShowModal ] = useState(false)
 
     const { taskList } = taskStore
 
@@ -43,49 +47,24 @@ const ExportImport = (props: Props) => {
         }
     }
 
-    const importModal = (reader: FileReader) => {
-        const onClose = () => {
-            actions.setModal(null) 
-            clearFileInput()
-        }
-
-        const onConfirm = () => {
-            actions.setModal(null)
-            doImport(reader)
-        }
-
-        return (
-            <>
-                <div>Do you want to overwrite existing data?</div>
-                <div className="modal-btns">
-                    <CloseButton action={onClose} />
-                    <ConfirmButton action={onConfirm} />
-                </div>
-            </>
-        )
-    }
-
-    const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const reader = new FileReader()
-        reader.onload = () => {
-            const modal = importModal(reader)
-            actions.setModal(modal)
-        };
-        const files = e.target.files
-        files && reader.readAsText(files[0])
-    }
-
-    const doImport = (reader: FileReader) => {
-        clearFileInput()
-        let taskList: Task
+    const doImport = async () => {
+        let taskList: Task | null = null
         try {
-            taskList = JSON.parse(reader.result as string)
+            const files = fileInputRef.current?.files
+            if (files) {
+                const fileContent = await readFile(files[0])
+                taskList = JSON.parse(fileContent)
+                clearFileInput()
+                setShowModal(false)
+            }
         } catch(err) {
+            setShowModal(false)
             const banner: IBanner = {
                 text: 'Failed to parse JSON file',
                 type: BannerTypes.Failure
             }
             actions.setBanner(banner)
+            clearFileInput()
             return
         }
         if (!validateExportedData(taskList)) {
@@ -121,6 +100,15 @@ const ExportImport = (props: Props) => {
         dataType = e.target.value
     }
 
+    const onModalConfirm = () => {
+        doImport()
+    }
+
+    const onModalCancel = () => {
+        clearFileInput()
+        setShowModal(false)
+    }
+
     return (
         <div className="settings-block">
             <h2>Import/Export your data</h2>
@@ -135,9 +123,13 @@ const ExportImport = (props: Props) => {
                 className="input-hidden" 
                 type="file" 
                 accept=".json" 
-                onChange={importData} 
+                onChange={() => setShowModal(true)} 
                 ref={fileInputRef} 
             />
+            {showModal && 
+            <Portal>
+                <ImportModal onCancel={onModalCancel} onConfirm={onModalConfirm} />
+            </Portal>}
         </div>
     )
 }
