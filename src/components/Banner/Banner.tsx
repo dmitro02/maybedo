@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import './Banner.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
-import { CloseButton } from '../Buttons/Buttons'
+import { MdClose } from 'react-icons/md'
 
 const Banner = () => {
     const { store: { banner } , actions } = useTasksContext()
@@ -21,7 +21,7 @@ const Banner = () => {
     return (
         <div className={`banner banner-${type}`}>
             <div>{text}</div>
-            <CloseButton action={closeBanner} />
+            <MdClose onClick={closeBanner} />
         </div>
     )
 }

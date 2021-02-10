@@ -29,32 +29,6 @@ function SyncSettings() {
         }
     }
 
-    // const getSyncModal = () => {
-    //     const selectLocal = () => {
-    //         actions.setModal(null) 
-    //         Syncer
-    //             .getInstance(actions)
-    //             .initSync(SyncSources.Local)
-    //     }
-    
-    //     const selectRemote = () => {
-    //         actions.setModal(null)
-    //         Syncer
-    //             .getInstance(actions)
-    //             .initSync(SyncSources.Remote)
-    //     }
-    
-    //     return (
-    //         <>
-    //             <div>Select initial data source</div>
-    //             <div className="">
-    //                 <button onClick={selectLocal}>Local</button>
-    //                 <button onClick={selectRemote}>Remote</button>
-    //             </div>
-    //         </>
-    //     )
-    // }
-
     const handleTargetChange = (e: any) => {
         const value = e.target.value as SyncTargets
         

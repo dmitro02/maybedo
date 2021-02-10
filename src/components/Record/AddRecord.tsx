@@ -10,6 +10,7 @@ const AddRecord = ({ root }: { root: Task }) => {
 
     const editableRef = useRef<HTMLDivElement>(null)
 
+    // TODO: set focus only when "Add sabtask" is clicked
     useEffect(() => {
         editableRef.current?.focus()
     }, [])

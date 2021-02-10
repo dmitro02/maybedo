@@ -1,5 +1,6 @@
-import { CloseButton, ConfirmButton } from "../Buttons/Buttons"
 import withModal from "../../HOCs/withModal"
+import { useEffect, useRef } from "react"
+import Button from "../Buttons/Button"
 
 type Props = {
     onConfirm: () => void
@@ -12,12 +13,25 @@ const ImportModal = (props: Props) => {
         onCancel
     } = props
 
+    const cancelRef = useRef<HTMLButtonElement>(null)
+
+    useEffect(() => { setTimeout(() => cancelRef.current?.focus(), 0) })
+
     return (
         <>
             <div>Do you want to overwrite existing data?</div>
             <div className="modal-btns">
-                <CloseButton action={onCancel} />
-                <ConfirmButton action={onConfirm} />
+                <Button 
+                    text='cancel' 
+                    ref={cancelRef} 
+                    action={onCancel} 
+                    isOutlined 
+                />
+                <Button 
+                    text='ok' 
+                    action={onConfirm} 
+                    classNames={['margin-left-btn']} 
+                />
             </div>
         </>
     )

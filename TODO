@@ -11,11 +11,7 @@
 ☐ smaller main font on mobile
 ☐ bigger record menu on mobile
 ☐ when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad
-✔ "Add subtasks" menu item component @done(21-02-08 19:27)
 ☐ persist opened state 
-✔ implement Modal HOC and portal @done(21-02-09 22:47)
-☐ set focus on modal; keyboard navigation
-✔ get rid of record configs @done(21-02-08 20:06)
-✔ close record menu on mouse out @done(21-02-08 19:03)
 ☐ style sync initial modal
-☐ close button on banner
+☐ set focus on "new task" only when "Add sabtask" is clicked
+
