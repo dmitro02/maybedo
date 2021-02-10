@@ -25,12 +25,12 @@ const ImportModal = (props: Props) => {
                     text='cancel' 
                     ref={cancelRef} 
                     action={onCancel} 
-                    isOutlined 
+                    isOutlined
+                    classNames={['central-btn']}
                 />
                 <Button 
                     text='ok' 
                     action={onConfirm} 
-                    classNames={['margin-left-btn']} 
                 />
             </div>
         </>

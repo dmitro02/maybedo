@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import Portal from '../../HOCs/Portal'
 import * as lsUtils from '../../utils/localStorageUtils'
@@ -7,8 +7,13 @@ import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
 
+interface SyncOpts {
+    target: SyncTargets
+    dataSource: SyncSources | undefined
+}
+
 function SyncSettings() {
-    const initialState = {
+    const initialState: SyncOpts = {
         target: lsUtils.getSyncTarget(),
         dataSource: undefined
     }
@@ -18,6 +23,8 @@ function SyncSettings() {
     const [ showModal, setShowModal ] = useState(false)
 
     const { store, actions } = useTasksContext()
+
+    const targetRef = useRef<SyncTargets>(syncOpts.target)
 
     const getTargetSettingsElement = () => {
         const { target, dataSource } = syncOpts
@@ -31,34 +38,42 @@ function SyncSettings() {
 
     const handleTargetChange = (e: any) => {
         const value = e.target.value as SyncTargets
-        
-        lsUtils.setSyncTarget(value)
+        targetRef.current = value
 
         if (value === SyncTargets.Disabled) {
+            setSyncOpts({ target: value, dataSource: undefined })
+            lsUtils.setSyncTarget(value)
             actions.setSyncStatus(SyncStatuses.NotConfigured)
             Syncer.getInstance(actions).initSync()
         } else {
             setShowModal(true)
         }
-        
-        setSyncOpts({ target: value, dataSource: undefined })
     }
 
     const isSelectDisabled = 
         store.syncStatus === SyncStatuses.InProgress || 
         store.syncStatus === SyncStatuses.Success
 
-    const onModalLocal = () => {
+
+    const initSyncWithTarget = (dataSource: SyncSources) => {
+        const target = targetRef.current
+        setSyncOpts({ target, dataSource })
+        lsUtils.setSyncTarget(target)
         Syncer
             .getInstance(actions)
-            .initSync(SyncSources.Local)
+            .initSync(dataSource)
         setShowModal(false)
+    }   
+    
+    const onModalLocal = () => {
+        initSyncWithTarget(SyncSources.Local)
     }
 
     const onModalRemote = () => {
-        Syncer
-            .getInstance(actions)
-            .initSync(SyncSources.Remote)
+        initSyncWithTarget(SyncSources.Remote)
+    }
+
+    const onModalCancel = () => {
         setShowModal(false)
     }
 
@@ -76,7 +91,11 @@ function SyncSettings() {
             {getTargetSettingsElement()}
             {showModal && 
             <Portal>
-                <SyncModal onLocal={onModalLocal} onRemote={onModalRemote} />
+                <SyncModal 
+                    onCancel={onModalCancel} 
+                    onLocal={onModalLocal} 
+                    onRemote={onModalRemote} 
+                />
             </Portal>}
         </div>
     )

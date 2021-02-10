@@ -77,3 +77,13 @@
 .filled-btn:hover {
     background-color: $grey4-1;
 }
+
+.central-btn {
+    margin-right: 8px;
+    margin-left: auto;
+}
+
+.modal-btns {
+    display: flex;
+    justify-content: flex-end;
+}
