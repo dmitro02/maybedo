@@ -7,8 +7,6 @@
 ☐ replace all icons with ones from react-icons
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ add "New Project" to the right empty panel if there no projects yet (mobile only?)
-☐ styles for standard buttons (in settings), on mobile looks ugly
 ☐ smaller main font on mobile
 ☐ bigger record menu on mobile
 ☐ when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad
-

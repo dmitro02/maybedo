@@ -108,9 +108,12 @@ input::placeholder {
                 display: block;
             }
         }
+
         .left-panel.panel-opened {
             left: 0;
+            z-index: 20;
         }
+
         .right-panel {
             padding: 0 100px;
 
