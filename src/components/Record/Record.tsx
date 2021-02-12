@@ -33,11 +33,17 @@ const Record = (props: Props) => {
         }
     } = props
 
+    const { store, actions } = useTasksContext()
+
+    const isSelected = parent && id === parent.selectedSubTaskId && !isTitle
+
+    const hasSubtasks = !!item.tasks.length
+
+    const isProject = !!!item.parent?.parent
+
     const [ isDone, setIsDone ] = useState(initialState)
 
-    const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened)
-    
-    const { store, actions } = useTasksContext()
+    const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
 
     const handleClickOnRecord = () => { 
         if (!isProject) return
@@ -61,12 +67,6 @@ const Record = (props: Props) => {
             actions.triggerCascadingUpdate()
         }
     }
-
-    const isSelected = parent && id === parent.selectedSubTaskId && !isTitle
-
-    const hasSubtasks = !!item.tasks.length
-
-    const isProject = !!!item.parent?.parent
 
     const recordClassName = [
         'record', 
@@ -134,7 +134,7 @@ const Record = (props: Props) => {
                     /> 
                 </div>
             </div>
-            <SubTaskList task={item} isDisplayed={showSubtasks} />
+            {showSubtasks && <SubTaskList task={item} />}
         </>
     )
 }

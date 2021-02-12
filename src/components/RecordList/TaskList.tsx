@@ -1,11 +1,9 @@
 import { Task } from '../../types'
 import RecordList from './RecordList'
 
-type Props = { rootTask: Task | null }
+type Props = { rootTask: Task }
 
 const TaskList = ({ rootTask }: Props) => {
-    if (!rootTask) return null
-
     return (
         <RecordList 
             classNames={['task-list']}

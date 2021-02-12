@@ -1,19 +1,14 @@
 import RecordList from './RecordList'
 import { Task } from '../../types'
 
-type Props = { 
-    task: Task,
-    isDisplayed?: boolean
-}
+type Props = { task: Task }
 
-const SubTaskList = ({ task, isDisplayed = false }: Props) => {
+const SubTaskList = ({ task }: Props) => {
     return (
-        isDisplayed
-            ? <RecordList 
-                classNames={['subtasks-list']}
-                root={task}
-            />
-            : null   
+        <RecordList 
+            classNames={['subtasks-list']}
+            root={task}
+        />
     )
 }
 

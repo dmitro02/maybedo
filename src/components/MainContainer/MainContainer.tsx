@@ -116,7 +116,7 @@ const MainContainer = () => {
                 <div className="right-content">
                     {isSettingsOpened 
                         ? <Settings backToTaskList={toggleSettings} />
-                        : <TaskList rootTask={selectedProject} />
+                        : selectedProject && <TaskList rootTask={selectedProject} />
                     }
                 </div>
             </div>
