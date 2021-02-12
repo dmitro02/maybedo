@@ -35,7 +35,7 @@ const Record = (props: Props) => {
 
     const [ isDone, setIsDone ] = useState(initialState)
 
-    const [ showSubtasks, setShowSubtasks ] = useState(false)
+    const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened)
     
     const { store, actions } = useTasksContext()
 
@@ -81,8 +81,15 @@ const Record = (props: Props) => {
         ? isSelected ? '' : ' mobile-hidden-btn'
         : ' hidden-btn' 
 
-    const openSubtasks = () => setShowSubtasks(true)
-    const closeSubtasks = () => setShowSubtasks(false)
+    const openSubtasks = () => {
+        setShowSubtasks(true)
+        item.isOpened = true
+    }
+
+    const closeSubtasks = () => {
+        setShowSubtasks(false)
+        item.isOpened = false
+    }
 
     const getSubtasksBtn = () => {
         const classNames = [ 'subtasks-btn' ]
@@ -121,7 +128,7 @@ const Record = (props: Props) => {
                     <RecordMenu 
                         task={item} 
                         actions={actions}
-                        showSubtasks={() => setShowSubtasks(true)}
+                        showSubtasks={openSubtasks}
                         classes={[ hiddenBtnClassName ]}
                         isProject={isProject}
                     /> 

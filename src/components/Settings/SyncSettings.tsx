@@ -54,7 +54,6 @@ function SyncSettings() {
         store.syncStatus === SyncStatuses.InProgress || 
         store.syncStatus === SyncStatuses.Success
 
-
     const initSyncWithTarget = (dataSource: SyncSources) => {
         const target = targetRef.current
         setSyncOpts({ target, dataSource })

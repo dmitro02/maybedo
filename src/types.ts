@@ -27,6 +27,7 @@ export class Task {
     parent: Task | null
     updatedAt?: number
     priority: Priorities
+    isOpened?: boolean
 
     constructor(text: string, parent: Task | null, isDone: boolean = false, ) {
         this.id = nanoid()
