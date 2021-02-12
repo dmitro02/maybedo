@@ -5,7 +5,7 @@
 
     .divider {
         margin: 10px auto;
-        border-top: 1px solid $grey4;
+        border-top: 1px solid $grey3;
     }
 
     .settings-block {
@@ -28,53 +28,14 @@
             font-size: $font-size-5;
             margin: 12px 0;
         }
-    
-        button, input {
-            height: 40px;
-        }
-
-        select {
-            padding: 5px;
-            margin: 10px 0;
-        }
-
-        button {
-            margin: 10px 0px 10px 0;
-            color: peru;
-            padding: 0px 6px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        
-        .input-hidden {
-            display: none;
-        }
-
-        input.auth-code {
-            max-width: 100%;
-            padding: 0 6px;
-        }
         
         .import-btn {
             display: block;
+            margin-top: 12px;
         }
     
         .words-between {
             margin: 0 10px;
-        }
-        
-        .data-types-select {
-            padding: 5px;
-            height: 40px;
-        }
-    
-        input::placeholder {
-            font-style: italic;
-            color: rgb(200, 200, 200);
-        }
-    
-        a {
-            color: peru;
         }
     
         .is-authorized {
@@ -93,7 +54,7 @@
 
         .arrow-right {
             font-size: $font-size-5;
-            color: peru;
+            color: $grey6;
         }
 
         .dropbox-flow {

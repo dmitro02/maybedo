@@ -8,7 +8,7 @@
         position: relative;
         min-width: 400px;
         padding: 0 6px;
-        border-right: 1px solid $grey4; 
+        border-right: 1px solid $grey3; 
         background-color: $grey1;
         overflow: auto;
 
@@ -36,7 +36,7 @@
         display: flex;
         padding-left: 6px;
         height: 56px;
-        border-bottom: 1px solid $grey4;
+        border-bottom: 1px solid $grey3;
         align-items: center;
 
         .row-btns {
@@ -61,6 +61,27 @@
             height: 100%;
         }
     }
+}
+
+select, input {
+    padding: 5px;
+    height: 36px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 0.9rem !important;
+    color: $grey6 !important;
+    border: 2px solid $grey6;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+input::placeholder {
+    font-style: italic;
+    color: $grey3-2;
+}
+
+.input-hidden {
+    display: none;
 }
 
 @media screen and (max-width: 1700px) {

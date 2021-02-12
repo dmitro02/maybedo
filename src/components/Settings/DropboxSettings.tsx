@@ -7,6 +7,7 @@ import {
 } from '../../types'
 import Syncer, { SyncSources } from '../../utils/Syncer'
 import { GoArrowRight } from "react-icons/go";
+import Button from '../Buttons/Button'
 
 type Props = { source: SyncSources }
 
@@ -45,7 +46,7 @@ const DropboxSettings = ({ source }: Props) => {
                 }
             </h3>
             <div className="dropbox-flow">
-                <button onClick={()=> window.open(dbx.authUrl, "_blank")} type="button">Get Code</button>
+                <Button text='get code' action={()=> window.open(dbx.authUrl, "_blank")} />
                 <GoArrowRight className="arrow-right" />
                 <input 
                     type="text" 
@@ -55,7 +56,7 @@ const DropboxSettings = ({ source }: Props) => {
                     className="auth-code"
                 />
                 <GoArrowRight className="arrow-right" />
-                <button onClick={authorizeApp}>Authorize</button>
+                <Button text='authorize' action={authorizeApp} />
             </div>
         </>
     )

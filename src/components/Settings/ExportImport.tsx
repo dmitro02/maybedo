@@ -16,6 +16,7 @@ import {
 import taskStore from '../../utils/taskStore'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
+import Button from '../Buttons/Button'
 
 type Props = {
     backToTaskList(): void
@@ -112,13 +113,17 @@ const ExportImport = (props: Props) => {
     return (
         <div className="settings-block">
             <h2>Import/Export your data</h2>
-            <button className="export-btn" onClick={exportData}>Export</button>
+            <Button text='export' action={exportData} />
             <span className="words-between">as</span>
             <select className="data-types-select" onChange={setDataType}>
                 <option value={DataTypes.JSON}>{DataTypes.JSON.toUpperCase()}</option>
                 <option value={DataTypes.HTML}>{DataTypes.HTML.toUpperCase()}</option>
             </select>
-            <button className="import-btn" onClick={clickOnFileInput}>Import JSON</button>
+            <Button 
+                text='import json' 
+                action={clickOnFileInput} 
+                classNames={['import-btn']} 
+            />
             <input 
                 className="input-hidden" 
                 type="file" 

@@ -43,10 +43,11 @@
 
 .button {
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 0.9rem !important;
     font-weight: bold;
     border-radius: 5px;
     padding: 8px 12px;
+    height: 36px;
 }
 
 .button:focus {
@@ -59,23 +60,23 @@
 }
 
 .outlined-btn {
-    color: $grey6;
+    color: $grey6 !important;
     background-color: $grey2;
     border: 2px solid $grey5;
-}
-
-.filled-btn {
-    color: white;
-    background-color: $grey5;
-    border: 2px solid $grey6;
 }
 
 .outlined-btn:hover {
     background-color: $grey3;
 }
 
+.filled-btn {
+    color: $grey6 !important;
+    background-color: $grey3-1;
+    border: 2px solid $grey6;
+}
+
 .filled-btn:hover {
-    background-color: $grey4-1;
+    background-color: #cfcfcf;
 }
 
 .central-btn {
