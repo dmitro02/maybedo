@@ -2,9 +2,9 @@ import { memo, useEffect, useRef } from 'react'
 import './Record.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
 import { Task } from '../../types'
-import { AddButton } from '../Buttons/Buttons'
 import taskStore from '../../utils/taskStore'
-
+import { MdAdd } from 'react-icons/md'
+ 
 const AddRecord = ({ root }: { root: Task }) => {
     const { actions } = useTasksContext()
 
@@ -28,16 +28,16 @@ const AddRecord = ({ root }: { root: Task }) => {
     return (  
         <div className="record add-record">
             <div className="row-btns">
-                <AddButton />
+                <MdAdd />
             </div>
-            <span 
+            <div 
                 className="item-content" 
                 contentEditable="true"
                 suppressContentEditableWarning={true}
                 onInput={createRecord}
                 onKeyPress={preventEnterOnEmpty}
                 ref={editableRef}
-            ></span>
+            ></div>
         </div>
     )
 }

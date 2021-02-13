@@ -29,6 +29,7 @@
             top: 0px;
             background-color: inherit;
             z-index: 1;
+            padding-right: 10px;
         }
     }
 
@@ -45,10 +46,6 @@
 
         .open-menu-btn {
             display: none;
-        }
-
-        .row-btns:last-child .common-btn:first-child {
-            margin-right: 10px;
         }
     }
 

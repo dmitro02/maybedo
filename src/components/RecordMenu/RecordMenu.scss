@@ -1,5 +1,10 @@
 @import '../../styles/variables';
 
+// TODO: try without this
+.record-menu-box {
+    display: flex;
+}
+
 .record-menu {
     position: absolute;
     top: 0;

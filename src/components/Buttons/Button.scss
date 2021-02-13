@@ -24,9 +24,8 @@
 
 .row-btns {
     display: flex;
-    position: relative;
-    top: 0.3rem;
     justify-content: flex-end;
+    font-size: $font-size-7;
 }
 
 .row-btns:first-child {

@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import './Button.scss'
+import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md'
 
 type Props = {
     actionOnMouseDown: (e: any) => void
@@ -17,11 +18,20 @@ const CheckmarkButton = (props: Props) => {
     } = props
 
     return (
-        <i
-            className={`material-icons common-btn checkmark-btn ${classes.join(' ')}`} 
-            onMouseDown={actionOnMouseDown}
-            onMouseUp={actionOnMouseUp}
-        >{isChecked ? 'check_box' : 'check_box_outline_blank'}</i>
+        <>
+            {isChecked
+                ? <MdCheckBox 
+                    className={`checkmark-btn ${classes.join(' ')}`} 
+                    onMouseDown={actionOnMouseDown}
+                    onMouseUp={actionOnMouseUp}
+                />
+                : <MdCheckBoxOutlineBlank 
+                    className={`checkmark-btn ${classes.join(' ')}`} 
+                    onMouseDown={actionOnMouseDown}
+                    onMouseUp={actionOnMouseUp}
+                />
+            }
+        </>
     )
 }
 
