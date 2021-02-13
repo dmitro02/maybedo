@@ -1,6 +1,8 @@
 @import '../../styles/variables';
 
 .sync-status {
+    display: flex;
+    
     .no-hover:hover {
         color: $grey6;
         cursor: default;

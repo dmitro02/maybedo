@@ -1,5 +1,5 @@
 ☐ implement PWA
-☐ implement reactive taskStore
+☐ implement reactive taskStore or parent-update-only
 ☐ no-singleton Syncer (initialized in TaskContext)
 ☐ Exporter class
 ☐ add sync inteval to Dropbox config UI
@@ -7,10 +7,4 @@
 ☐ replace all icons with ones from react-icons
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ add "New Project" to the right empty panel if there no projects yet
-☐ smaller main font on mobile
-✔ BUG MOB: when settings panel closed focus goes to "new task", on mibile keyboard is opened, bad @done(21-02-12 23:54)
-✔ BUG MOB: black sync button after success manual sync @done(21-02-13 22:39)
-✔ BUG MOB: dropbox flow should be vertical, input must not overflow screen @done(21-02-13 20:52)
-✔ BUG MOB: click on project closes side-bar, you cannot invoke record menu @done(21-02-13 22:33)
-✔ BUG MOB: click on "new project" closes project list, you cannot create project @done(21-02-13 22:33)
-✔ BUG MOB: no record menu button for all records except selected project @done(21-02-13 20:51)
+☐ If local data is empty do not ask local or remote before sync
