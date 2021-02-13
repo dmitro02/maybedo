@@ -3,7 +3,6 @@ import './Record.scss'
 import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
 import SubTaskList from '../RecordList/SubTaskList'
-import { isMobile } from '../../utils/commonUtils'
 import { 
     ExpandButton,
     CollapseButton,
@@ -12,8 +11,6 @@ import {
  import taskStore from '../../utils/taskStore'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-
-const IS_MOBILE = isMobile()
 
 type Props = { 
     item: Task, 
@@ -76,10 +73,8 @@ const Record = (props: Props) => {
         isProject? 'project' : '',
         isDone ? 'item-done' : ''
     ].join(' ')
-
-    const hiddenBtnClassName = IS_MOBILE 
-        ? isSelected ? '' : ' mobile-hidden-btn'
-        : ' hidden-btn' 
+        
+    const hiddenBtnClassName = window.iAmRunningOnMobile ? '' : 'hidden-btn' 
 
     const openSubtasks = () => {
         setShowSubtasks(true)

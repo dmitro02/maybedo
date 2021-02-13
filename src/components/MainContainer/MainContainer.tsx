@@ -52,7 +52,8 @@ const MainContainer = () => {
     const openLeftPanel = () => {
         if (!showSidebar) {
             actions.setShowSidebar(true)
-            window.addEventListener('resize', closeLeftPanel)
+            !window.iAmRunningOnMobile &&
+                window.addEventListener('resize', closeLeftPanel)
         }
     }
 

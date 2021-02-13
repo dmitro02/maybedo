@@ -60,7 +60,13 @@
         .dropbox-flow {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: wrap;  
+
+            .auth-code {
+                max-width: 95%;
+                margin: 15px 0;
+                display: block;
+            }
         }
     }
 }
