@@ -2,9 +2,9 @@
 ☐ implement reactive taskStore or parent-update-only
 ☐ no-singleton Syncer (initialized in TaskContext)
 ☐ Exporter class
+☐ replace all icons with ones from react-icons
+☐ implement full keyboard support
 ☐ add sync inteval to Dropbox config UI
 ☐ add number of sync files to keep to Dropbox config UI
-☐ replace all icons with ones from react-icons
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ add "New Project" to the right empty panel if there no projects yet
-☐ If local data is empty do not ask local or remote before sync

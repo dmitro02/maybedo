@@ -21,12 +21,12 @@ const CheckmarkButton = (props: Props) => {
         <>
             {isChecked
                 ? <MdCheckBox 
-                    className={`checkmark-btn ${classes.join(' ')}`} 
+                    className={`common-btn checkmark-btn ${classes.join(' ')}`} 
                     onMouseDown={actionOnMouseDown}
                     onMouseUp={actionOnMouseUp}
                 />
                 : <MdCheckBoxOutlineBlank 
-                    className={`checkmark-btn ${classes.join(' ')}`} 
+                    className={`common-btn checkmark-btn ${classes.join(' ')}`} 
                     onMouseDown={actionOnMouseDown}
                     onMouseUp={actionOnMouseUp}
                 />

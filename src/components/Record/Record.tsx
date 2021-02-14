@@ -54,12 +54,14 @@ const Record = (props: Props) => {
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
+        e.stopPropagation()
         if (e.button === 0) { // left click only
             setIsDone((prevState) => item.isDone = !prevState)
         }
     }
 
     const handleMouseUpOnCheckbox = (e: any) => {
+        e.stopPropagation()
         if (e.button === 0) { // left click only
             actions.triggerCascadingUpdate()
         }

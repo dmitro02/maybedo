@@ -6,6 +6,7 @@ import Syncer, { SyncSources, SyncTargets } from '../../utils/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
+import taskStore from '../../utils/taskStore' 
 
 interface SyncOpts {
     target: SyncTargets
@@ -44,6 +45,10 @@ function SyncSettings() {
             setSyncOpts({ target: value, dataSource: undefined })
             lsUtils.setSyncTarget(value)
             actions.setSyncStatus(SyncStatuses.NotConfigured)
+            Syncer.getInstance(actions).initSync()
+        } else if (!taskStore.taskList.tasks.length) {
+            setSyncOpts({ target: value, dataSource: undefined })
+            lsUtils.setSyncTarget(value)
             Syncer.getInstance(actions).initSync()
         } else {
             setShowModal(true)
