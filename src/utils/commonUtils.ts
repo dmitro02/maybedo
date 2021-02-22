@@ -10,3 +10,12 @@ export const isMobile = () => {
     return (/\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(navigator.userAgent) ||
             /\b(Android|Windows Phone|iPad|iPod)\b/i.test(navigator.userAgent))
 }
+
+export const readFile = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const fr = new FileReader()
+        fr.onerror = reject
+        fr.onload = () => resolve(fr.result as string)
+        fr.readAsText(blob)
+    })
+}

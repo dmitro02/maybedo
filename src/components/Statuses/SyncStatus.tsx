@@ -1,4 +1,3 @@
-import React from 'react'
 import Syncer from '../../utils/Syncer'
 import './SyncStatus.scss'
 
@@ -27,17 +26,28 @@ const SyncStatus = ({ status }: Props) => {
     const getStatusElement = (status?: SyncStatuses) => {
         switch (status) {
             case SyncStatuses.NotConfigured:
-                return <span className={noHoverClass}>cloud_off</span>
+                return <span 
+                    className={noHoverClass} 
+                    title="clud sync disabled">cloud_off</span>
             case SyncStatuses.Idle:
-                return <span className={baseClass} onClick={refresh}>sync</span>    
+                return <span 
+                    className={baseClass} 
+                    onClick={refresh} 
+                    title="synchronize">sync</span>    
             case SyncStatuses.InProgress:
                 return <span className={inProgresClass}>sync</span>   
             case SyncStatuses.Success:
-                return <span className={noHoverClass}>cloud_done</span>               
+                return <span 
+                    className={noHoverClass} 
+                    title="synchronized">cloud_done</span>               
             case SyncStatuses.Failure:
-                return <span className={failureClass}>sync_problem</span>            
+                return <span 
+                    className={failureClass} 
+                    title="sync failed">sync_problem</span>            
             default:
-                return <span className={noHoverClass}>cloud_off</span>
+                return <span 
+                    className={noHoverClass} 
+                    title="clud sync disabled">cloud_off</span>
         }
     } 
 

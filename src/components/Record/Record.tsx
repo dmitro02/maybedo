@@ -1,182 +1,102 @@
-import React, { useState, useRef, useEffect, memo } from 'react'
+import React, { useState, memo } from 'react'
 import './Record.scss'
 import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
+import SubTaskList from '../RecordList/SubTaskList'
 import { 
-    debounceInput, 
-    getCaretPosition,
-    setCaretPosition
-} from '../../utils/textInputUtils'
-import { isProjectLevelItem } from '../../utils/pathUtils'
-import SubTaskList from '../SubTaskList/SubTaskList'
-import { isMobile } from '../../utils/commonUtils'
-import { 
-    DeleteButton,
     ExpandButton,
     CollapseButton,
-    AddButton,
-    DragButton,
-    CheckmarkButton,
-    EmptyButton,
-    ConfirmButton,
-    CloseButton
+    CheckmarkButton
  } from '../Buttons/Buttons'
-
-export type RecordConfig = {
-    useDragBtn?: boolean
-    isEditable?: boolean
-    isTitle?: boolean
-}
-
-const IS_MOBILE = isMobile()
+ import taskStore from '../../utils/taskStore'
+import RecordMenu from '../RecordMenu/RecordMenu'
+import Editable from './Editable'
 
 type Props = { 
     item: Task, 
-    config: RecordConfig, 
-    parent: Task
+    isEditable?: boolean,
+    isTitle?: boolean
 }
 
-const Record = ({ item, config, parent }: Props) => {
-    const { isDone: initialState, text, path } = item
-    
+const Record = (props: Props) => {
     const {
-        useDragBtn = false,
-        isEditable = false,
-        isTitle = false
-    } = config
-
-    const [ isDone, setIsDone ] = useState(initialState)
-
-    const [ 
-        stateCaretPosition, 
-        setStateCaretPosition
-    ] = useState<number|undefined>(undefined)
-
-    const [ showSubtasks, setShowSubtasks ] = useState(false)
-    
-    const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
+        isEditable = true,
+        isTitle = false,
+        item,
+        item: {
+            id, 
+            isDone: initialState, 
+            parent 
+        }
+    } = props
 
     const { store, actions } = useTasksContext()
 
-    const recordContentRef = useRef<HTMLDivElement>(null)
+    const isSelected = parent && id === parent.selectedSubTaskId && !isTitle
 
-    useEffect(() => {
-        document.activeElement === recordContentRef.current && loadCaretPositionFromState()  
-    })
+    const hasSubtasks = !!item.tasks.length
 
-    useEffect(() => {
-        if (isJustAdded) {
-            setContentEditable(true)
-            setFocus()
-            loadCaretPositionFromState()
-            selectRecord(item)
+    const isProject = !!!item.parent?.parent
+
+    const [ isDone, setIsDone ] = useState(initialState)
+
+    const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
+
+    const handleClickOnRecord = () => { 
+        if (!isProject) return
+
+        if (parent && parent.selectedSubTaskId !== id) {
+            taskStore.selectTask(item)
+            actions.triggerCascadingUpdate() 
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [path, store.addedItemPath])
 
-    const updateRecord = (item: Task) => actions.updateTaskAction(item)
-
-    const deleteRecord = (item: Task) => {
-        if (isProjectLevelItem(item)) {
-            if (parent.tasks.length === 1) {
-                parent.selectedSubTaskPath = undefined
-            } else if (item === parent.tasks[0]) {
-                parent.selectedSubTaskPath = parent.tasks[1].path
-            } else {
-                parent.selectedSubTaskPath = parent.tasks[0].path
-            }
-            actions.updateTaskAction(parent)
-        }
-        setShowDeleteConfirmation(false)
-        actions.deleteTaskAction(item)
-    }
-
-    const selectRecord = (item: Task) => {
-        if (parent.selectedSubTaskPath === item.path) return
-        const updatedParent = { ...parent, selectedSubTaskPath: item.path }
-        actions.selectTaskAction(updatedParent)
+        store.showSidebar && actions.setShowSidebar(false)
     }
 
     const handleMouseDownOnCheckbox = (e: any) => {
+        e.stopPropagation()
         if (e.button === 0) { // left click only
             setIsDone((prevState) => item.isDone = !prevState)
+            taskStore.updateTask()
         }
     }
 
     const handleMouseUpOnCheckbox = (e: any) => {
+        e.stopPropagation()
         if (e.button === 0) { // left click only
-            updateRecord(item)
+            actions.triggerCascadingUpdate()
         }
     }
+
+    const recordClassName = [
+        'record', 
+        isSelected ? 'record-selected' : '',
+        !isEditable ? 'read-only' : '',
+        isTitle ? 'title' : '',
+        isProject? 'project' : '',
+        isDone ? 'item-done' : ''
+    ].join(' ')
         
-    const handleInput = debounceInput((text: string) => {
-        item.text = text
-        saveCaretPositionToState()
-        updateRecord(item)
-    })
+    const hiddenBtnClassName = window.iAmRunningOnMobile ? '' : 'hidden-btn' 
 
-    const openDeleteConfirmation = (e: any) => {
-        e.stopPropagation() // prevent item selection ob click
-        setShowDeleteConfirmation(true)
+    const openSubtasks = () => {
+        setShowSubtasks(true)
+        item.isOpened = true
     }
 
-    const closeDeleteConfirmation = (e: any) => {
-        e.stopPropagation() // prevent item selection ob click
-        setShowDeleteConfirmation(false)
+    const closeSubtasks = () => {
+        setShowSubtasks(false)
+        item.isOpened = false
     }
-
-    const deleteRecordOnConfirm = (e: any) => {
-        e.stopPropagation() // prevent item selection ob click
-        deleteRecord(item);
-    }
-
-    const setContentEditable = (flag: boolean) => {
-        const el = recordContentRef.current
-        el?.setAttribute('contenteditable', '' + flag)
-        loadCaretPositionFromState()
-    }
-
-    const saveCaretPositionToState = () => 
-        setStateCaretPosition(getCaretPosition(recordContentRef.current || undefined))
-
-    const loadCaretPositionFromState = () => 
-        setCaretPosition(recordContentRef.current || undefined, stateCaretPosition)
-
-    const handleBlur = () => !isEditable && setContentEditable(false)
-
-    const setFocus = () => recordContentRef.current?.focus()
-
-    const isJustAdded = store.addedItemPath === path && !isTitle
-
-    const isSelected = path === parent.selectedSubTaskPath && !isTitle
-
-    const hasSubtasks = !!item.tasks.length
-
-    const recordClassName = `record${isSelected ? ' record-selected' : ''}\
-        ${!isEditable ? ' read-only' : ''}${isTitle ? ' title' : ''}`
-
-    const hiddenBtnClassName = IS_MOBILE 
-        ? isSelected ? '' : ' mobile-hidden-btn'
-        : ' hidden-btn' 
 
     const getSubtasksBtn = () => {
-        const action = () => setShowSubtasks(!showSubtasks)
         const classNames = [ 'subtasks-btn' ]
-
         if (hasSubtasks && !showSubtasks) {
-            return <ExpandButton action={action} classNames={classNames} />
+            return <ExpandButton action={openSubtasks} classNames={classNames} />
         }
         if (showSubtasks) {
-            return <CollapseButton action={action} classNames={classNames} />
+            return <CollapseButton action={closeSubtasks} classNames={classNames} />
         }
-        if (!hasSubtasks && !(parent.isDone || isDone)) {
-            return <AddButton 
-                        action={action} 
-                        classNames={[...classNames, hiddenBtnClassName]} 
-                        title='add subtask'
-                    />
-        }
-
         return null
     }
 
@@ -184,52 +104,35 @@ const Record = ({ item, config, parent }: Props) => {
         <>
             <div 
                 className={recordClassName}
-                id={path} 
-                onClick={() => {
-                    saveCaretPositionToState()
-                    if (!isTitle) {
-                        selectRecord(item)
-                        actions.setShowSidebar(false)
-                    }
-                }}
+                id={id} 
+                onClick={handleClickOnRecord}
             >
                 <div className="row-btns">
-                    {useDragBtn ? <DragButton /> : <EmptyButton />}
                     <CheckmarkButton 
                         actionOnMouseDown={handleMouseDownOnCheckbox} 
                         actionOnMouseUp={handleMouseUpOnCheckbox}
                         isChecked={isDone}
+                        classes={[ isDone ? 'prio-0' : 'prio-' + item.priority ]}
                     />
                 </div>
-                <div 
-                    ref={recordContentRef}
-                    className={'item-content' + (isDone ? ' item-done' : '')} 
-                    contentEditable={isEditable}
-                    suppressContentEditableWarning={true}
-                    onInput={handleInput}
-                    onBlur={handleBlur}
-                >
-                    {text}
-                </div>
+                <Editable 
+                    task={item} 
+                    isEditable={isEditable}
+                    isProject={isProject}
+                    actions={actions}
+                 />
                 <div className="row-btns">
-                    {showDeleteConfirmation 
-                        ?
-                        <>
-                            <ConfirmButton action={deleteRecordOnConfirm} />
-                            <CloseButton action={closeDeleteConfirmation} />
-                        </>
-                        :
-                        <>
-                            {getSubtasksBtn()}
-                            <DeleteButton 
-                                classNames={[ hiddenBtnClassName ]} 
-                                action={openDeleteConfirmation} 
-                            />
-                        </>
-                    } 
+                    {getSubtasksBtn()}
+                    <RecordMenu 
+                        task={item} 
+                        actions={actions}
+                        showSubtasks={openSubtasks}
+                        classes={[ hiddenBtnClassName ]}
+                        isProject={isProject}
+                    /> 
                 </div>
             </div>
-            <SubTaskList task={item} isDisplayed={showSubtasks} />
+            {showSubtasks && <SubTaskList task={item} />}
         </>
     )
 }

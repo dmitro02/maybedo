@@ -2,30 +2,23 @@
 
 .common-btn {
     cursor: pointer;
-    color: $text-gray;
+    color: $grey6;
     font-size: $font-size-7;
 }
 
 .common-btn:hover {
-    color: black;
+    color: $grey8;
 }
 
-.hidden-btn, .mobile-hidden-btn {
+.hidden-btn {
     visibility: hidden;
-}
-
-.drag-mark {
-    cursor: move;
-}
-
-.empty-btn {
-    cursor: default;
 }
 
 .row-btns {
     display: flex;
-    position: relative;
-    top: 0.3rem;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: $font-size-7;
 }
 
 .row-btns:first-child {
@@ -33,10 +26,59 @@
 }
 
 .row-btns:last-child {
-    margin-right: 8px;
     margin-left: auto;
+    min-width: 64px;
 
     .common-btn:first-child {
         margin-right: 4px;
     }
+}
+
+.button {
+    text-transform: uppercase;
+    font-size: 0.9rem !important;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 8px 12px;
+    height: 36px;
+    line-height: 1;
+}
+
+.button:focus {
+    box-shadow: 0px 0px 6px 0px $grey6;
+    outline: none;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.outlined-btn {
+    color: $grey6 !important;
+    background-color: $grey2;
+    border: 2px solid $grey5;
+}
+
+.outlined-btn:hover {
+    background-color: $grey3;
+}
+
+.filled-btn {
+    color: $grey6 !important;
+    background-color: $grey3-1;
+    border: 2px solid $grey6;
+}
+
+.filled-btn:hover {
+    background-color: #cfcfcf;
+}
+
+.central-btn {
+    margin-right: 8px;
+    margin-left: auto;
+}
+
+.modal-btns {
+    display: flex;
+    justify-content: flex-end;
 }

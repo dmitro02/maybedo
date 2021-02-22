@@ -1,33 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import { 
+    useEffect, 
+    useState, 
+    useRef 
+} from 'react'
 import './MainContainer.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
-import ProjectList from '../ProjectList/ProjectList'
-import TaskList from '../TaskList/TaskList'
+import ProjectList from '../RecordList/ProjectList'
+import TaskList from '../RecordList/TaskList'
 import Settings from '../Settings/Settings'
-import Modal from '../Modal/Modal'
 import Banner from '../Banner/Banner'
 import { 
     ArrowBackButton, 
-    EmptyButton, 
     MenuButton, 
     SettingsButton 
 } from '../Buttons/Buttons'
-import Divider from '../Divider/Divider'
 import Fog from '../Fog/Fog'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import SyncStatus from '../Statuses/SyncStatus'
+import { Task } from '../../types'
+import taskStore from '../../utils/taskStore'
+import { useOutsideClickDetector } from '../../utils/customHooks'
+import NoProjects from '../NoProjects/NoProjects'
 
 const MainContainer = () => {
-    const { store, actions } = useTasksContext()
-
     const { 
-        showSidebar = false, 
-        loading,
-        syncStatus
-    } = store
+        store : {
+            showSidebar = false, 
+            loading,
+            syncStatus
+        }, 
+        actions 
+    } = useTasksContext()
+
+    const {       
+        taskList: rootTask,
+        taskList: {
+            tasks: projectList
+        }
+    } = taskStore
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
+
+    const hasData = !!projectList.length
 
     useEffect(() => {
         Syncer.getInstance(actions).initSync()
@@ -40,43 +55,53 @@ const MainContainer = () => {
     const openLeftPanel = () => {
         if (!showSidebar) {
             actions.setShowSidebar(true)
-            enableBodyScrolling(false)
+            !window.iAmRunningOnMobile &&
+                window.addEventListener('resize', closeLeftPanel)
         }
     }
 
-    const closeLeftPanel = () => {
-        if (showSidebar) {
-            actions.setShowSidebar(false)
-            enableBodyScrolling(true)
-        }
+    const closeLeftPanel = () => {        
+        actions.setShowSidebar(false)
+        window.removeEventListener('resize', closeLeftPanel)
+    }
+
+    const closeLeftPanelIfOpened = () => {
+        showSidebar && closeLeftPanel()
+    }
+
+    const leftPanelRef = useRef(null)
+    useOutsideClickDetector(leftPanelRef, closeLeftPanelIfOpened, showSidebar)
+
+    // select project
+    const selectedProject = projectList.length 
+        ? projectList.find((task: Task) => task.id === rootTask.selectedSubTaskId) || projectList[0]
+        : null
+    if (!rootTask.selectedSubTaskId && selectedProject) {
+        rootTask.selectedSubTaskId = selectedProject.id
     }
 
     return (
-        <div className="main-container">   
-            <Modal />
+        <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
             {loading && <Loading />}
-            <div className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
+            <div ref={leftPanelRef} className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
                 <Fog isDisplayed={isSettingsOpened} />
                 <div className="top-panel">
                     <div className="row-btns">
                         <ArrowBackButton 
-                            action={closeLeftPanel} 
+                            action={closeLeftPanelIfOpened} 
                             classNames={['close-menu-btn']} 
                             title="hide projects list"
                         />
-                        <EmptyButton />
                     </div>
                 </div>
-                <Divider />
-                <ProjectList />
+                <ProjectList rootTask={rootTask}/>
             </div>
-            <div className="right-panel" onClick={closeLeftPanel}>
+            <div className="right-panel" onClick={closeLeftPanelIfOpened}>
                 <Fog isDisplayed={showSidebar} />
                 <Banner />
                 <div className="top-panel">
                     {!isSettingsOpened &&
                         <div className="row-btns">
-                            <EmptyButton />
                             <MenuButton 
                                 action={openLeftPanel} 
                                 classNames={['open-menu-btn']}
@@ -90,22 +115,18 @@ const MainContainer = () => {
                             ? <ArrowBackButton action={toggleSettings} title="close settings" />
                             : <SettingsButton action={toggleSettings} />
                         }
-                        <EmptyButton />
                     </div>
                 </div>
-                <Divider />
                 <div className="right-content">
                     {isSettingsOpened 
                         ? <Settings backToTaskList={toggleSettings} />
-                        : <TaskList />
+                        : selectedProject && <TaskList rootTask={selectedProject} />
                     }
                 </div>
+                {!hasData && !isSettingsOpened && <NoProjects />}
             </div>
         </div>
     )
 }
-
-const enableBodyScrolling = (isEnabled: boolean) =>
-    document.body.style.overflow = isEnabled? 'auto' : 'hidden'
 
 export default MainContainer

@@ -1,32 +1,21 @@
-import React, { 
+import { 
     createContext, 
     useContext, 
     useReducer
 } from "react"
 import { 
     IContext, 
-    IStore, 
-    Task } from '../types'
-import { 
-    createItem,
-    updateItem,
-    deleteItem,
-    moveItem
-} from './contextUtils'
+    IStore
+} from '../types'
 import { 
     createActions, 
     actionTypes 
 } from '../contexts/actionCreators'
-import LsConnector from "../utils/LsConnector"
-
-const initialState: IStore = {
-    taskList: new Task('0', 'Projects')
-}
 
 const TasksContext = createContext<any>(undefined)
 
 export function TasksContextProvider({ children }: any) {
-    const [ store, dispatch ] = useReducer(tasksReducer, initialState)
+    const [ store, dispatch ] = useReducer(tasksReducer, {})
 
     const context: IContext = {
         store,
@@ -44,48 +33,8 @@ export const useTasksContext = (): IContext => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
-        case actionTypes.CREATE_TASK: {
-            const { item } = action 
-            return {
-                ...state,
-                updatedAt: Date.now(),
-                taskList: createItem(state.taskList, item),
-                addedItemPath: item.path
-            }
-        }
-        case actionTypes.UPDATE_TASK: {
-            return {
-                ...state,
-                updatedAt: Date.now(),
-                taskList: updateItem(state.taskList, action.item)
-            }
-        }
-        case actionTypes.SELECT_TASK: {
-            return {
-                ...state,
-                taskList: updateItem(state.taskList, action.parentItem)
-            }
-        }
-        case actionTypes.DELETE_TASK: {
-            return {
-                ...state,
-                updatedAt: Date.now(),
-                taskList: deleteItem(state.taskList, action.item)
-            }
-        }
-        case actionTypes.MOVE_TASK: {
-            const { movedItemPath, siblingPath } = action
-            return {
-                ...state,
-                updatedAt: Date.now(),
-                taskList: moveItem(state.taskList, movedItemPath, siblingPath)
-            }
-        }
-        case actionTypes.SET_APP_DATA: {
-            return { ...action.state }
-        }
-        case actionTypes.SET_MODAL: {
-            return { ...state, modal: action.modal }
+        case actionTypes.TRIGGER_CASCADING_UPDATE: {
+            return { ...state }
         }
         case actionTypes.SET_BANNER: {
             return { ...state, banner: action.banner }
@@ -98,14 +47,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         }
         case actionTypes.SET_SYNC_STATUS: {
             return { ...state, syncStatus: action.status }
-        }
-        case actionTypes.SAVE_TO_LS: {
-            const { updatedAt = 0, taskList } = state
-
-            if (taskList) {
-                LsConnector.saveToLocalStorage(updatedAt, taskList)
-            }
-            return state
         }
         default:
             return state

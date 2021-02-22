@@ -1,28 +1,46 @@
+import { nanoid } from 'nanoid';
 import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
+
 export interface IStore {
-    taskList: Task
-    addedItemPath?: string
-    modal?: IModal
     banner?: IBanner
     showSidebar?: boolean
     loading?: boolean
     syncStatus?: SyncStatuses
-    updatedAt?: number
+}
+
+export enum Priorities {
+    Trivial,
+    Minor,
+    Normal,
+    Major,
+    Critical
 }
 
 export class Task {
-    path: string
+    id: string
     text: string
     isDone: boolean
     tasks: Task[]
-    selectedSubTaskPath?: string
+    selectedSubTaskId?: string
+    isNew: boolean
+    parent: Task | null
+    updatedAt?: number
+    priority: Priorities
+    isOpened?: boolean
 
-    constructor(path: string, text: string, isDone: boolean = false) {
-        this.path = path
+    constructor(text: string, parent: Task | null, isDone: boolean = false, ) {
+        this.id = nanoid()
         this.text = text
         this.isDone = isDone
         this.tasks = []
+        this.isNew = false
+        this.parent = parent
+        this.priority = Priorities.Trivial
+    }
+
+    get isProject() {        
+        return !!!this.parent?.parent
     }
 }
 
@@ -32,12 +50,6 @@ export class Metadata {
     constructor(updatedAt?: number) {
         this.updatedAt = updatedAt
     }
-}
-
-export interface IModal {
-    text: string
-    okAction?: () => void 
-    cancelAction?: () => void
 }
 
 export interface IBanner {
@@ -79,23 +91,16 @@ export interface ICloudConnector {
     authorize: () => any
     check: () => any
     downloadMetadata: () => Promise<Metadata>
-    downloadTaskList: () => Promise<Task | null>
-    uploadData: (metadata: Metadata, taskList: Task) => any
+    downloadTaskList: () => Promise<string | null>
+    uploadData: (metadata: Metadata, taskList: string) => any
 }
 
 export interface IActions {
-    setAppData: (state: IStore) => IStore,
-    createTaskAction: (item: Task) => IStore,
-    updateTaskAction: (item: Task) => IStore,
-    deleteTaskAction: (item: Task) => IStore,
-    selectTaskAction: (parentItem: Task) => IStore,
-    setModal: (modal: IModal | null) => IStore,
     setBanner: (banner: IBanner | null) => IStore,
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,
     setSyncStatus: (status: SyncStatuses) => IStore,
-    saveToLocalStorage: () => IStore,
-    moveTaskAction: (movedItemPath: string, siblingPath: string | null) => IStore
+    triggerCascadingUpdate: () => IStore
 }
 
 export interface IContext {

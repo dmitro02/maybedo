@@ -1,14 +1,17 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { useTasksContext } from '../../contexts/TasksContext'
 import DropboxConnector from '../../utils/DropboxConnector'
 import { 
     FailureBanner, 
     SuccessBanner 
 } from '../../types'
-import Syncer from '../../utils/Syncer'
+import Syncer, { SyncSources } from '../../utils/Syncer'
 import { GoArrowRight } from "react-icons/go";
+import Button from '../Buttons/Button'
 
-const DropboxSettings = () => {
+type Props = { source: SyncSources }
+
+const DropboxSettings = ({ source }: Props) => {
     const { actions } = useTasksContext()
 
     const dbx = new DropboxConnector()
@@ -20,7 +23,7 @@ const DropboxSettings = () => {
         try {
             await dbx.authorize(authTokenRef.current?.value)
 
-            Syncer.getInstance(actions).initSync(dbx)
+            Syncer.getInstance(actions).initSync(source, dbx)
 
             actions.setBanner(new SuccessBanner('Application successfully authorized'))
         } catch(e) {
@@ -33,14 +36,17 @@ const DropboxSettings = () => {
         <>
             <h3>
                 Connect Dropbox
-                {dbx.isConfigured && 
-                    <span className="already-authorized" title="Already configured">
+                {dbx.isConfigured
+                    ? <span className="is-authorized already-authorized" title="Already configured">
                         &#10004;
+                    </span>
+                    : <span className="is-authorized not-authorized" title="Not configured">
+                        !
                     </span>
                 }
             </h3>
             <div className="dropbox-flow">
-                <button onClick={()=> window.open(dbx.authUrl, "_blank")} type="button">Get Code</button>
+                <Button text='get code' action={()=> window.open(dbx.authUrl, "_blank")} />
                 <GoArrowRight className="arrow-right" />
                 <input 
                     type="text" 
@@ -50,7 +56,7 @@ const DropboxSettings = () => {
                     className="auth-code"
                 />
                 <GoArrowRight className="arrow-right" />
-                <button onClick={authorizeApp}>Authorize</button>
+                <Button text='authorize' action={authorizeApp} />
             </div>
         </>
     )

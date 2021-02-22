@@ -2,75 +2,111 @@
 
 .record {
     display: flex;
-    font-size: $font-size-5;
+    font-size: $font-size-3;
     margin-bottom: 1px;
     border-radius: 4px;
-    padding: 2px 0 6px 0;
-    align-items: baseline;
+    padding: 6px;
+    align-items: flex-start;
+    border: 1px solid transparent;
 
     [contenteditable] {
         outline: 0px solid transparent;
         white-space: pre-wrap;
     }
 
-    .item-done {
-        color: $text-gray;
-        text-decoration: line-through;
-    }
-    
     .item-content {
         width: 100%;
         overflow-wrap: anywhere;
         margin: 0 8px;
     }
+
+    &.item-done .item-content {
+        color: $grey6;
+        text-decoration: line-through;
+    }
+
+    .prio-0 {
+        color: $grey6;
+    }
+    .prio-1 {
+        color: $green2;
+    }
+    .prio-2 {
+        color: $yellow2;
+    }
+    .prio-3 {
+        color: $orange1;
+    }
+    .prio-4 {
+        color: $red4;
+    }
 }
 
 .record-selected {
-    background-color: $record-selected-color;
+    background-color: $grey2;
 }
 
 .record:hover {
-    background-color: $record-hover-color;
-    
+    background-color: $grey1;
+
     .hidden-btn {
         visibility: visible;
     }
 }
 
-.add-record {
-    color: $text-gray;
-    cursor: text;
+.record.project:hover {
+    background-color: $grey2;
+}
 
-    .row-btns {
-        top: 0.42rem;
-    }
+.record:focus-within {
+    border: 1px solid $grey2;
+}
+
+.add-record {
+    color: $grey6;
+    cursor: text;
 
     .add-btn {
         cursor: default;
     }
 
     .add-btn:hover {
-        color: $text-gray;
+        color: $grey6;
     }
 }
 
 .record.title  {
     font-weight: bold;
-    font-size: 1.7rem;
+    font-size: $font-size-7;
     text-align: center;
-    color: $text-gray;
+    color: $grey6;
+    border-bottom: 1px solid $grey3;
+    align-items: center;
+    height: 56px;
+    margin-bottom: 6px;
+    border-radius: 0;
+    padding-bottom: 10px;
+
+    .item-content {
+        margin-left: 40px;
+    }
 
     .item-content:hover, .item-content:focus {
         text-decoration: underline;
     }
 
-    .common-btn {
+    .subtasks-btn, .checkmark-btn {
         display: none;
     }
 }
 
 .record.title:hover {
     background-color: inherit;
+}
+
+.record.title:focus-within {
+    border-color: transparent;
+    border-bottom-color: $grey3;
 }
 
 .record.title.read-only:hover .item-content:hover {

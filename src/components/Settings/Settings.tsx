@@ -1,7 +1,5 @@
-import React from 'react'
 import './Settings.scss'
 import ExportImport from './ExportImport' 
-import Divider from '../Divider/Divider'
 import SyncSettings from './SyncSettings'
 
 type Props = {
@@ -15,7 +13,7 @@ const Settings = (props: Props) => {
     return (
         <div className="settings">
             <ExportImport backToTaskList={backToTaskList} />
-            <Divider />
+            <div className="divider" />
             <SyncSettings />
         </div>
     )

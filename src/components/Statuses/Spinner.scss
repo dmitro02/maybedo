@@ -8,7 +8,7 @@
     width: 64px;
     height: 64px;
     border-width: 8px;
-    border-color: $dark-gray transparent $dark-gray transparent;
+    border-color: $grey8 transparent $grey8 transparent;
 }
 
 @keyframes rotation {
@@ -21,6 +21,6 @@
     width: 26px;
     height: 26px;
     border-width: 4px;
-    border-color: $text-gray;
+    border-color: $grey6;
     border-top-color: transparent;
 }

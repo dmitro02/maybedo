@@ -2,16 +2,14 @@
 
 .main-container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
 
     .left-panel {
         position: relative;
         min-width: 400px;
-        min-height: 100vh;
-        max-height: 100vh;
         padding: 0 6px;
-        border-right: 1px solid $devider-color; 
-        background-color: $background-light;
+        border-right: 1px solid $grey3; 
+        background-color: $grey1;
         overflow: auto;
 
         .close-menu-btn {
@@ -24,21 +22,63 @@
         background-color: white;
         position: relative;
         padding: 0 300px 0 100px;
+        overflow: auto;
+
+        .top-panel {
+            position: sticky;
+            top: 0px;
+            background-color: inherit;
+            z-index: 1;
+            padding-right: 10px;
+        }
     }
 
     .top-panel {
         display: flex;
-        margin-top: 10px;
-        margin-bottom: 18px;
+        padding-left: 6px;
+        height: 56px;
+        border-bottom: 1px solid $grey3;
+        align-items: center;
+
+        .row-btns {
+            top: 0;
+        }
 
         .open-menu-btn {
             display: none;
         }
+    }
 
-        .row-btns:last-child .common-btn:first-child {
-            margin-right: 10px;
+    &.sidebar-opened {
+        .right-panel {
+            overflow: hidden;
+        }
+
+        .left-panel {
+            height: 100%;
         }
     }
+}
+
+select, input {
+    padding: 5px;
+    height: 36px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 0.9rem !important;
+    color: $grey6 !important;
+    border: 2px solid $grey6;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+input::placeholder {
+    font-style: italic;
+    color: $grey3-2;
+}
+
+.input-hidden {
+    display: none;
 }
 
 @media screen and (max-width: 1700px) {
@@ -65,9 +105,12 @@
                 display: block;
             }
         }
+
         .left-panel.panel-opened {
             left: 0;
+            z-index: 20;
         }
+
         .right-panel {
             padding: 0 100px;
 
