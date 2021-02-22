@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { Task, Priorities, IActions } from '../../types'
 import { RiFilePptFill } from 'react-icons/ri'
 import { useOutsideClickDetector } from '../../utils/customHooks'
+import taskStore from '../../utils/taskStore'
 
 const PRIORITY_NAMES = new Map([
     [Priorities.Trivial, 'Trivial'],
@@ -43,6 +44,7 @@ const Priority = (props: Props) => {
         const newPrio = parseInt(el.textContent!)     
         if (newPrio !== task.priority) {
             task.priority = newPrio
+            taskStore.updateTask()
             actions.triggerCascadingUpdate()
         }
         closeMenu() 
