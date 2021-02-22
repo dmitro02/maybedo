@@ -1,0 +1,10 @@
+@import '../../styles/variables';
+
+.no-projects-message {
+    padding: 20px;
+    color: $grey2;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 200px auto 0;
+}

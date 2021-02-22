@@ -57,6 +57,7 @@ const Record = (props: Props) => {
         e.stopPropagation()
         if (e.button === 0) { // left click only
             setIsDone((prevState) => item.isDone = !prevState)
+            taskStore.updateTask()
         }
     }
 

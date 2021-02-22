@@ -21,6 +21,7 @@ import SyncStatus from '../Statuses/SyncStatus'
 import { Task } from '../../types'
 import taskStore from '../../utils/taskStore'
 import { useOutsideClickDetector } from '../../utils/customHooks'
+import NoProjects from '../NoProjects/NoProjects'
 
 const MainContainer = () => {
     const { 
@@ -40,6 +41,8 @@ const MainContainer = () => {
     } = taskStore
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
+
+    const hasData = !!projectList.length
 
     useEffect(() => {
         Syncer.getInstance(actions).initSync()
@@ -120,6 +123,7 @@ const MainContainer = () => {
                         : selectedProject && <TaskList rootTask={selectedProject} />
                     }
                 </div>
+                {!hasData && !isSettingsOpened && <NoProjects />}
             </div>
         </div>
     )
