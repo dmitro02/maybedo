@@ -13,3 +13,4 @@
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ implement ID generation without nanoid
 ☐ implement automatic set of updatedAt (Proxy ?)
+☐ move showSidebar from context to state

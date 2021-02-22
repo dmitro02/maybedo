@@ -123,7 +123,7 @@ const MainContainer = () => {
                         : selectedProject && <TaskList rootTask={selectedProject} />
                     }
                 </div>
-                {!hasData && !isSettingsOpened && <NoProjects />}
+                {!hasData && !isSettingsOpened && !loading && <NoProjects />} 
             </div>
         </div>
     )
