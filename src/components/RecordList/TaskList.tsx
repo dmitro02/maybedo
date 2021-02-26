@@ -1,23 +1,16 @@
 import { Task } from '../../types'
 import RecordList from './RecordList'
 import taskStore from '../../utils/Store'
-import { useForceUpdate } from '../../utils/customHooks'
-import { useEffect } from 'react'
+import { useTaskStoreWithPredicate } from '../../utils/customHooks'
 
 const TaskList = () => {
 
     const root = taskStore.taskList
 
-    const forceUpdate = useForceUpdate()
-
-    useEffect(() => {
-        const callback = (id: string) => {
-            if (id === root.id) forceUpdate()
-        }
-        taskStore.subscribe(callback)
-
-        return () => taskStore.unsubscribe(callback)
-    }, [forceUpdate, root.id])
+    const predicate = (id: string[]) => {
+        return id.includes(root.id)
+    }
+    useTaskStoreWithPredicate(predicate)
 
     // select project to display
     const projects = root.tasks

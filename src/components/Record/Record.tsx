@@ -8,10 +8,10 @@ import {
     CollapseButton,
     CheckmarkButton
  } from '../Buttons/Buttons'
-import taskStoreOld from '../../utils/taskStore'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { useForceUpdate, useTaskStore } from '../../utils/customHooks'
+import { useTaskStoreWithPredicate } from '../../utils/customHooks'
+import { selectTask } from '../../utils/Store'
 
 type Props = { 
     item: Task, 
@@ -28,18 +28,16 @@ const Record = (props: Props) => {
         item,
         item: {
             id, 
-            isDone, 
-            parent 
+            isDone,
+            priority, 
+            parent
         }
     } = props
 
-    const forceUpdate = useForceUpdate()
-
-    const callback = (id: string) => {
-        if (id === item.id && isProject) forceUpdate()
+    const predicate = (id: string[]) => {
+        return id.includes(item.id)
     }
-    
-    useTaskStore(callback)
+    useTaskStoreWithPredicate(predicate)
 
     const { store, actions } = useTasksContext()
 
@@ -50,8 +48,8 @@ const Record = (props: Props) => {
     const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
 
     const handleClickOnRecord = () => { 
-        if (isProject && parent!.selectedSubTaskId !== id) {
-            taskStoreOld.selectTask(item)
+        if (isProject && parent && parent!.selectedSubTaskId !== id) {
+            selectTask(item)
             store.showSidebar && actions.setShowSidebar(false)
         }
     }
@@ -106,14 +104,11 @@ const Record = (props: Props) => {
                     <CheckmarkButton 
                         actionOnClick={handleClickOnCheckbox} 
                         isChecked={isDone}
-                        classes={[ isDone ? 'prio-0' : 'prio-' + item.priority ]}
+                        priority={priority}
                     />
                 </div>
-                <Editable 
-                    task={item} 
-                    isEditable={isEditable}
-                    isProject={isProject}
-                 />
+                <Editable task={item} isEditable={isEditable} />
+                {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
                     {getSubtasksBtn()}
                     <RecordMenu 

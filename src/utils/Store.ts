@@ -1,7 +1,7 @@
 import { Task } from "../types";
 
 class Store {
-    public callbacks: ((taskId: string) => void)[] = []
+    public callbacks: ((taskId: string[]) => void)[] = []
     public updatedAt: number = 0
     private _taskList: Task = this.toProxy(new Task('Projects', null))
 
@@ -29,25 +29,27 @@ class Store {
         this.setUpdatedAt(updatedAt)
     }
 
-    subscribe(callback: (taskId: string) => void) {
+    subscribe(callback: (taskId: string[]) => void) {
         this.callbacks.push(callback);
     }
 
-    unsubscribe(callback: (taskId: string) => void) {
+    unsubscribe(callback: (taskId: string[]) => void) {
         this.callbacks = this.callbacks.filter((it) => it !== callback)
     }
 
     notify(context: any) {       
-        let updatedTaskId = ''
+        let updatedTaskId: string[] = []
 
         if (typeof context === 'string') {
-            updatedTaskId = context
+            updatedTaskId = [ context ]
         } else {
             const { target, prop } = context
-            if (prop === 'isDone' || prop === 'priority') {
-                updatedTaskId = target.parent.id
+            if (prop === 'priority') {
+                updatedTaskId = [ target.parent.id, target.id ]
+            } else if (prop === 'isDone') {
+                updatedTaskId = [ target.parent.id ]
             } else {
-                updatedTaskId = target.id
+                updatedTaskId = [ target.id ]
             }
         }  
         this.callbacks.forEach((cbk) => cbk(updatedTaskId));
@@ -121,3 +123,22 @@ const trackableProps = [
 const storer = new Store()
 
 export default storer
+
+export const createTask = (newTask: Task): void => {
+    const { parent } = newTask
+    parent!.tasks = parent!.tasks.concat(newTask)
+}
+
+export const deleteTask = (deletedTask: Task): void => {
+    const { parent } = deletedTask
+    parent!.tasks = parent!.tasks.filter((it) => it !== deletedTask)
+}
+
+export const deleteCompletedSubtasks = (task: Task): void => {
+    task.tasks = task.tasks.filter((it) => !it.isDone)
+}
+
+export const selectTask = (selectedTask: Task): void => {
+    const { parent } = selectedTask
+    parent!.selectedSubTaskId = selectedTask.id
+}

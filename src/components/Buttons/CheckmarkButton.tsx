@@ -4,25 +4,31 @@ import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md'
 type Props = {
     actionOnClick: (e: any) => void
     isChecked?: boolean,
-    classes?: string[]
+    priority: number
 }
 
 const CheckmarkButton = (props: Props) => {
     const {
         actionOnClick,
         isChecked = false,
-        classes = []
+        priority
     } = props
+
+    const classes = [ 
+        'common-btn', 
+        'checkmark-btn', 
+        isChecked ? 'prio-0' : 'prio-' + priority 
+    ].join(' ')
 
     return (
         <>
             {isChecked
                 ? <MdCheckBox 
-                    className={`common-btn checkmark-btn ${classes.join(' ')}`} 
+                    className={classes} 
                     onClick={actionOnClick}
                 />
                 : <MdCheckBoxOutlineBlank 
-                    className={`common-btn checkmark-btn ${classes.join(' ')}`} 
+                    className={classes} 
                     onClick={actionOnClick}
                 />
             }

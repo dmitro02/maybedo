@@ -28,13 +28,28 @@ export const useOutsideClickDetector = (
 export const useForceUpdate = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [value, setValue] = useState(0)
+
     return () => setValue(value => value + 1)
 }
 
-export const useTaskStore = (callback: (id: string) => void) => {    
+export const useTaskStoreWithCallback = (callback: (id: string[]) => void) => {    
     useEffect(() => {
         taskStore.subscribe(callback)
+
         return () => taskStore.unsubscribe(callback)
     }, [ callback ])
 }
 
+export const useTaskStoreWithPredicate = (predicate: (id: string[]) => boolean) => {   
+    const forceUpdate = useForceUpdate()
+
+    useEffect(() => {
+        const callback = (id: string[]) => {
+            if (predicate(id)) forceUpdate()
+        }
+
+        taskStore.subscribe(callback)
+
+        return () => taskStore.unsubscribe(callback)
+    }, [ forceUpdate, predicate ])
+}

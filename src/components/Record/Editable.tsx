@@ -4,10 +4,9 @@ import { Task } from '../../types'
 type Props = { 
     task: Task, 
     isEditable: boolean,
-    isProject: boolean,
 }
 
-const Editable = ({ task, isEditable, isProject }: Props) => {
+const Editable = ({ task, isEditable }: Props) => {
     const { isNew, text } = task
 
     const editableRef = useRef<HTMLDivElement>(null)
@@ -36,8 +35,8 @@ const Editable = ({ task, isEditable, isProject }: Props) => {
     }
 
     const handleInput = debounceInput((text: string) => {
-        task.text = text
         caretPosRef.current = getCaretPosition(editableRef.current)
+        task.text = text
     })
 
     const handleBlur = () => {
