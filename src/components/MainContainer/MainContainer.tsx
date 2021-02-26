@@ -18,7 +18,6 @@ import Fog from '../Fog/Fog'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import SyncStatus from '../Statuses/SyncStatus'
-import { Task } from '../../types'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import NoProjects from '../NoProjects/NoProjects'
 import taskStore from '../../utils/Store'
@@ -72,14 +71,6 @@ const MainContainer = () => {
     const leftPanelRef = useRef(null)
     useOutsideClickDetector(leftPanelRef, closeLeftPanelIfOpened, showSidebar)
 
-    // select project
-    const selectedProject = projectList.length 
-        ? projectList.find((task: Task) => task.id === rootTask.selectedSubTaskId) || projectList[0]
-        : null
-    if (!rootTask.selectedSubTaskId && selectedProject) {
-        rootTask.selectedSubTaskId = selectedProject.id
-    }
-
     return (
         <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
             {loading && <Loading />}
@@ -120,7 +111,7 @@ const MainContainer = () => {
                 <div className="right-content">
                     {isSettingsOpened 
                         ? <Settings backToTaskList={toggleSettings} />
-                        : selectedProject && <TaskList rootTask={selectedProject} />
+                        : <TaskList />
                     }
                 </div>
                 {!hasData && !isSettingsOpened && !loading && <NoProjects />} 

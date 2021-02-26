@@ -15,13 +15,15 @@ import Editable from './Editable'
 type Props = { 
     item: Task, 
     isEditable?: boolean,
-    isTitle?: boolean
+    isTitle?: boolean,
+    isSelected?: boolean
 }
 
 const Record = (props: Props) => {
     const {
         isEditable = true,
         isTitle = false,
+        isSelected = false,
         item,
         item: {
             id, 
@@ -32,8 +34,6 @@ const Record = (props: Props) => {
 
     const { store, actions } = useTasksContext()
 
-    const isSelected = parent && id === parent.selectedSubTaskId && !isTitle
-
     const hasSubtasks = !!item.tasks.length
 
     const isProject = !!!item.parent?.parent
@@ -41,13 +41,10 @@ const Record = (props: Props) => {
     const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
 
     const handleClickOnRecord = () => { 
-        if (!isProject) return
-
-        if (parent && parent.selectedSubTaskId !== id) {
+        if (isProject && parent!.selectedSubTaskId !== id) {
             taskStore.selectTask(item)
+            store.showSidebar && actions.setShowSidebar(false)
         }
-
-        store.showSidebar && actions.setShowSidebar(false)
     }
 
     const handleClickOnCheckbox = (e: any) => {
@@ -123,4 +120,4 @@ const Record = (props: Props) => {
     )
 }
 
-export default Record
+export default memo(Record)

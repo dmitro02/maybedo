@@ -71,6 +71,7 @@ const RecordList = (props: Props) => {
                             key={task.id} 
                             item={task}
                             isEditable={isEditable}
+                            isSelected={root.selectedSubTaskId === task.id && !root.parent}
                         />
                 )}
             </div>
@@ -82,6 +83,7 @@ const RecordList = (props: Props) => {
                             key={task.id}
                             item={task}
                             isEditable={isEditable}
+                            isSelected={root.selectedSubTaskId === task.id && !root.parent}
                         />
                 )}
             </div>}
