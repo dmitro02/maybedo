@@ -1,10 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import AddRecord from '../Record/AddRecord'
 import { Priorities, Task } from '../../types'
 import Record from '../Record/Record'
 import './RecordList.scss'
-import taskStore from '../../utils/Store'
-import { useForceUpdate } from '../../utils/customHooks'
+import { useForceUpdate, useTaskStore } from '../../utils/customHooks'
 
 type Props = { 
     classNames?: string[],
@@ -24,18 +23,12 @@ const RecordList = (props: Props) => {
     const { tasks } = root
 
     const forceUpdate = useForceUpdate()
+
+    const callback = (id: string) => {
+        if (id === root.id) forceUpdate()
+    }
     
-    useEffect(() => {
-        const callback = (id: string) => {
-            console.log('ROOT ID:', root.id);
-            console.log('UPDATE ID:', id);
-            if (id === root.id) forceUpdate()
-        }
-        taskStore.subscribe(callback)
-
-        return () => taskStore.unsubscribe(callback)
-    }, [forceUpdate, root.id])
-
+    useTaskStore(callback)
 
     // sort subtask by priority
     const setAndCompare = (a: Task, b: Task) => {

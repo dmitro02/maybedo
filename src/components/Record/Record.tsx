@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect } from 'react'
+import React, { useState, memo } from 'react'
 import './Record.scss'
 import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
@@ -11,8 +11,7 @@ import {
 import taskStoreOld from '../../utils/taskStore'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { useForceUpdate } from '../../utils/customHooks'
-import taskStore from '../../utils/Store'
+import { useForceUpdate, useTaskStore } from '../../utils/customHooks'
 
 type Props = { 
     item: Task, 
@@ -36,14 +35,11 @@ const Record = (props: Props) => {
 
     const forceUpdate = useForceUpdate()
 
-    useEffect(() => {
-        const callback = (id: string) => {
-            if (id === item.id && isProject) forceUpdate()
-        }
-        taskStore.subscribe(callback)
-
-        return () => taskStore.unsubscribe(callback)
-    }, [forceUpdate, item.id])
+    const callback = (id: string) => {
+        if (id === item.id && isProject) forceUpdate()
+    }
+    
+    useTaskStore(callback)
 
     const { store, actions } = useTasksContext()
 

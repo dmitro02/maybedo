@@ -1,5 +1,5 @@
 ☐ implement PWA
-☐ implement reactive taskStore or parent-update-only
+✔ implement reactive taskStore or parent-update-only @done(21-02-26 16:11)
 ☐ no-singleton Syncer (initialized in TaskContext)
 ☐ refactor Syncer into smaller self-documented functions
 ☐ Exporter class
@@ -12,7 +12,7 @@
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ implement ID generation without nanoid
-☐ implement automatic set of updatedAt (Proxy ?)
+✔ implement automatic set of updatedAt (Proxy ?) @done(21-02-26 16:11)
 ☐ move showSidebar from context to state
 ✔ BUG: project selected on set isDone @done(21-02-26 15:15)
 ✔ BUG: project is not selected on creation @done(21-02-26 15:07)
@@ -20,4 +20,6 @@
 ✔ BUG: project is not selected on click @done(21-02-26 15:06)
 ☐ Custom hook for subscribing to store
 ☐ get rid of task actions in old taskStore
-☐ cleanup action creators
+✔ cleanup action creators @done(21-02-26 16:11)
+☐ no "Add" menu item if there is subtask already
+☐ priority color is not updated
