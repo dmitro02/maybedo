@@ -1,13 +1,10 @@
 import { memo, useEffect, useRef } from 'react'
 import './Record.scss'
-import { useTasksContext } from '../../contexts/TasksContext'
 import { Task } from '../../types'
 import taskStore from '../../utils/taskStore'
 import { MdAdd } from 'react-icons/md'
  
 const AddRecord = ({ root }: { root: Task }) => {
-    const { actions } = useTasksContext()
-
     const editableRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -22,7 +19,6 @@ const AddRecord = ({ root }: { root: Task }) => {
         taskStore.createTask(task)
         task.isProject && taskStore.selectTask(task)
         e.target.textContent = ''
-        actions.triggerCascadingUpdate()
     }
 
     return (  

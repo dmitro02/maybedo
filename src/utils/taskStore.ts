@@ -28,7 +28,7 @@ class TaskStore {
 
     createTask(newTask: Task): void {
         const { parent } = newTask
-        parent!.tasks.push(newTask)
+        parent!.tasks = parent!.tasks.concat(newTask)
         this.setUpdatedAt()
     }
 

@@ -6,7 +6,7 @@ import {
 } from './../types';
 import DropboxConnector from './DropboxConnector';
 import * as lsUtils from "./localStorageUtils"
-import taskStore from "./taskStore"
+import taskStore from './Store'
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
 

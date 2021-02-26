@@ -19,9 +19,9 @@ import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import SyncStatus from '../Statuses/SyncStatus'
 import { Task } from '../../types'
-import taskStore from '../../utils/taskStore'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import NoProjects from '../NoProjects/NoProjects'
+import taskStore from '../../utils/Store'
 
 const MainContainer = () => {
     const { 

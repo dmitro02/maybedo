@@ -1,13 +1,12 @@
 import { useState, useRef } from "react"
-import { IActions, Task } from "../../types"
 import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import taskStore from "../../utils/taskStore"
 import { useOutsideClickDetector } from '../../utils/customHooks'
+import { Task } from "../../types"
 
 type Props = {
     task: Task,
-    actions: IActions,
     isBulk?: boolean,
     isDisabled?: boolean,
     closeMenu?: () => void
@@ -16,7 +15,6 @@ type Props = {
 const DeleteRecords = (props: Props) => {
     const { 
         task, 
-        actions, 
         isBulk = false, 
         isDisabled = false,
         closeMenu = () => {}
@@ -27,14 +25,12 @@ const DeleteRecords = (props: Props) => {
     const deleteRecord = () => {
         setShowDeleteConfirmation(false)
         taskStore.deleteTask(task)
-        actions.triggerCascadingUpdate()
     }
 
     const deleteCompleted = () => {
         setShowDeleteConfirmation(false)
         taskStore.deleteCompletedSubtasks(task)
         closeMenu()
-        actions.triggerCascadingUpdate()
     }
 
     const openDeleteConfirmation = (e: any) => {

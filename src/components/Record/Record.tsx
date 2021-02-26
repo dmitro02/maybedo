@@ -25,7 +25,7 @@ const Record = (props: Props) => {
         item,
         item: {
             id, 
-            isDone: initialState, 
+            isDone, 
             parent 
         }
     } = props
@@ -38,8 +38,6 @@ const Record = (props: Props) => {
 
     const isProject = !!!item.parent?.parent
 
-    const [ isDone, setIsDone ] = useState(initialState)
-
     const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
 
     const handleClickOnRecord = () => { 
@@ -47,24 +45,15 @@ const Record = (props: Props) => {
 
         if (parent && parent.selectedSubTaskId !== id) {
             taskStore.selectTask(item)
-            actions.triggerCascadingUpdate() 
         }
 
         store.showSidebar && actions.setShowSidebar(false)
     }
 
-    const handleMouseDownOnCheckbox = (e: any) => {
+    const handleClickOnCheckbox = (e: any) => {
         e.stopPropagation()
         if (e.button === 0) { // left click only
-            setIsDone((prevState) => item.isDone = !prevState)
-            taskStore.updateTask()
-        }
-    }
-
-    const handleMouseUpOnCheckbox = (e: any) => {
-        e.stopPropagation()
-        if (e.button === 0) { // left click only
-            actions.triggerCascadingUpdate()
+            item.isDone = !item.isDone
         }
     }
 
@@ -109,8 +98,7 @@ const Record = (props: Props) => {
             >
                 <div className="row-btns">
                     <CheckmarkButton 
-                        actionOnMouseDown={handleMouseDownOnCheckbox} 
-                        actionOnMouseUp={handleMouseUpOnCheckbox}
+                        actionOnClick={handleClickOnCheckbox} 
                         isChecked={isDone}
                         classes={[ isDone ? 'prio-0' : 'prio-' + item.priority ]}
                     />
@@ -119,13 +107,11 @@ const Record = (props: Props) => {
                     task={item} 
                     isEditable={isEditable}
                     isProject={isProject}
-                    actions={actions}
                  />
                 <div className="row-btns">
                     {getSubtasksBtn()}
                     <RecordMenu 
                         task={item} 
-                        actions={actions}
                         showSubtasks={openSubtasks}
                         classes={[ hiddenBtnClassName ]}
                         isProject={isProject}
@@ -137,4 +123,4 @@ const Record = (props: Props) => {
     )
 }
 
-export default memo(Record)
+export default Record

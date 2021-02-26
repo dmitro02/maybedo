@@ -18,16 +18,16 @@ export enum Priorities {
 }
 
 export class Task {
-    id: string
     text: string
     isDone: boolean
     tasks: Task[]
-    selectedSubTaskId?: string
-    isNew: boolean
-    parent: Task | null
-    updatedAt?: number
     priority: Priorities
     isOpened?: boolean
+    selectedSubTaskId?: string
+    
+    isNew: boolean
+    parent: Task | null
+    id: string
 
     constructor(text: string, parent: Task | null, isDone: boolean = false, ) {
         this.id = nanoid()

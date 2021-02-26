@@ -14,3 +14,10 @@
 ☐ implement ID generation without nanoid
 ☐ implement automatic set of updatedAt (Proxy ?)
 ☐ move showSidebar from context to state
+☐ BUG: project selected on set isDone
+☐ BUG: project is not selected on creation
+☐ BUG: project text is not updated on edit 
+☐ BUG: project is not selected on click
+☐ Custom hook for subscribing to store
+☐ get rid of task actions in old taskStore
+☐ cleanup action creators

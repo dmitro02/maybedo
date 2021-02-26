@@ -1,18 +1,15 @@
-import { memo } from 'react'
 import './Button.scss'
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md'
 
 type Props = {
-    actionOnMouseDown: (e: any) => void
-    actionOnMouseUp: (e: any) => void
+    actionOnClick: (e: any) => void
     isChecked?: boolean,
     classes?: string[]
 }
 
 const CheckmarkButton = (props: Props) => {
     const {
-        actionOnMouseDown,
-        actionOnMouseUp,
+        actionOnClick,
         isChecked = false,
         classes = []
     } = props
@@ -22,17 +19,15 @@ const CheckmarkButton = (props: Props) => {
             {isChecked
                 ? <MdCheckBox 
                     className={`common-btn checkmark-btn ${classes.join(' ')}`} 
-                    onMouseDown={actionOnMouseDown}
-                    onMouseUp={actionOnMouseUp}
+                    onClick={actionOnClick}
                 />
                 : <MdCheckBoxOutlineBlank 
                     className={`common-btn checkmark-btn ${classes.join(' ')}`} 
-                    onMouseDown={actionOnMouseDown}
-                    onMouseUp={actionOnMouseUp}
+                    onClick={actionOnClick}
                 />
             }
         </>
     )
 }
 
-export default memo(CheckmarkButton)
+export default CheckmarkButton
