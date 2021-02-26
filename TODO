@@ -16,7 +16,7 @@
 ☐ move showSidebar from context to state
 ✔ BUG: project selected on set isDone @done(21-02-26 15:15)
 ✔ BUG: project is not selected on creation @done(21-02-26 15:07)
-☐ BUG: project text is not updated on edit 
+✔ BUG: project text is not updated on edit @done(21-02-26 16:02)
 ✔ BUG: project is not selected on click @done(21-02-26 15:06)
 ☐ Custom hook for subscribing to store
 ☐ get rid of task actions in old taskStore

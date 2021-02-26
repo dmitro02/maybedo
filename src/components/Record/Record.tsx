@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react'
+import React, { useState, memo, useEffect } from 'react'
 import './Record.scss'
 import { Task } from '../../types'
 import { useTasksContext } from '../../contexts/TasksContext'
@@ -8,9 +8,11 @@ import {
     CollapseButton,
     CheckmarkButton
  } from '../Buttons/Buttons'
- import taskStore from '../../utils/taskStore'
+import taskStoreOld from '../../utils/taskStore'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
+import { useForceUpdate } from '../../utils/customHooks'
+import taskStore from '../../utils/Store'
 
 type Props = { 
     item: Task, 
@@ -32,6 +34,17 @@ const Record = (props: Props) => {
         }
     } = props
 
+    const forceUpdate = useForceUpdate()
+
+    useEffect(() => {
+        const callback = (id: string) => {
+            if (id === item.id && isProject) forceUpdate()
+        }
+        taskStore.subscribe(callback)
+
+        return () => taskStore.unsubscribe(callback)
+    }, [forceUpdate, item.id])
+
     const { store, actions } = useTasksContext()
 
     const hasSubtasks = !!item.tasks.length
@@ -42,7 +55,7 @@ const Record = (props: Props) => {
 
     const handleClickOnRecord = () => { 
         if (isProject && parent!.selectedSubTaskId !== id) {
-            taskStore.selectTask(item)
+            taskStoreOld.selectTask(item)
             store.showSidebar && actions.setShowSidebar(false)
         }
     }

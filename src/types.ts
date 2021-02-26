@@ -100,7 +100,6 @@ export interface IActions {
     setShowSidebar: (value: boolean) => IStore,
     setLoading: (value: boolean) => IStore,
     setSyncStatus: (status: SyncStatuses) => IStore,
-    triggerCascadingUpdate: () => IStore
 }
 
 export interface IContext {

@@ -6,7 +6,6 @@ export const createActions = (dispatch: Function): IActions => ({
     setShowSidebar: (value: boolean) => dispatch(setShowSidebar(value)),
     setLoading: (value: boolean) => dispatch(setLoading(value)),
     setSyncStatus: (status: SyncStatuses) => dispatch(setSyncStatus(status)),
-    triggerCascadingUpdate: () => dispatch(triggerCascadingUpdateAction()) 
 })
 
 export enum actionTypes {
@@ -14,12 +13,7 @@ export enum actionTypes {
     SET_SHOW_SIDEBAR = 'SET_SHOW_SIDEBAR',
     SET_LOADING = 'SET_LOADING',
     SET_SYNC_STATUS = 'SET_SYNC_STATUS',
-    TRIGGER_CASCADING_UPDATE = 'TRIGGER_CASCADING_UPDATE'
 }
-
-export const triggerCascadingUpdateAction = () => ({
-    type: actionTypes.TRIGGER_CASCADING_UPDATE,
-}) 
 
 export const setBanner = (banner: IBanner | null) => ({
     type: actionTypes.SET_BANNER,

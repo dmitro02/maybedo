@@ -37,6 +37,22 @@ class Store {
         this.callbacks = this.callbacks.filter((it) => it !== callback)
     }
 
+    notify(context: any) {       
+        let updatedTaskId = ''
+
+        if (typeof context === 'string') {
+            updatedTaskId = context
+        } else {
+            const { target, prop } = context
+            if (prop === 'isDone' || prop === 'priority') {
+                updatedTaskId = target.parent.id
+            } else {
+                updatedTaskId = target.id
+            }
+        }  
+        this.callbacks.forEach((cbk) => cbk(updatedTaskId));
+    }
+
     private toProxy(data: Task) {
         const proxyHandler = {
             set: (target: any, prop: string, value: any) => {                
@@ -70,25 +86,8 @@ class Store {
         return new Proxy(data, proxyHandler);
     }
 
-    // private isTask(item: Task | any): item is Task {
-    //     return (item as Task).isDone !== undefined;
-    // }
-
     private isTrackableProp(prop: any) {
         return trackableProps.includes(prop);
-    }
-
-    private notify(context: any) {        
-        const { target, prop } = context
-
-        let updatedTaskId = ''
-        if (prop === 'isDone' || prop === 'priority') {
-            updatedTaskId = target.parent.id
-        } else {
-            updatedTaskId = target.id
-        }
-
-        this.callbacks.forEach((cbk) => cbk(updatedTaskId));
     }
 
     private setUpdatedAt(updatedAt?: number) {

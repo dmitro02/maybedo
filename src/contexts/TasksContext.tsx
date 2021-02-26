@@ -3,14 +3,8 @@ import {
     useContext, 
     useReducer
 } from "react"
-import { 
-    IContext, 
-    IStore
-} from '../types'
-import { 
-    createActions, 
-    actionTypes 
-} from '../contexts/actionCreators'
+import { IContext, IStore } from '../types'
+import { createActions, actionTypes } from '../contexts/actionCreators'
 
 const TasksContext = createContext<any>(undefined)
 
@@ -33,9 +27,6 @@ export const useTasksContext = (): IContext => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
-        case actionTypes.TRIGGER_CASCADING_UPDATE: {
-            return { ...state }
-        }
         case actionTypes.SET_BANNER: {
             return { ...state, banner: action.banner }
         }
