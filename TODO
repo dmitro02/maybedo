@@ -1,5 +1,4 @@
 ☐ implement PWA
-☐ implement custom event system based on Store 
 ☐ no-singleton Syncer (initialized in TaskContext)
 ☐ refactor Syncer into smaller self-documented functions
 ☐ Exporter class
@@ -12,5 +11,5 @@
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ implement ID generation without nanoid
-☐ move showSidebar from context to state
+☐ move showSidebar from context to store
 ☐ no "Add" menu item if there is subtask already

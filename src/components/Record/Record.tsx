@@ -10,7 +10,7 @@ import {
  } from '../Buttons/Buttons'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { useTaskStoreWithPredicate } from '../../utils/customHooks'
+import { useTaskStoreWithForceUpdate } from '../../utils/customHooks'
 import { selectTask } from '../../utils/Store'
 
 type Props = { 
@@ -34,10 +34,7 @@ const Record = (props: Props) => {
         }
     } = props
 
-    const predicate = (id: string[]) => {
-        return id.includes(item.id)
-    }
-    useTaskStoreWithPredicate(predicate)
+    useTaskStoreWithForceUpdate(item.id)
 
     const { store, actions } = useTasksContext()
 

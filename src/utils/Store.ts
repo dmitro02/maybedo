@@ -1,8 +1,9 @@
 import { Task } from "../types";
 
 class Store {
-    public callbacks: ((taskId: string[]) => void)[] = []
+    public callbacks: Map<string, (() => void)[]> = new Map()
     public updatedAt: number = 0
+
     private _taskList: Task = this.toProxy(new Task('Projects', null))
 
     get taskList() { return this._taskList }
@@ -29,30 +30,42 @@ class Store {
         this.setUpdatedAt(updatedAt)
     }
 
-    subscribe(callback: (taskId: string[]) => void) {
-        this.callbacks.push(callback);
+    subscribe(event: string, callback: () => void) {
+        const cbks = this.callbacks.get(event)
+        if (cbks) {
+            cbks.push(callback)
+        } else {
+            this.callbacks.set(event, [callback])
+        }
     }
 
-    unsubscribe(callback: (taskId: string[]) => void) {
-        this.callbacks = this.callbacks.filter((it) => it !== callback)
+    unsubscribe(event: string, callback: () => void) {
+            const cbks = this.callbacks.get(event)
+            if (cbks) {
+                const newCbks = cbks.filter((it) => it !== callback)
+                this.callbacks.set(event, newCbks)
+            }
     }
 
     notify(context: any) {       
-        let updatedTaskId: string[] = []
+        let events: string[] = []
 
         if (typeof context === 'string') {
-            updatedTaskId = [ context ]
+            events = [ context ]
         } else {
             const { target, prop } = context
             if (prop === 'priority') {
-                updatedTaskId = [ target.parent.id, target.id ]
+                events = [ target.parent.id, target.id ]
             } else if (prop === 'isDone') {
-                updatedTaskId = [ target.parent.id ]
+                events = [ target.parent.id ]
             } else {
-                updatedTaskId = [ target.id ]
+                events = [ target.id ]
             }
         }  
-        this.callbacks.forEach((cbk) => cbk(updatedTaskId));
+
+        events.forEach((event) => {
+            this.callbacks.get(event)?.forEach((cbk) => cbk())
+        })
     }
 
     private toProxy(data: Task) {

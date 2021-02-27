@@ -1,16 +1,13 @@
 import { Task } from '../../types'
 import RecordList from './RecordList'
 import taskStore from '../../utils/Store'
-import { useTaskStoreWithPredicate } from '../../utils/customHooks'
+import { useTaskStoreWithForceUpdate } from '../../utils/customHooks'
 
 const TaskList = () => {
 
     const root = taskStore.taskList
 
-    const predicate = (id: string[]) => {
-        return id.includes(root.id)
-    }
-    useTaskStoreWithPredicate(predicate)
+    useTaskStoreWithForceUpdate(root.id)
 
     // select project to display
     const projects = root.tasks

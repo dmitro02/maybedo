@@ -32,24 +32,12 @@ export const useForceUpdate = () => {
     return () => setValue(value => value + 1)
 }
 
-export const useTaskStoreWithCallback = (callback: (id: string[]) => void) => {    
-    useEffect(() => {
-        taskStore.subscribe(callback)
-
-        return () => taskStore.unsubscribe(callback)
-    }, [ callback ])
-}
-
-export const useTaskStoreWithPredicate = (predicate: (id: string[]) => boolean) => {   
+export const useTaskStoreWithForceUpdate = (event: string) => {    
     const forceUpdate = useForceUpdate()
 
     useEffect(() => {
-        const callback = (id: string[]) => {
-            if (predicate(id)) forceUpdate()
-        }
+        taskStore.subscribe(event, forceUpdate)
 
-        taskStore.subscribe(callback)
-
-        return () => taskStore.unsubscribe(callback)
-    }, [ forceUpdate, predicate ])
+        return () => taskStore.unsubscribe(event, forceUpdate)
+    }, [event, forceUpdate])
 }

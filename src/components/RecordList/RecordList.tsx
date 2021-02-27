@@ -3,7 +3,7 @@ import AddRecord from '../Record/AddRecord'
 import { Priorities, Task } from '../../types'
 import Record from '../Record/Record'
 import './RecordList.scss'
-import { useTaskStoreWithPredicate } from '../../utils/customHooks'
+import { useTaskStoreWithForceUpdate } from '../../utils/customHooks'
 
 type Props = { 
     classNames?: string[],
@@ -22,10 +22,7 @@ const RecordList = (props: Props) => {
 
     const { tasks } = root
 
-    const predicate = (id: string[]) => {
-        return id.includes(root.id)
-    }
-    useTaskStoreWithPredicate(predicate)
+    useTaskStoreWithForceUpdate(root.id)
 
     // sort subtask by priority
     const setAndCompare = (a: Task, b: Task) => {
