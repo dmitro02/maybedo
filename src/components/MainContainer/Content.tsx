@@ -29,10 +29,7 @@ const Content = (props: Props) => {
     } = props
 
     const { 
-        store : {
-            loading,
-            syncStatus
-        } 
+        store : { loading } 
     } = useTasksContext()
 
     const { taskList } = taskStore
@@ -54,7 +51,7 @@ const Content = (props: Props) => {
                     </div>
                 }
                 <div className="row-btns">
-                    <SyncStatus status={syncStatus} />
+                    <SyncStatus />
                     {isSettingsOpened 
                         ? <ArrowBackButton action={toggleSettings} title="close settings" />
                         : <SettingsButton action={toggleSettings} />

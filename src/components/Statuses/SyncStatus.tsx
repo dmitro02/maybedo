@@ -1,3 +1,4 @@
+import { useTasksContext } from '../../contexts/TasksContext'
 import Syncer from '../../utils/Syncer'
 import './SyncStatus.scss'
 
@@ -9,11 +10,11 @@ export enum SyncStatuses {
     Failure = 'FAILURE'
 }
 
-type Props = {
-    status: SyncStatuses | undefined
-}
-
-const SyncStatus = ({ status }: Props) => {
+const SyncStatus = () => {
+    const { 
+        store : { syncStatus } 
+    } = useTasksContext()
+    
     const refresh = () => {
         Syncer.getInstance().onDemandCloud()
     }
@@ -53,7 +54,7 @@ const SyncStatus = ({ status }: Props) => {
 
     return (
         <div className='sync-status'>
-            {getStatusElement(status)}
+            {getStatusElement(syncStatus)}
         </div>
     )
 }
