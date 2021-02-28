@@ -30,6 +30,8 @@ const MainContainer = () => {
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
+    const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
+
     const hasData = !!taskList.tasks.length
 
     useEffect(() => {
@@ -40,20 +42,32 @@ const MainContainer = () => {
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
 
-    return (
-        // <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
-        <div className={`main-container`}>   
+    const openSidebar = () => {
+        setIsSidebarOpened(true)        
+        !window.iAmRunningOnMobile && window.addEventListener('resize', closeSidebar)
+    }
 
+    const closeSidebar = () => {
+        setIsSidebarOpened(false)
+        window.removeEventListener('resize', closeSidebar)
+    }
+
+    return (
+        <div className={`main-container${isSidebarOpened ? ' sidebar-opened' : ''}`}>   
             {loading && <Loading />}
-            <Sidebar />
+            <Sidebar 
+                isOpened={isSidebarOpened} 
+                close={closeSidebar} 
+                isSettingsOpened={isSettingsOpened}
+            />
             <div className="right-panel">
-                {/* <Fog isDisplayed={showSidebar} /> */}
+                <Fog isDisplayed={isSidebarOpened} />
                 <Banner />
                 <div className="top-panel">
                     {!isSettingsOpened &&
                         <div className="row-btns">
                             <MenuButton 
-                                action={() => taskStore.notify('openSidebar')} 
+                                action={openSidebar} 
                                 classNames={['open-menu-btn']}
                                 title="open projects list"
                             />

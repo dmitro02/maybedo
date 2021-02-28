@@ -1,7 +1,6 @@
 import React, { useState, memo } from 'react'
 import './Record.scss'
 import { Task } from '../../types'
-import { useTasksContext } from '../../contexts/TasksContext'
 import SubTaskList from '../RecordList/SubTaskList'
 import { 
     ExpandButton,
@@ -12,7 +11,6 @@ import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 import { useTaskStoreWithForceUpdate } from '../../utils/customHooks'
 import { selectTask } from '../../utils/Store'
-import taskStore from '../../utils/Store'
 
 type Props = { 
     item: Task, 
@@ -37,8 +35,6 @@ const Record = (props: Props) => {
 
     useTaskStoreWithForceUpdate(item.id)
 
-    const { store, actions } = useTasksContext()
-
     const hasSubtasks = !!item.tasks.length
 
     const isProject = !!!item.parent?.parent
@@ -48,7 +44,6 @@ const Record = (props: Props) => {
     const handleClickOnRecord = () => { 
         if (isProject && parent && parent!.selectedSubTaskId !== id) {
             selectTask(item)
-            taskStore.notify('closeSidebar')
         }
     }
 

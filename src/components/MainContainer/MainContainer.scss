@@ -49,6 +49,12 @@
             display: none;
         }
     }
+
+    &.sidebar-opened {
+        .right-panel {
+            overflow: hidden;
+        }
+    }
 }
 
 select, input {
@@ -70,6 +76,10 @@ input::placeholder {
 
 .input-hidden {
     display: none;
+}
+
+.no-scroll {
+    overflow: hidden !important;
 }
 
 @media screen and (max-width: 1700px) {

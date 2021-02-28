@@ -1,47 +1,37 @@
-import { 
-    useEffect, 
-    useRef, 
-    useState 
-} from 'react'
+import { useRef } from 'react'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import taskStore from '../../utils/Store'
 import { ArrowBackButton } from '../Buttons/Buttons'
-// import Fog from '../Fog/Fog'
+import Fog from '../Fog/Fog'
 import ProjectList from '../RecordList/ProjectList'
 import './Sidebar.scss'
 
-const Sidebar = () => {
+type Props = {
+    isOpened: boolean,
+    close: () => void,
+    isSettingsOpened: boolean
+}
+
+const Sidebar = ({ isOpened, close, isSettingsOpened }: Props) => {
     const { taskList } = taskStore
-
-    const [ isOpened, setIsOpened ] = useState(false)
-
-    const open = () => {
-        setIsOpened(true)
-        !window.iAmRunningOnMobile && window.addEventListener('resize', close)
-    }
-
-    const close = () => {
-        setIsOpened(false)
-        window.removeEventListener('resize', close)
-    }
-
-    useEffect(() => {
-        taskStore.subscribe('openSidebar', open)
-        taskStore.subscribe('closeSidebar', close)
-
-        return () => {
-            taskStore.unsubscribe('openSidebar', open)
-            taskStore.unsubscribe('closeSidebar', close)
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     const leftPanelRef = useRef(null)
     useOutsideClickDetector(leftPanelRef, close, isOpened) 
 
+    const handleClick = (e: any) => {
+        const el = e.target as HTMLDivElement        
+        if (el.getAttribute('contenteditable') === "false") close()
+    }
+
+    const classes = [
+        'left-panel',
+        isOpened ? 'panel-opened' : '',
+        isSettingsOpened? 'no-scroll' : ''
+    ].join(' ')
+
     return (
-        <div ref={leftPanelRef} className={`left-panel${isOpened ? ' panel-opened' : ''}`}>
-            {/* <Fog isDisplayed={isSettingsOpened} /> */}
+        <div ref={leftPanelRef} className={classes} onClick={handleClick}>
+            <Fog isDisplayed={isSettingsOpened} />
                 <div className="top-panel">
                     <div className="row-btns">
                         <ArrowBackButton 
@@ -51,7 +41,7 @@ const Sidebar = () => {
                         />
                     </div>
                 </div>
-            <ProjectList rootTask={taskList}/>
+            <ProjectList rootTask={taskList} />
         </div>
     )
 }

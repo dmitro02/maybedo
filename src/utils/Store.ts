@@ -48,7 +48,6 @@ class Store {
     }
 
     notify(context: any) {  
-        console.log(context);     
         let events: string[] = []
 
         if (typeof context === 'string') {
@@ -64,10 +63,7 @@ class Store {
             }
         }  
 
-        
         events.forEach((event) => {
-            
-            
             this.callbacks.get(event)?.forEach((cbk) => cbk())
         })
     }
