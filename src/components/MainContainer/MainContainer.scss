@@ -5,12 +5,13 @@
     height: 100vh;
 
     .left-panel {
+        width: 400px;
         position: relative;
-        min-width: 400px;
         padding: 0 6px;
         border-right: 1px solid $grey3; 
         background-color: $grey1;
         overflow: auto;
+        height: 100%;
 
         .close-menu-btn {
             display: none;
@@ -46,16 +47,6 @@
 
         .open-menu-btn {
             display: none;
-        }
-    }
-
-    &.sidebar-opened {
-        .right-panel {
-            overflow: hidden;
-        }
-
-        .left-panel {
-            height: 100%;
         }
     }
 }

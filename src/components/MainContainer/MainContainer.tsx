@@ -1,11 +1,6 @@
-import { 
-    useEffect, 
-    useState, 
-    useRef 
-} from 'react'
+import React, { useEffect, useState } from 'react'
 import './MainContainer.scss'
 import { useTasksContext } from '../../contexts/TasksContext'
-import ProjectList from '../RecordList/ProjectList'
 import TaskList from '../RecordList/TaskList'
 import Settings from '../Settings/Settings'
 import Banner from '../Banner/Banner'
@@ -18,30 +13,24 @@ import Fog from '../Fog/Fog'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import SyncStatus from '../Statuses/SyncStatus'
-import { useOutsideClickDetector } from '../../utils/customHooks'
 import NoProjects from '../NoProjects/NoProjects'
 import taskStore from '../../utils/Store'
+import Sidebar from '../Sidebar/Sidebar'
 
 const MainContainer = () => {
     const { 
         store : {
-            showSidebar = false, 
             loading,
             syncStatus
         }, 
         actions 
     } = useTasksContext()
 
-    const {       
-        taskList: rootTask,
-        taskList: {
-            tasks: projectList
-        }
-    } = taskStore
+    const { taskList } = taskStore
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
-    const hasData = !!projectList.length
+    const hasData = !!taskList.tasks.length
 
     useEffect(() => {
         Syncer.getInstance(actions).initSync()
@@ -51,50 +40,20 @@ const MainContainer = () => {
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
 
-    const openLeftPanel = () => {
-        if (!showSidebar) {
-            actions.setShowSidebar(true)
-            !window.iAmRunningOnMobile &&
-                window.addEventListener('resize', closeLeftPanel)
-        }
-    }
-
-    const closeLeftPanel = () => {        
-        actions.setShowSidebar(false)
-        window.removeEventListener('resize', closeLeftPanel)
-    }
-
-    const closeLeftPanelIfOpened = () => {
-        showSidebar && closeLeftPanel()
-    }
-
-    const leftPanelRef = useRef(null)
-    useOutsideClickDetector(leftPanelRef, closeLeftPanelIfOpened, showSidebar)
-
     return (
-        <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
+        // <div className={`main-container${showSidebar ? ' sidebar-opened' : ''}`}>   
+        <div className={`main-container`}>   
+
             {loading && <Loading />}
-            <div ref={leftPanelRef} className={`left-panel${showSidebar ? ' panel-opened' : ''}`}>
-                <Fog isDisplayed={isSettingsOpened} />
-                <div className="top-panel">
-                    <div className="row-btns">
-                        <ArrowBackButton 
-                            action={closeLeftPanelIfOpened} 
-                            classNames={['close-menu-btn']} 
-                            title="hide projects list"
-                        />
-                    </div>
-                </div>
-                <ProjectList rootTask={rootTask}/>
-            </div>
-            <div className="right-panel" onClick={closeLeftPanelIfOpened}>
-                <Fog isDisplayed={showSidebar} />
+            <Sidebar />
+            <div className="right-panel">
+                {/* <Fog isDisplayed={showSidebar} /> */}
                 <Banner />
                 <div className="top-panel">
                     {!isSettingsOpened &&
                         <div className="row-btns">
                             <MenuButton 
-                                action={openLeftPanel} 
+                                action={() => taskStore.notify('openSidebar')} 
                                 classNames={['open-menu-btn']}
                                 title="open projects list"
                             />

@@ -1,10 +1,10 @@
 import { Task } from "../types";
 
 class Store {
-    public callbacks: Map<string, (() => void)[]> = new Map()
-    public updatedAt: number = 0
-
+    private callbacks: Map<string, (() => void)[]> = new Map()
     private _taskList: Task = this.toProxy(new Task('Projects', null))
+
+    public updatedAt: number = 0
 
     get taskList() { return this._taskList }
 
@@ -36,7 +36,7 @@ class Store {
             cbks.push(callback)
         } else {
             this.callbacks.set(event, [callback])
-        }
+        }        
     }
 
     unsubscribe(event: string, callback: () => void) {
@@ -47,7 +47,8 @@ class Store {
             }
     }
 
-    notify(context: any) {       
+    notify(context: any) {  
+        console.log(context);     
         let events: string[] = []
 
         if (typeof context === 'string') {
@@ -63,7 +64,10 @@ class Store {
             }
         }  
 
+        
         events.forEach((event) => {
+            
+            
             this.callbacks.get(event)?.forEach((cbk) => cbk())
         })
     }

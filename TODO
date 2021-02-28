@@ -1,6 +1,7 @@
 ☐ implement PWA
 ☐ no-singleton Syncer (initialized in TaskContext)
 ☐ refactor Syncer into smaller self-documented functions
+☐ covert to Preact app
 ☐ Exporter class
 ☐ replace all icons with ones from react-icons (remove style links from index.html)
 ☐ implement full keyboard support
@@ -11,5 +12,6 @@
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ implement ID generation without nanoid
-☐ move showSidebar from context to store
+☐ move all actions from context to store
 ☐ no "Add" menu item if there is subtask already
+☐ refactor right panel into separate component

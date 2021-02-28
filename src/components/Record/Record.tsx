@@ -12,6 +12,7 @@ import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 import { useTaskStoreWithForceUpdate } from '../../utils/customHooks'
 import { selectTask } from '../../utils/Store'
+import taskStore from '../../utils/Store'
 
 type Props = { 
     item: Task, 
@@ -47,7 +48,7 @@ const Record = (props: Props) => {
     const handleClickOnRecord = () => { 
         if (isProject && parent && parent!.selectedSubTaskId !== id) {
             selectTask(item)
-            store.showSidebar && actions.setShowSidebar(false)
+            taskStore.notify('closeSidebar')
         }
     }
 
