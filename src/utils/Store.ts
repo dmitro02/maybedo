@@ -1,67 +1,66 @@
-import { Task } from "../types";
+import { Task } from "../types"
 
 class Store {
-    private callbacks: Map<string, (() => void)[]> = new Map()
-    private _taskList: Task = this.toProxy(new Task('Projects', null))
+    private callbacks: Map<string, ((value?: any) => void)[]> = new Map()
+    private _taskList: Task = this.toProxy(new Task("Projects", null))
 
     public updatedAt: number = 0
 
-    get taskList() { return this._taskList }
+    get taskList() {
+        return this._taskList
+    }
 
     get taskListJSON() {
-        const excludeKeys = [
-            'parent',
-            'isNew'
-        ]
+        const excludeKeys = ["parent", "isNew"]
         const replacer = (key: string, value: any) =>
             excludeKeys.includes(key) ? undefined : value
-    
+
         return JSON.stringify(this._taskList, replacer, 2)
     }
 
     setData(taskList: string | Task | null, updatedAt: number) {
         if (!taskList) return
-        
-        const data: Task = typeof taskList === 'string'
-            ? JSON.parse(taskList)
-            : taskList 
-        
+
+        const data: Task =
+            typeof taskList === "string" ? JSON.parse(taskList) : taskList
+
         this.setTaskList(data)
         this.setUpdatedAt(updatedAt)
     }
 
-    subscribe(event: string, callback: () => void) {
+    subscribe(event: string, callback: (value?: any) => void) {
         const cbks = this.callbacks.get(event)
         if (cbks) {
             cbks.push(callback)
         } else {
             this.callbacks.set(event, [callback])
-        }        
+        }
     }
 
-    unsubscribe(event: string, callback: () => void) {
-            const cbks = this.callbacks.get(event)
-            if (cbks) {
-                const newCbks = cbks.filter((it) => it !== callback)
-                this.callbacks.set(event, newCbks)
-            }
+    unsubscribe(event: string, callback: (value?: any) => void) {
+        const cbks = this.callbacks.get(event)
+        if (cbks) {
+            const newCbks = cbks.filter((it) => it !== callback)
+            this.callbacks.set(event, newCbks)
+        }
     }
 
-    notify(context: any) {  
+    notify(event: string, value?: any) {
+        this.callbacks.get(event)?.forEach((cbk) => cbk(value))
+    }
+
+    notifyFromProxy(context: any) {
         let events: string[] = []
 
-        if (typeof context === 'string') {
-            events = [ context ]
+        const { target, prop } = context
+
+        if (prop === "priority") {
+            events = [target.parent.id, target.id]
+        } else if (prop === "isDone") {
+            events = [target.parent.id]
         } else {
-            const { target, prop } = context
-            if (prop === 'priority') {
-                events = [ target.parent.id, target.id ]
-            } else if (prop === 'isDone') {
-                events = [ target.parent.id ]
-            } else {
-                events = [ target.id ]
-            }
-        }  
+            events = [target.id]
+        }
 
         events.forEach((event) => {
             this.callbacks.get(event)?.forEach((cbk) => cbk())
@@ -70,39 +69,39 @@ class Store {
 
     private toProxy(data: Task) {
         const proxyHandler = {
-            set: (target: any, prop: string, value: any) => {                
-                if (prop === 'tasks') {
+            set: (target: any, prop: string, value: any) => {
+                if (prop === "tasks") {
                     const newValue = value.map((it: any) => {
                         if (it.isProxy !== undefined) {
                             return it
                         } else {
-                            return this.toProxy(it);
+                            return this.toProxy(it)
                         }
-                    }); 
+                    })
                     target[prop] = newValue
                 } else {
                     target[prop] = value
                 }
 
                 if (this.isTrackableProp(prop)) {
-                    this.notify({ target, prop, value })
+                    this.notifyFromProxy({ target, prop, value })
                     this.setUpdatedAt()
                 }
-                return true;
+                return true
             },
             get: (target: any, prop: string) => {
-                if (prop === 'isProxy') return true
+                if (prop === "isProxy") return true
                 return target[prop]
-            }
+            },
         }
-        
-        data.tasks = data.tasks.map((it) => this.toProxy(it));
+
+        data.tasks = data.tasks.map((it) => this.toProxy(it))
         if (data.parent) data.parent = new Proxy(data.parent, proxyHandler)
-        return new Proxy(data, proxyHandler);
+        return new Proxy(data, proxyHandler)
     }
 
     private isTrackableProp(prop: any) {
-        return trackableProps.includes(prop);
+        return trackableProps.includes(prop)
     }
 
     private setUpdatedAt(updatedAt?: number) {
@@ -115,11 +114,11 @@ class Store {
     }
 
     private linkTasks(task: Task, parentTask: Task | null): void {
-        task.parent = parentTask;
+        task.parent = parentTask
         if (task.tasks) {
             task.tasks.forEach((childTask: Task) => {
                 this.linkTasks(childTask, task)
-            });
+            })
         }
     }
 }
@@ -131,7 +130,7 @@ const trackableProps = [
     "priority",
     "isOpened",
     "selectedSubTaskId",
-];
+]
 
 const storer = new Store()
 
