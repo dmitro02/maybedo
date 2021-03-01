@@ -7,10 +7,7 @@ import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
 
 const MainContainer = () => {
-    const { 
-        store : { loading }, 
-        actions 
-    } = useTasksContext()
+    const { actions } = useTasksContext()
 
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
@@ -36,7 +33,7 @@ const MainContainer = () => {
 
     return (
         <div className={`main-container${isSidebarOpened ? ' sidebar-opened' : ''}`}>   
-            {loading && <Loading />}
+            <Loading />
             <Sidebar 
                 isOpened={isSidebarOpened} 
                 close={closeSidebar} 

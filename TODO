@@ -13,3 +13,4 @@
 ☐ implement ID generation without nanoid
 ☐ move all actions from context to store or local states
 ☐ no "Add" menu item if there is subtask already
+☐ custom hook for standard subscribe/unsubscribe

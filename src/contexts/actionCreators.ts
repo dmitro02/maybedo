@@ -3,24 +3,17 @@ import { IBanner, IActions } from '../types'
 
 export const createActions = (dispatch: Function): IActions => ({
     setBanner: (banner: IBanner | null) => dispatch(setBanner(banner)),
-    setLoading: (value: boolean) => dispatch(setLoading(value)),
     setSyncStatus: (status: SyncStatuses) => dispatch(setSyncStatus(status)),
 })
 
 export enum actionTypes {
     SET_BANNER = 'SET_BANNER',
-    SET_LOADING = 'SET_LOADING',
     SET_SYNC_STATUS = 'SET_SYNC_STATUS',
 }
 
 export const setBanner = (banner: IBanner | null) => ({
     type: actionTypes.SET_BANNER,
     banner
-})
-
-export const setLoading = (value: boolean) => ({
-    type: actionTypes.SET_LOADING,
-    value
 })
 
 export const setSyncStatus = (status: SyncStatuses) => ({

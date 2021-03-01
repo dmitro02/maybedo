@@ -30,9 +30,6 @@ const tasksReducer = (state: IStore, action: any): IStore => {
         case actionTypes.SET_BANNER: {
             return { ...state, banner: action.banner }
         }
-        case actionTypes.SET_LOADING: {
-            return { ...state, loading: action.value }
-        }
         case actionTypes.SET_SYNC_STATUS: {
             return { ...state, syncStatus: action.status }
         }

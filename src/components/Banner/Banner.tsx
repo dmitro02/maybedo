@@ -1,27 +1,50 @@
-import { useCallback, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './Banner.scss'
-import { useTasksContext } from '../../contexts/TasksContext'
 import { MdClose } from 'react-icons/md'
+import taskStore from '../../utils/Store'
+import { IBanner } from '../../types'
+
+type BannerState = {
+    isDiplayed: boolean,
+    content?: IBanner
+}
 
 const Banner = () => {
-    const { store: { banner } , actions } = useTasksContext()
+    // const { store: { banner } , actions } = useTasksContext()
 
-    const closeBanner = useCallback(() => actions.setBanner(null), [actions])
+    const initState: BannerState = { isDiplayed: false }
+
+    const [ banner, setBanner ] = useState(initState)
+
+    const show = (content: IBanner) => setBanner({ isDiplayed: true, content })
+    const hide = () => setBanner({ isDiplayed: false })
+
+    const { isDiplayed, content } = banner
 
     useEffect(() => {
-        if (banner && banner.delay && banner.delay > 0) {
-            setTimeout(closeBanner, banner.delay * 1000)
+        taskStore.subscribe('showBanner', show)
+        taskStore.subscribe('hideBanner', hide)
+
+        return () => {
+            taskStore.unsubscribe('showBanner', show)
+            taskStore.unsubscribe('hideBanner', hide)
         }
-    }, [banner, closeBanner])
+    }, [])
 
-    if (!banner) return null
+    useEffect(() => {
+        if (content && content.delay && content.delay > 0) {
+            setTimeout(hide, content.delay * 1000)
+        }
+    }, [])
 
-    const { text, type } = banner
+    if (!isDiplayed || !content) return null
+
+    const { text, type } = content
 
     return (
         <div className={`banner banner-${type}`}>
             <div>{text}</div>
-            <MdClose onClick={closeBanner} />
+            <MdClose onClick={hide} />
         </div>
     )
 }

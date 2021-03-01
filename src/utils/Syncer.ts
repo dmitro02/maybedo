@@ -44,7 +44,7 @@ export default class Syncer {
     }
 
     async initSync(source?: SyncSources, cloudConnector?: ICloudConnector) {
-        this.actions.setLoading(true)
+        taskStore.notify('showLoading')
 
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
@@ -76,7 +76,7 @@ export default class Syncer {
 
         this.addGlobalEventListeners()
 
-        this.actions.setLoading(false)
+        taskStore.notify('hideLoading')
     }
 
     private resetSync() {

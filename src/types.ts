@@ -96,7 +96,6 @@ export interface ICloudConnector {
 
 export interface IActions {
     setBanner: (banner: IBanner | null) => IStore,
-    setLoading: (value: boolean) => IStore,
     setSyncStatus: (status: SyncStatuses) => IStore,
 }
 
