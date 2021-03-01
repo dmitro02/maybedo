@@ -3,8 +3,6 @@ import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
 
 export interface IStore {
-    banner?: IBanner
-    loading?: boolean
     syncStatus?: SyncStatuses
 }
 
@@ -95,7 +93,6 @@ export interface ICloudConnector {
 }
 
 export interface IActions {
-    setBanner: (banner: IBanner | null) => IStore,
     setSyncStatus: (status: SyncStatuses) => IStore,
 }
 

@@ -1,4 +1,3 @@
-import { useTasksContext } from '../../contexts/TasksContext'
 import Banner from '../Banner/Banner'
 import { 
     ArrowBackButton, 
@@ -26,10 +25,6 @@ const Content = (props: Props) => {
         openSidebar,
         toggleSettings
     } = props
-
-    const { 
-        store : { loading } 
-    } = useTasksContext()
 
     const { taskList } = taskStore
 
@@ -63,7 +58,7 @@ const Content = (props: Props) => {
                     : <TaskList />
                 }
             </div>
-            {!hasData && !isSettingsOpened && !loading && <NoProjects />} 
+            {!hasData && !isSettingsOpened && <NoProjects />} 
         </div>
     )
 }

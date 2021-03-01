@@ -4,22 +4,11 @@ import { MdClose } from 'react-icons/md'
 import taskStore from '../../utils/Store'
 import { IBanner } from '../../types'
 
-type BannerState = {
-    isDiplayed: boolean,
-    content?: IBanner
-}
-
 const Banner = () => {
-    // const { store: { banner } , actions } = useTasksContext()
+    const [ banner, setBanner ] = useState<IBanner | null>(null)
 
-    const initState: BannerState = { isDiplayed: false }
-
-    const [ banner, setBanner ] = useState(initState)
-
-    const show = (content: IBanner) => setBanner({ isDiplayed: true, content })
-    const hide = () => setBanner({ isDiplayed: false })
-
-    const { isDiplayed, content } = banner
+    const show = (banner: IBanner) => setBanner(banner)
+    const hide = () => setBanner(null)
 
     useEffect(() => {
         taskStore.subscribe('showBanner', show)
@@ -32,14 +21,14 @@ const Banner = () => {
     }, [])
 
     useEffect(() => {
-        if (content && content.delay && content.delay > 0) {
-            setTimeout(hide, content.delay * 1000)
+        if (banner && banner.delay && banner.delay > 0) {
+            setTimeout(hide, banner.delay * 1000)
         }
-    }, [])
+    }, [banner])
 
-    if (!isDiplayed || !content) return null
+    if (!banner) return null
 
-    const { text, type } = content
+    const { text, type } = banner
 
     return (
         <div className={`banner banner-${type}`}>

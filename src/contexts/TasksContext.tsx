@@ -27,13 +27,10 @@ export const useTasksContext = (): IContext => useContext(TasksContext)
 
 const tasksReducer = (state: IStore, action: any): IStore => {    
     switch (action.type) {
-        case actionTypes.SET_BANNER: {
-            return { ...state, banner: action.banner }
-        }
         case actionTypes.SET_SYNC_STATUS: {
             return { ...state, syncStatus: action.status }
         }
         default:
             return state
     }
-};
+}
