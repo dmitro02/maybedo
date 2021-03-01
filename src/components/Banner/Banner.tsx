@@ -12,11 +12,8 @@ const Banner = () => {
 
     useEffect(() => {
         taskStore.subscribe('showBanner', show)
-        taskStore.subscribe('hideBanner', hide)
-
         return () => {
             taskStore.unsubscribe('showBanner', show)
-            taskStore.unsubscribe('hideBanner', hide)
         }
     }, [])
 

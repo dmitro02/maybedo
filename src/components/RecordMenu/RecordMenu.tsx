@@ -64,6 +64,7 @@ const RecordMenu = (props: Props) => {
                 {!isProject && !task.isDone && !isRoot && <AddSubtask 
                     closeMenu={closeMenu}
                     showSubtasks={showSubtasks}
+                    isDisabled={hasSubtasks}
                 />}
                 <DeleteRecords
                     task={task} 

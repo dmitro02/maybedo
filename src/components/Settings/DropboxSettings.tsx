@@ -1,5 +1,4 @@
 import { useRef } from 'react'
-import { useTasksContext } from '../../contexts/TasksContext'
 import DropboxConnector from '../../utils/DropboxConnector'
 import { FailureBanner, SuccessBanner } from '../../types'
 import Syncer, { SyncSources } from '../../utils/Syncer'
@@ -10,8 +9,6 @@ import taskStore from '../../utils/Store'
 type Props = { source: SyncSources }
 
 const DropboxSettings = ({ source }: Props) => {
-    const { actions } = useTasksContext()
-
     const dbx = new DropboxConnector()
 
     const authTokenRef = useRef<HTMLInputElement>(null)
@@ -21,7 +18,7 @@ const DropboxSettings = ({ source }: Props) => {
         try {
             await dbx.authorize(authTokenRef.current?.value)
 
-            Syncer.getInstance(actions).initSync(source, dbx)
+            Syncer.getInstance().initSync(source, dbx)
             const banner = new SuccessBanner('Application successfully authorized')
             taskStore.notify('showBanner', banner)
         } catch(e) {

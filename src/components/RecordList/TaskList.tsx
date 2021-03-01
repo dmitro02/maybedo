@@ -1,13 +1,12 @@
 import { Task } from '../../types'
 import RecordList from './RecordList'
-import taskStore from '../../utils/Store'
-import { useTaskStoreWithForceUpdate } from '../../utils/customHooks'
+import taskStore, { useSubscribeWithForceUpdate } from '../../utils/Store'
 
 const TaskList = () => {
 
     const root = taskStore.taskList
 
-    useTaskStoreWithForceUpdate(root.id)
+    useSubscribeWithForceUpdate(root.id)
 
     // select project to display
     const projects = root.tasks

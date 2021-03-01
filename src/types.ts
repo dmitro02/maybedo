@@ -1,10 +1,5 @@
 import { nanoid } from 'nanoid';
-import { SyncStatuses } from './components/Statuses/SyncStatus';
 import { SyncTargets } from './utils/Syncer';
-
-export interface IStore {
-    syncStatus?: SyncStatuses
-}
 
 export enum Priorities {
     Trivial,
@@ -26,10 +21,10 @@ export class Task {
     parent: Task | null
     id: string
 
-    constructor(text: string, parent: Task | null, isDone: boolean = false, ) {
-        this.id = nanoid()
+    constructor(text: string, parent: Task | null, isDone?: boolean, id?: string) {
+        this.id = id || nanoid()
         this.text = text
-        this.isDone = isDone
+        this.isDone = isDone || false
         this.tasks = []
         this.isNew = false
         this.parent = parent
@@ -90,13 +85,4 @@ export interface ICloudConnector {
     downloadMetadata: () => Promise<Metadata>
     downloadTaskList: () => Promise<string | null>
     uploadData: (metadata: Metadata, taskList: string) => any
-}
-
-export interface IActions {
-    setSyncStatus: (status: SyncStatuses) => IStore,
-}
-
-export interface IContext {
-    store: IStore,
-    actions: IActions
 }

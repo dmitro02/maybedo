@@ -1,8 +1,10 @@
+import { useEffect } from "react"
 import { Task } from "../types"
+import { useForceUpdate } from "./customHooks"
 
 class Store {
     private callbacks: Map<string, ((value?: any) => void)[]> = new Map()
-    private _taskList: Task = this.toProxy(new Task("Projects", null))
+    private _taskList: Task = this.toProxy(new Task("Projects", null, false, '0'))
 
     public updatedAt: number = 0
 
@@ -21,11 +23,13 @@ class Store {
     setData(taskList: string | Task | null, updatedAt: number) {
         if (!taskList) return
 
-        const data: Task =
-            typeof taskList === "string" ? JSON.parse(taskList) : taskList
+        const data: Task = typeof taskList === "string" 
+            ? JSON.parse(taskList) 
+            : taskList
 
         this.setTaskList(data)
         this.setUpdatedAt(updatedAt)
+        this.notify('reload')
     }
 
     subscribe(event: string, callback: (value?: any) => void) {
@@ -49,7 +53,7 @@ class Store {
         this.callbacks.get(event)?.forEach((cbk) => cbk(value))
     }
 
-    notifyFromProxy(context: any) {
+    private notifyFromProxy(context: any) {
         let events: string[] = []
 
         const { target, prop } = context
@@ -153,4 +157,22 @@ export const deleteCompletedSubtasks = (task: Task): void => {
 export const selectTask = (selectedTask: Task): void => {
     const { parent } = selectedTask
     parent!.selectedSubTaskId = selectedTask.id
+}
+
+export const useSubscribe = (event: string, callback: (data: any) => void) => {    
+    useEffect(() => {
+        storer.subscribe(event, callback)
+
+        return () => storer.unsubscribe(event, callback)
+    }, [callback, event])
+}
+
+export const useSubscribeWithForceUpdate = (event: string) => {    
+    const forceUpdate = useForceUpdate()
+
+    useEffect(() => {
+        storer.subscribe(event, forceUpdate)
+
+        return () => storer.unsubscribe(event, forceUpdate)
+    }, [event, forceUpdate])
 }

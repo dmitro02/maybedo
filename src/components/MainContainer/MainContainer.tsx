@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import './MainContainer.scss'
-import { useTasksContext } from '../../contexts/TasksContext'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
+import { useSubscribeWithForceUpdate } from '../../utils/Store'
 
 const MainContainer = () => {
-    const { actions } = useTasksContext()
-
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
     const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
 
     useEffect(() => {
-        Syncer.getInstance(actions).initSync()
+        Syncer.getInstance().initSync()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useSubscribeWithForceUpdate('reload')
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)

@@ -9,7 +9,7 @@ import {
  } from '../Buttons/Buttons'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { useTaskStoreWithForceUpdate } from '../../utils/customHooks'
+import { useSubscribeWithForceUpdate } from '../../utils/Store'
 import { selectTask } from '../../utils/Store'
 
 type Props = { 
@@ -33,7 +33,7 @@ const Record = (props: Props) => {
         }
     } = props
 
-    useTaskStoreWithForceUpdate(item.id)
+    useSubscribeWithForceUpdate(item.id)
 
     const hasSubtasks = !!item.tasks.length
 
@@ -101,6 +101,7 @@ const Record = (props: Props) => {
                     />
                 </div>
                 <Editable task={item} isEditable={isEditable} />
+                {/* DEBUG: display task ID for each record  */}
                 {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
                     {getSubtasksBtn()}

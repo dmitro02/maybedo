@@ -34,7 +34,6 @@ const DeleteRecords = (props: Props) => {
     }
 
     const openDeleteConfirmation = (e: any) => {
-        if (isDisabled) return
         e && e.stopPropagation()
         setShowDeleteConfirmation(true)
     }

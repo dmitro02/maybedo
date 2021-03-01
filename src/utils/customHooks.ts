@@ -3,7 +3,6 @@ import {
     useEffect, 
     useState 
 } from "react"
-import taskStore from "./Store"
 
 export const useOutsideClickDetector = (
     ref: MutableRefObject<HTMLElement | null>, 
@@ -30,14 +29,4 @@ export const useForceUpdate = () => {
     const [value, setValue] = useState(0)
 
     return () => setValue(value => value + 1)
-}
-
-export const useTaskStoreWithForceUpdate = (event: string) => {    
-    const forceUpdate = useForceUpdate()
-
-    useEffect(() => {
-        taskStore.subscribe(event, forceUpdate)
-
-        return () => taskStore.unsubscribe(event, forceUpdate)
-    }, [event, forceUpdate])
 }

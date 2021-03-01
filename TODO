@@ -11,7 +11,7 @@
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ HTML export with collaps/expand projects and checkboxes
 ☐ implement ID generation without nanoid
-☐ move all actions from context to store or local states
-☐ no "Add" menu item if there is subtask already
-☐ custom hook for standard subscribe/unsubscribe
 ☐ do not show "no-projects" while loading
+☐ get rid of types file
+☐ enum with event names
+☐ app icon on mobile desktop is empty
