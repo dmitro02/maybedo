@@ -1,9 +1,19 @@
+import { SyncStatuses } from './../components/Statuses/SyncStatus';
+import { IBanner } from './../types';
 import { useEffect } from "react"
 import { Task } from "../types"
 import { useForceUpdate } from "./customHooks"
 
+export enum Events {
+    ShowLoading,
+    HideLoading,
+    ShowBanner,
+    SetSyncStatus,
+    Reload
+}
+
 class Store {
-    private callbacks: Map<string, ((value?: any) => void)[]> = new Map()
+    private callbacks: Map<string | Events, ((value?: any) => void)[]> = new Map()
     private _taskList: Task = this.toProxy(new Task("Projects", null, false, '0'))
 
     public updatedAt: number = 0
@@ -29,10 +39,10 @@ class Store {
 
         this.setTaskList(data)
         this.setUpdatedAt(updatedAt)
-        this.notifyWithDelay('reload')
+        this.notifyWithDelay(Events.Reload)
     }
 
-    subscribe(event: string, callback: (value?: any) => void) {
+    subscribe(event: string | Events, callback: (value?: any) => void) {
         const cbks = this.callbacks.get(event)
         if (cbks) {
             cbks.push(callback)
@@ -41,7 +51,7 @@ class Store {
         }
     }
 
-    unsubscribe(event: string, callback: (value?: any) => void) {
+    unsubscribe(event: string |Events, callback: (value?: any) => void) {
         const cbks = this.callbacks.get(event)
         if (cbks) {
             const newCbks = cbks.filter((it) => it !== callback)
@@ -49,11 +59,11 @@ class Store {
         }
     }
 
-    notify(event: string, value?: any) {
+    notify(event: string | Events, value?: any) {
         this.callbacks.get(event)?.forEach((cbk) => cbk(value))
     }
 
-    notifyWithDelay(event: string, value?: any) {
+    notifyWithDelay(event: string | Events, value?: any) {
         setTimeout(() => this.notify(event, value), 0)
     }
 
@@ -163,7 +173,7 @@ export const selectTask = (selectedTask: Task): void => {
     parent!.selectedSubTaskId = selectedTask.id
 }
 
-export const useSubscribe = (event: string, callback: (data: any) => void) => {    
+export const useSubscribe = (event: string | Events, callback: (data: any) => void) => {    
     useEffect(() => {
         storer.subscribe(event, callback)
 
@@ -171,7 +181,7 @@ export const useSubscribe = (event: string, callback: (data: any) => void) => {
     }, [callback, event])
 }
 
-export const useSubscribeWithForceUpdate = (event: string) => {    
+export const useSubscribeWithForceUpdate = (event: string | Events) => {    
     const forceUpdate = useForceUpdate()
 
     useEffect(() => {
@@ -180,4 +190,12 @@ export const useSubscribeWithForceUpdate = (event: string) => {
         return () => storer.unsubscribe(event, forceUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event])
+}
+
+export const actions = {
+    showLoading: () => storer.notify(Events.ShowLoading),
+    hideLoading: () => storer.notify(Events.HideLoading),
+    showBanner: (banner: IBanner) => storer.notify(Events.ShowBanner, banner),
+    setSyncStatus: (status: SyncStatuses) => storer.notify(Events.SetSyncStatus, status),
+    reload: () => storer.notify(Events.Reload)
 }

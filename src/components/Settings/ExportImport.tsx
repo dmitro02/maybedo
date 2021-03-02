@@ -12,7 +12,7 @@ import {
     getExportFileName,
     validateExportedData
 } from '../../utils/persistDataUtils'
-import taskStore from '../../utils/Store'
+import taskStore, { actions } from '../../utils/Store'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
 import Button from '../Buttons/Button'
@@ -58,20 +58,20 @@ const ExportImport = (props: Props) => {
         } catch(err) {
             setShowModal(false)
             const banner = new FailureBanner('Failed to parse JSON file')
-            taskStore.notify('showBanner', banner)
+            actions.showBanner(banner)
             clearFileInput()
             return
         }
         if (!validateExportedData(taskList)) {
             const banner = new FailureBanner('Some required fields are missing')
-            taskStore.notify('showBanner', banner)
+            actions.showBanner(banner)
             return
         }
         taskStore.setData(taskList, Date.now())
         
         backToTaskList()
         const banner = new SuccessBanner('Data successfully imported', 5)
-        taskStore.notify('showBanner', banner)
+        actions.showBanner(banner)
     }
 
     const clickOnFileInput = () => {

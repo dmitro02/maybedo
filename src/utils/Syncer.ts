@@ -2,7 +2,7 @@ import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import { ICloudConnector, Metadata } from './../types';
 import DropboxConnector from './DropboxConnector';
 import * as lsUtils from "./localStorageUtils"
-import taskStore from './Store'
+import taskStore, { actions } from './Store'
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
 
@@ -36,7 +36,7 @@ export default class Syncer {
     }
 
     async initSync(source?: SyncSources, cloudConnector?: ICloudConnector) {
-        taskStore.notify('showLoading')
+        actions.showLoading()
 
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
@@ -68,7 +68,7 @@ export default class Syncer {
 
         this.addGlobalEventListeners()
 
-        taskStore.notify('hideLoading')
+        actions.hideLoading()
     }
 
     private resetSync() {
@@ -88,7 +88,7 @@ export default class Syncer {
 
     private async onLoadCloud() {
         this.isSyncFaild = false
-        taskStore.notify('setSyncStatus', SyncStatuses.InProgress)
+        actions.setSyncStatus(SyncStatuses.InProgress)
 
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
         const lsUpdatedAt = lsUtils.getLsUpdatedAt()
@@ -118,7 +118,7 @@ export default class Syncer {
 
     private async forceUpdateFromSource(source: SyncSources) {
         this.isSyncFaild = false
-        taskStore.notify('setSyncStatus', SyncStatuses.InProgress)
+        actions.setSyncStatus(SyncStatuses.InProgress)
         
         if (source === SyncSources.Remote) {
             const updatedAt = await this.getCloudUpdatedAt()
@@ -148,7 +148,7 @@ export default class Syncer {
 
     async onDemandCloud() {
         this.isSyncFaild = false
-        taskStore.notify('setSyncStatus', SyncStatuses.InProgress)
+        actions.setSyncStatus(SyncStatuses.InProgress)
 
         this.saveToLS()
         
@@ -190,10 +190,10 @@ export default class Syncer {
             await this.cloudConnector!.check()
         } catch(e) {
             if (e.message.toLowerCase().includes('not_configured')) {
-                taskStore.notify('setSyncStatus', SyncStatuses.NotConfigured)
+                actions.setSyncStatus(SyncStatuses.NotConfigured)
                 return false
             } else {
-                taskStore.notify('setSyncStatus', SyncStatuses.Failure)
+                actions.setSyncStatus(SyncStatuses.Failure)
                 return true
             }
         }
@@ -238,10 +238,10 @@ export default class Syncer {
 
     private setSyncResultStatus() {
         if (this.isSyncFaild) {
-            taskStore.notify('setSyncStatus', SyncStatuses.Failure)
+            actions.setSyncStatus(SyncStatuses.Failure)
         } else {
-            taskStore.notify('setSyncStatus', SyncStatuses.Success)
-            setTimeout(() => taskStore.notify('setSyncStatus', SyncStatuses.Idle), 3000)
+            actions.setSyncStatus(SyncStatuses.Success)
+            setTimeout(() => actions.setSyncStatus(SyncStatuses.Idle), 2500)
         }
     }
 }

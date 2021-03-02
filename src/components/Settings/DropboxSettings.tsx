@@ -4,7 +4,7 @@ import { FailureBanner, SuccessBanner } from '../../types'
 import Syncer, { SyncSources } from '../../utils/Syncer'
 import { GoArrowRight } from "react-icons/go";
 import Button from '../Buttons/Button'
-import taskStore from '../../utils/Store'
+import { actions } from '../../utils/Store'
 
 type Props = { source: SyncSources }
 
@@ -14,18 +14,18 @@ const DropboxSettings = ({ source }: Props) => {
     const authTokenRef = useRef<HTMLInputElement>(null)
 
     const authorizeApp = async () => {
-        taskStore.notify('showLoading')
+        actions.showLoading()
         try {
             await dbx.authorize(authTokenRef.current?.value)
 
             Syncer.getInstance().initSync(source, dbx)
             const banner = new SuccessBanner('Application successfully authorized')
-            taskStore.notify('showBanner', banner)
+            actions.showBanner(banner)
         } catch(e) {
             const banner = new FailureBanner('Error: ' + e.message)
-            taskStore.notify('showBanner', banner)
+            actions.showBanner(banner)
         }
-        taskStore.notify('hideLoading')
+        actions.hideLoading()
     }
 
     return (

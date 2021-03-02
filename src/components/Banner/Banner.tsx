@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './Banner.scss'
 import { MdClose } from 'react-icons/md'
-import { useSubscribe } from '../../utils/Store'
+import { Events, useSubscribe } from '../../utils/Store'
 import { IBanner } from '../../types'
 
 const Banner = () => {
@@ -10,7 +10,7 @@ const Banner = () => {
     const show = (banner: IBanner) => setBanner(banner)
     const hide = () => setBanner(null)
 
-    useSubscribe('showBanner', show)
+    useSubscribe(Events.ShowBanner, show)
 
     useEffect(() => {
         if (banner && banner.delay && banner.delay > 0) {

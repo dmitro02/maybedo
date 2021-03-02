@@ -1,6 +1,6 @@
 import Syncer from '../../utils/Syncer'
 import './SyncStatus.scss'
-import { useSubscribe } from '../../utils/Store'
+import { Events, useSubscribe } from '../../utils/Store'
 import { useState } from 'react'
 
 export enum SyncStatuses {
@@ -14,7 +14,7 @@ export enum SyncStatuses {
 const SyncStatus = () => {
     const [ status, setStatus ] = useState<SyncStatuses>(SyncStatuses.NotConfigured)
 
-    useSubscribe('setSyncStatus', setStatus)
+    useSubscribe(Events.SetSyncStatus, setStatus)
 
     const refresh = () => {
         Syncer.getInstance().onDemandCloud()

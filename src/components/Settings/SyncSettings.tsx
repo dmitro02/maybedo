@@ -5,7 +5,7 @@ import Syncer, { SyncSources, SyncTargets } from '../../utils/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
-import taskStore, { useSubscribe } from '../../utils/Store'
+import { actions, Events, useSubscribe } from '../../utils/Store'
 
 interface SyncOpts {
     target: SyncTargets
@@ -33,7 +33,7 @@ function SyncSettings() {
         setIsSelectDisabled(flag)
     }
 
-    useSubscribe('setSyncStatus', toggleTargetSelector)
+    useSubscribe(Events.SetSyncStatus, toggleTargetSelector)
 
     const getTargetSettingsElement = () => {
         const { target, dataSource } = syncOpts
@@ -52,7 +52,7 @@ function SyncSettings() {
         if (value === SyncTargets.Disabled) {
             setSyncOpts({ target: value, dataSource: undefined })
             lsUtils.setSyncTarget(value)
-            taskStore.notify('setSyncStatus', SyncStatuses.NotConfigured)
+            actions.setSyncStatus(SyncStatuses.NotConfigured)
             Syncer.getInstance().initSync()
         } else {
             setShowModal(true)

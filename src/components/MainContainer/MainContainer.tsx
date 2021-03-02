@@ -4,7 +4,7 @@ import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { useSubscribeWithForceUpdate } from '../../utils/Store'
+import { Events, useSubscribeWithForceUpdate } from '../../utils/Store'
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
@@ -16,7 +16,7 @@ const MainContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useSubscribeWithForceUpdate('reload')
+    useSubscribeWithForceUpdate(Events.Reload)
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)

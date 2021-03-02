@@ -1,7 +1,7 @@
 import Fog from '../Fog/Fog'
 import Spinner from './Spinner'
 import './Loading.scss'
-import { useSubscribe } from '../../utils/Store'
+import { Events, useSubscribe } from '../../utils/Store'
 import { useState } from 'react'
 
 type Props = {
@@ -16,8 +16,8 @@ const Loading = (props: Props) => {
     const show = () => setIsDisplayed(true)
     const hide = () => setIsDisplayed(false)
 
-    useSubscribe('showLoading', show)
-    useSubscribe('hideLoading', hide)
+    useSubscribe(Events.ShowLoading, show)
+    useSubscribe(Events.HideLoading, hide)
 
     if (!isDiplayed) return null
     
