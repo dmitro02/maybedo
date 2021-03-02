@@ -1,7 +1,7 @@
 import Syncer from '../../utils/Syncer'
 import './SyncStatus.scss'
-import taskStore from '../../utils/Store'
-import { useEffect, useState } from 'react'
+import { useSubscribe } from '../../utils/Store'
+import { useState } from 'react'
 
 export enum SyncStatuses {
     NotConfigured = 'NOT_CONFIGURED',
@@ -14,13 +14,7 @@ export enum SyncStatuses {
 const SyncStatus = () => {
     const [ status, setStatus ] = useState<SyncStatuses>(SyncStatuses.NotConfigured)
 
-    useEffect(() => {
-        taskStore.subscribe('setSyncStatus', setStatus)
-
-        return () => {
-            taskStore.unsubscribe('setSyncStatus', setStatus)
-        }
-    }, [])
+    useSubscribe('setSyncStatus', setStatus)
 
     const refresh = () => {
         Syncer.getInstance().onDemandCloud()

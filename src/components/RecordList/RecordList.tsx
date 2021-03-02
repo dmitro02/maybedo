@@ -26,11 +26,11 @@ const RecordList = (props: Props) => {
 
     // sort subtask by priority
     const setAndCompare = (a: Task, b: Task) => {
-        if (a.priority === undefined) a.priority = Priorities.Trivial 
-        if (b.priority === undefined) b.priority = Priorities.Trivial
+        const pa = a.priority || Priorities.Trivial
+        const pb = b.priority || Priorities.Trivial
 
-        if (a.priority > b.priority) return -1
-        if (a.priority < b.priority) return 1
+        if (pa > pb) return -1
+        if (pa < pb) return 1
         return 0
     }
     tasks.sort(setAndCompare)

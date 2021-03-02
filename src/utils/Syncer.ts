@@ -177,7 +177,7 @@ export default class Syncer {
 
     private saveToLS() {
         const { updatedAt, taskListJSON } = taskStore  
-        lsUtils.saveToLocalStorage(updatedAt, taskListJSON)    
+        lsUtils.saveToLocalStorage(updatedAt, taskListJSON)
     }
 
     private loadToStore(updatedAt: number, taskList: string | null) {        

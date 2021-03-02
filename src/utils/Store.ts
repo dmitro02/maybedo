@@ -29,7 +29,7 @@ class Store {
 
         this.setTaskList(data)
         this.setUpdatedAt(updatedAt)
-        this.notify('reload')
+        this.notifyWithDelay('reload')
     }
 
     subscribe(event: string, callback: (value?: any) => void) {
@@ -51,6 +51,10 @@ class Store {
 
     notify(event: string, value?: any) {
         this.callbacks.get(event)?.forEach((cbk) => cbk(value))
+    }
+
+    notifyWithDelay(event: string, value?: any) {
+        setTimeout(() => this.notify(event, value), 0)
     }
 
     private notifyFromProxy(context: any) {
@@ -170,15 +174,10 @@ export const useSubscribe = (event: string, callback: (data: any) => void) => {
 export const useSubscribeWithForceUpdate = (event: string) => {    
     const forceUpdate = useForceUpdate()
 
-    // to avoid concurrent updates
-    const delayedForceUpdate = () => {
-        setTimeout(forceUpdate, 0)
-    }
-
     useEffect(() => {
-        storer.subscribe(event, delayedForceUpdate)
+        storer.subscribe(event, forceUpdate)
 
-        return () => storer.unsubscribe(event, delayedForceUpdate)
+        return () => storer.unsubscribe(event, forceUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event])
 }

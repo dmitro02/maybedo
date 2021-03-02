@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Portal from '../../HOCs/Portal'
 import * as lsUtils from '../../utils/localStorageUtils'
 import Syncer, { SyncSources, SyncTargets } from '../../utils/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
-import taskStore from '../../utils/Store'
+import taskStore, { useSubscribe } from '../../utils/Store'
 
 interface SyncOpts {
     target: SyncTargets
@@ -33,12 +33,7 @@ function SyncSettings() {
         setIsSelectDisabled(flag)
     }
 
-    useEffect(() => {
-        taskStore.subscribe('setSyncStatus', toggleTargetSelector)
-        return () => {
-            taskStore.unsubscribe('showBanner', toggleTargetSelector)
-        }
-    }, [])
+    useSubscribe('setSyncStatus', toggleTargetSelector)
 
     const getTargetSettingsElement = () => {
         const { target, dataSource } = syncOpts

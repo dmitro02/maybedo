@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './MainContainer.scss'
 import Loading from '../Statuses/Loading'
 import Syncer from '../../utils/Syncer'
