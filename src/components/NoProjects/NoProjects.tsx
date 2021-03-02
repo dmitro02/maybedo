@@ -1,9 +1,11 @@
 import './NoProjects.scss'
+import { MdCheckBoxOutlineBlank } from 'react-icons/md'
 
 const NoProjects = () => {
     return (
         <div className="no-projects-message">
-            <div>You don't have any projects yet.</div>
+            <MdCheckBoxOutlineBlank />
+            <span>Know thyself!</span>
         </div>
     )
 }

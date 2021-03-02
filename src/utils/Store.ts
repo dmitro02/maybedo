@@ -170,9 +170,15 @@ export const useSubscribe = (event: string, callback: (data: any) => void) => {
 export const useSubscribeWithForceUpdate = (event: string) => {    
     const forceUpdate = useForceUpdate()
 
-    useEffect(() => {
-        storer.subscribe(event, forceUpdate)
+    // to avoid concurrent updates
+    const delayedForceUpdate = () => {
+        setTimeout(forceUpdate, 0)
+    }
 
-        return () => storer.unsubscribe(event, forceUpdate)
-    }, [event, forceUpdate])
+    useEffect(() => {
+        storer.subscribe(event, delayedForceUpdate)
+
+        return () => storer.unsubscribe(event, delayedForceUpdate)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [event])
 }

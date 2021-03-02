@@ -1,7 +1,6 @@
 ☐ implement PWA
 ☐ no-singleton Syncer (initialized in TaskContext)
 ☐ refactor Syncer into smaller self-documented functions
-☐ covert to Preact app
 ☐ Exporter class
 ☐ replace all icons with ones from react-icons (remove style links from index.html)
 ☐ implement full keyboard support
@@ -10,8 +9,6 @@
 ☐ add sync inteval to Dropbox config UI
 ☐ add number of sync files to keep to Dropbox config UI
 ☐ HTML export with collaps/expand projects and checkboxes
-☐ implement ID generation without nanoid
-☐ do not show "no-projects" while loading
 ☐ get rid of types file
 ☐ enum with event names
 ☐ app icon on mobile desktop is empty

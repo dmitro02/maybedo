@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+import { generateId } from './utils/commonUtils';
 import { SyncTargets } from './utils/Syncer';
 
 export enum Priorities {
@@ -22,7 +22,7 @@ export class Task {
     id: string
 
     constructor(text: string, parent: Task | null, isDone?: boolean, id?: string) {
-        this.id = id || nanoid()
+        this.id = id || generateId()
         this.text = text
         this.isDone = isDone || false
         this.tasks = []
