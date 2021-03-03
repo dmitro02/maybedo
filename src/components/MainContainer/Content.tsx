@@ -1,15 +1,12 @@
 import Banner from '../Banner/Banner'
-import { 
-    ArrowBackButton, 
-    MenuButton, 
-    SettingsButton 
-} from '../Buttons/Buttons'
+import { MenuButton, SettingsButton } from '../Buttons/Buttons'
 import Fog from '../Fog/Fog'
 import NoProjects from '../NoProjects/NoProjects'
 import TaskList from '../RecordList/TaskList'
 import Settings from '../Settings/Settings'
 import SyncStatus from '../Statuses/SyncStatus'
 import taskStore from '../../classes/Store'
+import { BsBoxArrowLeft } from 'react-icons/bs'
 
 type Props = {
     isSidebarOpened: boolean,
@@ -47,7 +44,11 @@ const Content = (props: Props) => {
                 <div className="row-btns">
                     <SyncStatus />
                     {isSettingsOpened 
-                        ? <ArrowBackButton action={toggleSettings} title="close settings" />
+                        ? <BsBoxArrowLeft 
+                            onClick={toggleSettings}
+                            className="common-btn close settings"
+                            title="close settings"
+                          />
                         : <SettingsButton action={toggleSettings} />
                     }
                 </div>

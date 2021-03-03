@@ -247,8 +247,7 @@ class Syncer {
         if (this.isSyncFaild) {
             actions.setSyncStatus(SyncStatuses.Failure)
         } else {
-            actions.setSyncStatus(SyncStatuses.Success)
-            setTimeout(() => actions.setSyncStatus(SyncStatuses.Idle), 2500)
+            actions.setSyncStatus(SyncStatuses.Idle)
         }
     }
 }

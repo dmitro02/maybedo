@@ -27,9 +27,7 @@ function SyncSettings() {
     const targetRef = useRef<SyncTargets>(syncOpts.target)
 
     const toggleTargetSelector = (status: SyncStatuses) => {
-        const flag = 
-            status === SyncStatuses.InProgress || 
-            status === SyncStatuses.Success
+        const flag = status === SyncStatuses.InProgress 
         setIsSelectDisabled(flag)
     }
 
