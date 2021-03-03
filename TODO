@@ -1,5 +1,4 @@
 ☐ implement PWA
-☐ replace all icons with ones from react-icons (remove style links from index.html)
 V2:
     ☐ refactor Syncer into smaller self-documented functions
     ☐ implement full keyboard support
@@ -8,3 +7,4 @@ V2:
     ☐ add sync inteval to Dropbox config UI
     ☐ add number of sync files to keep to Dropbox config UI
     ☐ HTML export with collaps/expand projects and checkboxes
+    ☐ dark theme
