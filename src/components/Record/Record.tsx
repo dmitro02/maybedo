@@ -2,11 +2,9 @@ import React, { useState, memo } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
 import SubTaskList from '../RecordList/SubTaskList'
-import { 
-    ExpandButton,
-    CollapseButton,
-    CheckmarkButton
- } from '../Buttons/Buttons'
+import CheckmarkButton from '../Buttons/CheckmarkButton'
+ import { MdExpandLess, MdExpandMore } from 'react-icons/md'
+
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 import { useSubscribeWithForceUpdate } from '../../classes/Store'
@@ -76,12 +74,12 @@ const Record = (props: Props) => {
     }
 
     const getSubtasksBtn = () => {
-        const classNames = [ 'subtasks-btn' ]
+        const classes = "common-btn subtasks-btn"
         if (hasSubtasks && !showSubtasks) {
-            return <ExpandButton action={openSubtasks} classNames={classNames} />
+            return <MdExpandMore onClick={openSubtasks} className={classes} />
         }
         if (showSubtasks) {
-            return <CollapseButton action={closeSubtasks} classNames={classNames} />
+            return <MdExpandLess onClick={closeSubtasks} className={classes} />
         }
         return null
     }

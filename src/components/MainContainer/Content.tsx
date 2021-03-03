@@ -1,5 +1,6 @@
 import Banner from '../Banner/Banner'
-import { MenuButton, SettingsButton } from '../Buttons/Buttons'
+import MenuButton from '../Buttons/MenuButton'
+import { RiSettingsLine } from 'react-icons/ri'
 import Fog from '../Fog/Fog'
 import NoProjects from '../NoProjects/NoProjects'
 import TaskList from '../RecordList/TaskList'
@@ -45,11 +46,15 @@ const Content = (props: Props) => {
                     <SyncStatus />
                     {isSettingsOpened 
                         ? <BsBoxArrowLeft 
-                            onClick={toggleSettings}
                             className="common-btn close settings"
+                            onClick={toggleSettings}
                             title="close settings"
                           />
-                        : <SettingsButton action={toggleSettings} />
+                        : <RiSettingsLine 
+                            className="common-btn "
+                            onClick={toggleSettings}
+                            title="settings"
+                          />
                     }
                 </div>
             </div>

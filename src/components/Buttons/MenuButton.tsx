@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import './Button.scss'
+import { MdMenu } from 'react-icons/md'
 
 type Props = {
     action: () => void
@@ -20,11 +21,11 @@ const MenuButton = (props: Props) => {
     }
 
     return (
-        <i 
-            className={`material-icons common-btn ${classNames.join(' ')}`} 
+        <MdMenu 
+            className={`common-btn ${classNames.join(' ')}`} 
             onClick={handleClick}
             title={title}
-        >menu</i>
+        />
     )
 }
 
