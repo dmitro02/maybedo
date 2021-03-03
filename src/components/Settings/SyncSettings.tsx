@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
-import { useTasksContext } from '../../contexts/TasksContext'
 import Portal from '../../HOCs/Portal'
 import * as lsUtils from '../../utils/localStorageUtils'
-import Syncer, { SyncSources, SyncTargets } from '../../utils/Syncer'
+import syncer, { SyncSources, SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
+import { actions, Events, useSubscribe } from '../../classes/Store'
 
 interface SyncOpts {
     target: SyncTargets
@@ -22,9 +22,16 @@ function SyncSettings() {
 
     const [ showModal, setShowModal ] = useState(false)
 
-    const { store, actions } = useTasksContext()
+    const [ isSelectDisabled, setIsSelectDisabled ] = useState(false)
 
     const targetRef = useRef<SyncTargets>(syncOpts.target)
+
+    const toggleTargetSelector = (status: SyncStatuses) => {
+        const flag = status === SyncStatuses.InProgress 
+        setIsSelectDisabled(flag)
+    }
+
+    useSubscribe(Events.SetSyncStatus, toggleTargetSelector)
 
     const getTargetSettingsElement = () => {
         const { target, dataSource } = syncOpts
@@ -44,23 +51,17 @@ function SyncSettings() {
             setSyncOpts({ target: value, dataSource: undefined })
             lsUtils.setSyncTarget(value)
             actions.setSyncStatus(SyncStatuses.NotConfigured)
-            Syncer.getInstance(actions).initSync()
+            syncer.initSync()
         } else {
             setShowModal(true)
         }
     }
 
-    const isSelectDisabled = 
-        store.syncStatus === SyncStatuses.InProgress || 
-        store.syncStatus === SyncStatuses.Success
-
     const initSyncWithTarget = (dataSource: SyncSources) => {
         const target = targetRef.current
         setSyncOpts({ target, dataSource })
         lsUtils.setSyncTarget(target)
-        Syncer
-            .getInstance(actions)
-            .initSync(dataSource)
+        syncer.initSync(dataSource)
         setShowModal(false)
     }   
     

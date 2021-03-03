@@ -5,12 +5,14 @@
     height: 100vh;
 
     .left-panel {
-        position: relative;
+        width: 400px;
         min-width: 400px;
+        position: relative;
         padding: 0 6px;
         border-right: 1px solid $grey3; 
         background-color: $grey1;
         overflow: auto;
+        height: 100%;
 
         .close-menu-btn {
             display: none;
@@ -53,10 +55,6 @@
         .right-panel {
             overflow: hidden;
         }
-
-        .left-panel {
-            height: 100%;
-        }
     }
 }
 
@@ -81,6 +79,10 @@ input::placeholder {
     display: none;
 }
 
+.no-scroll {
+    overflow: hidden !important;
+}
+
 @media screen and (max-width: 1700px) {
     .main-container .right-panel {
         padding: 0 100px;
@@ -97,7 +99,7 @@ input::placeholder {
     .main-container {
         .left-panel {
             position: absolute;
-            left: -410px;
+            left: -420px;
             transition: left 0.2s;
             z-index: 2;
 
@@ -129,9 +131,3 @@ input::placeholder {
     } 
 }
 
-@media screen and (max-width: 400px) {
-    .main-container .left-panel {
-        min-width: 300px;
-        left: -310px;
-    }  
-}

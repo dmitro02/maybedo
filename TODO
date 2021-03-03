@@ -1,16 +1,10 @@
 ☐ implement PWA
-☐ implement reactive taskStore or parent-update-only
-☐ no-singleton Syncer (initialized in TaskContext)
-☐ refactor Syncer into smaller self-documented functions
-☐ Exporter class
-☐ replace all icons with ones from react-icons (remove style links from index.html)
-☐ implement full keyboard support
-☐ refactor sidebar into separate component
-☐ make sidebar always hidable
-☐ make sidebar resizable
-☐ add sync inteval to Dropbox config UI
-☐ add number of sync files to keep to Dropbox config UI
-☐ HTML export with collaps/expand projects and checkboxes
-☐ implement ID generation without nanoid
-☐ implement automatic set of updatedAt (Proxy ?)
-☐ move showSidebar from context to state
+V2:
+    ☐ refactor Syncer into smaller self-documented functions
+    ☐ implement full keyboard support
+    ☐ make sidebar always hideable
+    ☐ make sidebar resizable
+    ☐ add sync inteval to Dropbox config UI
+    ☐ add number of sync files to keep to Dropbox config UI
+    ☐ HTML export with collaps/expand projects and checkboxes
+    ☐ dark theme

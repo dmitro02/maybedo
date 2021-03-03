@@ -1,10 +1,6 @@
 import { useRef, useState } from 'react'
-import { useTasksContext } from '../../contexts/TasksContext'
-import { 
-    BannerTypes, 
-    IBanner, 
-    Task
-} from '../../types'
+import Task from '../../classes/Task'
+import { FailureBanner, SuccessBanner } from '../Banner/Banner'
 import { readFile } from '../../utils/commonUtils'
 import { 
     convertDataToHtmlString,
@@ -13,7 +9,7 @@ import {
     getExportFileName,
     validateExportedData
 } from '../../utils/persistDataUtils'
-import taskStore from '../../utils/taskStore'
+import taskStore, { actions } from '../../classes/Store'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
 import Button from '../Buttons/Button'
@@ -23,8 +19,6 @@ type Props = {
 }
 
 const ExportImport = (props: Props) => {
-    const { actions } = useTasksContext()
-
     const [ showModal, setShowModal ] = useState(false)
 
     const { taskList } = taskStore
@@ -60,31 +54,21 @@ const ExportImport = (props: Props) => {
             }
         } catch(err) {
             setShowModal(false)
-            const banner: IBanner = {
-                text: 'Failed to parse JSON file',
-                type: BannerTypes.Failure
-            }
-            actions.setBanner(banner)
+            const banner = new FailureBanner('Failed to parse JSON file')
+            actions.showBanner(banner)
             clearFileInput()
             return
         }
         if (!validateExportedData(taskList)) {
-            const banner: IBanner = {
-                text: 'Some required fields are missing',
-                type: BannerTypes.Failure
-            }
-            actions.setBanner(banner)
+            const banner = new FailureBanner('Some required fields are missing')
+            actions.showBanner(banner)
             return
         }
         taskStore.setData(taskList, Date.now())
         
         backToTaskList()
-        const banner: IBanner = {
-            text: 'Data successfully imported',
-            type: BannerTypes.Success,
-            delay: 5
-        }
-        actions.setBanner(banner)
+        const banner = new SuccessBanner('Data successfully imported', 5)
+        actions.showBanner(banner)
     }
 
     const clickOnFileInput = () => {

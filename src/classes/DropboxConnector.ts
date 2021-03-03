@@ -1,8 +1,7 @@
-import { readFile } from './commonUtils';
+import { readFile } from '../utils/commonUtils';
 import { SyncTargets } from './Syncer';
-import { ICloudConnector } from './../types';
+import { Metadata, ICloudConnector } from './Syncer';
 import DropboxClient from './DropboxClient'
-import { Metadata } from '../types';
 
 const CLIENT_ID = 'lxn28fv9hhsn7id'
 
@@ -11,28 +10,28 @@ const METADATA_FILE_PATH = '/metadata.json'
 const MAX_EXPORTS_NUMBER_TO_KEEP = 10
 
 export default class DropboxConnector implements ICloudConnector {
-    private dropboxCon: DropboxClient
+    private dropboxClient: DropboxClient
 
     syncTarget = SyncTargets.Dropbox
 
     constructor() {
-        this.dropboxCon = new DropboxClient(CLIENT_ID)
+        this.dropboxClient = new DropboxClient(CLIENT_ID)
     }
 
     get authUrl(): string {
-        return this.dropboxCon.authUrl
+        return this.dropboxClient.authUrl
     }
 
     get isConfigured(): boolean {
-        return this.dropboxCon.isConfigured
+        return this.dropboxClient.isConfigured
     }
 
     async authorize(authorizationCode?: string)  {
-        await this.dropboxCon.authorize(authorizationCode)
+        await this.dropboxClient.authorize(authorizationCode)
     }
 
     async check() {
-        await this.dropboxCon.check()
+        await this.dropboxClient.check()
     }
 
     async uploadData(metadata: Metadata, taskList: string) {
@@ -42,7 +41,7 @@ export default class DropboxConnector implements ICloudConnector {
 
     async downloadMetadata(): Promise<Metadata> {        
         try {
-            const response: any = await this.dropboxCon.downloadFile(METADATA_FILE_PATH)
+            const response: any = await this.dropboxClient.downloadFile(METADATA_FILE_PATH)
             const fileContent = await readFile(response.result.fileBlob)
             return JSON.parse(fileContent as string)
         } catch(e) {
@@ -52,7 +51,7 @@ export default class DropboxConnector implements ICloudConnector {
 
     async uploadMetadata(metadata: Metadata) {
         const contents = JSON.stringify(metadata)
-        await this.dropboxCon.uploadFile(contents, METADATA_FILE_PATH)
+        await this.dropboxClient.uploadFile(contents, METADATA_FILE_PATH)
     }
 
     async downloadTaskList(): Promise<string | null> {
@@ -70,13 +69,13 @@ export default class DropboxConnector implements ICloudConnector {
         if (!taskList) return
 
         const path = `${DATA_FOLDER_PATH}/tasklist_${new Date().toISOString()}.json`
-        await this.dropboxCon.uploadFile(taskList, path)
+        await this.dropboxClient.uploadFile(taskList, path)
 
         await this.deleteOldestExports()
     }
 
     private async getSortedExports(): Promise<any[]> {
-        const response: any = await this.dropboxCon.listFolder(DATA_FOLDER_PATH)
+        const response: any = await this.dropboxClient.listFolder(DATA_FOLDER_PATH)
         return response.result.entries.sort((a: any, b: any) => {
             const clientModifiedA = new Date(a.client_modified)
             const clientModifiedB = new Date(b.client_modified)
@@ -91,7 +90,7 @@ export default class DropboxConnector implements ICloudConnector {
     private async getLatestExport() {
         const sortedExports = await this.getSortedExports()
         const path = sortedExports.pop().path_lower
-        const response: any = await this.dropboxCon.downloadFile(path)
+        const response: any = await this.dropboxClient.downloadFile(path)
         return response.result
     }
 
@@ -99,7 +98,7 @@ export default class DropboxConnector implements ICloudConnector {
         const sortedExports = await this.getSortedExports()
 
         for (let i = 0; i < sortedExports.length - MAX_EXPORTS_NUMBER_TO_KEEP; i++) {            
-            await this.dropboxCon.deleteFile(sortedExports[i].path_lower)
+            await this.dropboxClient.deleteFile(sortedExports[i].path_lower)
         }
     }
 }

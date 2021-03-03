@@ -1,6 +1,6 @@
-import { useRef, useState, memo } from 'react'
+import { useRef, useState } from 'react'
 import { MdMoreVert } from "react-icons/md"
-import { IActions, Task } from '../../types'
+import Task from '../../classes/Task'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import DeleteRecords from './DeleteRecords'
 import Priority from './Priority'
@@ -10,7 +10,6 @@ import AddSubtask from './AddSubtask'
 type Props = {
     task: Task,
     classes?: string[],
-    actions: IActions,
     showSubtasks: () => void,
     isProject: boolean
 }
@@ -19,7 +18,6 @@ const RecordMenu = (props: Props) => {
     const {
         task,
         classes = [],
-        actions,
         showSubtasks,
         isProject
     } = props
@@ -61,24 +59,23 @@ const RecordMenu = (props: Props) => {
             >
                 {!task.isDone && !isRoot && <Priority 
                     task={task} 
-                    actions={actions} 
                     closeMenu={closeMenu} 
                 />}
                 {!isProject && !task.isDone && !isRoot && <AddSubtask 
                     closeMenu={closeMenu}
                     showSubtasks={showSubtasks}
+                    isDisabled={hasSubtasks}
                 />}
                 <DeleteRecords
                     task={task} 
-                    actions={actions} 
                     isBulk
                     isDisabled={!hasCompleted || !hasSubtasks}
                     closeMenu={closeMenu}
                 />
-                {!isRoot && <DeleteRecords task={task} actions={actions} />}
+                {!isRoot && <DeleteRecords task={task} />}
             </div>}
         </div>
     )
 }
 
-export default memo(RecordMenu)
+export default RecordMenu

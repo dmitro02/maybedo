@@ -1,8 +1,9 @@
 import { useRef } from 'react'
 import AddRecord from '../Record/AddRecord'
-import { Priorities, Task } from '../../types'
+import Task, { Priorities } from '../../classes/Task'
 import Record from '../Record/Record'
 import './RecordList.scss'
+import { useSubscribeWithForceUpdate } from '../../classes/Store'
 
 type Props = { 
     classNames?: string[],
@@ -21,13 +22,15 @@ const RecordList = (props: Props) => {
 
     const { tasks } = root
 
+    useSubscribeWithForceUpdate(root.id)
+
     // sort subtask by priority
     const setAndCompare = (a: Task, b: Task) => {
-        if (a.priority === undefined) a.priority = Priorities.Trivial 
-        if (b.priority === undefined) b.priority = Priorities.Trivial
+        const pa = a.priority || Priorities.Trivial
+        const pb = b.priority || Priorities.Trivial
 
-        if (a.priority > b.priority) return -1
-        if (a.priority < b.priority) return 1
+        if (pa > pb) return -1
+        if (pa < pb) return 1
         return 0
     }
     tasks.sort(setAndCompare)
@@ -55,6 +58,7 @@ const RecordList = (props: Props) => {
                             key={task.id} 
                             item={task}
                             isEditable={isEditable}
+                            isSelected={root.selectedSubTaskId === task.id && !root.parent}
                         />
                 )}
             </div>
@@ -66,6 +70,7 @@ const RecordList = (props: Props) => {
                             key={task.id}
                             item={task}
                             isEditable={isEditable}
+                            isSelected={root.selectedSubTaskId === task.id && !root.parent}
                         />
                 )}
             </div>}

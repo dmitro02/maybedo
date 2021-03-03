@@ -73,6 +73,7 @@
     .record-menu-row.disabled {
         color: $grey5;
         cursor: default;
+        pointer-events: none;
     }
 }
 

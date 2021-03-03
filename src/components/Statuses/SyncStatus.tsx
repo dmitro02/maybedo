@@ -1,21 +1,27 @@
-import Syncer from '../../utils/Syncer'
+import syncer from '../../classes/Syncer'
 import './SyncStatus.scss'
+import { Events, useSubscribe } from '../../classes/Store'
+import { useState } from 'react'
+import { 
+    MdSyncProblem,
+    MdSyncDisabled,
+    MdSync
+} from 'react-icons/md'
 
 export enum SyncStatuses {
     NotConfigured = 'NOT_CONFIGURED',
     Idle = 'IDLE',
     InProgress = 'IN_PROGRESS',
-    Success = 'SUCCESS',
     Failure = 'FAILURE'
 }
 
-type Props = {
-    status: SyncStatuses | undefined
-}
+const SyncStatus = () => {
+    const [ status, setStatus ] = useState<SyncStatuses>(SyncStatuses.NotConfigured)
 
-const SyncStatus = ({ status }: Props) => {
+    useSubscribe(Events.SetSyncStatus, setStatus)
+
     const refresh = () => {
-        Syncer.getInstance().onDemandCloud()
+        syncer.onDemandCloud()
     }
 
     const baseClass = 'material-icons-outlined common-btn'
@@ -26,28 +32,33 @@ const SyncStatus = ({ status }: Props) => {
     const getStatusElement = (status?: SyncStatuses) => {
         switch (status) {
             case SyncStatuses.NotConfigured:
-                return <span 
-                    className={noHoverClass} 
-                    title="clud sync disabled">cloud_off</span>
+                return <MdSyncDisabled 
+                            className={noHoverClass}
+                            title="cloud sync disabled"
+                        />  
             case SyncStatuses.Idle:
-                return <span 
-                    className={baseClass} 
-                    onClick={refresh} 
-                    title="synchronize">sync</span>    
+                return <MdSync 
+                            className={baseClass}
+                            onClick={refresh}
+                            title="synchronize"
+                        />     
             case SyncStatuses.InProgress:
-                return <span className={inProgresClass}>sync</span>   
-            case SyncStatuses.Success:
-                return <span 
-                    className={noHoverClass} 
-                    title="synchronized">cloud_done</span>               
+                return <MdSync 
+                            className={inProgresClass}
+                            onClick={refresh}
+                            title="synchronizing"
+                        />                
             case SyncStatuses.Failure:
-                return <span 
-                    className={failureClass} 
-                    title="sync failed">sync_problem</span>            
+                return <MdSyncProblem 
+                            className={failureClass}
+                            onClick={refresh}
+                            title="sync failed"
+                        />            
             default:
-                return <span 
-                    className={noHoverClass} 
-                    title="clud sync disabled">cloud_off</span>
+                 return <MdSyncDisabled 
+                            className={noHoverClass}
+                            title="cloud sync disabled"
+                        />   
         }
     } 
 

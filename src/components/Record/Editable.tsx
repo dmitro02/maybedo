@@ -1,14 +1,12 @@
-import { useRef, useEffect, memo } from 'react'
-import { IActions, Task } from '../../types'
+import { useRef, useEffect } from 'react'
+import Task from '../../classes/Task'
 
 type Props = { 
     task: Task, 
     isEditable: boolean,
-    isProject: boolean,
-    actions: IActions
 }
 
-const Editable = ({ task, isEditable, actions, isProject }: Props) => {
+const Editable = ({ task, isEditable }: Props) => {
     const { isNew, text } = task
 
     const editableRef = useRef<HTMLDivElement>(null)
@@ -37,9 +35,8 @@ const Editable = ({ task, isEditable, actions, isProject }: Props) => {
     }
 
     const handleInput = debounceInput((text: string) => {
-        task.text = text
         caretPosRef.current = getCaretPosition(editableRef.current)
-        isProject && actions.triggerCascadingUpdate()
+        task.text = text
     })
 
     const handleBlur = () => {
@@ -100,4 +97,4 @@ const setCaretPosition = (el: HTMLElement | null, pos?: number): void => {
     selection?.addRange(range)
 }
 
-export default memo(Editable)
+export default Editable

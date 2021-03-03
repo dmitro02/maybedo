@@ -1,6 +1,6 @@
 import { Dropbox } from 'dropbox'
 import fetch from 'isomorphic-fetch'
-import { nanoid } from 'nanoid'
+import { generateId } from '../utils/commonUtils'
 
 const AUTH_URL = 'https://www.dropbox.com/oauth2/authorize'
 const TOKEN_URL = 'https://api.dropbox.com/oauth2/token'
@@ -13,8 +13,8 @@ export default class DropboxClient {
 
     constructor(clientId: string) {
         this.clientId = clientId
-        this.codeVerifier = nanoid(43)
-        this.initDropbox(null)
+        this.codeVerifier = generateId(43)
+        this.initDropbox()
     }
 
     async check() {
@@ -80,7 +80,7 @@ export default class DropboxClient {
         return !!this.dropbox
     }
 
-    private initDropbox(token: string | null) {
+    private initDropbox(token?: string) {
         const accessToken = token || this.getAccessTokenFromLS()
         this.dropbox = accessToken 
             ? new Dropbox({ accessToken, fetch })

@@ -1,8 +1,9 @@
 import { memo } from 'react'
 import './Button.scss'
+import { MdMenu } from 'react-icons/md'
 
 type Props = {
-    action: (e: any) => void
+    action: () => void
     classNames?: string[]
     title?: string
 }
@@ -14,12 +15,17 @@ const MenuButton = (props: Props) => {
         title = ''
     } = props
 
+    const handleClick = (e: any) => {
+        e.stopPropagation()
+        action()
+    }
+
     return (
-        <i 
-            className={`material-icons common-btn ${classNames.join(' ')}`} 
-            onClick={action}
+        <MdMenu 
+            className={`common-btn ${classNames.join(' ')}`} 
+            onClick={handleClick}
             title={title}
-        >menu</i>
+        />
     )
 }
 

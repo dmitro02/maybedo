@@ -1,14 +1,26 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
-import { 
-    ICloudConnector, 
-    IActions, 
-    Metadata
-} from './../types';
 import DropboxConnector from './DropboxConnector';
-import * as lsUtils from "./localStorageUtils"
-import taskStore from "./taskStore"
+import * as lsUtils from "../utils/localStorageUtils"
+import taskStore, { actions } from './Store'
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
+
+export class Metadata {
+    updatedAt: number | undefined
+
+    constructor(updatedAt?: number) {
+        this.updatedAt = updatedAt
+    }
+}
+
+export interface ICloudConnector {
+    syncTarget: SyncTargets
+    authorize: () => any
+    check: () => any
+    downloadMetadata: () => Promise<Metadata>
+    downloadTaskList: () => Promise<string | null>
+    uploadData: (metadata: Metadata, taskList: string) => any
+}
 
 export enum SyncTargets {
     Dropbox = 'DROPBOX',
@@ -20,31 +32,18 @@ export enum SyncSources {
     Remote = 'REMOTE' 
 }
 
-export default class Syncer {
-    private static instance: Syncer;
-
+class Syncer {
     private cloudConnector: ICloudConnector | null = null
-    private actions: IActions
     private isSyncFaild: boolean = false
     private interval: any = null
 
-    private constructor(actions: IActions) {
-        this.actions = actions
+    public constructor() {
         this.onDemandCloud = this.onDemandCloud.bind(this)
         this.onDemandLocal = this.onDemandLocal.bind(this)
     }
 
-    public static getInstance(actions?: IActions): Syncer {
-        if (!actions) return Syncer.instance;
-
-        if (!Syncer.instance) {
-            Syncer.instance = new Syncer(actions);
-        }
-        return Syncer.instance;
-    }
-
     async initSync(source?: SyncSources, cloudConnector?: ICloudConnector) {
-        this.actions.setLoading(true)
+        actions.showLoading()
 
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
@@ -76,7 +75,7 @@ export default class Syncer {
 
         this.addGlobalEventListeners()
 
-        this.actions.setLoading(false)
+        actions.hideLoading()
     }
 
     private resetSync() {
@@ -96,7 +95,7 @@ export default class Syncer {
 
     private async onLoadCloud() {
         this.isSyncFaild = false
-        this.actions.setSyncStatus(SyncStatuses.InProgress)
+        actions.setSyncStatus(SyncStatuses.InProgress)
 
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
         const lsUpdatedAt = lsUtils.getLsUpdatedAt()
@@ -126,7 +125,7 @@ export default class Syncer {
 
     private async forceUpdateFromSource(source: SyncSources) {
         this.isSyncFaild = false
-        this.actions.setSyncStatus(SyncStatuses.InProgress)        
+        actions.setSyncStatus(SyncStatuses.InProgress)
         
         if (source === SyncSources.Remote) {
             const updatedAt = await this.getCloudUpdatedAt()
@@ -156,7 +155,7 @@ export default class Syncer {
 
     async onDemandCloud() {
         this.isSyncFaild = false
-        this.actions.setSyncStatus(SyncStatuses.InProgress)
+        actions.setSyncStatus(SyncStatuses.InProgress)
 
         this.saveToLS()
         
@@ -185,7 +184,7 @@ export default class Syncer {
 
     private saveToLS() {
         const { updatedAt, taskListJSON } = taskStore  
-        lsUtils.saveToLocalStorage(updatedAt, taskListJSON)    
+        lsUtils.saveToLocalStorage(updatedAt, taskListJSON)
     }
 
     private loadToStore(updatedAt: number, taskList: string | null) {        
@@ -198,10 +197,10 @@ export default class Syncer {
             await this.cloudConnector!.check()
         } catch(e) {
             if (e.message.toLowerCase().includes('not_configured')) {
-                this.actions.setSyncStatus(SyncStatuses.NotConfigured)
+                actions.setSyncStatus(SyncStatuses.NotConfigured)
                 return false
             } else {
-                this.actions.setSyncStatus(SyncStatuses.Failure)
+                actions.setSyncStatus(SyncStatuses.Failure)
                 return true
             }
         }
@@ -246,10 +245,13 @@ export default class Syncer {
 
     private setSyncResultStatus() {
         if (this.isSyncFaild) {
-            this.actions.setSyncStatus(SyncStatuses.Failure)
+            actions.setSyncStatus(SyncStatuses.Failure)
         } else {
-            this.actions.setSyncStatus(SyncStatuses.Success)
-            setTimeout(() => this.actions.setSyncStatus(SyncStatuses.Idle), 3000)
+            actions.setSyncStatus(SyncStatuses.Idle)
         }
     }
 }
+
+const syncer = new Syncer()
+
+export default syncer

@@ -19,3 +19,14 @@ export const readFile = (blob: Blob): Promise<string> => {
         fr.readAsText(blob)
     })
 }
+
+export const generateId = (length?: number): string => {
+    const idLength = length && length >= 20 ? length : 20
+
+    let id = ''
+
+    while (id.length < idLength) {
+        id += Math.floor(Math.random() * 1E10).toString()
+    }
+    return id.substring(0, length)
+}
