@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import DropboxConnector from '../../utils/DropboxConnector'
 import { FailureBanner, SuccessBanner } from '../../types'
-import Syncer, { SyncSources } from '../../utils/Syncer'
+import syncer, { SyncSources } from '../../utils/Syncer'
 import { GoArrowRight } from "react-icons/go";
 import Button from '../Buttons/Button'
 import { actions } from '../../utils/Store'
@@ -18,7 +18,7 @@ const DropboxSettings = ({ source }: Props) => {
         try {
             await dbx.authorize(authTokenRef.current?.value)
 
-            Syncer.getInstance().initSync(source, dbx)
+            syncer.initSync(source, dbx)
             const banner = new SuccessBanner('Application successfully authorized')
             actions.showBanner(banner)
         } catch(e) {

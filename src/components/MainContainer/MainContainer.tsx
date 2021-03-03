@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './MainContainer.scss'
 import Loading from '../Statuses/Loading'
-import Syncer from '../../utils/Syncer'
+import syncer from '../../utils/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
 import { Events, useSubscribeWithForceUpdate } from '../../utils/Store'
@@ -12,7 +12,7 @@ const MainContainer = () => {
     const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
 
     useEffect(() => {
-        Syncer.getInstance().initSync()
+        syncer.initSync()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

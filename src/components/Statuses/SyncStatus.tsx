@@ -1,4 +1,4 @@
-import Syncer from '../../utils/Syncer'
+import syncer from '../../utils/Syncer'
 import './SyncStatus.scss'
 import { Events, useSubscribe } from '../../utils/Store'
 import { useState } from 'react'
@@ -17,7 +17,7 @@ const SyncStatus = () => {
     useSubscribe(Events.SetSyncStatus, setStatus)
 
     const refresh = () => {
-        Syncer.getInstance().onDemandCloud()
+        syncer.onDemandCloud()
     }
 
     const baseClass = 'material-icons-outlined common-btn'

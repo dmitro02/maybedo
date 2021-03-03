@@ -1,5 +1,4 @@
 ☐ implement PWA
-☐ no-singleton Syncer (initialized in TaskContext)
 ☐ replace all icons with ones from react-icons (remove style links from index.html)
 ☐ get rid of types file
 V2:

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import Portal from '../../HOCs/Portal'
 import * as lsUtils from '../../utils/localStorageUtils'
-import Syncer, { SyncSources, SyncTargets } from '../../utils/Syncer'
+import syncer, { SyncSources, SyncTargets } from '../../utils/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
@@ -53,7 +53,7 @@ function SyncSettings() {
             setSyncOpts({ target: value, dataSource: undefined })
             lsUtils.setSyncTarget(value)
             actions.setSyncStatus(SyncStatuses.NotConfigured)
-            Syncer.getInstance().initSync()
+            syncer.initSync()
         } else {
             setShowModal(true)
         }
@@ -63,7 +63,7 @@ function SyncSettings() {
         const target = targetRef.current
         setSyncOpts({ target, dataSource })
         lsUtils.setSyncTarget(target)
-        Syncer.getInstance().initSync(dataSource)
+        syncer.initSync(dataSource)
         setShowModal(false)
     }   
     

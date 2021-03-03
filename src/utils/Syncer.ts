@@ -16,23 +16,14 @@ export enum SyncSources {
     Remote = 'REMOTE' 
 }
 
-export default class Syncer {
-    private static instance: Syncer;
-
+class Syncer {
     private cloudConnector: ICloudConnector | null = null
     private isSyncFaild: boolean = false
     private interval: any = null
 
-    private constructor() {
+    public constructor() {
         this.onDemandCloud = this.onDemandCloud.bind(this)
         this.onDemandLocal = this.onDemandLocal.bind(this)
-    }
-
-    public static getInstance(): Syncer {
-        if (!Syncer.instance) {
-            Syncer.instance = new Syncer();
-        }
-        return Syncer.instance;
     }
 
     async initSync(source?: SyncSources, cloudConnector?: ICloudConnector) {
@@ -245,3 +236,7 @@ export default class Syncer {
         }
     }
 }
+
+const syncer = new Syncer()
+
+export default syncer
