@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { Task } from '../../types'
+import Task from '../../classes/Task'
 
 type Props = { 
     task: Task, 

@@ -1,6 +1,6 @@
-import syncer from '../../utils/Syncer'
+import syncer from '../../classes/Syncer'
 import './SyncStatus.scss'
-import { Events, useSubscribe } from '../../utils/Store'
+import { Events, useSubscribe } from '../../classes/Store'
 import { useState } from 'react'
 
 export enum SyncStatuses {

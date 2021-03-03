@@ -1,8 +1,8 @@
-import { SyncStatuses } from './../components/Statuses/SyncStatus';
-import { IBanner } from './../types';
+import { SyncStatuses } from '../components/Statuses/SyncStatus';
+import { IBanner } from '../components/Banner/Banner';
 import { useEffect } from "react"
-import { Task } from "../types"
-import { useForceUpdate } from "./customHooks"
+import Task from "./Task"
+import { useForceUpdate } from "../utils/customHooks"
 
 export enum Events {
     ShowLoading,

@@ -1,6 +1,6 @@
 import { Dropbox } from 'dropbox'
 import fetch from 'isomorphic-fetch'
-import { generateId } from './commonUtils'
+import { generateId } from '../utils/commonUtils'
 
 const AUTH_URL = 'https://www.dropbox.com/oauth2/authorize'
 const TOKEN_URL = 'https://api.dropbox.com/oauth2/token'

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 import withModal from "../../HOCs/withModal"
-import { SyncTargets } from "../../utils/Syncer"
+import { SyncTargets } from "../../classes/Syncer"
 import Button from "../Buttons/Button"
 
 type Props = {

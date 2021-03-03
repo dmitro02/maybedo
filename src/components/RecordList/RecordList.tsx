@@ -1,9 +1,9 @@
 import { useRef } from 'react'
 import AddRecord from '../Record/AddRecord'
-import { Priorities, Task } from '../../types'
+import Task, { Priorities } from '../../classes/Task'
 import Record from '../Record/Record'
 import './RecordList.scss'
-import { useSubscribeWithForceUpdate } from '../../utils/Store'
+import { useSubscribeWithForceUpdate } from '../../classes/Store'
 
 type Props = { 
     classNames?: string[],

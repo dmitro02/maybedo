@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import './MainContainer.scss'
 import Loading from '../Statuses/Loading'
-import syncer from '../../utils/Syncer'
+import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { Events, useSubscribeWithForceUpdate } from '../../utils/Store'
+import { Events, useSubscribeWithForceUpdate } from '../../classes/Store'
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)

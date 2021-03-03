@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import './Banner.scss'
 import { MdClose } from 'react-icons/md'
-import { Events, useSubscribe } from '../../utils/Store'
-import { IBanner } from '../../types'
+import { Events, useSubscribe } from '../../classes/Store'
 
 const Banner = () => {
     const [ banner, setBanner ] = useState<IBanner | null>(null)
@@ -31,3 +30,37 @@ const Banner = () => {
 }
 
 export default Banner
+
+export interface IBanner {
+    text: string
+    type: BannerTypes
+    delay?: number
+}
+
+export enum BannerTypes {
+    Success = "success",
+    Warning = "warning",
+    Failure = "failure"
+}
+
+export class FailureBanner implements IBanner {
+    text: string
+    type: BannerTypes
+
+    constructor(text: string) {
+        this.text = text
+        this.type = BannerTypes.Failure
+    }
+}
+
+export class SuccessBanner implements IBanner {
+    text: string
+    type: BannerTypes
+    delay: number
+
+    constructor(text: string, delay: number = 5) {
+        this.text = text
+        this.type = BannerTypes.Success
+        this.delay = delay
+    }
+}

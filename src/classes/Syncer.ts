@@ -1,10 +1,26 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
-import { ICloudConnector, Metadata } from './../types';
 import DropboxConnector from './DropboxConnector';
-import * as lsUtils from "./localStorageUtils"
+import * as lsUtils from "../utils/localStorageUtils"
 import taskStore, { actions } from './Store'
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
+
+export class Metadata {
+    updatedAt: number | undefined
+
+    constructor(updatedAt?: number) {
+        this.updatedAt = updatedAt
+    }
+}
+
+export interface ICloudConnector {
+    syncTarget: SyncTargets
+    authorize: () => any
+    check: () => any
+    downloadMetadata: () => Promise<Metadata>
+    downloadTaskList: () => Promise<string | null>
+    uploadData: (metadata: Metadata, taskList: string) => any
+}
 
 export enum SyncTargets {
     Dropbox = 'DROPBOX',

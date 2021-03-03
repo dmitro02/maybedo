@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useOutsideClickDetector } from '../../utils/customHooks'
-import taskStore from '../../utils/Store'
+import taskStore from '../../classes/Store'
 import { ArrowBackButton } from '../Buttons/Buttons'
 import Fog from '../Fog/Fog'
 import ProjectList from '../RecordList/ProjectList'

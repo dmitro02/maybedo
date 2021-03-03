@@ -1,6 +1,6 @@
-import { Task } from '../../types'
+import Task from '../../classes/Task'
 import RecordList from './RecordList'
-import taskStore, { useSubscribeWithForceUpdate } from '../../utils/Store'
+import taskStore, { useSubscribeWithForceUpdate } from '../../classes/Store'
 
 const TaskList = () => {
 

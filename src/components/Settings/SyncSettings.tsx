@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
 import Portal from '../../HOCs/Portal'
 import * as lsUtils from '../../utils/localStorageUtils'
-import syncer, { SyncSources, SyncTargets } from '../../utils/Syncer'
+import syncer, { SyncSources, SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
-import { actions, Events, useSubscribe } from '../../utils/Store'
+import { actions, Events, useSubscribe } from '../../classes/Store'
 
 interface SyncOpts {
     target: SyncTargets

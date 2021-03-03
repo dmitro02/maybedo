@@ -1,6 +1,5 @@
 ☐ implement PWA
 ☐ replace all icons with ones from react-icons (remove style links from index.html)
-☐ get rid of types file
 V2:
     ☐ refactor Syncer into smaller self-documented functions
     ☐ implement full keyboard support

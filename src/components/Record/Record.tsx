@@ -1,6 +1,6 @@
 import React, { useState, memo } from 'react'
 import './Record.scss'
-import { Task } from '../../types'
+import Task from '../../classes/Task'
 import SubTaskList from '../RecordList/SubTaskList'
 import { 
     ExpandButton,
@@ -9,8 +9,8 @@ import {
  } from '../Buttons/Buttons'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { useSubscribeWithForceUpdate } from '../../utils/Store'
-import { selectTask } from '../../utils/Store'
+import { useSubscribeWithForceUpdate } from '../../classes/Store'
+import { selectTask } from '../../classes/Store'
 
 type Props = { 
     item: Task, 

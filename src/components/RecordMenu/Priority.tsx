@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Task, Priorities } from '../../types'
+import Task, { Priorities } from '../../classes/Task'
 import { RiFilePptFill } from 'react-icons/ri'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 

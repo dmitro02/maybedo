@@ -9,7 +9,7 @@ import NoProjects from '../NoProjects/NoProjects'
 import TaskList from '../RecordList/TaskList'
 import Settings from '../Settings/Settings'
 import SyncStatus from '../Statuses/SyncStatus'
-import taskStore from '../../utils/Store'
+import taskStore from '../../classes/Store'
 
 type Props = {
     isSidebarOpened: boolean,

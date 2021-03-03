@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { MdMoreVert } from "react-icons/md"
-import { Task } from '../../types'
+import Task from '../../classes/Task'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import DeleteRecords from './DeleteRecords'
 import Priority from './Priority'

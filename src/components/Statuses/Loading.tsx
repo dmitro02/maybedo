@@ -1,7 +1,7 @@
 import Fog from '../Fog/Fog'
 import Spinner from './Spinner'
 import './Loading.scss'
-import { Events, useSubscribe } from '../../utils/Store'
+import { Events, useSubscribe } from '../../classes/Store'
 import { useState } from 'react'
 
 type Props = {

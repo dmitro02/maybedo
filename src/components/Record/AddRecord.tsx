@@ -1,8 +1,8 @@
 import { memo, useEffect, useRef } from 'react'
 import './Record.scss'
-import { Task } from '../../types'
+import Task from '../../classes/Task'
 import { MdAdd } from 'react-icons/md'
-import { createTask, selectTask } from '../../utils/Store'
+import { createTask, selectTask } from '../../classes/Store'
  
 const AddRecord = ({ root }: { root: Task }) => {
     const editableRef = useRef<HTMLDivElement>(null)

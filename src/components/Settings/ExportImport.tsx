@@ -1,9 +1,6 @@
 import { useRef, useState } from 'react'
-import { 
-    FailureBanner, 
-    SuccessBanner, 
-    Task
-} from '../../types'
+import Task from '../../classes/Task'
+import { FailureBanner, SuccessBanner } from '../Banner/Banner'
 import { readFile } from '../../utils/commonUtils'
 import { 
     convertDataToHtmlString,
@@ -12,7 +9,7 @@ import {
     getExportFileName,
     validateExportedData
 } from '../../utils/persistDataUtils'
-import taskStore, { actions } from '../../utils/Store'
+import taskStore, { actions } from '../../classes/Store'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
 import Button from '../Buttons/Button'

@@ -1,4 +1,4 @@
-import { SyncTargets } from './Syncer';
+import { SyncTargets } from '../classes/Syncer';
 
 export const saveToLocalStorage = (updatedAt: number, taskList: string | null): void => {
     if (!taskList) return

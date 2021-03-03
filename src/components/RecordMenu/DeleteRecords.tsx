@@ -2,8 +2,8 @@ import { useState, useRef } from "react"
 import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import { useOutsideClickDetector } from '../../utils/customHooks'
-import { Task } from "../../types"
-import { deleteCompletedSubtasks, deleteTask } from "../../utils/Store"
+import Task from "../../classes/Task"
+import { deleteCompletedSubtasks, deleteTask } from "../../classes/Store"
 
 type Props = {
     task: Task,

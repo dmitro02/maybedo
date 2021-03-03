@@ -1,5 +1,5 @@
 import RecordList from './RecordList'
-import { Task } from '../../types'
+import Task from '../../classes/Task'
 
 type Props = { rootTask: Task }
 

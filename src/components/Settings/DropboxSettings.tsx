@@ -1,10 +1,10 @@
 import { useRef } from 'react'
-import DropboxConnector from '../../utils/DropboxConnector'
-import { FailureBanner, SuccessBanner } from '../../types'
-import syncer, { SyncSources } from '../../utils/Syncer'
+import DropboxConnector from '../../classes/DropboxConnector'
+import { FailureBanner, SuccessBanner } from '../Banner/Banner'
+import syncer, { SyncSources } from '../../classes/Syncer'
 import { GoArrowRight } from "react-icons/go";
 import Button from '../Buttons/Button'
-import { actions } from '../../utils/Store'
+import { actions } from '../../classes/Store'
 
 type Props = { source: SyncSources }
 
