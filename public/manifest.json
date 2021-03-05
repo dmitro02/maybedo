@@ -1,7 +1,7 @@
 {
   "start_url": ".",
-  "name": "Todom",
-  "short_name": "Todom",
+  "name": "Maybedo",
+  "short_name": "Maybedo",
   "icons": [
       {
           "src": "./android-chrome-192x192.png",

@@ -19,7 +19,7 @@ export default class DropboxClient {
 
     async check() {
         this.validateConfiguration()
-        await this.dropbox!.checkUser({ query: 'todom' })
+        await this.dropbox!.checkUser({ query: 'maybedo' })
     }
 
     async authorize(authorizationCode: string = '') {
