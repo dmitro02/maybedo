@@ -1,10 +1,10 @@
+import { setDropboxToken, getDropboxToken } from './../utils/localStorageUtils';
 import { Dropbox } from 'dropbox'
 import fetch from 'isomorphic-fetch'
 import { generateId } from '../utils/commonUtils'
 
 const AUTH_URL = 'https://www.dropbox.com/oauth2/authorize'
 const TOKEN_URL = 'https://api.dropbox.com/oauth2/token'
-const ACCESS_TOKEN_LOCAL_STORAGE_NAME = 'dropboxAccessToken'
 
 export default class DropboxClient {
     private clientId: string
@@ -46,7 +46,7 @@ export default class DropboxClient {
     
         const accessToken = resData.access_token
 
-        this.saveAccessTokenToLS(accessToken)
+        setDropboxToken(accessToken)
 
         this.initDropbox(accessToken)
     }
@@ -81,18 +81,10 @@ export default class DropboxClient {
     }
 
     private initDropbox(token?: string) {
-        const accessToken = token || this.getAccessTokenFromLS()
+        const accessToken = token || getDropboxToken()
         this.dropbox = accessToken 
             ? new Dropbox({ accessToken, fetch })
             : null
-    }
-
-    private saveAccessTokenToLS(accessToken: string) {
-        localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME, accessToken!)
-    }
-    
-    private getAccessTokenFromLS() {
-        return localStorage.getItem(ACCESS_TOKEN_LOCAL_STORAGE_NAME)
     }
 
     validateConfiguration() {

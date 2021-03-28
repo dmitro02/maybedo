@@ -100,7 +100,7 @@ class Syncer {
         actions.setSyncStatus(SyncStatuses.InProgress)
 
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
-        const lsUpdatedAt = lsUtils.getLsUpdatedAt()
+        const lsUpdatedAt = lsUtils.getUpdatedAt()
         
         if (cloudUpdatedAt > lsUpdatedAt) {
             const taskList = await this.getCloudTaskList()
@@ -136,7 +136,7 @@ class Syncer {
             this.loadToStore(updatedAt, taskList)
         } else {
             // this.saveToLS()
-            const updatedAt = lsUtils.getLsUpdatedAt()
+            const updatedAt = lsUtils.getUpdatedAt()
             const taskList = lsUtils.getLsTaskList()
             await this.setCloudData({ updatedAt }, taskList)
         }
@@ -145,7 +145,7 @@ class Syncer {
     }
 
     private onLoadLocal() {
-        const lsUpdatedAt = lsUtils.getLsUpdatedAt()
+        const lsUpdatedAt = lsUtils.getUpdatedAt()
 
         if (lsUpdatedAt) {
             const taskList = lsUtils.getLsTaskList()
@@ -162,7 +162,7 @@ class Syncer {
         // this.saveToLS()
         
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
-        const lsUpdatedAt = lsUtils.getLsUpdatedAt()     
+        const lsUpdatedAt = lsUtils.getUpdatedAt()     
         
         if (cloudUpdatedAt > lsUpdatedAt) {
             const taskList = await this.getCloudTaskList()
