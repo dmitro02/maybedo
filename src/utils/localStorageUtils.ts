@@ -24,10 +24,21 @@ export const setLsTaskList = (taskList: string): void => {
     localStorage.setItem('taskList', taskList)
 }
 
+export const getSettings = (): any => {
+    console.log(localStorage.getItem('settings'));
+    
+    return JSON.parse(localStorage.getItem('settings') || '{}')
+}
+
+export const setSettings = (settings: any): void => {
+    return localStorage.setItem('settings', JSON.stringify(settings))
+}
+
 export const getSyncTarget = (): SyncTargets => {
-    return localStorage.getItem('syncTarget') as SyncTargets
+    return getSettings().syncTarget as SyncTargets
 }
 
 export const setSyncTarget = (syncTarget: SyncTargets): void => {
-    localStorage.setItem('syncTarget', syncTarget)
+    const settings = { ...getSettings(), syncTarget }
+    setSettings(settings)
 }
