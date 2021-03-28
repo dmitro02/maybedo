@@ -39,11 +39,13 @@ class Syncer {
 
     public constructor() {
         this.onDemandCloud = this.onDemandCloud.bind(this)
-        this.onDemandLocal = this.onDemandLocal.bind(this)
+        // this.onDemandLocal = this.onDemandLocal.bind(this)
     }
 
     async initSync(source?: SyncSources, cloudConnector?: ICloudConnector) {
         actions.showLoading()
+        this.onLoadLocal()
+        actions.hideLoading()
 
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
@@ -68,30 +70,30 @@ class Syncer {
                 await this.onLoadCloud()
             }
             this.interval = setInterval(this.onDemandCloud, 60000 * SYNC_INTERVAL_IN_MINUTES)
-        } else {
-            this.onLoadLocal()
-            this.interval = setInterval(this.onDemandLocal, 60000 * SYNC_INTERVAL_IN_MINUTES)
-        }
+        } // else {
+            // this.onLoadLocal()
+            // this.interval = setInterval(this.onDemandLocal, 60000 * SYNC_INTERVAL_IN_MINUTES)
+        //}
 
-        this.addGlobalEventListeners()
+        // this.addGlobalEventListeners()
 
-        actions.hideLoading()
+        // actions.hideLoading()
     }
 
     private resetSync() {
         clearInterval(this.interval)
-        this.removeGlobalEventListeners()
+        // this.removeGlobalEventListeners()
     }
 
-    private addGlobalEventListeners() {
-        window.addEventListener('unload', this.onDemandLocal)
-        window.addEventListener('blur', this.onDemandLocal)
-    }
+    // private addGlobalEventListeners() {
+    //     window.addEventListener('unload', this.onDemandLocal)
+    //     window.addEventListener('blur', this.onDemandLocal)
+    // }
 
-    private removeGlobalEventListeners() {
-        window.removeEventListener('unload', this.onDemandLocal)
-        window.removeEventListener('blur', this.onDemandLocal) 
-    }
+    // private removeGlobalEventListeners() {
+    //     window.removeEventListener('unload', this.onDemandLocal)
+    //     window.removeEventListener('blur', this.onDemandLocal) 
+    // }
 
     private async onLoadCloud() {
         this.isSyncFaild = false
@@ -133,7 +135,7 @@ class Syncer {
             lsUtils.saveToLocalStorage(updatedAt, taskList)
             this.loadToStore(updatedAt, taskList)
         } else {
-            this.saveToLS()
+            // this.saveToLS()
             const updatedAt = lsUtils.getLsUpdatedAt()
             const taskList = lsUtils.getLsTaskList()
             await this.setCloudData({ updatedAt }, taskList)
@@ -157,7 +159,7 @@ class Syncer {
         this.isSyncFaild = false
         actions.setSyncStatus(SyncStatuses.InProgress)
 
-        this.saveToLS()
+        // this.saveToLS()
         
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
         const lsUpdatedAt = lsUtils.getLsUpdatedAt()     
@@ -178,9 +180,9 @@ class Syncer {
         this.setSyncResultStatus()
     }
 
-    private onDemandLocal() {
-        this.saveToLS()
-    }
+    // private onDemandLocal() {
+    //     this.saveToLS()
+    // }
 
     private saveToLS() {
         const { updatedAt, taskListJSON } = taskStore  

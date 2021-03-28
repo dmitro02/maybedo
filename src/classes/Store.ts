@@ -3,6 +3,7 @@ import { IBanner } from '../components/Banner/Banner';
 import { useEffect } from "react"
 import Task from "./Task"
 import { useForceUpdate } from "../utils/customHooks"
+import * as lsUtils from "../utils/localStorageUtils"
 
 export enum Events {
     ShowLoading,
@@ -104,6 +105,7 @@ class Store {
                 if (this.isTrackableProp(prop)) {
                     this.notifyFromProxy({ target, prop, value })
                     this.setUpdatedAt()
+                    this.saveToLS()
                 }
                 return true
             },
@@ -138,6 +140,10 @@ class Store {
                 this.linkTasks(childTask, task)
             })
         }
+    }
+
+    private saveToLS() { 
+        lsUtils.saveToLocalStorage(this.updatedAt, this.taskListJSON)
     }
 }
 
