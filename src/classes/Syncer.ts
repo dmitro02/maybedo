@@ -38,15 +38,10 @@ class Syncer {
     private interval: any = null
 
     public constructor() {
-        this.onDemandCloud = this.onDemandCloud.bind(this)
-        // this.onDemandLocal = this.onDemandLocal.bind(this)
+        this.sync = this.sync.bind(this)
     }
 
     async initSync(source?: SyncSources, cloudConnector?: ICloudConnector) {
-        actions.showLoading()
-        this.onLoadLocal()
-        actions.hideLoading()
-
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
             lsUtils.setSyncTarget(cloudConnector.syncTarget)
@@ -59,69 +54,38 @@ class Syncer {
             }
         }
         
-        this.resetSync()
+        clearInterval(this.interval)
 
         const isConfigured = this.cloudConnector ? await this.check() : false        
 
         if (isConfigured) {
-            if (source) {
-                await this.forceUpdateFromSource(source)
-            } else {
-                await this.onLoadCloud()
-            }
-            this.interval = setInterval(this.onDemandCloud, 60000 * SYNC_INTERVAL_IN_MINUTES)
-        } // else {
-            // this.onLoadLocal()
-            // this.interval = setInterval(this.onDemandLocal, 60000 * SYNC_INTERVAL_IN_MINUTES)
-        //}
+            source
+                ? await this.forceUpdateFromSource(source)
+                : await this.sync()
 
-        // this.addGlobalEventListeners()
-
-        // actions.hideLoading()
+            this.interval = setInterval(this.sync, 60000 * SYNC_INTERVAL_IN_MINUTES)
+        }
     }
 
-    private resetSync() {
-        clearInterval(this.interval)
-        // this.removeGlobalEventListeners()
-    }
-
-    // private addGlobalEventListeners() {
-    //     window.addEventListener('unload', this.onDemandLocal)
-    //     window.addEventListener('blur', this.onDemandLocal)
-    // }
-
-    // private removeGlobalEventListeners() {
-    //     window.removeEventListener('unload', this.onDemandLocal)
-    //     window.removeEventListener('blur', this.onDemandLocal) 
-    // }
-
-    private async onLoadCloud() {
+    async sync() {
         this.isSyncFaild = false
         actions.setSyncStatus(SyncStatuses.InProgress)
-
+    
         const cloudUpdatedAt = await this.getCloudUpdatedAt()
         const lsUpdatedAt = lsUtils.getUpdatedAt()
         
         if (cloudUpdatedAt > lsUpdatedAt) {
             const taskList = await this.getCloudTaskList()
-   
+    
             lsUtils.saveToLocalStorage(cloudUpdatedAt, taskList)
             this.loadToStore(cloudUpdatedAt, taskList)
         } else if (cloudUpdatedAt < lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-
+            const taskList = lsUtils.getTaskList()
+    
             if (taskList) {
-                this.loadToStore(lsUpdatedAt, taskList)
                 await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
             }
-        } else if (cloudUpdatedAt === lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-
-            this.loadToStore(lsUpdatedAt, taskList)
-        } else {
-            this.saveToLS()
         }
-
         this.setSyncResultStatus()
     }
 
@@ -135,58 +99,11 @@ class Syncer {
             lsUtils.saveToLocalStorage(updatedAt, taskList)
             this.loadToStore(updatedAt, taskList)
         } else {
-            // this.saveToLS()
             const updatedAt = lsUtils.getUpdatedAt()
-            const taskList = lsUtils.getLsTaskList()
+            const taskList = lsUtils.getTaskList()
             await this.setCloudData({ updatedAt }, taskList)
         }
-
         this.setSyncResultStatus()
-    }
-
-    private onLoadLocal() {
-        const lsUpdatedAt = lsUtils.getUpdatedAt()
-
-        if (lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-            this.loadToStore(lsUpdatedAt, taskList)
-        } else {
-            this.saveToLS()
-        }
-    }
-
-    async onDemandCloud() {
-        this.isSyncFaild = false
-        actions.setSyncStatus(SyncStatuses.InProgress)
-
-        // this.saveToLS()
-        
-        const cloudUpdatedAt = await this.getCloudUpdatedAt()
-        const lsUpdatedAt = lsUtils.getUpdatedAt()     
-        
-        if (cloudUpdatedAt > lsUpdatedAt) {
-            const taskList = await this.getCloudTaskList()
-
-            lsUtils.saveToLocalStorage(cloudUpdatedAt, taskList)
-            this.loadToStore(cloudUpdatedAt, taskList)
-        } else if (cloudUpdatedAt < lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-
-            if (taskList) {
-                await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
-            }
-        }
-
-        this.setSyncResultStatus()
-    }
-
-    // private onDemandLocal() {
-    //     this.saveToLS()
-    // }
-
-    private saveToLS() {
-        const { updatedAt, taskListJSON } = taskStore  
-        lsUtils.saveToLocalStorage(updatedAt, taskListJSON)
     }
 
     private loadToStore(updatedAt: number, taskList: string | null) {        

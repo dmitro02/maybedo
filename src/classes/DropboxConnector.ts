@@ -101,4 +101,10 @@ export default class DropboxConnector implements ICloudConnector {
             await this.dropboxClient.deleteFile(sortedExports[i].path_lower)
         }
     }
+
+    async getItemList() {
+        const response: any = await this.dropboxClient.listFolder(DATA_FOLDER_PATH)
+
+        return response.result.entries
+    } 
 }

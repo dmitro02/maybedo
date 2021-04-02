@@ -15,9 +15,19 @@ export enum Events {
 
 class Store {
     private callbacks: Map<string | Events, ((value?: any) => void)[]> = new Map()
-    private _taskList: Task = this.toProxy(new Task("Projects", null, false, '0'))
-
+    private _taskList: Task
     public updatedAt: number = 0
+
+    constructor() {
+        let lsUpdatedAt = lsUtils.getUpdatedAt()
+        
+        if (lsUpdatedAt !== null) {
+            lsUtils.init()
+            lsUpdatedAt = lsUtils.getUpdatedAt()
+        }
+        this._taskList = JSON.parse(lsUtils.getTaskList()!)
+        this.updatedAt = lsUtils.getUpdatedAt()
+    }
 
     get taskList() {
         return this._taskList
@@ -105,7 +115,7 @@ class Store {
                 if (this.isTrackableProp(prop)) {
                     this.notifyFromProxy({ target, prop, value })
                     this.setUpdatedAt()
-                    this.saveToLS()
+                    this.saveToLS([target.id])
                 }
                 return true
             },
@@ -142,8 +152,10 @@ class Store {
         }
     }
 
-    private saveToLS() { 
-        lsUtils.saveToLocalStorage(this.updatedAt, this.taskListJSON)
+    private saveToLS(ids: string[]) { 
+        lsUtils.setMetadata(this.updatedAt, ids)
+        lsUtils.setTaskList(this.taskListJSON)
+        // lsUtils.saveToLocalStorage(this.updatedAt, this.taskListJSON)
     }
 }
 

@@ -26,7 +26,7 @@ const Content = (props: Props) => {
 
     const { taskList } = taskStore
 
-    const hasData = !!taskList.tasks.length
+    const hasData = !!taskList!.tasks.length
 
     return (
         <div className="right-panel">

@@ -28,6 +28,10 @@ const DropboxSettings = ({ source }: Props) => {
         actions.hideLoading()
     }
 
+    const listItems = async () => {
+        console.log(await dbx.getItemList())
+    }
+
     return (
         <>
             <h3>
@@ -54,6 +58,7 @@ const DropboxSettings = ({ source }: Props) => {
                 <GoArrowRight className="arrow-right" />
                 <Button text='authorize' action={authorizeApp} />
             </div>
+            <button onClick={listItems}>LIST</button>
         </>
     )
 }

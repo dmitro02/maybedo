@@ -21,7 +21,7 @@ const SyncStatus = () => {
     useSubscribe(Events.SetSyncStatus, setStatus)
 
     const refresh = () => {
-        syncer.onDemandCloud()
+        syncer.sync()
     }
 
     const baseClass = 'material-icons-outlined common-btn'
