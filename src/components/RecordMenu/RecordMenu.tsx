@@ -11,6 +11,8 @@ type Props = {
     task: Task,
     classes?: string[],
     showSubtasks: () => void,
+    update: (task: Task) => void,
+    remove: (task: Task) => void,
     isProject: boolean
 }
 
@@ -19,6 +21,8 @@ const RecordMenu = (props: Props) => {
         task,
         classes = [],
         showSubtasks,
+        update,
+        remove,
         isProject
     } = props
 
@@ -44,9 +48,7 @@ const RecordMenu = (props: Props) => {
     
     const hasSubtasks = !!task.tasks.length
 
-    const hasCompleted = !!task.tasks.filter((it) => it.isDone).length
-
-    const isRoot = !!!task.parent
+    const isRoot = task.id === '0'
 
     return (
         <div className={'record-menu-box ' + classes.join(' ')}>
@@ -60,6 +62,7 @@ const RecordMenu = (props: Props) => {
                 {!task.isDone && !isRoot && <Priority 
                     task={task} 
                     closeMenu={closeMenu} 
+                    update={update}
                 />}
                 {!isProject && !task.isDone && !isRoot && <AddSubtask 
                     closeMenu={closeMenu}
@@ -69,10 +72,16 @@ const RecordMenu = (props: Props) => {
                 <DeleteRecords
                     task={task} 
                     isBulk
-                    isDisabled={!hasCompleted || !hasSubtasks}
+                    isDisabled={!hasSubtasks}
                     closeMenu={closeMenu}
+                    remove={remove}
                 />
-                {!isRoot && <DeleteRecords task={task} />}
+                {!isRoot && 
+                    <DeleteRecords 
+                        task={task}
+                        remove={remove}
+                    />
+                }
             </div>}
         </div>
     )

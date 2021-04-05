@@ -1,31 +1,74 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AddRecord from '../Record/AddRecord'
 import Task, { Priorities } from '../../classes/Task'
 import Record from '../Record/Record'
 import './RecordList.scss'
-import { useSubscribeWithForceUpdate } from '../../classes/Store'
+import { 
+    createTask, 
+    deleteTask, 
+    getTask, 
+    getTaskList, 
+    updateTask 
+} from '../../utils/taskService'
 
 type Props = { 
     classNames?: string[],
-    root: Task,
+    rootId: string,
     hasTitle?: boolean,
-    isEditable?: boolean
+    isEditable?: boolean,
+    selectProject?: (id: string) => void,
 }
 
 const RecordList = (props: Props) => {
     const {
         classNames = [],
-        root,
+        rootId,
         hasTitle = false,
-        isEditable = true
+        isEditable = true,
+        selectProject
     } = props
 
-    const { tasks } = root
+    const [root, setRoot] = useState<Task>(new Task())
+    const [subTasks, setSubTasks] = useState<Task[]>([])
 
-    useSubscribeWithForceUpdate(root.id)
+    const selectTask = (id: string) => {
+        const newRoot = new Task(root)
+        newRoot.selectedSubTaskId = id
+        setRoot(newRoot)
+        selectProject && selectProject(id)
+    }
+
+    useEffect(() => {
+        const task = getTask(rootId)
+        setRoot(task)
+
+        const subTasks = getTaskList(task.tasks)
+        setSubTasks(subTasks)
+    }, [rootId])
+
+    const addSubTask = (task: Task) => {
+        if (rootId === '0') task.isProject = true
+        const newSubTasks = subTasks.concat(task)
+        setSubTasks(newSubTasks)
+        createTask(task, root)
+    }
+
+    const updateSubTask = (task: Task) => {
+        const newSubTasks = subTasks.map((it) => {
+            return it.id === task.id ? task : it  
+        })
+        setSubTasks(newSubTasks)
+        updateTask(task)
+    }
+
+    const deleteSubTask = (task: Task) => {
+        const newSubTasks = subTasks.filter((it) => it !== task)
+        setSubTasks(newSubTasks)
+        deleteTask(task, root)
+    }
 
     // sort subtask by priority
-    const setAndCompare = (a: Task, b: Task) => {
+    const setAndComparePriotity = (a: Task, b: Task) => {
         const pa = a.priority || Priorities.Trivial
         const pb = b.priority || Priorities.Trivial
 
@@ -33,18 +76,24 @@ const RecordList = (props: Props) => {
         if (pa < pb) return 1
         return 0
     }
-    tasks.sort(setAndCompare)
+    subTasks.sort(setAndComparePriotity)
 
-    const activeTasks = tasks.filter((t: Task) => !t.isDone)
-    const completedTasks = tasks.filter((t: Task) => t.isDone)
+    const activeTasks = subTasks.filter((t: Task) => !t.isDone)
+    const completedTasks = subTasks.filter((t: Task) => t.isDone)
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
+    const classes = [
+        rootId === '0' ? 'project-list' : 'task-list',
+        ...classNames
+    ].join(' ')
+
     return (
-        <div className={classNames.join(' ')}>
+        <div className={classes}>
             {hasTitle && 
                 <>
                     <Record 
+                        key={root.id}
                         item={root} 
                         isTitle
                         isEditable={isEditable}
@@ -57,12 +106,16 @@ const RecordList = (props: Props) => {
                         <Record 
                             key={task.id} 
                             item={task}
+                            parent={root}
                             isEditable={isEditable}
-                            isSelected={root.selectedSubTaskId === task.id && !root.parent}
+                            isSelected={root.selectedSubTaskId === task.id && task.isProject}
+                            update={updateSubTask}
+                            remove={deleteSubTask}
+                            selectProject={selectTask}
                         />
                 )}
             </div>
-            <AddRecord root={root}/>
+            <AddRecord add={addSubTask}/>
             {!!completedTasks.length && <div className="completed-tasks">
                 {completedTasks.map(
                     (task: Task) => 
@@ -70,7 +123,10 @@ const RecordList = (props: Props) => {
                             key={task.id}
                             item={task}
                             isEditable={isEditable}
-                            isSelected={root.selectedSubTaskId === task.id && !root.parent}
+                            isSelected={root.selectedSubTaskId === task.id && task.isProject}
+                            update={updateSubTask}
+                            remove={deleteSubTask}
+                            selectProject={selectTask}
                         />
                 )}
             </div>}

@@ -14,13 +14,15 @@ const PRIORITY_NAMES = new Map([
 
 type Props = { 
     task: Task,
-    closeMenu: () => void
+    closeMenu: () => void,
+    update: (task: Task) => void
 }
 
 const Priority = (props: Props) => {
     const {
         task,
-        closeMenu
+        closeMenu,
+        update
     } = props
 
     const [ showSelector, setShowSelector ] = useState(false)
@@ -41,6 +43,7 @@ const Priority = (props: Props) => {
         const newPrio = parseInt(el.textContent!)     
         if (newPrio !== task.priority) {
             task.priority = newPrio
+            update(task)
         }
         closeMenu() 
     }

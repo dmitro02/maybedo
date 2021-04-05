@@ -1,20 +1,23 @@
-import React, { useState, memo } from 'react'
+import { useState, memo } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
-import SubTaskList from '../RecordList/SubTaskList'
 import CheckmarkButton from '../Buttons/CheckmarkButton'
- import { MdExpandLess, MdExpandMore } from 'react-icons/md'
-
+import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { useSubscribeWithForceUpdate } from '../../classes/Store'
-import { selectTask } from '../../classes/Store'
+import { updateTask } from '../../utils/taskService'
+import RecordList from '../RecordList/RecordList'
+import notifier, { Events, useSubscribe } from '../../classes/Notifier'
 
 type Props = { 
     item: Task, 
+    parent?: Task,
     isEditable?: boolean,
     isTitle?: boolean,
-    isSelected?: boolean
+    isSelected?: boolean,
+    update?: (task: Task) => void,
+    remove?: (task: Task) => void,
+    selectProject?: (id: string) => void
 }
 
 const Record = (props: Props) => {
@@ -23,25 +26,29 @@ const Record = (props: Props) => {
         isTitle = false,
         isSelected = false,
         item,
+        update = () => {},
+        remove = () => {},
+        selectProject,
         item: {
             id, 
             isDone,
             priority, 
-            parent
+            isProject,
+            hasSubtasks
         }
     } = props
 
-    useSubscribeWithForceUpdate(item.id)
-
-    const hasSubtasks = !!item.tasks.length
-
-    const isProject = !!!item.parent?.parent
-
     const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
 
+    const [ text, setText ] = useState(item.text)
+
+    useSubscribe(Events.UpdateTitle, (data) => {
+        if (!isTitle && id === data.id) setText(data.text)
+    });
+
     const handleClickOnRecord = () => { 
-        if (isProject && parent && parent!.selectedSubTaskId !== id) {
-            selectTask(item)
+        if (isProject && selectProject) {
+            selectProject(item.id)
         }
     }
 
@@ -49,6 +56,7 @@ const Record = (props: Props) => {
         e.stopPropagation()
         if (e.button === 0) { // left click only
             item.isDone = !item.isDone
+            update(item)
         }
     }
 
@@ -65,12 +73,10 @@ const Record = (props: Props) => {
 
     const openSubtasks = () => {
         setShowSubtasks(true)
-        item.isOpened = true
     }
 
     const closeSubtasks = () => {
         setShowSubtasks(false)
-        item.isOpened = false
     }
 
     const getSubtasksBtn = () => {
@@ -84,11 +90,16 @@ const Record = (props: Props) => {
         return null
     }
 
+    const updateText = (text: string) => {
+        item.text = text
+        updateTask(item)
+        isTitle && notifier.notify(Events.UpdateTitle, { id, text })
+    }
+
     return (
         <>
             <div 
                 className={recordClassName}
-                id={id} 
                 onClick={handleClickOnRecord}
             >
                 <div className="row-btns">
@@ -98,7 +109,12 @@ const Record = (props: Props) => {
                         priority={priority}
                     />
                 </div>
-                <Editable task={item} isEditable={isEditable} />
+                <Editable 
+                    text={text} 
+                    update={updateText} 
+                    isEditable={isEditable}
+                    getFocus={item.isNew}
+                />
                 {/* DEBUG: display task ID for each record  */}
                 {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
@@ -107,11 +123,18 @@ const Record = (props: Props) => {
                         task={item} 
                         showSubtasks={openSubtasks}
                         classes={[ hiddenBtnClassName ]}
-                        isProject={isProject}
+                        isProject={!!isProject}
+                        update={update}
+                        remove={remove}
                     /> 
                 </div>
             </div>
-            {showSubtasks && <SubTaskList task={item} />}
+            {showSubtasks && 
+                <RecordList 
+                    classNames={['subtasks-list']}
+                    rootId={item.id}
+                />
+            }
         </>
     )
 }

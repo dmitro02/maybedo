@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './Banner.scss'
 import { MdClose } from 'react-icons/md'
-import { Events, useSubscribe } from '../../classes/Store'
+import { Events, useSubscribe } from '../../classes/Notifier'
 
 const Banner = () => {
     const [ banner, setBanner ] = useState<IBanner | null>(null)

@@ -4,19 +4,39 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { Events, useSubscribeWithForceUpdate } from '../../classes/Store'
+import { Events, useSubscribeWithForceUpdate } from '../../classes/Notifier'
+import DATA from '../../flat-data'
+import { getRoot, updateTask } from '../../utils/taskService'
+
+// lsUtils.init()
+// lsUtils.populateData(DATA)
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
 
     const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
 
+    const [ selectedProjectId, setSelectedProjectId ] = useState('')
+
     useEffect(() => {
-        syncer.initSync()
+        
+        // syncer.initSync()
+        selectProject()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useSubscribeWithForceUpdate(Events.Reload)
+    const selectProject = (projectId?: string) => {
+        const root = getRoot()
+        if (!root || !root.tasks) return        
+        const id = projectId || root.selectedSubTaskId || root.tasks[0] || ''
+        if (id !== root.selectedSubTaskId) {
+            root.selectedSubTaskId = id
+            updateTask(root)
+        }
+        setSelectedProjectId(id)
+    }
+
+    // useSubscribeWithForceUpdate(Events.Reload)
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
@@ -38,12 +58,14 @@ const MainContainer = () => {
                 isOpened={isSidebarOpened} 
                 close={closeSidebar} 
                 isSettingsOpened={isSettingsOpened}
+                selectProject={selectProject}
             />
             <Content 
                 isSettingsOpened={isSettingsOpened}
                 isSidebarOpened={isSidebarOpened}
                 toggleSettings={toggleSettings}
                 openSidebar={openSidebar}
+                projectId={selectedProjectId}
             />
         </div>
     )

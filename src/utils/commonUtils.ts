@@ -21,7 +21,7 @@ export const readFile = (blob: Blob): Promise<string> => {
 }
 
 export const generateId = (length?: number): string => {
-    const idLength = length && length >= 20 ? length : 20
+    const idLength = length && length >= 10 ? length : 10
 
     let id = ''
 

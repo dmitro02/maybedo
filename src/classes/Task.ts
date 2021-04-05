@@ -11,26 +11,35 @@ export enum Priorities {
 export default class Task {
     text: string
     isDone: boolean
-    tasks: Task[]
+    tasks: string[]
     priority: Priorities
     isOpened?: boolean
     selectedSubTaskId?: string
-    
-    isNew: boolean
-    parent: Task | null
+    isProject?: boolean
+    isNew?: boolean
     id: string
 
-    constructor(text: string, parent: Task | null, isDone?: boolean, id?: string) {
+    constructor(props: any = {}) {
+        const {
+            id, 
+            text, 
+            isDone, 
+            tasks, 
+            isNew, 
+            priority, 
+            isProject
+        } = props
+
         this.id = id || generateId()
-        this.text = text
+        this.text = text || ''
         this.isDone = isDone || false
-        this.tasks = []
-        this.isNew = false
-        this.parent = parent
-        this.priority = Priorities.Trivial
+        this.tasks = tasks || []
+        this.isNew = isNew || false
+        this.priority = priority || Priorities.Trivial
+        this.isProject = isProject || false
     }
 
-    get isProject() {        
-        return !!!this.parent?.parent
+    get hasSubtasks() {
+        return !!this.tasks.length
     }
 }

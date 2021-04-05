@@ -3,13 +3,13 @@ import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import Task from "../../classes/Task"
-import { deleteCompletedSubtasks, deleteTask } from "../../classes/Store"
 
 type Props = {
     task: Task,
     isBulk?: boolean,
     isDisabled?: boolean,
     closeMenu?: () => void
+    remove: (task: Task) => void
 }
 
 const DeleteRecords = (props: Props) => {
@@ -17,14 +17,17 @@ const DeleteRecords = (props: Props) => {
         task, 
         isBulk = false, 
         isDisabled = false,
-        closeMenu = () => {}
+        closeMenu = () => {},
+        remove
      } = props
-     
+    
+    const deleteCompletedSubtasks = (t: any) => {}
+
     const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
     const deleteRecord = () => {
         setShowDeleteConfirmation(false)
-        deleteTask(task)
+        remove(task)
     }
 
     const deleteCompleted = () => {

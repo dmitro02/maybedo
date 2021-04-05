@@ -9,7 +9,7 @@ import {
     getExportFileName,
     validateExportedData
 } from '../../utils/persistDataUtils'
-import taskStore, { actions } from '../../classes/Store'
+import { actions } from '../../classes/Notifier'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
 import Button from '../Buttons/Button'
@@ -21,7 +21,7 @@ type Props = {
 const ExportImport = (props: Props) => {
     const [ showModal, setShowModal ] = useState(false)
 
-    const { taskList } = taskStore
+    // const { taskList } = taskStore
 
     const { backToTaskList } = props
 
@@ -32,13 +32,13 @@ const ExportImport = (props: Props) => {
     const exportData = () => {
         switch (dataType) {
             case DataTypes.JSON:
-                exportDataAsJson(taskList)
+                // exportDataAsJson(taskList)
                 break
             case DataTypes.HTML:
-                exportDataAsHtml(taskList)
+                // exportDataAsHtml(taskList)
                 break
             default:
-                exportDataAsJson(taskList)
+                // exportDataAsJson(taskList)
         }
     }
 
@@ -64,7 +64,7 @@ const ExportImport = (props: Props) => {
             actions.showBanner(banner)
             return
         }
-        taskStore.setData(taskList, Date.now())
+        // taskStore.setData(taskList, Date.now())
         
         backToTaskList()
         const banner = new SuccessBanner('Data successfully imported', 5)

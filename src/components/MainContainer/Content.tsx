@@ -2,18 +2,17 @@ import Banner from '../Banner/Banner'
 import MenuButton from '../Buttons/MenuButton'
 import { RiSettingsLine } from 'react-icons/ri'
 import Fog from '../Fog/Fog'
-import NoProjects from '../NoProjects/NoProjects'
-import TaskList from '../RecordList/TaskList'
 import Settings from '../Settings/Settings'
 import SyncStatus from '../Statuses/SyncStatus'
-import taskStore from '../../classes/Store'
 import { BsBoxArrowLeft } from 'react-icons/bs'
+import RecordList from '../RecordList/RecordList'
 
 type Props = {
     isSidebarOpened: boolean,
     isSettingsOpened: boolean,
     openSidebar: () => void,
-    toggleSettings: () => void
+    toggleSettings: () => void,
+    projectId: string
 }
 
 const Content = (props: Props) => {
@@ -21,12 +20,9 @@ const Content = (props: Props) => {
         isSettingsOpened, 
         isSidebarOpened, 
         openSidebar,
-        toggleSettings
+        toggleSettings,
+        projectId
     } = props
-
-    const { taskList } = taskStore
-
-    const hasData = !!taskList!.tasks.length
 
     return (
         <div className="right-panel">
@@ -61,10 +57,9 @@ const Content = (props: Props) => {
             <div className="right-content">
                 {isSettingsOpened 
                     ? <Settings backToTaskList={toggleSettings} />
-                    : <TaskList />
+                    : projectId && <RecordList rootId={projectId} hasTitle />
                 }
             </div>
-            {!hasData && !isSettingsOpened && <NoProjects />} 
         </div>
     )
 }

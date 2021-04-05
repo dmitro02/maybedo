@@ -1,6 +1,6 @@
 import syncer from '../../classes/Syncer'
 import './SyncStatus.scss'
-import { Events, useSubscribe } from '../../classes/Store'
+import { Events, useSubscribe } from '../../classes/Notifier'
 import { useState } from 'react'
 import { 
     MdSyncProblem,

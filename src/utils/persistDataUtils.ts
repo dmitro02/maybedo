@@ -1,4 +1,5 @@
-import Task from '../classes/Task';
+import Task from '../classes/Task'
+import * as lsUtils from "../utils/localStorageUtils"
 
 export enum DataTypes {
     JSON = 'json',
@@ -17,11 +18,17 @@ export const convertDataToJsonString = (taskList: Task): string => {
     return JSON.stringify(taskList, replacer, 2)
 }
 
+const getSubTasks = (root: Task): Task[] => {
+    return root.tasks.map((id) => (
+        lsUtils.getObject(id)
+    ))
+}
+
 export const convertDataToHtmlString = (taskList: Task): string => {
     const textDecoration = taskList.isDone 
         ? 'style="text-decoration: line-through"' : ''
     const subtasks = taskList.tasks.length 
-        ? `<ul>${taskList.tasks.map(task => convertDataToHtmlString(task))}</ul>` : ''
+        ? `<ul>${getSubTasks(taskList).map((task) => convertDataToHtmlString(task))}</ul>` : ''
     const item = `<li ${textDecoration}>${taskList.text + subtasks}</li>` 
     return item.replace(/>,</g, '><')
 }

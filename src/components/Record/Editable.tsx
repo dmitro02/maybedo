@@ -1,23 +1,28 @@
 import { useRef, useEffect } from 'react'
-import Task from '../../classes/Task'
 
 type Props = { 
-    task: Task, 
+    text: string, 
     isEditable: boolean,
+    update: (text: string) => void,
+    getFocus?: boolean
 }
 
-const Editable = ({ task, isEditable }: Props) => {
-    const { isNew, text } = task
+const Editable = (props: Props) => {
+    const {
+        text,
+        isEditable,
+        update,
+        getFocus = false
+    } = props
 
     const editableRef = useRef<HTMLDivElement>(null)
 
     const caretPosRef = useRef<number | undefined>(undefined)
 
     useEffect(() => {
-        if (isNew) {            
+        if (getFocus) {            
             setContentEditable(true)
             setCaretPosition(editableRef.current, text.length)
-            task.isNew = false
             editableRef.current?.focus()
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,12 +41,14 @@ const Editable = ({ task, isEditable }: Props) => {
 
     const handleInput = debounceInput((text: string) => {
         caretPosRef.current = getCaretPosition(editableRef.current)
-        task.text = text
+        update(text)
     })
 
     const handleBlur = () => {
         !isEditable && setContentEditable(false)
     }
+
+    const a = '12345'
 
     return (
         <div 
@@ -51,6 +58,7 @@ const Editable = ({ task, isEditable }: Props) => {
             suppressContentEditableWarning={true}
             onInput={handleInput}
             onBlur={handleBlur}
+            data-id={a}
         >
             {text}
         </div>

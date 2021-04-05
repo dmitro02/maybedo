@@ -2,9 +2,8 @@ import { memo, useEffect, useRef } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
 import { MdAdd } from 'react-icons/md'
-import { createTask, selectTask } from '../../classes/Store'
  
-const AddRecord = ({ root }: { root: Task }) => {
+const AddRecord = ({ add }: { add: (task: Task) => void }) => {
     const editableRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -12,12 +11,11 @@ const AddRecord = ({ root }: { root: Task }) => {
     }, [])
     
     const createRecord = (e: any) => {
-        const taskText = e.target.textContent.trim()
-        if (!taskText) return
-        const task: Task = new Task(taskText, root)
-        task.isNew = true
-        createTask(task)
-        task.isProject && selectTask(task)
+        const text = e.target.textContent.trim()
+        if (!text) return
+        const task = new Task({ text, isNew: true })
+        add(task)
+        // task.isProject && selectTask(task, parent)
         e.target.textContent = ''
     }
 

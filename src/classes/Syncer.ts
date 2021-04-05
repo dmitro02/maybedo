@@ -1,7 +1,7 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import DropboxConnector from './DropboxConnector';
 import * as lsUtils from "../utils/localStorageUtils"
-import taskStore, { actions } from './Store'
+import { actions } from './Notifier'
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
 
@@ -78,13 +78,13 @@ class Syncer {
             const taskList = await this.getCloudTaskList()
     
             lsUtils.saveToLocalStorage(cloudUpdatedAt, taskList)
-            this.loadToStore(cloudUpdatedAt, taskList)
+            // this.loadToStore(cloudUpdatedAt, taskList)
         } else if (cloudUpdatedAt < lsUpdatedAt) {
-            const taskList = lsUtils.getTaskList()
+            // const taskList = lsUtils.getTaskList()
     
-            if (taskList) {
-                await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
-            }
+            // if (taskList) {
+            //     await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
+            // }
         }
         this.setSyncResultStatus()
     }
@@ -97,18 +97,13 @@ class Syncer {
             const updatedAt = await this.getCloudUpdatedAt()
             const taskList = await this.getCloudTaskList()
             lsUtils.saveToLocalStorage(updatedAt, taskList)
-            this.loadToStore(updatedAt, taskList)
+            // this.loadToStore(updatedAt, taskList)
         } else {
-            const updatedAt = lsUtils.getUpdatedAt()
-            const taskList = lsUtils.getTaskList()
-            await this.setCloudData({ updatedAt }, taskList)
+            // const updatedAt = lsUtils.getUpdatedAt()
+            // const taskList = lsUtils.getTaskList()
+            // await this.setCloudData({ updatedAt }, taskList)
         }
         this.setSyncResultStatus()
-    }
-
-    private loadToStore(updatedAt: number, taskList: string | null) {        
-        if (!taskList) return
-        taskStore.setData(taskList, updatedAt)
     }
 
     private async check(): Promise<boolean> {
