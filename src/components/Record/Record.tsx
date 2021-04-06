@@ -16,8 +16,7 @@ type Props = {
     isTitle?: boolean,
     isSelected?: boolean,
     update?: (task: Task) => void,
-    remove?: (task: Task) => void,
-    selectProject?: (id: string) => void
+    remove?: (task: Task) => void
 }
 
 const Record = (props: Props) => {
@@ -28,7 +27,6 @@ const Record = (props: Props) => {
         item,
         update = () => {},
         remove = () => {},
-        selectProject,
         item: {
             id, 
             isDone,
@@ -43,13 +41,20 @@ const Record = (props: Props) => {
     const [ text, setText ] = useState(item.text)
 
     useSubscribe(Events.UpdateTitle, (data) => {
-        if (!isTitle && id === data.id) setText(data.text)
+        if (!isTitle && id === data.id) {
+            setText(data.text)
+        }
     });
 
     const handleClickOnRecord = () => { 
-        if (isProject && selectProject) {
-            selectProject(item.id)
-        }
+        isProject && notifier.notify(Events.SelectProject, { id })
+    }
+
+    const updateText = (text: string) => {
+        setText(text)
+        item.text = text
+        updateTask(item)
+        isTitle && notifier.notify(Events.UpdateTitle, { id, text })
     }
 
     const handleClickOnCheckbox = (e: any) => {
@@ -88,12 +93,6 @@ const Record = (props: Props) => {
             return <MdExpandLess onClick={closeSubtasks} className={classes} />
         }
         return null
-    }
-
-    const updateText = (text: string) => {
-        item.text = text
-        updateTask(item)
-        isTitle && notifier.notify(Events.UpdateTitle, { id, text })
     }
 
     return (

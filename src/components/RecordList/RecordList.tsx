@@ -1,4 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { 
+    useCallback, 
+    useEffect, 
+    useRef, 
+    useState 
+} from 'react'
 import AddRecord from '../Record/AddRecord'
 import Task, { Priorities } from '../../classes/Task'
 import Record from '../Record/Record'
@@ -16,7 +21,7 @@ type Props = {
     rootId: string,
     hasTitle?: boolean,
     isEditable?: boolean,
-    selectProject?: (id: string) => void,
+    projectId?: string
 }
 
 const RecordList = (props: Props) => {
@@ -25,18 +30,11 @@ const RecordList = (props: Props) => {
         rootId,
         hasTitle = false,
         isEditable = true,
-        selectProject
+        projectId
     } = props
 
     const [root, setRoot] = useState<Task>(new Task())
     const [subTasks, setSubTasks] = useState<Task[]>([])
-
-    const selectTask = (id: string) => {
-        const newRoot = new Task(root)
-        newRoot.selectedSubTaskId = id
-        setRoot(newRoot)
-        selectProject && selectProject(id)
-    }
 
     useEffect(() => {
         const task = getTask(rootId)
@@ -46,26 +44,26 @@ const RecordList = (props: Props) => {
         setSubTasks(subTasks)
     }, [rootId])
 
-    const addSubTask = (task: Task) => {
+    const addSubTask = useCallback((task: Task) => {
         if (rootId === '0') task.isProject = true
         const newSubTasks = subTasks.concat(task)
         setSubTasks(newSubTasks)
         createTask(task, root)
-    }
+    }, [root, rootId, subTasks])
 
-    const updateSubTask = (task: Task) => {
+    const updateSubTask = useCallback((task: Task) => {
         const newSubTasks = subTasks.map((it) => {
             return it.id === task.id ? task : it  
         })
         setSubTasks(newSubTasks)
         updateTask(task)
-    }
+    }, [subTasks])
 
-    const deleteSubTask = (task: Task) => {
+    const deleteSubTask = useCallback((task: Task) => {
         const newSubTasks = subTasks.filter((it) => it !== task)
         setSubTasks(newSubTasks)
         deleteTask(task, root)
-    }
+    }, [root, subTasks])
 
     // sort subtask by priority
     const setAndComparePriotity = (a: Task, b: Task) => {
@@ -108,10 +106,9 @@ const RecordList = (props: Props) => {
                             item={task}
                             parent={root}
                             isEditable={isEditable}
-                            isSelected={root.selectedSubTaskId === task.id && task.isProject}
+                            isSelected={projectId === task.id}
                             update={updateSubTask}
                             remove={deleteSubTask}
-                            selectProject={selectTask}
                         />
                 )}
             </div>
@@ -123,10 +120,9 @@ const RecordList = (props: Props) => {
                             key={task.id}
                             item={task}
                             isEditable={isEditable}
-                            isSelected={root.selectedSubTaskId === task.id && task.isProject}
+                            isSelected={projectId === task.id}
                             update={updateSubTask}
                             remove={deleteSubTask}
-                            selectProject={selectTask}
                         />
                 )}
             </div>}

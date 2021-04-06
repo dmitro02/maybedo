@@ -9,7 +9,7 @@ type Props = {
     isOpened: boolean,
     close: () => void,
     isSettingsOpened: boolean,
-    selectProject: (id: string) => void
+    projectId: string
 }
 
 const Sidebar = (props: Props) => {
@@ -17,7 +17,7 @@ const Sidebar = (props: Props) => {
         isOpened, 
         close, 
         isSettingsOpened, 
-        selectProject 
+        projectId 
     } = props
 
     const leftPanelRef = useRef(null)
@@ -55,7 +55,7 @@ const Sidebar = (props: Props) => {
                 rootId='0'
                 hasTitle
                 isEditable={false}
-                selectProject={selectProject}
+                projectId={projectId}
             />
         </div>
     )

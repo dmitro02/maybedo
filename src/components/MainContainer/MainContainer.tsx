@@ -4,7 +4,7 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { Events, useSubscribeWithForceUpdate } from '../../classes/Notifier'
+import { Events, useSubscribe } from '../../classes/Notifier'
 import DATA from '../../flat-data'
 import { getRoot, updateTask } from '../../utils/taskService'
 
@@ -18,8 +18,11 @@ const MainContainer = () => {
 
     const [ selectedProjectId, setSelectedProjectId ] = useState('')
 
+    useSubscribe(Events.SelectProject, (data) => {
+        selectProject(data.id)
+    })
+
     useEffect(() => {
-        
         // syncer.initSync()
         selectProject()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,8 +38,6 @@ const MainContainer = () => {
         }
         setSelectedProjectId(id)
     }
-
-    // useSubscribeWithForceUpdate(Events.Reload)
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)
@@ -58,7 +59,7 @@ const MainContainer = () => {
                 isOpened={isSidebarOpened} 
                 close={closeSidebar} 
                 isSettingsOpened={isSettingsOpened}
-                selectProject={selectProject}
+                projectId={selectedProjectId}
             />
             <Content 
                 isSettingsOpened={isSettingsOpened}
