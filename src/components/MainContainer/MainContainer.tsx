@@ -7,6 +7,8 @@ import Content from './Content'
 import { Events, useSubscribe } from '../../classes/Notifier'
 import DATA from '../../flat-data'
 import { getRoot, updateTask } from '../../utils/taskService'
+import * as lsUtils from "../../utils/localStorageUtils"
+
 
 // lsUtils.init()
 // lsUtils.populateData(DATA)

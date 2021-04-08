@@ -18,6 +18,7 @@ export default class Task {
     isProject?: boolean
     isNew?: boolean
     id: string
+    updatedAt: number
 
     constructor(props: any = {}) {
         const {
@@ -27,7 +28,8 @@ export default class Task {
             tasks, 
             isNew, 
             priority, 
-            isProject
+            isProject,
+            updatedAt
         } = props
 
         this.id = id || generateId()
@@ -37,6 +39,7 @@ export default class Task {
         this.isNew = isNew || false
         this.priority = priority || Priorities.Trivial
         this.isProject = isProject || false
+        this.updatedAt = updatedAt || Date.now()
     }
 
     get hasSubtasks() {

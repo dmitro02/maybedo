@@ -1,13 +1,13 @@
 import Task from "../classes/Task"
 import * as lsUtils from "./localStorageUtils"
 
+export const getRoot = () => {
+    return getTask('0')
+}
+
 export const getTask = (taskId: string): Task => {
     const rawObj = lsUtils.getObject(taskId)
     return Object.assign(new Task(), rawObj)
-}
-
-export const getRoot = () => {
-    return getTask('0')
 }
 
 export const getTaskList = (taskIds: string[]): Task[] => {
@@ -18,20 +18,26 @@ export const getTaskList = (taskIds: string[]): Task[] => {
 }
 
 export const updateTask = (task: Task): void => {
+    task.updatedAt = Date.now()
     lsUtils.setObject(task.id, task)
-    lsUtils.setMetadata(Date.now(), [task.id])
 }
 
 export const createTask = (task: Task, parent: Task): void => {
-    lsUtils.setObject(task.id, task)
+    updateTask(task)
     parent.tasks.push(task.id)
-    lsUtils.setObject(parent.id, parent)
-    lsUtils.setMetadata(Date.now(), [task.id, parent.id])
+    updateTask(parent)
+    saveMetadata(task.id, 'created')
 }
 
 export const deleteTask = (task: Task, parent: Task): void => {
     lsUtils.removeItem(task.id)
     parent.tasks = parent.tasks.filter((id) => id !== task.id)
-    lsUtils.setObject(parent.id, parent)
-    lsUtils.setMetadata(Date.now(), [task.id, parent.id])
+    updateTask(parent)
+    saveMetadata(task.id, 'deleted')
+}
+
+const saveMetadata = (taskId: String, operation: 'created' | 'deleted'): void => {
+    const meta = lsUtils.getMetadata()
+    meta[operation].push(taskId)
+    lsUtils.setMetadata(meta)
 }

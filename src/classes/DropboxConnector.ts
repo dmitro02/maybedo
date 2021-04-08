@@ -1,6 +1,9 @@
 import { readFile } from '../utils/commonUtils';
-import { SyncTargets } from './Syncer';
-import { Metadata, ICloudConnector } from './Syncer';
+import { 
+    Metadata, 
+    ICloudConnector, 
+    SyncTargets 
+} from './Syncer';
 import DropboxClient from './DropboxClient'
 
 const CLIENT_ID = 'lxn28fv9hhsn7id'

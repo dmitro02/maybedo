@@ -1,13 +1,12 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import DropboxConnector from './DropboxConnector';
-import { actions } from './Notifier'
 import * as lsUtils from "../utils/localStorageUtils"
+import { actions } from './Notifier'
 
 const SYNC_INTERVAL_IN_MINUTES = 5 
 
 export class Metadata {
-    created: string[] = []
-    deleted: string[] = []
+
 }
 
 export interface ICloudConnector {
@@ -47,7 +46,7 @@ class Syncer {
             if (syncTarget === SyncTargets.Disabled) {
                 this.cloudConnector = null
             } else {
-                this.cloudConnector = this.createCloudConnector(syncTarget)
+                // this.cloudConnector = this.createCloudConnector(syncTarget)
             }
         }
         
@@ -93,6 +92,33 @@ class Syncer {
             }
         }
         return true
+    }
+
+    private async getCloudUpdatedAt(): Promise<number> {
+        try {
+            const cloudMetadata = await this.cloudConnector!.downloadMetadata()
+            return 1
+        } catch {
+            this.isSyncFaild = true
+            return 0
+        }
+    }
+
+    private async getCloudTaskList(): Promise<string | null> {
+        try {
+            return await this.cloudConnector!.downloadTaskList()
+        } catch {
+            this.isSyncFaild = true
+            return null
+        }
+    }
+
+    private async setCloudData(metadata: Metadata, taskList: string | null) {
+        try {
+            taskList && await this.cloudConnector!.uploadData(metadata, taskList)
+        } catch {
+            this.isSyncFaild = true            
+        }
     }
 
     private createCloudConnector(syncTarget?: SyncTargets) {
