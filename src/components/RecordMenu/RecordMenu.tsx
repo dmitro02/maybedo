@@ -46,8 +46,6 @@ const RecordMenu = (props: Props) => {
         clearTimeout(closeTimeout)
     }
     
-    const hasSubtasks = !!task.tasks.length
-
     const isRoot = task.id === '0'
 
     return (
@@ -67,12 +65,12 @@ const RecordMenu = (props: Props) => {
                 {!isProject && !task.isDone && !isRoot && <AddSubtask 
                     closeMenu={closeMenu}
                     showSubtasks={showSubtasks}
-                    isDisabled={hasSubtasks}
+                    isDisabled={false}
                 />}
                 <DeleteRecords
                     task={task} 
                     isBulk
-                    isDisabled={!hasSubtasks}
+                    isDisabled={false}
                     closeMenu={closeMenu}
                     remove={remove}
                 />

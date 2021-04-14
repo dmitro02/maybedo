@@ -1,5 +1,4 @@
-import { Metadata, SyncTargets } from '../classes/Syncer';
-import Task from '../classes/Task'
+import { SyncTargets } from '../classes/Syncer';
 
 export const getObject = (key: string): any => {
     return JSON.parse(localStorage.getItem(key) || '{}')
@@ -13,12 +12,12 @@ export const removeItem = (key: string) => {
     localStorage.removeItem(key)
 }
 
-export const getMetadata = (): any => { 
-    return getObject('metadata')   
+export const setSelectedProjectId = (id: string): void => {
+    localStorage.setItem('selectedProjectId', id)
 }
 
-export const setMetadata = (metadata: Metadata): void => {   
-    setObject('metadata', metadata) 
+export const getSelectedProjectId = (): string => {
+    return localStorage.getItem('selectedProjectId') || ''
 }
 
 const getSettings = (): any => { 
@@ -45,19 +44,7 @@ export const setDropboxToken = (dropboxAccessToken: string): void => {
     setObject('tokens', { ...getTokens(), dropboxAccessToken })
 }
 
-export const init = () => {
-    const initial = { 
-        id: '0', 
-        text: "Projects", 
-        isProject: true 
-    }
-    const root = new Task(initial)
-    setMetadata(new Metadata())
-    setObject(root.id, root)
-}
-
 export const populateData = (flatData: any) => {
-    init()
     Object.entries(flatData).forEach((entry: any) => {
         const task = entry[1]
         task.updatedAt = Date.now()

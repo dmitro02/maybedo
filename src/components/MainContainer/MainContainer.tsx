@@ -5,12 +5,25 @@ import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
 import { Events, useSubscribe } from '../../classes/Notifier'
-import DATA from '../../flat-data'
-import { getRoot, updateTask } from '../../utils/taskService'
+import { createTask, getProjectsList } from '../../utils/taskService'
+import metadata from '../../classes/Metadata'
+import Task from '../../classes/Task'
 import * as lsUtils from "../../utils/localStorageUtils"
 
 
-// lsUtils.init()
+const initData = () => {
+    metadata.init()
+    const initial = { 
+        id: '0', 
+        text: "Projects", 
+        isProject: true 
+    }
+    const root = new Task(initial)
+    createTask(root)
+}
+
+initData()
+
 // lsUtils.populateData(DATA)
 
 const MainContainer = () => {
@@ -25,20 +38,22 @@ const MainContainer = () => {
     })
 
     useEffect(() => {
-        // syncer.initSync()
-        selectProject()
+        // syncer.init()
+        // syncer.sync()
+        selectProjectOnLoad()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const selectProject = (projectId?: string) => {
-        const root = getRoot()
-        if (!root || !root.tasks) return        
-        const id = projectId || root.selectedSubTaskId || root.tasks[0] || ''
-        if (id !== root.selectedSubTaskId) {
-            root.selectedSubTaskId = id
-            updateTask(root)
-        }
-        setSelectedProjectId(id)
+    const selectProject = (projectId: string) => {
+        setSelectedProjectId(projectId)
+        lsUtils.setSelectedProjectId(projectId)
+    }
+
+    const selectProjectOnLoad = () => {
+        let id = lsUtils.getSelectedProjectId()
+                || getProjectsList()[0]?.id 
+                || ''
+        id && selectProject(id)
     }
 
     const toggleSettings = () =>

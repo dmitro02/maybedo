@@ -11,10 +11,11 @@ import './RecordList.scss'
 import { 
     createTask, 
     deleteTask, 
+    getSubTasksList, 
     getTask, 
-    getTaskList, 
     updateTask 
 } from '../../utils/taskService'
+import notifier, { Events } from '../../classes/Notifier'
 
 type Props = { 
     classNames?: string[],
@@ -40,15 +41,26 @@ const RecordList = (props: Props) => {
         const task = getTask(rootId)
         setRoot(task)
 
-        const subTasks = getTaskList(task.tasks)
+        const subTasks = getSubTasksList(rootId)
         setSubTasks(subTasks)
     }, [rootId])
 
+    const focusedItemId = useRef<string>()
+
     const addSubTask = useCallback((task: Task) => {
-        if (rootId === '0') task.isProject = true
+        task.isProject = rootId === '0'
+        task.parentId = root.id
+
+        createTask(task)
+        
+        focusedItemId.current = task.id
+
         const newSubTasks = subTasks.concat(task)
         setSubTasks(newSubTasks)
-        createTask(task, root)
+
+        if (task.isProject) {
+            notifier.notify(Events.SelectProject, { id: task.id})
+        }
     }, [root, rootId, subTasks])
 
     const updateSubTask = useCallback((task: Task) => {
@@ -62,8 +74,8 @@ const RecordList = (props: Props) => {
     const deleteSubTask = useCallback((task: Task) => {
         const newSubTasks = subTasks.filter((it) => it !== task)
         setSubTasks(newSubTasks)
-        deleteTask(task, root)
-    }, [root, subTasks])
+        deleteTask(task.id)
+    }, [subTasks])
 
     // sort subtask by priority
     const setAndComparePriotity = (a: Task, b: Task) => {
@@ -109,6 +121,7 @@ const RecordList = (props: Props) => {
                             isSelected={projectId === task.id}
                             update={updateSubTask}
                             remove={deleteSubTask}
+                            isFocused={focusedItemId.current === task.id}
                         />
                 )}
             </div>

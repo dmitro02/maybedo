@@ -51,7 +51,7 @@ function SyncSettings() {
             setSyncOpts({ target: value, dataSource: undefined })
             lsUtils.setSyncTarget(value)
             actions.setSyncStatus(SyncStatuses.NotConfigured)
-            syncer.initSync()
+            syncer.init()
         } else {
             setShowModal(true)
         }
@@ -61,7 +61,7 @@ function SyncSettings() {
         const target = targetRef.current
         setSyncOpts({ target, dataSource })
         lsUtils.setSyncTarget(target)
-        syncer.initSync(dataSource)
+        syncer.init()
         setShowModal(false)
     }   
     

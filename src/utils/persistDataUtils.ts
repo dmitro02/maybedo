@@ -1,5 +1,4 @@
 import Task from '../classes/Task'
-import * as lsUtils from "../utils/localStorageUtils"
 
 export enum DataTypes {
     JSON = 'json',
@@ -19,16 +18,14 @@ export const convertDataToJsonString = (taskList: Task): string => {
 }
 
 const getSubTasks = (root: Task): Task[] => {
-    return root.tasks.map((id) => (
-        lsUtils.getObject(id)
-    ))
+    return []
 }
 
 export const convertDataToHtmlString = (taskList: Task): string => {
     const textDecoration = taskList.isDone 
         ? 'style="text-decoration: line-through"' : ''
-    const subtasks = taskList.tasks.length 
-        ? `<ul>${getSubTasks(taskList).map((task) => convertDataToHtmlString(task))}</ul>` : ''
+    const subtasks = 
+        `<ul>${getSubTasks(taskList).map((task) => convertDataToHtmlString(task))}</ul>`
     const item = `<li ${textDecoration}>${taskList.text + subtasks}</li>` 
     return item.replace(/>,</g, '><')
 }
@@ -45,7 +42,6 @@ export const isExportedData = (data: any): data is Task => {
     const dataToValidate = data as Task
     return dataToValidate.text !== undefined
             && dataToValidate.isDone !== undefined 
-            && dataToValidate.tasks !== undefined 
 }
 
 export const validateExportedData = (data: any): boolean => {
@@ -57,13 +53,8 @@ const isTask = (data: any): data is Task => {
     const dataToValidate = data as Task
     return dataToValidate.text !== undefined 
             && dataToValidate.isDone !== undefined 
-            && dataToValidate.tasks !== undefined
 }
 
 const validateTaks = (data: any): boolean => {
-    if (!isTask(data)) return false
-    for (let task of data.tasks) {
-        if(!validateTaks(task)) return false;
-    }
-    return true
+    return isTask(data)
 } 

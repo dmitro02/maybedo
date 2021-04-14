@@ -18,7 +18,7 @@ const DropboxSettings = ({ source }: Props) => {
         try {
             await dbx.authorize(authTokenRef.current?.value)
 
-            syncer.initSync(source, dbx)
+            syncer.init(dbx)
             const banner = new SuccessBanner('Application successfully authorized')
             actions.showBanner(banner)
         } catch(e) {
@@ -26,10 +26,6 @@ const DropboxSettings = ({ source }: Props) => {
             actions.showBanner(banner)
         }
         actions.hideLoading()
-    }
-
-    const listItems = async () => {
-        console.log(await dbx.getItemList())
     }
 
     return (
@@ -58,7 +54,6 @@ const DropboxSettings = ({ source }: Props) => {
                 <GoArrowRight className="arrow-right" />
                 <Button text='authorize' action={authorizeApp} />
             </div>
-            <button onClick={listItems}>LIST</button>
         </>
     )
 }

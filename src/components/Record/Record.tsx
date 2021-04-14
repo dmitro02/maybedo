@@ -16,7 +16,8 @@ type Props = {
     isTitle?: boolean,
     isSelected?: boolean,
     update?: (task: Task) => void,
-    remove?: (task: Task) => void
+    remove?: (task: Task) => void,
+    isFocused?: boolean
 }
 
 const Record = (props: Props) => {
@@ -24,6 +25,7 @@ const Record = (props: Props) => {
         isEditable = true,
         isTitle = false,
         isSelected = false,
+        isFocused = false,
         item,
         update = () => {},
         remove = () => {},
@@ -32,11 +34,13 @@ const Record = (props: Props) => {
             isDone,
             priority, 
             isProject,
-            hasSubtasks
+            isOpened
         }
     } = props
 
-    const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
+    const hasSubtasks = false
+
+    const [ showSubtasks, setShowSubtasks ] = useState(isOpened)
 
     const [ text, setText ] = useState(item.text)
 
@@ -112,7 +116,7 @@ const Record = (props: Props) => {
                     text={text} 
                     update={updateText} 
                     isEditable={isEditable}
-                    getFocus={item.isNew}
+                    getFocus={isFocused}
                 />
                 {/* DEBUG: display task ID for each record  */}
                 {/* <span style={{fontSize: '10px'}}>{id}</span> */}
@@ -131,7 +135,7 @@ const Record = (props: Props) => {
             {showSubtasks && 
                 <RecordList 
                     classNames={['subtasks-list']}
-                    rootId={item.id}
+                    rootId={id}
                 />
             }
         </>
