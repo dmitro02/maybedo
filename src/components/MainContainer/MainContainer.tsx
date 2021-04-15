@@ -5,24 +5,12 @@ import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
 import { Events, useSubscribe } from '../../classes/Notifier'
-import { createTask, getProjectsList } from '../../utils/taskService'
+import { getProjectsList, initRoot } from '../../utils/taskService'
 import metadata from '../../classes/Metadata'
-import Task from '../../classes/Task'
 import * as lsUtils from "../../utils/localStorageUtils"
 
-
-const initData = () => {
-    metadata.init()
-    const initial = { 
-        id: '0', 
-        text: "Projects", 
-        isProject: true 
-    }
-    const root = new Task(initial)
-    createTask(root)
-}
-
-initData()
+metadata.init()
+initRoot()
 
 // lsUtils.populateData(DATA)
 

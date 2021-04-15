@@ -1,5 +1,14 @@
 import { SyncTargets } from '../classes/Syncer';
 
+const METADATA_KEY = 'metadata'
+const SELECTED_PROJECT_ID_KEY = 'selectedProjectId'
+const SETTINGS_KEY = 'settings'
+const TOKENS_KEY = 'tokens'
+
+export const hasItem = (key: string): boolean => {
+    return !!localStorage.getItem(key)
+}
+
 export const getObject = (key: string): any => {
     return JSON.parse(localStorage.getItem(key) || '{}')
 }
@@ -13,15 +22,15 @@ export const removeItem = (key: string) => {
 }
 
 export const setSelectedProjectId = (id: string): void => {
-    localStorage.setItem('selectedProjectId', id)
+    localStorage.setItem(SELECTED_PROJECT_ID_KEY, id)
 }
 
 export const getSelectedProjectId = (): string => {
-    return localStorage.getItem('selectedProjectId') || ''
+    return localStorage.getItem(SELECTED_PROJECT_ID_KEY) || ''
 }
 
 const getSettings = (): any => { 
-    return getObject('settings')   
+    return getObject(SETTINGS_KEY)   
 }
 
 export const getSyncTarget = (): SyncTargets => {
@@ -29,11 +38,11 @@ export const getSyncTarget = (): SyncTargets => {
 }
 
 export const setSyncTarget = (syncTarget: SyncTargets): void => {
-    setObject('settings', { ...getSettings(), syncTarget })
+    setObject(SETTINGS_KEY, { ...getSettings(), syncTarget })
 }
 
 const getTokens = (): any => {
-    return getObject('tokens')
+    return getObject(TOKENS_KEY)
 }
 
 export const getDropboxToken = (): string => {
@@ -41,7 +50,19 @@ export const getDropboxToken = (): string => {
 }
 
 export const setDropboxToken = (dropboxAccessToken: string): void => {
-    setObject('tokens', { ...getTokens(), dropboxAccessToken })
+    setObject(TOKENS_KEY, { ...getTokens(), dropboxAccessToken })
+}
+
+export const getMetadada = (): any => {
+    return getObject(METADATA_KEY)
+}
+
+export const setMetadada = (metadata: any) => {
+    setObject(METADATA_KEY, metadata)
+}
+
+export const hasMetadata = (): boolean => {
+    return hasItem(METADATA_KEY)
 }
 
 export const populateData = (flatData: any) => {

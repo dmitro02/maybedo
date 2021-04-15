@@ -8,6 +8,7 @@ import Editable from './Editable'
 import { updateTask } from '../../utils/taskService'
 import RecordList from '../RecordList/RecordList'
 import notifier, { Events, useSubscribe } from '../../classes/Notifier'
+import metadata from '../../classes/Metadata'
 
 type Props = { 
     item: Task, 
@@ -38,9 +39,9 @@ const Record = (props: Props) => {
         }
     } = props
 
-    const hasSubtasks = false
+    const hasSubtasks = metadata.hasChildren(id)
 
-    const [ showSubtasks, setShowSubtasks ] = useState(isOpened)
+    const [ showSubtasks, setShowSubtasks ] = useState(hasSubtasks && isOpened)
 
     const [ text, setText ] = useState(item.text)
 

@@ -4,6 +4,20 @@ import metadata from '../classes/Metadata'
 
 const ROOT_ID = '0'
 
+export const initRoot = () => {
+    if (hasRoot()) return
+    const root = { 
+        id: '0', 
+        text: "Projects", 
+        isProject: true 
+    }
+    createTask(new Task(root))
+}
+
+export const hasRoot = (): boolean => {
+    return lsUtils.hasItem(ROOT_ID)
+}
+
 export const getRoot = () => {
     return getTask(ROOT_ID)
 }

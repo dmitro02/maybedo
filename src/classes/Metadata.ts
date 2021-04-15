@@ -6,8 +6,6 @@ export type Item = {
     updatedAt: number
 }
 
-const METADATA_KEY_NAME = 'metadata'
-
 export class Metadata {
     taskList: { [id: string]: { p: string | null, u: number } }
     created: string[] = []
@@ -19,8 +17,6 @@ export class Metadata {
     }
 
     addToTaskList(item: Item) {
-        console.log('this.taskList', this.taskList);
-        // if (!this.taskList) this.taskList = {}
         const { id, parentId, updatedAt } = item
         this.taskList[id] = {
             p: parentId,
@@ -75,17 +71,21 @@ export class Metadata {
         }, [])
     }
 
+    hasChildren(parentId: string) {
+        return Object.values(this.taskList).some((it) => it.p === parentId)
+    }
+
     save() {
         const metadata = {
             taskList: this.taskList,
             created: this.created,
             deleted: this.deleted
         }
-        lsUtils.setObject(METADATA_KEY_NAME, metadata)
+        lsUtils.setMetadada(metadata)
     }
 
     restore() {
-        const metadata = lsUtils.getObject(METADATA_KEY_NAME)
+        const metadata = lsUtils.getMetadada()
         this.taskList = metadata.taskList
         this.created = metadata.created
         this.deleted = metadata.deleted
@@ -99,7 +99,7 @@ export class Metadata {
     }
 
     init() {
-        localStorage.getItem(METADATA_KEY_NAME)
+        lsUtils.hasMetadata()
             ? this.restore() 
             : this.save()
     }
