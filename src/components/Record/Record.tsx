@@ -34,21 +34,18 @@ const Record = (props: Props) => {
             id, 
             isDone,
             priority, 
-            isProject,
-            isOpened
+            isProject
         }
     } = props
 
     const hasSubtasks = metadata.hasChildren(id)
 
-    const [ showSubtasks, setShowSubtasks ] = useState(hasSubtasks && isOpened)
+    const [ showSubtasks, setShowSubtasks ] = useState(false)
 
     const [ text, setText ] = useState(item.text)
 
     useSubscribe(Events.UpdateTitle, (data) => {
-        if (!isTitle && id === data.id) {
-            setText(data.text)
-        }
+        id === data.id && setText(data.text)
     });
 
     const handleClickOnRecord = () => { 
@@ -59,7 +56,7 @@ const Record = (props: Props) => {
         setText(text)
         item.text = text
         updateTask(item)
-        isTitle && notifier.notify(Events.UpdateTitle, { id, text })
+        isProject && notifier.notify(Events.UpdateTitle, { id, text })
     }
 
     const handleClickOnCheckbox = (e: any) => {

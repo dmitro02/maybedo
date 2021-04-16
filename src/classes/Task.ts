@@ -12,7 +12,6 @@ export default class Task {
     text: string
     isDone: boolean
     priority: Priorities
-    isOpened?: boolean
     isProject?: boolean
     id: string
     updatedAt: number

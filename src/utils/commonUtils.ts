@@ -20,12 +20,9 @@ export const readFile = (blob: Blob): Promise<string> => {
     })
 }
 
-export const generateId = (length?: number): string => {
-    const idLength = length && length >= 10 ? length : 10
-
+export const generateId = (length: number = 10): string => {
     let id = ''
-
-    while (id.length < idLength) {
+    while (id.length < length) {
         id += Math.floor(Math.random() * 1E10).toString()
     }
     return id.substring(0, length)

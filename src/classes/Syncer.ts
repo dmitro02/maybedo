@@ -121,7 +121,6 @@ class Syncer {
         local.created.forEach((it) => { remoteList[it] = localList[it] })
         local.deleted.forEach((it) => { remote.removeFromTaskList(it) })
 
-      
         Object.keys(localList).forEach((it) => {
             if (!remoteList.hasOwnProperty(it)) {
                 remote.addToDeleted(it)

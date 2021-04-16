@@ -1,18 +1,11 @@
-import { memo, useEffect, useRef } from 'react'
+import { memo } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
 import { MdAdd } from 'react-icons/md'
 
 type Props = { add: (task: Task) => void }
  
-const AddRecord = ({ add }: Props) => {
-
-    const editableRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        !window.iAmRunningOnMobile && editableRef.current?.focus()
-    }, [])
-    
+const AddRecord = ({ add }: Props) => {    
     const createRecord = (e: any) => {
         const text = e.target.textContent.trim()
         if (!text) return
@@ -32,7 +25,6 @@ const AddRecord = ({ add }: Props) => {
                 suppressContentEditableWarning={true}
                 onInput={createRecord}
                 onKeyPress={preventEnterOnEmpty}
-                ref={editableRef}
             ></div>
         </div>
     )

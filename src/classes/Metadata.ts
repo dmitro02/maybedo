@@ -59,8 +59,9 @@ export class Metadata {
 
     registerDeleted(id: string) {
         this.removeFromTaskList(id)
-        this.removeFromCreated(id)
-        this.addToDeleted(id)
+        this.created.includes(id)
+            ? this.removeFromCreated(id)
+            : this.addToDeleted(id)
         this.save()
     }
 

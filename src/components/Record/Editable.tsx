@@ -39,16 +39,16 @@ const Editable = (props: Props) => {
         el?.setAttribute('contenteditable', '' + flag)
     }
 
-    const handleInput = debounceInput((text: string) => {
-        caretPosRef.current = getCaretPosition(editableRef.current)
-        update(text)
+    const handleInput = debounceInput((text: string) => {    
+        // +1 fixes position for multiline
+        caretPosRef.current = getCaretPosition(editableRef.current) + 1  
+        // do not rerender on enter
+        if (!text.endsWith('\n')) update(text)
     })
 
     const handleBlur = () => {
         !isEditable && setContentEditable(false)
     }
-
-    const a = '12345'
 
     return (
         <div 
@@ -58,7 +58,6 @@ const Editable = (props: Props) => {
             suppressContentEditableWarning={true}
             onInput={handleInput}
             onBlur={handleBlur}
-            data-id={a}
         >
             {text}
         </div>
@@ -74,19 +73,19 @@ const debounceInput = (callback: (text: string) => void) => {
     }
 }
 
-const getCaretPosition = (el: HTMLElement | null): number | undefined => {
-    if (!el || !el.isContentEditable) return
+const getCaretPosition = (el: HTMLElement | null): number => {
+    if (!el || !el.isContentEditable) return 0
     let range
     try {
         range = document.getSelection()?.getRangeAt(0)
     } catch(err) {
         // do nothing
     }
-    if (!range) return
+    if (!range) return 0
     let rangeClone = range.cloneRange()
     rangeClone.selectNodeContents(el)
     rangeClone.setEnd(range.endContainer, range.endOffset)
-    return rangeClone.toString().length
+    return rangeClone.toString().length || 0
 }
 
 const setCaretPosition = (el: HTMLElement | null, pos?: number): void => {
