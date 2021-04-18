@@ -1,0 +1,9 @@
+- implement full keyboard support
+- make sidebar always hideable
+- make sidebar resizable
+- add sync inteval to Dropbox config UI
+- HTML export with collaps/expand projects
+- dark theme
+- "About" with a description and short help
+- Doe SyncSettings need targetRef?
+- split Store and Notifier

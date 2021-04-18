@@ -1,30 +1,17 @@
 import { useRef, useState } from 'react'
-import Portal from '../../HOCs/Portal'
 import * as lsUtils from '../../utils/localStorageUtils'
-import syncer, { SyncSources, SyncTargets } from '../../classes/Syncer'
+import syncer, { SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
-import SyncModal from './SyncModal'
 import { actions, Events, useSubscribe } from '../../classes/Store'
 
-interface SyncOpts {
-    target: SyncTargets
-    dataSource: SyncSources | undefined
-}
 
 function SyncSettings() {
-    const initialState: SyncOpts = {
-        target: lsUtils.getSyncTarget(),
-        dataSource: undefined
-    }
-
-    const [ syncOpts, setSyncOpts ] = useState(initialState)
-
-    const [ showModal, setShowModal ] = useState(false)
+    const [ syncTarget, setSyncTarget ] = useState(lsUtils.getSyncTarget())
 
     const [ isSelectDisabled, setIsSelectDisabled ] = useState(false)
 
-    const targetRef = useRef<SyncTargets>(syncOpts.target)
+    const targetRef = useRef(syncTarget)
 
     const toggleTargetSelector = (status: SyncStatuses) => {
         const flag = status === SyncStatuses.InProgress 
@@ -34,69 +21,39 @@ function SyncSettings() {
     useSubscribe(Events.SetSyncStatus, toggleTargetSelector)
 
     const getTargetSettingsElement = () => {
-        const { target, dataSource } = syncOpts
-        switch (target) {
+        switch (syncTarget) {
             case SyncTargets.Dropbox:
-                return <DropboxSettings source={dataSource!} />
+                return <DropboxSettings />
             default:
                 return null
         }
     }
 
     const handleTargetChange = (e: any) => {
-        const value = e.target.value as SyncTargets
-        targetRef.current = value
+        const target = e.target.value as SyncTargets
+        targetRef.current = target
 
-        if (value === SyncTargets.Disabled) {
-            setSyncOpts({ target: value, dataSource: undefined })
-            lsUtils.setSyncTarget(value)
+        if (target === SyncTargets.Disabled) {
             actions.setSyncStatus(SyncStatuses.NotConfigured)
-            syncer.init()
-        } else {
-            setShowModal(true)
         }
-    }
-
-    const initSyncWithTarget = (dataSource: SyncSources) => {
-        const target = targetRef.current
-        setSyncOpts({ target, dataSource })
+            
+        setSyncTarget(target)
         lsUtils.setSyncTarget(target)
         syncer.init()
-        setShowModal(false)
-    }   
-    
-    const onModalLocal = () => {
-        initSyncWithTarget(SyncSources.Local)
-    }
-
-    const onModalRemote = () => {
-        initSyncWithTarget(SyncSources.Remote)
-    }
-
-    const onModalCancel = () => {
-        setShowModal(false)
-    }
+    }  
 
     return (
         <div className="settings-block">
             <h2>Cloud Synchronization</h2>
             <select 
                 disabled={isSelectDisabled} 
-                value={syncOpts.target} 
+                value={syncTarget} 
                 onChange={handleTargetChange}
             >
                 <option value={SyncTargets.Disabled}>Disabled</option>
                 <option value={SyncTargets.Dropbox}>Dropbox</option>
             </select>
             {getTargetSettingsElement()}
-            {showModal && 
-            <Portal>
-                <SyncModal 
-                    onCancel={onModalCancel} 
-                    onLocal={onModalLocal} 
-                    onRemote={onModalRemote} 
-                />
-            </Portal>}
         </div>
     )
 }

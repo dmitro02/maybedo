@@ -27,11 +27,6 @@ export enum SyncTargets {
     Disabled = 'DISABLED'
 }
 
-export enum SyncSources {
-    Local = 'LOCAL',
-    Remote = 'REMOTE' 
-}
-
 class Syncer {
     private cloudConnector: ICloudConnector | null = null
     private isSyncFaild: boolean = false
