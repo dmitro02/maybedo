@@ -2,7 +2,7 @@ import Task from "../classes/Task"
 import * as lsUtils from "./localStorageUtils"
 import metadata from '../classes/Metadata'
 
-const ROOT_ID = '0'
+export const ROOT_ID = '0'
 
 export const initRoot = () => {
     if (hasRoot()) return
@@ -59,4 +59,8 @@ export const deleteTask = (taskId: string): void => {
     lsUtils.removeItem(taskId)
     metadata.registerDeleted(taskId)
     metadata.getChildrenIds(taskId).forEach((id) => deleteTask(id))
+}
+
+export const deleteTasks = (taskIds: string[]): void => {
+    taskIds.forEach((id) => deleteTask(id))
 }

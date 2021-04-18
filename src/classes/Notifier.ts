@@ -1,7 +1,6 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import { IBanner } from '../components/Banner/Banner';
 import { useEffect } from "react"
-import { useForceUpdate } from "../utils/customHooks"
 
 export enum Events {
     ShowLoading,
@@ -36,10 +35,6 @@ class Notifier {
     notify(event: string | Events, value?: any) {
         this.callbacks.get(event)?.forEach((cbk) => cbk(value))
     }
-
-    notifyWithDelay(event: string | Events, value?: any) {
-        setTimeout(() => this.notify(event, value), 0)
-    }
 }
 
 const notifier = new Notifier()
@@ -54,21 +49,11 @@ export const useSubscribe = (event: string | Events, callback: (data: any) => vo
     }, [callback, event])
 }
 
-export const useSubscribeWithForceUpdate = (event: string | Events) => {    
-    const forceUpdate = useForceUpdate()
-
-    useEffect(() => {
-        notifier.subscribe(event, forceUpdate)
-
-        return () => notifier.unsubscribe(event, forceUpdate)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [event])
-}
-
 export const actions = {
     showLoading: () => notifier.notify(Events.ShowLoading),
     hideLoading: () => notifier.notify(Events.HideLoading),
     showBanner: (banner: IBanner) => notifier.notify(Events.ShowBanner, banner),
     setSyncStatus: (status: SyncStatuses) => notifier.notify(Events.SetSyncStatus, status),
-    reload: () => notifier.notify(Events.Reload)
+    selectProject: (projectId: string) => notifier.notify(Events.SelectProject, projectId),
+    updateTitle: (data: { id: string, text: string }) => notifier.notify(Events.UpdateTitle, data)
 }

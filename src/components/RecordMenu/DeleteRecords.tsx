@@ -25,12 +25,14 @@ const DeleteRecords = (props: Props) => {
 
     const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
-    const deleteRecord = () => {
+    const deleteRecord = (e: any) => {
+        e.stopPropagation()
         setShowDeleteConfirmation(false)
         remove(task)
     }
 
-    const deleteCompleted = () => {
+    const deleteCompleted = (e: any) => {
+        e.stopPropagation()
         setShowDeleteConfirmation(false)
         deleteCompletedSubtasks(task)
         closeMenu()

@@ -15,7 +15,7 @@ import {
     getTask, 
     updateTask 
 } from '../../utils/taskService'
-import notifier, { Events } from '../../classes/Notifier'
+import { actions } from '../../classes/Notifier'
 
 type Props = { 
     classNames?: string[],
@@ -58,9 +58,7 @@ const RecordList = (props: Props) => {
         const newSubTasks = subTasks.concat(task)
         setSubTasks(newSubTasks)
 
-        if (task.isProject) {
-            notifier.notify(Events.SelectProject, { id: task.id})
-        }
+        task.isProject && actions.selectProject(task.id)
     }, [root, rootId, subTasks])
 
     const updateSubTask = useCallback((task: Task) => {
@@ -75,6 +73,7 @@ const RecordList = (props: Props) => {
         const newSubTasks = subTasks.filter((it) => it !== task)
         setSubTasks(newSubTasks)
         deleteTask(task.id)
+        task.isProject && actions.selectProject('')
     }, [subTasks])
 
     // sort subtask by priority
@@ -88,8 +87,8 @@ const RecordList = (props: Props) => {
     }
     subTasks.sort(setAndComparePriotity)
 
-    const activeTasks = subTasks.filter((t: Task) => !t.isDone)
-    const completedTasks = subTasks.filter((t: Task) => t.isDone)
+    const activeTasks = subTasks.filter((t) => !t.isDone)
+    const completedTasks = subTasks.filter((t) => t.isDone)
 
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
@@ -116,7 +115,6 @@ const RecordList = (props: Props) => {
                         <Record 
                             key={task.id} 
                             item={task}
-                            parent={root}
                             isEditable={isEditable}
                             isSelected={projectId === task.id}
                             update={updateSubTask}

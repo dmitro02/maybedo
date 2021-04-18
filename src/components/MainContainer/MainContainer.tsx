@@ -21,9 +21,19 @@ const MainContainer = () => {
 
     const [ selectedProjectId, setSelectedProjectId ] = useState('')
 
-    useSubscribe(Events.SelectProject, (data) => {
-        selectProject(data.id)
-    })
+    const selectProject = (id: string) => {
+        setSelectedProjectId(id)
+        lsUtils.setSelectedProjectId(id)
+    }
+
+    const selectProjectOnLoad = () => {
+        let id = lsUtils.getSelectedProjectId()
+                || getProjectsList()[0]?.id 
+                || ''
+        selectProject(id)
+    }
+
+    useSubscribe(Events.SelectProject, selectProject)
 
     useEffect(() => {
         // syncer.init()
@@ -31,18 +41,6 @@ const MainContainer = () => {
         selectProjectOnLoad()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const selectProject = (projectId: string) => {
-        setSelectedProjectId(projectId)
-        lsUtils.setSelectedProjectId(projectId)
-    }
-
-    const selectProjectOnLoad = () => {
-        let id = lsUtils.getSelectedProjectId()
-                || getProjectsList()[0]?.id 
-                || ''
-        id && selectProject(id)
-    }
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)

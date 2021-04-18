@@ -5,14 +5,13 @@ import CheckmarkButton from '../Buttons/CheckmarkButton'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { updateTask } from '../../utils/taskService'
+import { updateTask, ROOT_ID } from '../../utils/taskService'
 import RecordList from '../RecordList/RecordList'
-import notifier, { Events, useSubscribe } from '../../classes/Notifier'
+import { Events, actions, useSubscribe } from '../../classes/Notifier'
 import metadata from '../../classes/Metadata'
 
 type Props = { 
     item: Task, 
-    parent?: Task,
     isEditable?: boolean,
     isTitle?: boolean,
     isSelected?: boolean,
@@ -40,23 +39,28 @@ const Record = (props: Props) => {
 
     const hasSubtasks = metadata.hasChildren(id)
 
+    const isRootProject = id === ROOT_ID
+
     const [ showSubtasks, setShowSubtasks ] = useState(false)
 
     const [ text, setText ] = useState(item.text)
 
-    useSubscribe(Events.UpdateTitle, (data) => {
+    useSubscribe(Events.UpdateTitle, (data: any) => {
         id === data.id && setText(data.text)
     });
 
     const handleClickOnRecord = () => { 
-        isProject && notifier.notify(Events.SelectProject, { id })
+        if (isProject && !isRootProject) actions.selectProject(id)
     }
 
     const updateText = (text: string) => {
+        text = isTitle 
+            ? text.replace(/\n/g, ' ')
+            : text
         setText(text)
         item.text = text
         updateTask(item)
-        isProject && notifier.notify(Events.UpdateTitle, { id, text })
+        isProject && actions.updateTitle({ id, text })
     }
 
     const handleClickOnCheckbox = (e: any) => {
@@ -120,14 +124,17 @@ const Record = (props: Props) => {
                 {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
                     {getSubtasksBtn()}
-                    <RecordMenu 
-                        task={item} 
-                        showSubtasks={openSubtasks}
-                        classes={[ hiddenBtnClassName ]}
-                        isProject={!!isProject}
-                        update={update}
-                        remove={remove}
-                    /> 
+                    {(!isTitle || isRootProject) &&
+                        <RecordMenu 
+                            task={item} 
+                            showSubtasks={openSubtasks}
+                            classes={[ hiddenBtnClassName ]}
+                            isProject={!!isProject}
+                            update={update}
+                            remove={remove}
+                        /> 
+                    }
+
                 </div>
             </div>
             {showSubtasks && 
