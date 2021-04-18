@@ -3,6 +3,7 @@ import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import Task from "../../classes/Task"
+import { actions } from "../../classes/Notifier"
 
 type Props = {
     task: Task,
@@ -20,8 +21,6 @@ const DeleteRecords = (props: Props) => {
         closeMenu = () => {},
         remove
      } = props
-    
-    const deleteCompletedSubtasks = (t: any) => {}
 
     const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false)
 
@@ -34,7 +33,7 @@ const DeleteRecords = (props: Props) => {
     const deleteCompleted = (e: any) => {
         e.stopPropagation()
         setShowDeleteConfirmation(false)
-        deleteCompletedSubtasks(task)
+        actions.deleteCompleted(task.id)
         closeMenu()
     }
 

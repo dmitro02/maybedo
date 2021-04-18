@@ -1,3 +1,4 @@
+import { ROOT_ID } from './../utils/taskService';
 import * as lsUtils from '../utils/localStorageUtils'
 
 export type Item = {
@@ -16,7 +17,7 @@ export class Metadata {
         this.taskList = {}
     }
 
-    addToTaskList(item: Item) {
+    addToTaskList(item: Item): void {
         const { id, parentId, updatedAt } = item
         this.taskList[id] = {
             p: parentId,
@@ -24,40 +25,40 @@ export class Metadata {
         }
     }
 
-    removeFromTaskList(id: string) {
+    removeFromTaskList(id: string): void {
         delete this.taskList[id]
     }
 
-    addToCreated(id: string) {
+    addToCreated(id: string): void {
         this.created.push(id)
     }
 
-    removeFromCreated(id: string) {
+    removeFromCreated(id: string): void {
         if (this.created.includes(id)) {
             this.created = this.created.filter((it) => it !== id)
         }
     }
 
-    addToDeleted(id: string) {
+    addToDeleted(id: string): void {
         this.deleted.push(id)
     }
 
-    addToUpdated(id: string) {
+    addToUpdated(id: string): void {
         this.updated.push(id)
     }
 
-    registerCreated(item: Item) {
+    registerCreated(item: Item): void {
         this.addToTaskList(item)
         this.addToCreated(item.id)
         this.save()
     }
 
-    registerUpdated(item: Item) {
+    registerUpdated(item: Item): void {
         this.addToTaskList(item)
         this.save()
     }
 
-    registerDeleted(id: string) {
+    registerDeleted(id: string): void {
         this.removeFromTaskList(id)
         this.created.includes(id)
             ? this.removeFromCreated(id)
@@ -65,18 +66,18 @@ export class Metadata {
         this.save()
     }
 
-    getChildrenIds(parentId: string) {
+    getChildrenIds(parentId: string): string[] {
         return Object.keys(this.taskList).reduce((acc: string[], curr) => {
             if (this.taskList[curr].p === parentId) acc.push(curr)
             return acc
         }, [])
     }
 
-    hasChildren(parentId: string) {
+    hasChildren(parentId: string): boolean {
         return Object.values(this.taskList).some((it) => it.p === parentId)
     }
 
-    save() {
+    save(): void {
         const metadata = {
             taskList: this.taskList,
             created: this.created,
@@ -85,21 +86,21 @@ export class Metadata {
         lsUtils.setMetadada(metadata)
     }
 
-    restore() {
+    restore(): void {
         const metadata = lsUtils.getMetadada()
         this.taskList = metadata.taskList
         this.created = metadata.created
         this.deleted = metadata.deleted
     }
 
-    reset() {
+    reset(): void {
         this.created = []
         this.deleted = []
         this.updated = []
         this.save()
     }
 
-    init() {
+    init(): void {
         lsUtils.hasMetadata()
             ? this.restore() 
             : this.save()

@@ -4,6 +4,7 @@ import Fog from '../Fog/Fog'
 import './Sidebar.scss'
 import { BsBoxArrowLeft } from 'react-icons/bs'
 import RecordList from '../RecordList/RecordList'
+import { ROOT_ID } from '../../utils/taskService'
 
 type Props = {
     isOpened: boolean,
@@ -52,7 +53,7 @@ const Sidebar = (props: Props) => {
                     </div>
                 </div>
             <RecordList 
-                rootId='0'
+                rootId={ROOT_ID}
                 hasTitle
                 isEditable={false}
                 projectId={projectId}

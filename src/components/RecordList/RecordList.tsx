@@ -11,11 +11,14 @@ import './RecordList.scss'
 import { 
     createTask, 
     deleteTask, 
+    deleteTasks, 
     getSubTasksList, 
     getTask, 
+    ROOT_ID, 
     updateTask 
 } from '../../utils/taskService'
-import { actions } from '../../classes/Notifier'
+import { actions, Events, useSubscribe } from '../../classes/Notifier'
+import * as lsUtils from '../../utils/localStorageUtils'
 
 type Props = { 
     classNames?: string[],
@@ -37,6 +40,10 @@ const RecordList = (props: Props) => {
     const [root, setRoot] = useState<Task>(new Task())
     const [subTasks, setSubTasks] = useState<Task[]>([])
 
+    useSubscribe(Events.DeleteCompleted, (id: string) => {
+        id === rootId && deleteCompletedSubTask()
+    })
+
     useEffect(() => {
         const task = getTask(rootId)
         setRoot(task)
@@ -47,8 +54,10 @@ const RecordList = (props: Props) => {
 
     const focusedItemId = useRef<string>()
 
+    const isRootProject = rootId === ROOT_ID
+
     const addSubTask = useCallback((task: Task) => {
-        task.isProject = rootId === '0'
+        task.isProject = isRootProject
         task.parentId = root.id
 
         createTask(task)
@@ -59,7 +68,7 @@ const RecordList = (props: Props) => {
         setSubTasks(newSubTasks)
 
         task.isProject && actions.selectProject(task.id)
-    }, [root, rootId, subTasks])
+    }, [isRootProject, root.id, subTasks])
 
     const updateSubTask = useCallback((task: Task) => {
         const newSubTasks = subTasks.map((it) => {
@@ -70,10 +79,22 @@ const RecordList = (props: Props) => {
     }, [subTasks])
 
     const deleteSubTask = useCallback((task: Task) => {
+        const selectedProjectId = lsUtils.getSelectedProjectId()
+        const isSelectedPojectDeleted = selectedProjectId === task.id
         const newSubTasks = subTasks.filter((it) => it !== task)
         setSubTasks(newSubTasks)
         deleteTask(task.id)
-        task.isProject && actions.selectProject('')
+        isSelectedPojectDeleted && actions.selectProject('')
+    }, [subTasks])
+
+    const deleteCompletedSubTask = useCallback(() => {
+        const idsToDelete = subTasks.filter((it) => it.isDone).map((it) => it.id)
+        const selectedProjectId = lsUtils.getSelectedProjectId()
+        const isSelectedPojectDeleted = idsToDelete.some((id) => selectedProjectId === id)
+        const newSubTasks = subTasks.filter((it) => !it.isDone)
+        setSubTasks(newSubTasks)
+        deleteTasks(idsToDelete)
+        isSelectedPojectDeleted && actions.selectProject('')
     }, [subTasks])
 
     // sort subtask by priority
@@ -93,7 +114,7 @@ const RecordList = (props: Props) => {
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
     const classes = [
-        rootId === '0' ? 'project-list' : 'task-list',
+        isRootProject ? 'project-list' : 'task-list',
         ...classNames
     ].join(' ')
 

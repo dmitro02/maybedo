@@ -9,7 +9,8 @@ export enum Events {
     SetSyncStatus,
     Reload,
     UpdateTitle,
-    SelectProject
+    SelectProject,
+    DeleteCompleted
 }
 
 class Notifier {
@@ -55,5 +56,6 @@ export const actions = {
     showBanner: (banner: IBanner) => notifier.notify(Events.ShowBanner, banner),
     setSyncStatus: (status: SyncStatuses) => notifier.notify(Events.SetSyncStatus, status),
     selectProject: (projectId: string) => notifier.notify(Events.SelectProject, projectId),
-    updateTitle: (data: { id: string, text: string }) => notifier.notify(Events.UpdateTitle, data)
+    updateTitle: (data: { id: string, text: string }) => notifier.notify(Events.UpdateTitle, data),
+    deleteCompleted: (listId: string) => notifier.notify(Events.DeleteCompleted, listId)
 }

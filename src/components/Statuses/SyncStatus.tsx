@@ -20,9 +20,7 @@ const SyncStatus = () => {
 
     useSubscribe(Events.SetSyncStatus, setStatus)
 
-    const refresh = () => {
-        syncer.sync()
-    }
+    const refresh = () => syncer.sync()
 
     const baseClass = 'material-icons-outlined common-btn'
     const noHoverClass = baseClass + ' no-hover'
