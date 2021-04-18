@@ -4,7 +4,7 @@ import { FailureBanner, SuccessBanner } from '../Banner/Banner'
 import syncer, { SyncSources } from '../../classes/Syncer'
 import { GoArrowRight } from "react-icons/go";
 import Button from '../Buttons/Button'
-import { actions } from '../../classes/Notifier'
+import { actions } from '../../classes/Store'
 
 type Props = { source: SyncSources }
 

@@ -3,7 +3,7 @@ import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import Task from "../../classes/Task"
-import { actions } from "../../classes/Notifier"
+import { actions } from "../../classes/Store"
 
 type Props = {
     task: Task,

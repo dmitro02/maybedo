@@ -17,8 +17,7 @@ import {
     ROOT_ID, 
     updateTask 
 } from '../../utils/taskService'
-import { actions, Events, useSubscribe } from '../../classes/Notifier'
-import * as lsUtils from '../../utils/localStorageUtils'
+import store, { Events, useSubscribe } from '../../classes/Store'
 
 type Props = { 
     classNames?: string[],
@@ -67,7 +66,7 @@ const RecordList = (props: Props) => {
         const newSubTasks = subTasks.concat(task)
         setSubTasks(newSubTasks)
 
-        task.isProject && actions.selectProject(task.id)
+        task.isProject && store.setSelectedProjectId(task.id)
     }, [isRootProject, root.id, subTasks])
 
     const updateSubTask = useCallback((task: Task) => {
@@ -79,22 +78,21 @@ const RecordList = (props: Props) => {
     }, [subTasks])
 
     const deleteSubTask = useCallback((task: Task) => {
-        const selectedProjectId = lsUtils.getSelectedProjectId()
-        const isSelectedPojectDeleted = selectedProjectId === task.id
+        const isSelectedPojectDeleted = store.selectedProjectId === task.id
         const newSubTasks = subTasks.filter((it) => it !== task)
         setSubTasks(newSubTasks)
         deleteTask(task.id)
-        isSelectedPojectDeleted && actions.selectProject('')
+        isSelectedPojectDeleted && store.resetSelectedProjectId()
     }, [subTasks])
 
     const deleteCompletedSubTask = useCallback(() => {
         const idsToDelete = subTasks.filter((it) => it.isDone).map((it) => it.id)
-        const selectedProjectId = lsUtils.getSelectedProjectId()
-        const isSelectedPojectDeleted = idsToDelete.some((id) => selectedProjectId === id)
+        const isSelectedPojectDeleted = idsToDelete
+            .some((id) => store.selectedProjectId === id)
         const newSubTasks = subTasks.filter((it) => !it.isDone)
         setSubTasks(newSubTasks)
         deleteTasks(idsToDelete)
-        isSelectedPojectDeleted && actions.selectProject('')
+        isSelectedPojectDeleted && store.resetSelectedProjectId()
     }, [subTasks])
 
     // sort subtask by priority

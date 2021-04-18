@@ -1,4 +1,3 @@
-import { ROOT_ID } from './../utils/taskService';
 import * as lsUtils from '../utils/localStorageUtils'
 
 export type Item = {

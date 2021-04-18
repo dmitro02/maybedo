@@ -4,7 +4,7 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { Events, useSubscribe } from '../../classes/Notifier'
+import store, { Events, useSubscribe } from '../../classes/Store'
 import { getProjectsList, initRoot } from '../../utils/taskService'
 import metadata from '../../classes/Metadata'
 import * as lsUtils from "../../utils/localStorageUtils"
@@ -23,11 +23,11 @@ const MainContainer = () => {
 
     const selectProject = (id: string) => {
         setSelectedProjectId(id)
-        lsUtils.setSelectedProjectId(id)
+        store.setSelectedProjectId(id)
     }
 
     const selectProjectOnLoad = () => {
-        let id = lsUtils.getSelectedProjectId()
+        let id = store.selectedProjectId
                 || getProjectsList()[0]?.id 
                 || ''
         selectProject(id)

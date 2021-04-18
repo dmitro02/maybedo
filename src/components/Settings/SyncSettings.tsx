@@ -5,7 +5,7 @@ import syncer, { SyncSources, SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import SyncModal from './SyncModal'
-import { actions, Events, useSubscribe } from '../../classes/Notifier'
+import { actions, Events, useSubscribe } from '../../classes/Store'
 
 interface SyncOpts {
     target: SyncTargets

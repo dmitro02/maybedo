@@ -9,7 +9,7 @@ import {
     getExportFileName,
     validateExportedData
 } from '../../utils/persistDataUtils'
-import { actions } from '../../classes/Notifier'
+import { actions } from '../../classes/Store'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
 import Button from '../Buttons/Button'
