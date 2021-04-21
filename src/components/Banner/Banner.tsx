@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import './Banner.scss'
 import { MdClose } from 'react-icons/md'
-import { Events, useSubscribe } from '../../classes/Store'
+import { store, useSubscribe } from '../../classes/Store2'
 
 const Banner = () => {
-    const [ banner, setBanner ] = useState<IBanner | null>(null)
+    const hide = () => store.banner = null
 
-    const show = (banner: IBanner) => setBanner(banner)
-    const hide = () => setBanner(null)
-
-    useSubscribe(Events.ShowBanner, show)
+    const banner = useSubscribe('banner')
 
     useEffect(() => {
         if (banner && banner.delay && banner.delay > 0) {

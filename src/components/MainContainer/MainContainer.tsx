@@ -4,43 +4,24 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import store, { Events, useSubscribe } from '../../classes/Store'
-import { getProjectsList, initRoot } from '../../utils/taskService'
-import metadata from '../../classes/Metadata'
+import { useSubscribe } from '../../classes/Store2'
 import * as lsUtils from "../../utils/localStorageUtils"
-
-metadata.init()
-initRoot()
-
-// lsUtils.populateData(DATA)
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
-
     const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
 
-    const [ selectedProjectId, setSelectedProjectId ] = useState('')
-
-    const selectProject = (id: string) => {
-        setSelectedProjectId(id)
-        store.setSelectedProjectId(id)
-    }
-
-    const selectProjectOnLoad = () => {
-        let id = store.selectedProjectId
-                || getProjectsList()[0]?.id 
-                || ''
-        selectProject(id)
-    }
-
-    useSubscribe(Events.SelectProject, selectProject)
+    const selectedProjectId = useSubscribe('selectedProjectId')
 
     useEffect(() => {
         // syncer.init()
         // syncer.sync()
-        selectProjectOnLoad()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        lsUtils.setSelectedProjectId(selectedProjectId)
+    })
 
     const toggleSettings = () =>
         setIsSettingsOpened(!isSettingsOpened)

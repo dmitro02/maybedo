@@ -1,12 +1,11 @@
 import syncer from '../../classes/Syncer'
 import './SyncStatus.scss'
-import { Events, useSubscribe } from '../../classes/Store'
-import { useState } from 'react'
 import { 
     MdSyncProblem,
     MdSyncDisabled,
     MdSync
 } from 'react-icons/md'
+import { useSubscribe } from '../../classes/Store2'
 
 export enum SyncStatuses {
     NotConfigured = 'NOT_CONFIGURED',
@@ -16,9 +15,7 @@ export enum SyncStatuses {
 }
 
 const SyncStatus = () => {
-    const [ status, setStatus ] = useState<SyncStatuses>(SyncStatuses.NotConfigured)
-
-    useSubscribe(Events.SetSyncStatus, setStatus)
+    const status = useSubscribe('syncStatus')
 
     const refresh = () => syncer.sync()
 

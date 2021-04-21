@@ -7,7 +7,8 @@ import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 import { updateTask, ROOT_ID } from '../../utils/taskService'
 import RecordList from '../RecordList/RecordList'
-import store, { Events, actions, useSubscribe } from '../../classes/Store'
+import { Events, actions, useSubscribe } from '../../classes/Store'
+import { store } from '../../classes/Store2'
 import metadata from '../../classes/Metadata'
 
 type Props = { 
@@ -50,7 +51,7 @@ const Record = (props: Props) => {
     });
 
     const handleClickOnRecord = () => { 
-        (isProject && !isRootProject) && store.setSelectedProjectId(id)
+        if (isProject && !isRootProject) store.selectedProjectId = id
     }
 
     const updateText = (text: string) => {

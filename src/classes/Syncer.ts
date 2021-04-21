@@ -1,6 +1,6 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import DropboxConnector from './DropboxConnector';
-import { actions } from './Store'
+import { store } from './Store2'
 import * as lsUtils from "../utils/localStorageUtils"
 import * as taskService from '../utils/taskService'
 import metaLocal, { Metadata } from './Metadata'
@@ -62,7 +62,7 @@ class Syncer {
     sync() {
         this.isSyncFaild = false
 
-        actions.setSyncStatus(SyncStatuses.InProgress)
+        store.syncStatus = SyncStatuses.InProgress
 
         const metaRemote = new Metadata()
 
@@ -76,10 +76,10 @@ class Syncer {
             await this.cloudConnector!.check()
         } catch(e) {
             if (e.message.toLowerCase().includes('not_configured')) {
-                actions.setSyncStatus(SyncStatuses.NotConfigured)
+                store.syncStatus = SyncStatuses.NotConfigured
                 return false
             } else {
-                actions.setSyncStatus(SyncStatuses.Failure)
+                store.syncStatus = SyncStatuses.Failure
                 return true
             }
         }
@@ -97,9 +97,9 @@ class Syncer {
 
     private setSyncResultStatus() {
         if (this.isSyncFaild) {
-            actions.setSyncStatus(SyncStatuses.Failure)
+            store.syncStatus = SyncStatuses.Failure
         } else {
-            actions.setSyncStatus(SyncStatuses.Idle)
+            store.syncStatus = SyncStatuses.Idle
         }
     }
 

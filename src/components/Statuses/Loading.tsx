@@ -1,8 +1,7 @@
 import Fog from '../Fog/Fog'
 import Spinner from './Spinner'
 import './Loading.scss'
-import { Events, useSubscribe } from '../../classes/Store'
-import { useState } from 'react'
+import { useSubscribe } from '../../classes/Store2'
 
 type Props = {
     spinnerClass?: string
@@ -11,15 +10,9 @@ type Props = {
 const Loading = (props: Props) => {
     const { spinnerClass } = props
 
-    const [ isDiplayed, setIsDisplayed ] = useState(false)
+    const showLoading = useSubscribe('showLoading')
 
-    const show = () => setIsDisplayed(true)
-    const hide = () => setIsDisplayed(false)
-
-    useSubscribe(Events.ShowLoading, show)
-    useSubscribe(Events.HideLoading, hide)
-
-    if (!isDiplayed) return null
+    if (!showLoading) return null
     
     return (
         <>

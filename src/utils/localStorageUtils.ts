@@ -64,11 +64,3 @@ export const setMetadada = (metadata: any) => {
 export const hasMetadata = (): boolean => {
     return hasItem(METADATA_KEY)
 }
-
-export const populateData = (flatData: any) => {
-    Object.entries(flatData).forEach((entry: any) => {
-        const task = entry[1]
-        task.updatedAt = Date.now()
-        setObject(entry[0], task)
-    })
-}

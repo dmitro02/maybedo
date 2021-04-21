@@ -17,7 +17,8 @@ import {
     ROOT_ID, 
     updateTask 
 } from '../../utils/taskService'
-import store, { Events, useSubscribe } from '../../classes/Store'
+import { Events, useSubscribe } from '../../classes/Store'
+import { store } from '../../classes/Store2'
 
 type Props = { 
     classNames?: string[],
@@ -66,7 +67,7 @@ const RecordList = (props: Props) => {
         const newSubTasks = subTasks.concat(task)
         setSubTasks(newSubTasks)
 
-        task.isProject && store.setSelectedProjectId(task.id)
+        if (task.isProject) store.selectedProjectId = task.id
     }, [isRootProject, root.id, subTasks])
 
     const updateSubTask = useCallback((task: Task) => {
@@ -82,7 +83,7 @@ const RecordList = (props: Props) => {
         const newSubTasks = subTasks.filter((it) => it !== task)
         setSubTasks(newSubTasks)
         deleteTask(task.id)
-        isSelectedPojectDeleted && store.resetSelectedProjectId()
+        if (isSelectedPojectDeleted) store.selectedProjectId = ''
     }, [subTasks])
 
     const deleteCompletedSubTask = useCallback(() => {
@@ -92,7 +93,7 @@ const RecordList = (props: Props) => {
         const newSubTasks = subTasks.filter((it) => !it.isDone)
         setSubTasks(newSubTasks)
         deleteTasks(idsToDelete)
-        isSelectedPojectDeleted && store.resetSelectedProjectId()
+        if (isSelectedPojectDeleted) store.selectedProjectId = ''
     }, [subTasks])
 
     // sort subtask by priority

@@ -3,22 +3,16 @@ import * as lsUtils from '../../utils/localStorageUtils'
 import syncer, { SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
-import { actions, Events, useSubscribe } from '../../classes/Store'
-
+import { store, useSubscribe } from '../../classes/Store2'
 
 function SyncSettings() {
     const [ syncTarget, setSyncTarget ] = useState(lsUtils.getSyncTarget())
 
-    const [ isSelectDisabled, setIsSelectDisabled ] = useState(false)
-
     const targetRef = useRef(syncTarget)
 
-    const toggleTargetSelector = (status: SyncStatuses) => {
-        const flag = status === SyncStatuses.InProgress 
-        setIsSelectDisabled(flag)
-    }
+    const syncStatus = useSubscribe('syncStatus')
 
-    useSubscribe(Events.SetSyncStatus, toggleTargetSelector)
+    const isSelectDisabled = syncStatus === SyncStatuses.InProgress
 
     const getTargetSettingsElement = () => {
         switch (syncTarget) {
@@ -34,7 +28,7 @@ function SyncSettings() {
         targetRef.current = target
 
         if (target === SyncTargets.Disabled) {
-            actions.setSyncStatus(SyncStatuses.NotConfigured)
+            store.syncStatus = SyncStatuses.NotConfigured
         }
             
         setSyncTarget(target)
