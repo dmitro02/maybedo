@@ -45,7 +45,7 @@ const Record = (props: Props) => {
 
     const [ text, setText ] = useState(item.text)
 
-    const updateTitle = useEvent('title_' + id, setText)
+    const updateTitle = useEvent('title' + id, setText)
     
     const handleClickOnRecord = () => { 
         if (isProject && !isRootProject) store.selectedProjectId = id

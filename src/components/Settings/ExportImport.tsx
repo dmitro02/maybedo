@@ -62,7 +62,6 @@ const ExportImport = (props: Props) => {
             store.banner = new FailureBanner('Some required fields are missing')
             return
         }
-        // taskStore.setData(taskList, Date.now())
         
         backToTaskList()
         store.banner = new SuccessBanner('Data successfully imported', 5)

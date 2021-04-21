@@ -1,5 +1,4 @@
 export type Callback = (value?: any) => void
-// type Data = {[key: string]: any}
 
 export default class Observer {
     data: any

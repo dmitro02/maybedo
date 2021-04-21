@@ -17,8 +17,7 @@ import {
     ROOT_ID, 
     updateTask 
 } from '../../utils/taskService'
-import { Events, useSubscribe } from '../../classes/Store'
-import { store } from '../../classes/Store2'
+import { store, useEvent } from '../../classes/Store2'
 
 type Props = { 
     classNames?: string[],
@@ -39,10 +38,6 @@ const RecordList = (props: Props) => {
 
     const [root, setRoot] = useState<Task>(new Task())
     const [subTasks, setSubTasks] = useState<Task[]>([])
-
-    useSubscribe(Events.DeleteCompleted, (id: string) => {
-        id === rootId && deleteCompletedSubTask()
-    })
 
     useEffect(() => {
         const task = getTask(rootId)
@@ -95,6 +90,8 @@ const RecordList = (props: Props) => {
         deleteTasks(idsToDelete)
         if (isSelectedPojectDeleted) store.selectedProjectId = ''
     }, [subTasks])
+
+    useEvent('deleteCompleted' + rootId, deleteCompletedSubTask)
 
     // sort subtask by priority
     const setAndComparePriotity = (a: Task, b: Task) => {

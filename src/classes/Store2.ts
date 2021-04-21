@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Observer, { Callback } from './Observer'
 import * as lsUtils from "../utils/localStorageUtils"
 import { getProjectsList, initRoot } from '../utils/taskService'
 import metadata from './Metadata'
@@ -29,13 +28,57 @@ const initialValue: StoreData = {
 }
 
 type Property = keyof typeof initialValue
-type Store = typeof initialValue
+
+type Callback = (value?: any) => void
+
+class Observer {
+    data: any
+
+    constructor(initialValue: any) {
+        this.data = this.toProxy(initialValue)
+    }
+
+    private subsciptions: Map<string, Callback[]> = new Map()
+
+    subscribe (property: string, callback: Callback) {
+        const callbacks = this.subsciptions.get(property)
+        callbacks
+            ? callbacks.push(callback)
+            : this.subsciptions.set(property, [callback])
+    }
+
+    unsubscribe (property: string, callback: Callback) {
+        const callbacks = this.subsciptions.get(property)
+        if (callbacks) {
+            const newCallbacks = callbacks.filter((it) => it !== callback)
+            this.subsciptions.set(property, newCallbacks)
+        }
+    }
+
+    notify (property: string, value: any) {
+        this.subsciptions.get(property)?.forEach((callback) => callback(value))
+    }
+
+    toProxy (obj: any) {
+        const proxyHandler = {
+            set: (target: any, property: string, value: any) => {
+                target[property] = value
+                this.notify(property, value)
+                return true
+            },
+            get: (target: any, property: string) => {
+                return target[property]
+            }
+        }
+        return new Proxy(obj, proxyHandler)
+    }
+}
 
 const observer = new Observer(initialValue)
 
-export const store: Store = observer.data
+export const store: StoreData = observer.data
 
-export const triggerEvent = (eventName: string, eventData: any) => {
+export const triggerEvent = (eventName: string, eventData?: any) => {
     observer.notify(eventName, eventData)
 }
 
