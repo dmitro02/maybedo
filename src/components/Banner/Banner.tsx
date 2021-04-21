@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import './Banner.scss'
 import { MdClose } from 'react-icons/md'
-import { usePropertyWithState } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store'
 
 const Banner = () => {
     const [ banner, setBanner ] = usePropertyWithState('banner')

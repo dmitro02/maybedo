@@ -5,7 +5,7 @@ import {
     MdSyncDisabled,
     MdSync
 } from 'react-icons/md'
-import { usePropertyWithState } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store'
 
 export enum SyncStatuses {
     NotConfigured = 'NOT_CONFIGURED',

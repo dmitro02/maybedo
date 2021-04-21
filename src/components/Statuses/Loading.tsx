@@ -1,7 +1,7 @@
 import Fog from '../Fog/Fog'
 import Spinner from './Spinner'
 import './Loading.scss'
-import { usePropertyWithState } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store'
 
 type Props = {
     spinnerClass?: string

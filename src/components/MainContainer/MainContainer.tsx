@@ -4,7 +4,7 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { usePropertyWithState } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store'
 import * as lsUtils from "../../utils/localStorageUtils"
 
 const MainContainer = () => {

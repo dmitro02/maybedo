@@ -17,7 +17,7 @@ import {
     ROOT_ID, 
     updateTask 
 } from '../../utils/taskService'
-import { store, useEvent } from '../../classes/Store2'
+import { store, useEvent } from '../../classes/Store'
 
 type Props = { 
     classNames?: string[],

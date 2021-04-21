@@ -4,7 +4,7 @@ import { FailureBanner, SuccessBanner } from '../Banner/Banner'
 import syncer from '../../classes/Syncer'
 import { GoArrowRight } from "react-icons/go";
 import Button from '../Buttons/Button'
-import { store } from '../../classes/Store2'
+import { store } from '../../classes/Store'
 
 const DropboxSettings = () => {
     const dbx = new DropboxConnector()

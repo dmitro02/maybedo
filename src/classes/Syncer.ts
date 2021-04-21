@@ -1,6 +1,6 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import DropboxConnector from './DropboxConnector';
-import { store } from './Store2'
+import { store } from './Store'
 import * as lsUtils from "../utils/localStorageUtils"
 import * as taskService from '../utils/taskService'
 import metaLocal, { Metadata } from './Metadata'

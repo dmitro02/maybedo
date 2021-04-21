@@ -3,7 +3,7 @@ import * as lsUtils from '../../utils/localStorageUtils'
 import syncer, { SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
-import { usePropertyWithState } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store'
 
 function SyncSettings() {
     const [ syncTarget, setSyncTarget ] = useState(lsUtils.getSyncTarget())
