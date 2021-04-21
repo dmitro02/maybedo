@@ -35,17 +35,53 @@ const observer = new Observer(initialValue)
 
 export const store: Store = observer.data
 
-export const useSubscribe = (property: Property, callback?: Callback) => {  
+export const triggerEvent = (eventName: string, eventData: any) => {
+    observer.notify(eventName, eventData)
+}
+
+export const setProperty = (property: Property, value: any) => {
+    observer.data[property] = value
+}
+
+export const useSubscribe = (eventOrProperty: Property | string, callback: Callback) => {  
+    useEffect(() => {
+        observer.subscribe(eventOrProperty, callback)
+        return () => observer.unsubscribe(eventOrProperty, callback)
+    }, [callback, eventOrProperty])
+}
+
+export const useEvent = (eventName: string, callback: Callback) => {  
+    useSubscribe(eventName, callback)
+
+    return (value: any) => triggerEvent(eventName, value)
+}
+
+export const useEventWithState = (eventName: string, callback?: Callback) => {  
+    const [ state, setState ] = useState()
+
+    const onNotify = (value: any) => {
+        callback && callback(value)
+        setState(value)
+    }
+    useEvent(eventName, onNotify)
+
+    return [ state, (value: any) => triggerEvent(eventName, value) ]
+}
+
+export const useProperty = (property: Property, callback: Callback) => { 
+    useSubscribe(property, callback)
+
+    return (value: any) => setProperty(property, value)
+}
+
+export const usePropertyWithState = (property: Property, callback?: Callback) => {  
     const [ state, setState ] = useState(observer.data[property])
 
-    useEffect(() => {
-        const onNotify = (value: any) => {
-            callback && callback(value)
-            setState(value)
-        }
-        observer.subscribe(property, onNotify)
-        return () => observer.unsubscribe(property, onNotify)
-    }, [callback, property])
+    const onNotify = (value: any) => {
+        callback && callback(value)
+        setState(value)
+    }
+    useProperty(property, onNotify)
 
-    return state
+    return [ state, (value: any) => setProperty(property, value) ]
 }

@@ -5,7 +5,7 @@ import {
     MdSyncDisabled,
     MdSync
 } from 'react-icons/md'
-import { useSubscribe } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store2'
 
 export enum SyncStatuses {
     NotConfigured = 'NOT_CONFIGURED',
@@ -15,7 +15,7 @@ export enum SyncStatuses {
 }
 
 const SyncStatus = () => {
-    const status = useSubscribe('syncStatus')
+    const [ status ] = usePropertyWithState('syncStatus')
 
     const refresh = () => syncer.sync()
 

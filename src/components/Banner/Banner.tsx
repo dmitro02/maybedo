@@ -1,18 +1,16 @@
 import { useEffect } from 'react'
 import './Banner.scss'
 import { MdClose } from 'react-icons/md'
-import { store, useSubscribe } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store2'
 
 const Banner = () => {
-    const hide = () => store.banner = null
-
-    const banner = useSubscribe('banner')
+    const [ banner, setBanner ] = usePropertyWithState('banner')
 
     useEffect(() => {
         if (banner && banner.delay && banner.delay > 0) {
-            setTimeout(hide, banner.delay * 1000)
+            setTimeout(() => setBanner(null), banner.delay * 1000)
         }
-    }, [banner])
+    }, [banner, setBanner])
 
     if (!banner) return null
 
@@ -21,7 +19,7 @@ const Banner = () => {
     return (
         <div className={`banner banner-${type}`}>
             <div>{text}</div>
-            <MdClose onClick={hide} />
+            <MdClose onClick={setBanner(null)} />
         </div>
     )
 }

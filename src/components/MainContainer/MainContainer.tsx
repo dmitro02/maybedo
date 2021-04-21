@@ -4,14 +4,14 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { useSubscribe } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store2'
 import * as lsUtils from "../../utils/localStorageUtils"
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
     const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
 
-    const selectedProjectId = useSubscribe('selectedProjectId')
+    const [ selectedProjectId ] = usePropertyWithState('selectedProjectId')
 
     useEffect(() => {
         // syncer.init()

@@ -3,14 +3,14 @@ import * as lsUtils from '../../utils/localStorageUtils'
 import syncer, { SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
-import { store, useSubscribe } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store2'
 
 function SyncSettings() {
     const [ syncTarget, setSyncTarget ] = useState(lsUtils.getSyncTarget())
 
     const targetRef = useRef(syncTarget)
 
-    const syncStatus = useSubscribe('syncStatus')
+    const [ syncStatus, setSynStatus ] = usePropertyWithState('syncStatus')
 
     const isSelectDisabled = syncStatus === SyncStatuses.InProgress
 
@@ -28,7 +28,7 @@ function SyncSettings() {
         targetRef.current = target
 
         if (target === SyncTargets.Disabled) {
-            store.syncStatus = SyncStatuses.NotConfigured
+            setSynStatus(SyncStatuses.NotConfigured)
         }
             
         setSyncTarget(target)

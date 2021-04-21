@@ -7,8 +7,7 @@ import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 import { updateTask, ROOT_ID } from '../../utils/taskService'
 import RecordList from '../RecordList/RecordList'
-import { Events, actions, useSubscribe } from '../../classes/Store'
-import { store } from '../../classes/Store2'
+import { store, useEvent } from '../../classes/Store2'
 import metadata from '../../classes/Metadata'
 
 type Props = { 
@@ -46,10 +45,8 @@ const Record = (props: Props) => {
 
     const [ text, setText ] = useState(item.text)
 
-    useSubscribe(Events.UpdateTitle, (data: any) => {
-        id === data.id && setText(data.text)
-    });
-
+    const updateTitle = useEvent('title_' + id, setText)
+    
     const handleClickOnRecord = () => { 
         if (isProject && !isRootProject) store.selectedProjectId = id
     }
@@ -61,7 +58,7 @@ const Record = (props: Props) => {
         setText(text)
         item.text = text
         updateTask(item)
-        isProject && actions.updateTitle({ id, text })
+        isProject && updateTitle(text)
     }
 
     const handleClickOnCheckbox = (e: any) => {

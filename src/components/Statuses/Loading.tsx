@@ -1,7 +1,7 @@
 import Fog from '../Fog/Fog'
 import Spinner from './Spinner'
 import './Loading.scss'
-import { useSubscribe } from '../../classes/Store2'
+import { usePropertyWithState } from '../../classes/Store2'
 
 type Props = {
     spinnerClass?: string
@@ -10,7 +10,7 @@ type Props = {
 const Loading = (props: Props) => {
     const { spinnerClass } = props
 
-    const showLoading = useSubscribe('showLoading')
+    const [ showLoading ] = usePropertyWithState('showLoading')
 
     if (!showLoading) return null
     
