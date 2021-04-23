@@ -1,8 +1,5 @@
 import { readFile } from '../utils/commonUtils';
-import { 
-    ICloudConnector, 
-    SyncTargets 
-} from './Syncer';
+import { ICloudConnector, SyncTargets } from './Syncer';
 import DropboxClient from './DropboxClient'
 
 const CLIENT_ID = 'lxn28fv9hhsn7id'
@@ -60,7 +57,7 @@ export default class DropboxConnector implements ICloudConnector {
         }
     }
 
-    async downloadTaskList(): Promise<string> {        
+    async downloadMetadata(): Promise<string> {        
         try {
             const response: any = await this.dropboxClient.downloadFile(METADATA_FILE_PATH)
             return await readFile(response.result.fileBlob)
@@ -69,7 +66,7 @@ export default class DropboxConnector implements ICloudConnector {
         }
     }
 
-    async uploadTaskList(metadata: string) {
+    async uploadMetadata(metadata: string) {
         await this.dropboxClient.uploadFile(metadata, METADATA_FILE_PATH)
     }
 }

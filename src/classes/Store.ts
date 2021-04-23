@@ -15,13 +15,14 @@ type Store = {
     syncStatus: SyncStatuses
 }
 
-const initSelectProjectId =
+export const initSelectProjectId = () => (
     lsUtils.getSelectedProjectId()
-    || getProjectsList()[0]?.id 
-    || ''
+        || getProjectsList()[0]?.id 
+        || ''
+)
 
 const initialValue: Store = {
-    selectedProjectId: initSelectProjectId,
+    selectedProjectId: initSelectProjectId(),
     showLoading: false,
     banner: null,
     syncStatus: SyncStatuses.NotConfigured
@@ -31,5 +32,7 @@ export const {
     store,
     notify,
     useEvent,
-    usePropertyWithState
+    usePropertyWithState,
+    useReload,
+    reload
 } = createStore(initialValue)

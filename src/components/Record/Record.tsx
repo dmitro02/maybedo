@@ -32,8 +32,8 @@ const Record = (props: Props) => {
         item: {
             id, 
             isDone,
-            priority, 
-            isProject
+            isProject,
+            priority
         }
     } = props
 
@@ -42,8 +42,9 @@ const Record = (props: Props) => {
     const isRootProject = id === ROOT_ID
 
     const [ showSubtasks, setShowSubtasks ] = useState(false)
-
     const [ text, setText ] = useState(item.text)
+
+    if (item.text !== text) setText(item.text)
 
     const updateTitle = useEvent('title' + id, setText)
     

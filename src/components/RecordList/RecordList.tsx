@@ -17,7 +17,7 @@ import {
     ROOT_ID, 
     updateTask 
 } from '../../utils/taskService'
-import { store, useEvent } from '../../classes/Store'
+import { store, useEvent, useReload } from '../../classes/Store'
 
 type Props = { 
     classNames?: string[],
@@ -39,13 +39,16 @@ const RecordList = (props: Props) => {
     const [root, setRoot] = useState<Task>(new Task())
     const [subTasks, setSubTasks] = useState<Task[]>([])
 
-    useEffect(() => {
+    const setData = () => {
         const task = getTask(rootId)
         setRoot(task)
-
         const subTasks = getSubTasksList(rootId)
         setSubTasks(subTasks)
-    }, [rootId])
+    }
+
+    useReload(setData)
+
+    useEffect(setData, [rootId])
 
     const focusedItemId = useRef<string>()
 

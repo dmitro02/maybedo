@@ -1,15 +1,11 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import DropboxConnector from './DropboxConnector';
-import { store } from './Store'
+import { reload, store } from './Store'
 import * as lsUtils from "../utils/localStorageUtils"
 import * as taskService from '../utils/taskService'
 import metaLocal, { Metadata } from './Metadata'
 
-const SYNC_INTERVAL_IN_MINUTES = 500 
-
-export type TaskList = {
-    [key: string]: number
-}
+const SYNC_INTERVAL_IN_MINUTES = 10
 
 export interface ICloudConnector {
     syncTarget: SyncTargets
@@ -18,8 +14,8 @@ export interface ICloudConnector {
     downloadItems: (names: string[]) => Promise<any[]>
     uploadItems: (files: string[][]) => void
     deleteItems: (names: string[]) => void
-    downloadTaskList: () => Promise<string>
-    uploadTaskList: (metadata: string) => void
+    downloadMetadata: () => Promise<string>
+    uploadMetadata: (metadata: string) => void
 }
 
 export enum SyncTargets {
@@ -31,10 +27,6 @@ class Syncer {
     private cloudConnector: ICloudConnector | null = null
     private isSyncFaild: boolean = false
     private interval: any = null
-
-    public constructor() {
-        this.sync = this.sync.bind(this)
-    }
 
     async init(cloudConnector?: ICloudConnector) {
         if (cloudConnector) {
@@ -54,21 +46,26 @@ class Syncer {
         const isConfigured = this.cloudConnector ? await this.check() : false        
 
         if (isConfigured) {
-            // await this.sync()
-            this.interval = setInterval(this.sync, 60000 * SYNC_INTERVAL_IN_MINUTES)
+            await this.sync()
+            this.interval = setInterval(this.sync.bind(this), 60000 * SYNC_INTERVAL_IN_MINUTES)
         }
     }
 
-    sync() {
+    async sync() {
         this.isSyncFaild = false
-
         store.syncStatus = SyncStatuses.InProgress
 
-        const metaRemote = new Metadata()
+        try {
+            const metaRemote = await this.fetchRemoteMeta()
+            await this.syncChanges(metaLocal, metaRemote)
+        } catch (e) {
+            console.error(e);
+            this.isSyncFaild = true
+        }
 
-        this.syncChanges(metaLocal, metaRemote)
-    
-        this.setSyncResultStatus()
+        store.syncStatus = this.isSyncFaild
+            ? SyncStatuses.Failure
+            : SyncStatuses.Idle
     }
 
     private async check(): Promise<boolean> {
@@ -95,15 +92,18 @@ class Syncer {
         }
     }
 
-    private setSyncResultStatus() {
-        if (this.isSyncFaild) {
-            store.syncStatus = SyncStatuses.Failure
-        } else {
-            store.syncStatus = SyncStatuses.Idle
-        }
+    private async fetchRemoteMeta(): Promise<Metadata> {
+        const taskListStr = await this.cloudConnector?.downloadMetadata() || '{}'
+        const taskList = JSON.parse(taskListStr)
+        return new Metadata(taskList)
     }
 
-    processChanges = (local: Metadata, remote: Metadata) => {
+    private uploadRemoteMeta(metadata: Metadata) {
+        const taskListStr = JSON.stringify(metadata.taskList)
+        this.cloudConnector?.uploadMetadata(taskListStr)
+    }
+
+    private processChanges = (local: Metadata, remote: Metadata) => {
         const localList = local.taskList
         const remoteList = remote.taskList
 
@@ -138,7 +138,7 @@ class Syncer {
         })
     }
 
-    syncChanges = async (local: Metadata, remote: Metadata) => {
+    private syncChanges = async (local: Metadata, remote: Metadata) => {
         this.processChanges(local, remote)
 
         const toDownload = remote.created.concat(remote.updated)
@@ -146,14 +146,17 @@ class Syncer {
         const toDeleteLocal = remote.deleted
         const toDeleteRemote = local.deleted
     
+        const needToUpdateRemote = toUpload.length || toDeleteRemote.length
+        const needToUpdateLocal = toDownload.length || toDeleteLocal.length
+
         const items = await this.cloudConnector?.downloadItems(toDownload)
-        items?.forEach((it) => taskService.createTask(JSON.parse(it)))
+        items?.forEach((it) => taskService.createTask(it))
  
         const filesToUpload = toUpload.map((it) => {
             const fileContent = localStorage.getItem(it) || ''
             return [fileContent, it]
         })
-        // this.cloudConnector?.uploadItems(filesToUpload)
+        this.cloudConnector?.uploadItems(filesToUpload)
 
         this.cloudConnector?.deleteItems(toDeleteRemote)
 
@@ -162,7 +165,9 @@ class Syncer {
         local.reset()
         local.save()
 
-        console.log('upload new remote meta', local.taskList)
+        needToUpdateLocal && reload()
+
+        needToUpdateRemote && this.uploadRemoteMeta(metaLocal)
       }
 }
 

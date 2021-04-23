@@ -4,27 +4,29 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { usePropertyWithState } from '../../classes/Store'
+import { 
+    usePropertyWithState, 
+    useReload, 
+    initSelectProjectId 
+} from '../../classes/Store'
 import * as lsUtils from "../../utils/localStorageUtils"
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
     const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
 
-    const [ selectedProjectId ] = usePropertyWithState('selectedProjectId')
+    const [ selectedProjectId, setSelectedProjectId ] 
+        = usePropertyWithState('selectedProjectId')
 
-    useEffect(() => {
-        // syncer.init()
-        // syncer.sync()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    useReload(() => setSelectedProjectId(initSelectProjectId()))    
 
-    useEffect(() => {
-        lsUtils.setSelectedProjectId(selectedProjectId)
-    })
+    useEffect(() => { syncer.init() }, [])
 
-    const toggleSettings = () =>
-        setIsSettingsOpened(!isSettingsOpened)
+    // useEffect(() => lsUtils.setSelectedProjectId(selectedProjectId))
+
+    lsUtils.setSelectedProjectId(selectedProjectId)
+
+    const toggleSettings = () => setIsSettingsOpened(!isSettingsOpened)
 
     const openSidebar = () => {
         setIsSidebarOpened(true)        

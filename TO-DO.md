@@ -5,6 +5,6 @@
 - HTML export with collaps/expand projects
 - dark theme
 - "About" with a description and short help
-- Does SyncSettings need targetRef?
-- Sync
-- Export/Import
+- implement testing
+- switch to preact
+- export/import

@@ -49,12 +49,12 @@ export const createStore = <T extends object>(initialValue: T) => {
         }, [callback, eventOrProperty])
     }
 
-    const useEvent = (eventName: string, callback: Callback): (v: any) => void => {  
+    const useEvent = (eventName: string, callback: Callback): Callback => {  
         useSubscribe(eventName, callback)
         return (value: any) => notify(eventName, value)
     }
 
-    const useEventWithState = (eventName: string, callback?: Callback): [any, (v: any) => void] => {  
+    const useEventWithState = (eventName: string, callback?: Callback): [any, Callback] => {  
         const [ state, setState ] = useState()
     
         const onNotify = (value: any) => {
@@ -72,7 +72,7 @@ export const createStore = <T extends object>(initialValue: T) => {
         return (value: any) => store[property] = value
     }
     
-    const usePropertyWithState = (property: Property, callback?: Callback): [any, (v: any) => void] => {  
+    const usePropertyWithState = (property: Property, callback?: Callback): [any, Callback] => {  
         const [ state, setState ] = useState(store[property])
     
         const onNotify = (value: any) => {
@@ -84,6 +84,19 @@ export const createStore = <T extends object>(initialValue: T) => {
         return [ state, (value: any) => store[property] = value ]
     }
 
+    const useReload = (callback: Callback) => {
+        const [ , setState ] = useState({})
+
+        const onNotify = () => {
+            callback && callback()
+            setState({})
+        }
+        
+        useEvent('reload', onNotify)
+    }
+
+    const reload = () => notify('reload')
+
     return {
         store,
         notify,
@@ -91,6 +104,8 @@ export const createStore = <T extends object>(initialValue: T) => {
         useEvent,
         useEventWithState,
         useProperty,
-        usePropertyWithState
+        usePropertyWithState,
+        useReload,
+        reload
     }
 }

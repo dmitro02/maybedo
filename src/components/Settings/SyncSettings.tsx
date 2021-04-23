@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import * as lsUtils from '../../utils/localStorageUtils'
 import syncer, { SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
@@ -7,8 +7,6 @@ import { usePropertyWithState } from '../../classes/Store'
 
 function SyncSettings() {
     const [ syncTarget, setSyncTarget ] = useState(lsUtils.getSyncTarget())
-
-    const targetRef = useRef(syncTarget)
 
     const [ syncStatus, setSynStatus ] = usePropertyWithState('syncStatus')
 
@@ -25,7 +23,6 @@ function SyncSettings() {
 
     const handleTargetChange = (e: any) => {
         const target = e.target.value as SyncTargets
-        targetRef.current = target
 
         if (target === SyncTargets.Disabled) {
             setSynStatus(SyncStatuses.NotConfigured)

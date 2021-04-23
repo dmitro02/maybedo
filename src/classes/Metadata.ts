@@ -6,14 +6,16 @@ export type Item = {
     updatedAt: number
 }
 
+export type TaskList = { [id: string]: { p: string | null, u: number } }
+
 export class Metadata {
-    taskList: { [id: string]: { p: string | null, u: number } }
+    taskList: TaskList
     created: string[] = []
     deleted: string[] = []
     updated: string[] = []
 
-    constructor() {
-        this.taskList = {}
+    constructor(taskList: TaskList = {}) {
+        this.taskList = taskList
     }
 
     addToTaskList(item: Item): void {

@@ -50,7 +50,7 @@ export const updateTask = (task: Task): void => {
 }
 
 export const createTask = (task: Task): void => {
-    task.updatedAt = Date.now()
+    if (!task.updatedAt) task.updatedAt = Date.now()
     lsUtils.setObject(task.id, task)
     metadata.registerCreated(task)
 }
