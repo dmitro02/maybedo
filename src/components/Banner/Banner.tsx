@@ -19,7 +19,7 @@ const Banner = () => {
     return (
         <div className={`banner banner-${type}`}>
             <div>{text}</div>
-            <MdClose onClick={setBanner(null)} />
+            <MdClose onClick={() => setBanner(null)} />
         </div>
     )
 }

@@ -3,7 +3,7 @@ import { RiDeleteBin7Fill, RiDeleteBinFill } from 'react-icons/ri'
 import { MdCheck, MdClose } from "react-icons/md"
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import Task from "../../classes/Task"
-import { triggerEvent } from "../../classes/Store"
+import { notify } from "../../classes/Store"
 
 type Props = {
     task: Task,
@@ -33,7 +33,7 @@ const DeleteRecords = (props: Props) => {
     const deleteCompleted = (e: any) => {
         e.stopPropagation()
         setShowDeleteConfirmation(false)
-        triggerEvent('deleteCompleted' + task.id)
+        notify('deleteCompleted' + task.id)
         closeMenu()
     }
 

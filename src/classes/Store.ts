@@ -29,7 +29,7 @@ const initialValue: Store = {
 
 export const {
     store,
-    triggerEvent,
+    notify,
     useEvent,
     usePropertyWithState
 } = createStore(initialValue)
