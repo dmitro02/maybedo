@@ -8,5 +8,4 @@
 - implement testing
 - switch to preact
 - switch to indexedDB
-- do not start sync until other sync in progress
 - get rid of isProject in Task

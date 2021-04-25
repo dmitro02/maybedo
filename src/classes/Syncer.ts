@@ -52,6 +52,8 @@ class Syncer {
     }
 
     async sync() {
+        if (store.syncStatus === SyncStatuses.InProgress) return
+
         this.isSyncFaild = false
         store.syncStatus = SyncStatuses.InProgress
 
