@@ -45,6 +45,16 @@ export const getProjectsList = (): Task[] => {
     return getTaskList(childrenIds)
 }
 
+export const getTasksTree = () => {
+    const addSubTasks = (parent: Task) => {
+        parent.subTasks = getSubTasksList(parent.id)
+        parent.subTasks.forEach((task) => addSubTasks(task))
+    }
+    const root = getRoot()
+    addSubTasks(root)
+    return root
+}
+
 export const updateTask = (task: Task): void => {
     task.updatedAt = Date.now()
     lsUtils.setObject(task.id, task)

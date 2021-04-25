@@ -6,7 +6,11 @@ import { reload, store } from '../../classes/Store'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
 import Button from '../Buttons/Button'
-import { createTasks, getAllTasks } from '../../utils/taskService'
+import { 
+    createTasks, 
+    getAllTasks, 
+    getTasksTree 
+} from '../../utils/taskService'
 
 enum DataTypes {
     JSON = 'json',
@@ -133,7 +137,8 @@ const exportDataAsJson = () => {
 }
 
 const exportDataAsHtml = () => {
-    const content = convertDataToHtmlString()
+    const taskTree = getTasksTree()
+    const content = convertDataToHtmlString(taskTree)
     const styles = 'body { font-family: sans-serif; font-size: 16px; } ul, li { margin-top: 6px }'
     const data = `<html><head><style>${styles}</style></head><body>${content}</body></html>`
     doExport(data, DataTypes.HTML)
@@ -148,14 +153,16 @@ const getExportFileName = (type: DataTypes) => {
     return `todolist_export_${timestamp}.${type}`
 }
 
-const convertDataToHtmlString = (): string => {
-    // const textDecoration = taskList.isDone 
-    //     ? 'style="text-decoration: line-through"' : ''
-    // const subtasks = 
-    //     `<ul>${getSubTasks(taskList).map((task) => convertDataToHtmlString(task))}</ul>`
-    // const item = `<li ${textDecoration}>${taskList.text + subtasks}</li>` 
-    // return item.replace(/>,</g, '><')
-    return ''
+const convertDataToHtmlString = (task: Task): string => {
+    const textDecoration = task.isDone 
+        ? 'style="text-decoration: line-through"' 
+        : ''
+
+    const subTasksHtml = 
+        `<ul>${task.subTasks?.map((it) => convertDataToHtmlString(it))}</ul>`
+
+    return  `<li ${textDecoration}>${task.text + subTasksHtml}</li>`
+            .replace(/>,</g, '><')
 }
 
 export default ExportImport

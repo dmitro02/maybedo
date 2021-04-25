@@ -15,6 +15,7 @@ export default class Task {
     id: string
     updatedAt: number
     parentId: string | null
+    subTasks?: Task[]
 
     constructor(props: any = {}) {
         const {
