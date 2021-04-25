@@ -1,3 +1,4 @@
+import { ROOT_ID } from './../utils/taskService';
 import * as lsUtils from '../utils/localStorageUtils'
 
 export type Item = {
@@ -68,7 +69,7 @@ export class Metadata {
     }
 
     getChildrenIds(parentId: string): string[] {
-        return Object.keys(this.taskList).reduce((acc: string[], curr) => {
+        return this.getAllTaskIds().reduce((acc: string[], curr) => {
             if (this.taskList[curr].p === parentId) acc.push(curr)
             return acc
         }, [])
@@ -76,6 +77,15 @@ export class Metadata {
 
     hasChildren(parentId: string): boolean {
         return Object.values(this.taskList).some((it) => it.p === parentId)
+    }
+
+    isProject(taskId: string): boolean {
+        const taskMetaRecord = this.taskList[taskId]
+        return taskMetaRecord && taskMetaRecord.p === ROOT_ID
+    }
+
+    getAllTaskIds(): string[] {
+        return Object.keys(this.taskList)
     }
 
     save(): void {

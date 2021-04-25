@@ -6,6 +6,7 @@ import DeleteRecords from './DeleteRecords'
 import Priority from './Priority'
 import './RecordMenu.scss'
 import AddSubtask from './AddSubtask'
+import { ROOT_ID } from '../../utils/taskService'
 
 type Props = {
     task: Task,
@@ -46,7 +47,7 @@ const RecordMenu = (props: Props) => {
         clearTimeout(closeTimeout)
     }
     
-    const isRoot = task.id === '0'
+    const isRoot = task.id === ROOT_ID
 
     return (
         <div className={'record-menu-box ' + classes.join(' ')}>

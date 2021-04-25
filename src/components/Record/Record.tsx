@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'
+import { useState, memo, useEffect } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
 import CheckmarkButton from '../Buttons/CheckmarkButton'
@@ -44,7 +44,8 @@ const Record = (props: Props) => {
     const [ showSubtasks, setShowSubtasks ] = useState(false)
     const [ text, setText ] = useState(item.text)
 
-    if (item.text !== text) setText(item.text)
+    // rerender record after updating from cloud 
+    useEffect(() => setText(item.text), [item.text])
 
     const updateTitle = useEvent('title' + id, setText)
     

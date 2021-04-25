@@ -2,17 +2,16 @@ import { useRef, useState } from 'react'
 import Task from '../../classes/Task'
 import { FailureBanner, SuccessBanner } from '../Banner/Banner'
 import { readFile } from '../../utils/commonUtils'
-import { 
-    convertDataToHtmlString,
-    convertDataToJsonString, 
-    DataTypes, 
-    getExportFileName,
-    validateExportedData
-} from '../../utils/persistDataUtils'
-import { store } from '../../classes/Store'
+import { reload, store } from '../../classes/Store'
 import Portal from '../../HOCs/Portal'
 import ImportModal from './ImportModal'
 import Button from '../Buttons/Button'
+import { createTasks, getAllTasks } from '../../utils/taskService'
+
+enum DataTypes {
+    JSON = 'json',
+    HTML = 'html'
+}
 
 type Props = {
     backToTaskList(): void
@@ -20,8 +19,6 @@ type Props = {
 
 const ExportImport = (props: Props) => {
     const [ showModal, setShowModal ] = useState(false)
-
-    // const { taskList } = taskStore
 
     const { backToTaskList } = props
 
@@ -32,23 +29,23 @@ const ExportImport = (props: Props) => {
     const exportData = () => {
         switch (dataType) {
             case DataTypes.JSON:
-                // exportDataAsJson(taskList)
+                exportDataAsJson()
                 break
             case DataTypes.HTML:
-                // exportDataAsHtml(taskList)
+                exportDataAsHtml()
                 break
             default:
-                // exportDataAsJson(taskList)
+                exportDataAsJson()
         }
     }
 
     const doImport = async () => {
-        let taskList: Task | null = null
+        let tasks: Task[] | null = null
         try {
             const files = fileInputRef.current?.files
             if (files) {
                 const fileContent = await readFile(files[0])
-                taskList = JSON.parse(fileContent)
+                tasks = JSON.parse(fileContent)
                 clearFileInput()
                 setShowModal(false)
             }
@@ -58,12 +55,15 @@ const ExportImport = (props: Props) => {
             clearFileInput()
             return
         }
-        if (!validateExportedData(taskList)) {
-            store.banner = new FailureBanner('Some required fields are missing')
+        if (!tasks) {
+            store.banner = new FailureBanner('No exported tasks found')
             return
         }
         
+        createTasks(tasks)
         backToTaskList()
+        reload()
+        
         store.banner = new SuccessBanner('Data successfully imported', 5)
     }
 
@@ -128,15 +128,34 @@ const doExport = (data: string, type: DataTypes) => {
     link.click();
 }
 
-const exportDataAsJson = (root: Task) => {
-    doExport(convertDataToJsonString(root), DataTypes.JSON)
+const exportDataAsJson = () => {
+    doExport(convertDataToJsonString(), DataTypes.JSON)
 }
 
-const exportDataAsHtml = (root: Task) => {
-    const content = convertDataToHtmlString(root)
+const exportDataAsHtml = () => {
+    const content = convertDataToHtmlString()
     const styles = 'body { font-family: sans-serif; font-size: 16px; } ul, li { margin-top: 6px }'
     const data = `<html><head><style>${styles}</style></head><body>${content}</body></html>`
     doExport(data, DataTypes.HTML)
+}
+
+const convertDataToJsonString = (): string => {
+    return JSON.stringify(getAllTasks(), null, 2)
+}
+
+const getExportFileName = (type: DataTypes) => {
+    const timestamp = new Date().toISOString()
+    return `todolist_export_${timestamp}.${type}`
+}
+
+const convertDataToHtmlString = (): string => {
+    // const textDecoration = taskList.isDone 
+    //     ? 'style="text-decoration: line-through"' : ''
+    // const subtasks = 
+    //     `<ul>${getSubTasks(taskList).map((task) => convertDataToHtmlString(task))}</ul>`
+    // const item = `<li ${textDecoration}>${taskList.text + subtasks}</li>` 
+    // return item.replace(/>,</g, '><')
+    return ''
 }
 
 export default ExportImport

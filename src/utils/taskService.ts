@@ -1,6 +1,7 @@
 import Task from "../classes/Task"
 import * as lsUtils from "./localStorageUtils"
 import metadata from '../classes/Metadata'
+import { store } from '../classes/Store' 
 
 export const ROOT_ID = '0'
 
@@ -33,6 +34,10 @@ export const getTaskList = (taskIds: string[]): Task[] => {
     }, [])
 }
 
+export const getAllTasks = (): Task[] => {
+    return getTaskList(metadata.getAllTaskIds())
+}
+
 export const getSubTasksList = (parentId: string): Task[] => {
     const childrenIds = metadata.getChildrenIds(parentId)
     return getTaskList(childrenIds)
@@ -55,7 +60,15 @@ export const createTask = (task: Task): void => {
     metadata.registerCreated(task)
 }
 
+export const createTasks = (tasks: Task[]): void => {
+    tasks.forEach((task) => createTask(task))
+}
+
 export const deleteTask = (taskId: string): void => {
+    if (metadata.isProject(taskId) && store.selectedProjectId === taskId) {
+        store.selectedProjectId = ''
+        lsUtils.setSelectedProjectId('')
+    }
     lsUtils.removeItem(taskId)
     metadata.registerDeleted(taskId)
     metadata.getChildrenIds(taskId).forEach((id) => deleteTask(id))

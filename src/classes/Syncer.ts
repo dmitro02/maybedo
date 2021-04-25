@@ -12,8 +12,8 @@ export interface ICloudConnector {
     authorize: () => any
     check: () => any
     downloadItems: (names: string[]) => Promise<any[]>
-    uploadItems: (files: string[][]) => void
-    deleteItems: (names: string[]) => void
+    uploadItems: (files: string[][]) => Promise<void>
+    deleteItems: (names: string[]) => Promise<void>
     downloadMetadata: () => Promise<string>
     uploadMetadata: (metadata: string) => void
 }
@@ -156,9 +156,9 @@ class Syncer {
             const fileContent = localStorage.getItem(it) || ''
             return [fileContent, it]
         })
-        this.cloudConnector?.uploadItems(filesToUpload)
+        await this.cloudConnector?.uploadItems(filesToUpload)
 
-        this.cloudConnector?.deleteItems(toDeleteRemote)
+        await this.cloudConnector?.deleteItems(toDeleteRemote)
 
         toDeleteLocal.forEach((it) => taskService.deleteTask(it))
     

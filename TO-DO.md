@@ -2,9 +2,11 @@
 - make sidebar always hideable
 - make sidebar resizable
 - add sync inteval to Dropbox config UI
-- HTML export with collaps/expand projects
+- HTML export with collaps/expand subtasks
 - dark theme
 - "About" with a description and short help
 - implement testing
 - switch to preact
-- export/import
+- switch to indexedDB
+- do not start sync until other sync in progress
+- get rid of isProject in Task
