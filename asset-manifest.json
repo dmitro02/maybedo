@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/maybedo/static/css/main.d2d4f5cf.chunk.css",
-    "main.js": "/maybedo/static/js/main.e7245fa8.chunk.js",
-    "main.js.map": "/maybedo/static/js/main.e7245fa8.chunk.js.map",
+    "main.css": "/maybedo/static/css/main.0492f2ab.chunk.css",
+    "main.js": "/maybedo/static/js/main.55e06d7d.chunk.js",
+    "main.js.map": "/maybedo/static/js/main.55e06d7d.chunk.js.map",
     "runtime-main.js": "/maybedo/static/js/runtime-main.a5983d39.js",
     "runtime-main.js.map": "/maybedo/static/js/runtime-main.a5983d39.js.map",
-    "static/js/2.084617f6.chunk.js": "/maybedo/static/js/2.084617f6.chunk.js",
-    "static/js/2.084617f6.chunk.js.map": "/maybedo/static/js/2.084617f6.chunk.js.map",
+    "static/js/2.40c9e431.chunk.js": "/maybedo/static/js/2.40c9e431.chunk.js",
+    "static/js/2.40c9e431.chunk.js.map": "/maybedo/static/js/2.40c9e431.chunk.js.map",
     "index.html": "/maybedo/index.html",
     "service-worker.js": "/maybedo/service-worker.js",
     "service-worker.js.map": "/maybedo/service-worker.js.map",
-    "static/css/main.d2d4f5cf.chunk.css.map": "/maybedo/static/css/main.d2d4f5cf.chunk.css.map",
-    "static/js/2.084617f6.chunk.js.LICENSE.txt": "/maybedo/static/js/2.084617f6.chunk.js.LICENSE.txt"
+    "static/css/main.0492f2ab.chunk.css.map": "/maybedo/static/css/main.0492f2ab.chunk.css.map",
+    "static/js/2.40c9e431.chunk.js.LICENSE.txt": "/maybedo/static/js/2.40c9e431.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a5983d39.js",
-    "static/js/2.084617f6.chunk.js",
-    "static/css/main.d2d4f5cf.chunk.css",
-    "static/js/main.e7245fa8.chunk.js"
+    "static/js/2.40c9e431.chunk.js",
+    "static/css/main.0492f2ab.chunk.css",
+    "static/js/main.55e06d7d.chunk.js"
   ]
 }
