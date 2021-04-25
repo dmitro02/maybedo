@@ -6,7 +6,6 @@ import DeleteRecords from './DeleteRecords'
 import Priority from './Priority'
 import './RecordMenu.scss'
 import AddSubtask from './AddSubtask'
-import { ROOT_ID } from '../../utils/taskService'
 
 type Props = {
     task: Task,
@@ -14,7 +13,8 @@ type Props = {
     showSubtasks: () => void,
     update: (task: Task) => void,
     remove: (task: Task) => void,
-    isProject: boolean
+    isProject: boolean,
+    isRoot: boolean
 }
 
 const RecordMenu = (props: Props) => {
@@ -24,7 +24,8 @@ const RecordMenu = (props: Props) => {
         showSubtasks,
         update,
         remove,
-        isProject
+        isProject,
+        isRoot
     } = props
 
     const [ showMenu, setShowMenu ] = useState(false)
@@ -47,8 +48,6 @@ const RecordMenu = (props: Props) => {
         clearTimeout(closeTimeout)
     }
     
-    const isRoot = task.id === ROOT_ID
-
     return (
         <div className={'record-menu-box ' + classes.join(' ')}>
             <MdMoreVert className="common-btn" onClick={openMenu} />

@@ -5,7 +5,7 @@ import CheckmarkButton from '../Buttons/CheckmarkButton'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { updateTask, ROOT_ID } from '../../utils/taskService'
+import { updateTask } from '../../utils/taskService'
 import RecordList from '../RecordList/RecordList'
 import { store, useEvent } from '../../classes/Store'
 import metadata from '../../classes/Metadata'
@@ -32,14 +32,13 @@ const Record = (props: Props) => {
         item: {
             id, 
             isDone,
-            isProject,
             priority
         }
     } = props
 
     const hasSubtasks = metadata.hasChildren(id)
-
-    const isRootProject = id === ROOT_ID
+    const isProject = metadata.isProject(id)
+    const isRoot = metadata.isRoot(id)
 
     const [ showSubtasks, setShowSubtasks ] = useState(false)
     const [ text, setText ] = useState(item.text)
@@ -50,7 +49,7 @@ const Record = (props: Props) => {
     const updateTitle = useEvent('title' + id, setText)
     
     const handleClickOnRecord = () => { 
-        if (isProject && !isRootProject) store.selectedProjectId = id
+        if (isProject && !isRoot) store.selectedProjectId = id
     }
 
     const updateText = (text: string) => {
@@ -124,12 +123,13 @@ const Record = (props: Props) => {
                 {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
                     {getSubtasksBtn()}
-                    {(!isTitle || isRootProject) &&
+                    {(!isTitle || isRoot) &&
                         <RecordMenu 
                             task={item} 
                             showSubtasks={openSubtasks}
                             classes={[ hiddenBtnClassName ]}
-                            isProject={!!isProject}
+                            isProject={isProject}
+                            isRoot={isRoot}
                             update={update}
                             remove={remove}
                         /> 

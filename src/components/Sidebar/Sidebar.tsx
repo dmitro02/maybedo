@@ -4,7 +4,7 @@ import Fog from '../Fog/Fog'
 import './Sidebar.scss'
 import { BsBoxArrowLeft } from 'react-icons/bs'
 import RecordList from '../RecordList/RecordList'
-import { ROOT_ID } from '../../utils/taskService'
+import { ROOT_ID } from '../../classes/Metadata'
 
 type Props = {
     isOpened: boolean,

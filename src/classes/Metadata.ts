@@ -1,5 +1,6 @@
-import { ROOT_ID } from './../utils/taskService';
 import * as lsUtils from '../utils/localStorageUtils'
+
+export const ROOT_ID = '0'
 
 export type Item = {
     id: string
@@ -82,6 +83,10 @@ export class Metadata {
     isProject(taskId: string): boolean {
         const taskMetaRecord = this.taskList[taskId]
         return taskMetaRecord && taskMetaRecord.p === ROOT_ID
+    }
+
+    isRoot(taskId: string): boolean {
+        return taskId === ROOT_ID
     }
 
     getAllTaskIds(): string[] {

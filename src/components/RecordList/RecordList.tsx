@@ -14,10 +14,10 @@ import {
     deleteTasks, 
     getSubTasksList, 
     getTask, 
-    ROOT_ID, 
     updateTask 
 } from '../../utils/taskService'
 import { store, useEvent, useReload } from '../../classes/Store'
+import metadata from '../../classes/Metadata'
 
 type Props = { 
     classNames?: string[],
@@ -52,10 +52,9 @@ const RecordList = (props: Props) => {
 
     const focusedItemId = useRef<string>()
 
-    const isRootProject = rootId === ROOT_ID
+    const isRootList = metadata.isRoot(rootId)
 
     const addSubTask = useCallback((task: Task) => {
-        task.isProject = isRootProject
         task.parentId = root.id
 
         createTask(task)
@@ -65,8 +64,8 @@ const RecordList = (props: Props) => {
         const newSubTasks = subTasks.concat(task)
         setSubTasks(newSubTasks)
 
-        if (task.isProject) store.selectedProjectId = task.id
-    }, [isRootProject, root.id, subTasks])
+        if (isRootList) store.selectedProjectId = task.id
+    }, [isRootList, root.id, subTasks])
 
     const updateSubTask = useCallback((task: Task) => {
         const newSubTasks = subTasks.map((it) => {
@@ -113,7 +112,7 @@ const RecordList = (props: Props) => {
     const activeItemListRef = useRef<HTMLDivElement>(null)
 
     const classes = [
-        isRootProject ? 'project-list' : 'task-list',
+        isRootList ? 'project-list' : 'task-list',
         ...classNames
     ].join(' ')
 

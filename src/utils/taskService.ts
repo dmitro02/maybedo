@@ -1,16 +1,13 @@
 import Task from "../classes/Task"
 import * as lsUtils from "./localStorageUtils"
-import metadata from '../classes/Metadata'
+import metadata, { ROOT_ID } from '../classes/Metadata'
 import { store } from '../classes/Store' 
-
-export const ROOT_ID = '0'
 
 export const initRoot = () => {
     if (hasRoot()) return
     const root = { 
         id: '0', 
-        text: "Projects", 
-        isProject: true 
+        text: "Projects" 
     }
     createTask(new Task(root))
 }

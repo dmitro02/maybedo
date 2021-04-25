@@ -12,7 +12,6 @@ export default class Task {
     text: string
     isDone: boolean
     priority: Priorities
-    isProject?: boolean
     id: string
     updatedAt: number
     parentId: string | null
@@ -23,7 +22,6 @@ export default class Task {
             text = '', 
             isDone = false, 
             priority = Priorities.Trivial, 
-            isProject = false,
             updatedAt = Date.now(),
             parentId = null
         } = props
@@ -32,7 +30,6 @@ export default class Task {
         this.text = text
         this.isDone = isDone
         this.priority = priority
-        this.isProject = isProject
         this.updatedAt = updatedAt
         this.parentId = parentId
     }
