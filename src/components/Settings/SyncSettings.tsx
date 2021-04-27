@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import * as lsUtils from '../../utils/localStorageUtils'
+import * as ls from '../../services/localStorageService'
 import syncer, { SyncTargets } from '../../classes/Syncer'
 import { SyncStatuses } from '../Statuses/SyncStatus'
 import DropboxSettings from './DropboxSettings'
 import { usePropertyWithState } from '../../classes/Store'
 
 function SyncSettings() {
-    const [ syncTarget, setSyncTarget ] = useState(lsUtils.getSyncTarget())
+    const [ syncTarget, setSyncTarget ] = useState(ls.getSyncTarget())
 
     const [ syncStatus, setSynStatus ] = usePropertyWithState('syncStatus')
 
@@ -29,7 +29,7 @@ function SyncSettings() {
         }
             
         setSyncTarget(target)
-        lsUtils.setSyncTarget(target)
+        ls.setSyncTarget(target)
         syncer.init()
     }  
 

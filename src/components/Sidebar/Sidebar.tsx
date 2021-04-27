@@ -1,10 +1,10 @@
 import { useRef } from 'react'
 import { useOutsideClickDetector } from '../../utils/customHooks'
 import Fog from '../Fog/Fog'
-import './Sidebar.scss'
 import { BsBoxArrowLeft } from 'react-icons/bs'
 import RecordList from '../RecordList/RecordList'
 import { ROOT_ID } from '../../classes/Metadata'
+import { APP_VERSION } from '../../version'
 
 type Props = {
     isOpened: boolean,
@@ -42,6 +42,7 @@ const Sidebar = (props: Props) => {
             className={classes} 
             onClick={handleClick}
         >
+            <div className="app-version">v{APP_VERSION}</div>
             <Fog isDisplayed={isSettingsOpened} />
                 <div className="top-panel">
                     <div className="row-btns">

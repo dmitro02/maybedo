@@ -9,7 +9,7 @@ import {
     useReload, 
     initSelectProjectId 
 } from '../../classes/Store'
-import * as lsUtils from "../../utils/localStorageUtils"
+import * as ls from "../../services/localStorageService"
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
@@ -22,9 +22,9 @@ const MainContainer = () => {
 
     useEffect(() => { syncer.init() }, [])
 
-    // useEffect(() => lsUtils.setSelectedProjectId(selectedProjectId))
+    // useEffect(() => ls.setSelectedProjectId(selectedProjectId))
 
-    lsUtils.setSelectedProjectId(selectedProjectId)
+    ls.setSelectedProjectId(selectedProjectId)
 
     const toggleSettings = () => setIsSettingsOpened(!isSettingsOpened)
 

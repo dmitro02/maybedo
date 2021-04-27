@@ -1,4 +1,4 @@
-import { setDropboxToken, getDropboxToken } from './../utils/localStorageUtils';
+import { setDropboxToken, getDropboxToken } from '../services/localStorageService';
 import { Dropbox } from 'dropbox'
 import fetch from 'isomorphic-fetch'
 import { generateId } from '../utils/commonUtils'

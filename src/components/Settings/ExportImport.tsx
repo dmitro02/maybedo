@@ -10,7 +10,7 @@ import {
     createTasks, 
     getAllTasks, 
     getTasksTree 
-} from '../../utils/taskService'
+} from '../../services/taskService'
 
 enum DataTypes {
     JSON = 'json',

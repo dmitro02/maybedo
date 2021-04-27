@@ -1,8 +1,8 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import DropboxConnector from './DropboxConnector';
 import { reload, store } from './Store'
-import * as lsUtils from "../utils/localStorageUtils"
-import * as taskService from '../utils/taskService'
+import * as ls from "../services/localStorageService"
+import * as taskService from '../services/taskService'
 import metaLocal, { Metadata } from './Metadata'
 
 const SYNC_INTERVAL_IN_MINUTES = 10
@@ -31,9 +31,9 @@ class Syncer {
     async init(cloudConnector?: ICloudConnector) {
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
-            lsUtils.setSyncTarget(cloudConnector.syncTarget)
+            ls.setSyncTarget(cloudConnector.syncTarget)
         } else {
-            const syncTarget = lsUtils.getSyncTarget()
+            const syncTarget = ls.getSyncTarget()
             if (syncTarget === SyncTargets.Disabled) {
                 this.cloudConnector = null
             } else {

@@ -15,7 +15,7 @@ import {
     getSubTasksList, 
     getTask, 
     updateTask 
-} from '../../utils/taskService'
+} from '../../services/taskService'
 import { store, useEvent, useReload, Events } from '../../classes/Store'
 import metadata from '../../classes/Metadata'
 import Title from './Title'

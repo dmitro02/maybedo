@@ -1,5 +1,5 @@
 import Task from "../classes/Task"
-import * as lsUtils from "./localStorageUtils"
+import * as ls from "./localStorageService"
 import metadata, { ROOT_ID } from '../classes/Metadata'
 import { store } from '../classes/Store' 
 
@@ -13,7 +13,7 @@ export const initRoot = () => {
 }
 
 export const hasRoot = (): boolean => {
-    return lsUtils.hasItem(ROOT_ID)
+    return ls.hasItem(ROOT_ID)
 }
 
 export const getRoot = () => {
@@ -21,7 +21,7 @@ export const getRoot = () => {
 }
 
 export const getTask = (taskId: string): Task => {
-    return lsUtils.getObject(taskId)
+    return ls.getObject(taskId)
 }
 
 export const getTaskList = (taskIds: string[]): Task[] => {
@@ -57,13 +57,13 @@ export const getTasksTree = () => {
 
 export const updateTask = (task: Task): void => {
     task.updatedAt = Date.now()
-    lsUtils.setObject(task.id, task)
+    ls.setObject(task.id, task)
     metadata.registerUpdated(task)
 }
 
 export const createTask = (task: Task): void => {
     if (!task.updatedAt) task.updatedAt = Date.now()
-    lsUtils.setObject(task.id, task)
+    ls.setObject(task.id, task)
     metadata.registerCreated(task)
 }
 
@@ -74,9 +74,9 @@ export const createTasks = (tasks: Task[]): void => {
 export const deleteTask = (taskId: string): void => {
     if (metadata.isProject(taskId) && store.selectedProjectId === taskId) {
         store.selectedProjectId = ''
-        lsUtils.setSelectedProjectId('')
+        ls.setSelectedProjectId('')
     }
-    lsUtils.removeItem(taskId)
+    ls.removeItem(taskId)
     metadata.registerDeleted(taskId)
     metadata.getChildrenIds(taskId).forEach((id) => deleteTask(id))
 }

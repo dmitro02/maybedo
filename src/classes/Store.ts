@@ -1,6 +1,6 @@
 import { createStore } from './StoreFactory';
-import * as lsUtils from "../utils/localStorageUtils"
-import { getProjectsList, initRoot } from '../utils/taskService'
+import * as ls from "../services/localStorageService"
+import { getProjectsList, initRoot } from '../services/taskService'
 import metadata from './Metadata'
 import { SyncStatuses } from '../components/Statuses/SyncStatus'
 import { IBanner } from '../components/Banner/Banner'
@@ -16,7 +16,7 @@ type Store = {
 }
 
 export const initSelectProjectId = () => (
-    lsUtils.getSelectedProjectId()
+    ls.getSelectedProjectId()
         || getProjectsList()[0]?.id 
         || ''
 )

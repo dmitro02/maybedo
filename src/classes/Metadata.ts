@@ -1,4 +1,4 @@
-import * as lsUtils from '../utils/localStorageUtils'
+import * as ls from '../services/localStorageService'
 
 export const ROOT_ID = '0'
 
@@ -99,11 +99,11 @@ export class Metadata {
             created: this.created,
             deleted: this.deleted
         }
-        lsUtils.setMetadada(metadata)
+        ls.setMetadada(metadata)
     }
 
     restore(): void {
-        const metadata = lsUtils.getMetadada()
+        const metadata = ls.getMetadada()
         this.taskList = metadata.taskList
         this.created = metadata.created
         this.deleted = metadata.deleted
@@ -117,7 +117,7 @@ export class Metadata {
     }
 
     init(): void {
-        lsUtils.hasMetadata()
+        ls.hasMetadata()
             ? this.restore() 
             : this.save()
     }
