@@ -18,6 +18,7 @@
         width: 100%;
         overflow-wrap: anywhere;
         margin: 0 8px;
+        overflow: auto;
     }
 
     &.item-done .item-content {

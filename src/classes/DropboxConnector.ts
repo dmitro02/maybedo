@@ -52,8 +52,18 @@ export default class DropboxConnector implements ICloudConnector {
 
     async deleteItems(names: string[]): Promise<void> {
         for (const name of names) {
-            const path = `${DATA_FOLDER_PATH}/${name}.json`            
-            await this.dropboxClient.deleteFile(path)
+            const path = `${DATA_FOLDER_PATH}/${name}.json`    
+            try {
+                await this.dropboxClient.deleteFile(path)
+            } catch (e) {
+                const fileNotFound = JSON
+                    .parse(e.error)
+                    .error_summary
+                    .includes('path_lookup/not_found')
+                if (!fileNotFound) {
+                    throw e
+                }
+            }                   
         }
     }
 
