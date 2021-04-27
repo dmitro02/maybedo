@@ -17,38 +17,27 @@ const Editable = (props: Props) => {
 
     const editableRef = useRef<HTMLDivElement>(null)
 
-    const caretPosRef = useRef<number | undefined>(undefined)
+    useEffect(() => {
+        if (editableRef.current) editableRef.current.innerHTML = text
+    })
 
     useEffect(() => {
-        if (getFocus) {            
+        if (getFocus) {        
             setContentEditable(true)
-            setCaretPosition(editableRef.current, text.length)
             editableRef.current?.focus()
+            setCaretPosition(editableRef.current, text.length)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        if (document.activeElement === editableRef.current) {
-            setCaretPosition(editableRef.current, caretPosRef.current)
-        }
-    })
-        
     const setContentEditable = (flag: boolean) => {
         const el = editableRef.current
         el?.setAttribute('contenteditable', '' + flag)
     }
 
-    const handleInput = debounceInput((text: string) => {    
-        // +1 fixes position for multiline
-        caretPosRef.current = getCaretPosition(editableRef.current) + 1  
-        // do not rerender on enter
-        if (!text.endsWith('\n')) update(text)
-    })
+    const handleInput = debounceInput(update)
 
-    const handleBlur = () => {
-        !isEditable && setContentEditable(false)
-    }
+    const handleBlur = () => !isEditable && setContentEditable(false)
 
     return (
         <div 
@@ -58,34 +47,17 @@ const Editable = (props: Props) => {
             suppressContentEditableWarning={true}
             onInput={handleInput}
             onBlur={handleBlur}
-        >
-            {text}
-        </div>
+        />
     )
 }
 
 const debounceInput = (callback: (text: string) => void) => {
     let timeout: any
     return (e: any) => {
-        const text = e.target.innerText
+        const text = e.target.innerHTML
         clearTimeout(timeout)
         timeout = setTimeout(() => callback(text), 700)
     }
-}
-
-const getCaretPosition = (el: HTMLElement | null): number => {
-    if (!el || !el.isContentEditable) return 0
-    let range
-    try {
-        range = document.getSelection()?.getRangeAt(0)
-    } catch(err) {
-        // do nothing
-    }
-    if (!range) return 0
-    let rangeClone = range.cloneRange()
-    rangeClone.selectNodeContents(el)
-    rangeClone.setEnd(range.endContainer, range.endOffset)
-    return rangeClone.toString().length || 0
 }
 
 const setCaretPosition = (el: HTMLElement | null, pos?: number): void => {

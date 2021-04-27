@@ -15,7 +15,7 @@ export default class Task {
     id: string
     updatedAt: number
     parentId: string | null
-    subTasks?: Task[]
+    subTasks?: Task[] // for getting tasksTree for HTML export
 
     constructor(props: any = {}) {
         const {

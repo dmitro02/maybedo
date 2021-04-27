@@ -46,20 +46,17 @@ const Record = (props: Props) => {
     // rerender record after updating from cloud 
     useEffect(() => setText(item.text), [item.text])
 
-    const updateTitle = useEvent('title' + id, setText)
+    const updateTitle = (text: string) => setText(text)
+    const notifyUpdateTitle = useEvent('title' + id, updateTitle)
     
     const handleClickOnRecord = () => { 
         if (isProject && !isRoot) store.selectedProjectId = id
     }
 
     const updateText = (text: string) => {
-        text = isTitle 
-            ? text.replace(/\n/g, ' ')
-            : text
-        setText(text)
         item.text = text
         updateTask(item)
-        isProject && updateTitle(text)
+        isProject && notifyUpdateTitle(text)
     }
 
     const handleClickOnCheckbox = (e: any) => {

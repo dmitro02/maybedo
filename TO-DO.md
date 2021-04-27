@@ -1,9 +1,0 @@
-- implement full keyboard support
-- make sidebar always hideable
-- make sidebar resizable
-- add sync inteval to Dropbox config UI
-- dark theme
-- "About" with a description and short help
-- implement testing
-- switch to preact
-- switch to indexedDB

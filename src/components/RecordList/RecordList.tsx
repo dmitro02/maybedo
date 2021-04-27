@@ -46,11 +46,13 @@ const RecordList = (props: Props) => {
         setSubTasks(subTasks)
     }
 
+    const focusedItemId = useRef<string>() 
+
     useReload(setData)
 
     useEffect(setData, [rootId])
 
-    const focusedItemId = useRef<string>()
+    useEffect(() => { focusedItemId.current = '' }, [rootId])
 
     const isRootList = metadata.isRoot(rootId)
 
