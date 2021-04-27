@@ -16,7 +16,7 @@ import {
     getTask, 
     updateTask 
 } from '../../utils/taskService'
-import { store, useEvent, useReload } from '../../classes/Store'
+import { store, useEvent, useReload, Events } from '../../classes/Store'
 import metadata from '../../classes/Metadata'
 import Title from './Title'
 
@@ -96,7 +96,7 @@ const RecordList = (props: Props) => {
         if (isSelectedPojectDeleted) store.selectedProjectId = ''
     }, [subTasks])
 
-    useEvent('deleteCompleted' + rootId, deleteCompletedSubTask)
+    useEvent(Events.DeleteCompleted + rootId, deleteCompletedSubTask)
 
     // sort subtask by priority
     const setAndComparePriotity = (a: Task, b: Task) => {

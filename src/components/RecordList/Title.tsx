@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useEvent, notify } from "../../classes/Store"
+import { useEvent, notify, Events } from "../../classes/Store"
 import Task from "../../classes/Task"
 import Editable from "../Record/Editable"
 
@@ -20,10 +20,10 @@ const Title = (props: Props) => {
         setTitle(text)
     }, [text])
 
-    useEvent('projectToTitle' + id, setTitle)
+    useEvent(Events.SetTitleByProject + id, setTitle)
 
     const updateTitle = (title: string) => {
-        notify('titleToProject' + id, title)
+        notify(Events.SetProjectByTitle + id, title)
     }
 
     return (

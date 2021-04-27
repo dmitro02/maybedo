@@ -36,3 +36,9 @@ export const {
     useReload,
     reload
 } = createStore(initialValue)
+
+export enum Events {
+    SetTitleByProject,
+    SetProjectByTitle,
+    DeleteCompleted,
+} 

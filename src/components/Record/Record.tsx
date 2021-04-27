@@ -7,7 +7,7 @@ import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 import { updateTask } from '../../utils/taskService'
 import RecordList from '../RecordList/RecordList'
-import { store, useEvent, notify } from '../../classes/Store'
+import { store, useEvent, notify, Events } from '../../classes/Store'
 import metadata from '../../classes/Metadata'
 
 type Props = { 
@@ -54,9 +54,9 @@ const Record = (props: Props) => {
         isProject && updateTitle(text)
     }
 
-    useEvent('titleToProject' + id, updateTextFromTitle)
+    useEvent(Events.SetProjectByTitle + id, updateTextFromTitle)
 
-    const updateTitle = (text: string) => notify('projectToTitle' + id, text)
+    const updateTitle = (text: string) => notify(Events.SetTitleByProject + id, text)
     
     const handleClickOnRecord = () => { 
         if (isProject && !isRoot) store.selectedProjectId = id

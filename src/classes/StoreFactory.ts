@@ -5,25 +5,25 @@ export const createStore = <T extends object>(initialValue: T) => {
     type Property = keyof typeof initialValue
     type StoreData = typeof initialValue
 
-    const subsciptions: Map<Property | string, Callback[]> = new Map()
+    const subsciptions: Map<string, Callback[]> = new Map()
     
-    const subscribe = (property: string, callback: Callback) => {
-        const callbacks = subsciptions.get(property)
+    const subscribe = (eventOrProperty: string, callback: Callback) => {
+        const callbacks = subsciptions.get(eventOrProperty)
         callbacks
             ? callbacks.push(callback)
-            : subsciptions.set(property, [callback])
+            : subsciptions.set(eventOrProperty, [callback])
     }
 
-    const unsubscribe = (property: string, callback: Callback) => {
-        const callbacks = subsciptions.get(property)
+    const unsubscribe = (eventOrProperty: string, callback: Callback) => {
+        const callbacks = subsciptions.get(eventOrProperty)
         if (callbacks) {
             const newCallbacks = callbacks.filter((it) => it !== callback)
-            subsciptions.set(property as string, newCallbacks)
+            subsciptions.set(eventOrProperty as string, newCallbacks)
         }
     }
 
-    const notify = (property: Property | string, value?: any) => {
-        subsciptions.get(property)?.forEach((callback) => callback(value))
+    const notify = (eventOrProperty: string, value?: any) => {
+        subsciptions.get(eventOrProperty)?.forEach((callback) => callback(value))
     }
 
     const toProxy = (obj: StoreData):  StoreData => {
@@ -42,10 +42,10 @@ export const createStore = <T extends object>(initialValue: T) => {
 
     const store: StoreData = toProxy(initialValue)
 
-    const useSubscribe = (eventOrProperty: Property | string, callback: Callback) => {  
+    const useSubscribe = (eventOrProperty: string, callback: Callback) => {  
         useEffect(() => {
-            subscribe(eventOrProperty as string, callback)
-            return () => unsubscribe(eventOrProperty as string, callback)
+            subscribe(eventOrProperty, callback)
+            return () => unsubscribe(eventOrProperty, callback)
         }, [callback, eventOrProperty])
     }
 
@@ -54,20 +54,8 @@ export const createStore = <T extends object>(initialValue: T) => {
         return (value: any) => notify(eventName, value)
     }
 
-    const useEventWithState = (eventName: string, callback?: Callback): [any, Callback] => {  
-        const [ state, setState ] = useState()
-    
-        const onNotify = (value: any) => {
-            callback && callback(value)
-            setState(value)
-        }
-        useEvent(eventName, onNotify)
-    
-        return [ state, (value: any) => notify(eventName, value) ]
-    }
-
     const useProperty = (property: Property, callback: Callback) => { 
-        useSubscribe(property, callback)
+        useSubscribe(property as string, callback)
     
         return (value: any) => store[property] = value
     }
@@ -102,7 +90,6 @@ export const createStore = <T extends object>(initialValue: T) => {
         notify,
         useSubscribe,
         useEvent,
-        useEventWithState,
         useProperty,
         usePropertyWithState,
         useReload,
