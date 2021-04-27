@@ -45,3 +45,25 @@
     padding-top: 10px;
     border-top: 1px solid $grey3;
 }
+
+.title  {
+    display: flex;
+    font-weight: bold;
+    font-size: $font-size-7;
+    color: $grey6;
+    border-bottom: 1px solid $grey3;
+    align-items: center;
+    height: 56px;
+    margin-bottom: 6px;
+    justify-content: center;
+    outline: none;
+    white-space: nowrap;
+
+    &:hover, &:focus {
+        text-decoration: underline;
+    }
+
+    &.read-only:hover {
+        text-decoration: none;
+    }
+}

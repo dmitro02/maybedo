@@ -25,7 +25,7 @@ const AddRecord = ({ add }: Props) => {
                 suppressContentEditableWarning={true}
                 onInput={createRecord}
                 onKeyPress={preventEnterOnEmpty}
-            ></div>
+            />
         </div>
     )
 }

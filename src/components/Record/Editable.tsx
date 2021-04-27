@@ -4,7 +4,9 @@ type Props = {
     text: string, 
     isEditable: boolean,
     update: (text: string) => void,
-    getFocus?: boolean
+    getFocus?: boolean, 
+    isSingleLine?: boolean,
+    classes?: string[]
 }
 
 const Editable = (props: Props) => {
@@ -12,7 +14,9 @@ const Editable = (props: Props) => {
         text,
         isEditable,
         update,
-        getFocus = false
+        getFocus = false,
+        isSingleLine = false,
+        classes = []
     } = props
 
     const editableRef = useRef<HTMLDivElement>(null)
@@ -39,14 +43,24 @@ const Editable = (props: Props) => {
 
     const handleBlur = () => !isEditable && setContentEditable(false)
 
+    const preserveSingleLine = (e: any) => {
+        isSingleLine && e.key === 'Enter' && e.preventDefault()
+    }
+
+    const classNames = [ 
+        ...classes,
+        isEditable ? '' : 'read-only'
+    ].join(' ')
+
     return (
         <div 
             ref={editableRef}
-            className="item-content"
+            className={classNames}
             contentEditable={isEditable}
             suppressContentEditableWarning={true}
             onInput={handleInput}
             onBlur={handleBlur}
+            onKeyPress={preserveSingleLine}
         />
     )
 }

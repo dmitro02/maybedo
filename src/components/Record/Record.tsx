@@ -7,13 +7,12 @@ import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
 import { updateTask } from '../../utils/taskService'
 import RecordList from '../RecordList/RecordList'
-import { store, useEvent } from '../../classes/Store'
+import { store, useEvent, notify } from '../../classes/Store'
 import metadata from '../../classes/Metadata'
 
 type Props = { 
     item: Task, 
     isEditable?: boolean,
-    isTitle?: boolean,
     isSelected?: boolean,
     update?: (task: Task) => void,
     remove?: (task: Task) => void,
@@ -23,7 +22,6 @@ type Props = {
 const Record = (props: Props) => {
     const {
         isEditable = true,
-        isTitle = false,
         isSelected = false,
         isFocused = false,
         item,
@@ -46,17 +44,22 @@ const Record = (props: Props) => {
     // rerender record after updating from cloud 
     useEffect(() => setText(item.text), [item.text])
 
-    const updateTitle = (text: string) => setText(text)
-    const notifyUpdateTitle = useEvent('title' + id, updateTitle)
+    const  updateTextFromTitle = (text: string) => {
+        updateTask({ ...item, text})
+        setText(text)
+    }
+
+    const updateTextFromEditable = (text: string) => {
+        updateTask({ ...item, text})
+        isProject && updateTitle(text)
+    }
+
+    useEvent('titleToProject' + id, updateTextFromTitle)
+
+    const updateTitle = (text: string) => notify('projectToTitle' + id, text)
     
     const handleClickOnRecord = () => { 
         if (isProject && !isRoot) store.selectedProjectId = id
-    }
-
-    const updateText = (text: string) => {
-        item.text = text
-        updateTask(item)
-        isProject && notifyUpdateTitle(text)
     }
 
     const handleClickOnCheckbox = (e: any) => {
@@ -71,7 +74,6 @@ const Record = (props: Props) => {
         'record', 
         isSelected ? 'record-selected' : '',
         !isEditable ? 'read-only' : '',
-        isTitle ? 'title' : '',
         isProject? 'project' : '',
         isDone ? 'item-done' : ''
     ].join(' ')
@@ -112,26 +114,24 @@ const Record = (props: Props) => {
                 </div>
                 <Editable 
                     text={text} 
-                    update={updateText} 
+                    update={updateTextFromEditable} 
                     isEditable={isEditable}
                     getFocus={isFocused}
+                    classes={[ 'item-content' ]}
                 />
                 {/* DEBUG: display task ID for each record  */}
                 {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
                     {getSubtasksBtn()}
-                    {(!isTitle || isRoot) &&
-                        <RecordMenu 
-                            task={item} 
-                            showSubtasks={openSubtasks}
-                            classes={[ hiddenBtnClassName ]}
-                            isProject={isProject}
-                            isRoot={isRoot}
-                            update={update}
-                            remove={remove}
-                        /> 
-                    }
-
+                    <RecordMenu 
+                        task={item} 
+                        showSubtasks={openSubtasks}
+                        classes={[ hiddenBtnClassName ]}
+                        isProject={isProject}
+                        isRoot={isRoot}
+                        update={update}
+                        remove={remove}
+                    /> 
                 </div>
             </div>
             {showSubtasks && 

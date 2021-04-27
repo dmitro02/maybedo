@@ -18,6 +18,7 @@ import {
 } from '../../utils/taskService'
 import { store, useEvent, useReload } from '../../classes/Store'
 import metadata from '../../classes/Metadata'
+import Title from './Title'
 
 type Props = { 
     classNames?: string[],
@@ -121,14 +122,10 @@ const RecordList = (props: Props) => {
     return (
         <div className={classes}>
             {hasTitle && 
-                <>
-                    <Record 
-                        key={root.id}
-                        item={root} 
-                        isTitle
-                        isEditable={isEditable}
-                    />
-                </>
+                <Title
+                    item={root}
+                    isEditable={isEditable}
+                />
             }
             <div className="active-tasks" ref={activeItemListRef}>
                 {activeTasks.map(
