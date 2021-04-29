@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/maybedo/static/css/main.1b7bd5df.chunk.css",
-    "main.js": "/maybedo/static/js/main.ad284cb6.chunk.js",
-    "main.js.map": "/maybedo/static/js/main.ad284cb6.chunk.js.map",
+    "main.js": "/maybedo/static/js/main.71b92540.chunk.js",
+    "main.js.map": "/maybedo/static/js/main.71b92540.chunk.js.map",
     "runtime-main.js": "/maybedo/static/js/runtime-main.a5983d39.js",
     "runtime-main.js.map": "/maybedo/static/js/runtime-main.a5983d39.js.map",
     "static/js/2.b9e9ce98.chunk.js": "/maybedo/static/js/2.b9e9ce98.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.a5983d39.js",
     "static/js/2.b9e9ce98.chunk.js",
     "static/css/main.1b7bd5df.chunk.css",
-    "static/js/main.ad284cb6.chunk.js"
+    "static/js/main.71b92540.chunk.js"
   ]
 }
