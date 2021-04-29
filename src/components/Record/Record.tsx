@@ -28,7 +28,8 @@ const Record = (props: Props) => {
         update = () => {},
         remove = () => {},
         item: {
-            id, 
+            id,
+            text,
             isDone,
             priority
         }
@@ -39,21 +40,21 @@ const Record = (props: Props) => {
     const isRoot = metadata.isRoot(id)
 
     const [ showSubtasks, setShowSubtasks ] = useState(false)
-    const [ text, setText ] = useState(item.text)
+    const [ recordText, setRecordText ] = useState(text)
 
     /* 
     Record state is not updated while editing but content
     saved to the buffer and goes to state only after blur
     to avoid problems with handling caret position on rerender.  
     */
-    const recordTextBuffer = useRef(item.text)
+    const recordTextBuffer = useRef(text)
 
     // rerender record after updating from cloud 
-    useEffect(() => setText(item.text), [item.text])
+    useEffect(() => setRecordText(text), [text])
 
     const updateTextFromTitle = (text: string) => {
         updateTask({ ...item, text})
-        setText(text)
+        setRecordText(text)
     }
 
     const updateTextFromEditable = (text: string) => {
@@ -62,7 +63,7 @@ const Record = (props: Props) => {
         isProject && updateTitle(text)
     }
 
-    const updateTextFromBuffer = () => setText(recordTextBuffer.current)
+    const updateTextFromBuffer = () => setRecordText(recordTextBuffer.current)
 
     useEvent(Events.SetProjectByTitle + id, updateTextFromTitle)
 
@@ -124,7 +125,7 @@ const Record = (props: Props) => {
                     />
                 </div>
                 <Editable 
-                    text={text} 
+                    text={recordText} 
                     saveContent={updateTextFromEditable} 
                     isEditable={isEditable}
                     getFocus={isFocused}
