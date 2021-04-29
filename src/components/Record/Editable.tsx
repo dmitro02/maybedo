@@ -3,7 +3,7 @@ import { useRef, useEffect } from 'react'
 type Props = { 
     text: string, 
     isEditable: boolean,
-    update: (text: string) => void,
+    saveContent: (text: string) => void,
     getFocus?: boolean, 
     isSingleLine?: boolean,
     classes?: string[]
@@ -13,7 +13,7 @@ const Editable = (props: Props) => {
     const {
         text,
         isEditable,
-        update,
+        saveContent,
         getFocus = false,
         isSingleLine = false,
         classes = []
@@ -39,9 +39,12 @@ const Editable = (props: Props) => {
         el?.setAttribute('contenteditable', '' + flag)
     }
 
-    const handleInput = debounceInput(update)
+    const handleInput = debounceInput(saveContent)
 
-    const handleBlur = () => !isEditable && setContentEditable(false)
+    const handleBlur = (e: any) => {
+        saveContent(e.target.innerHTML)
+        !isEditable && setContentEditable(false)
+    }
 
     const preserveSingleLine = (e: any) => {
         isSingleLine && e.key === 'Enter' && e.preventDefault()

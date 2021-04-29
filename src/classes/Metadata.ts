@@ -51,6 +51,7 @@ export class Metadata {
     }
 
     registerCreated(item: Item): void {
+        if (this.isRoot(item.id)) return
         this.addToTaskList(item)
         this.addToCreated(item.id)
         this.save()

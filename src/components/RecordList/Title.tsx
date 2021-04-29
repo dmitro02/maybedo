@@ -29,7 +29,7 @@ const Title = (props: Props) => {
     return (
         <Editable 
             text={title} 
-            update={updateTitle} 
+            saveContent={updateTitle} 
             isEditable={isEditable}
             isSingleLine={true}
             classes={[ 'title' ]}

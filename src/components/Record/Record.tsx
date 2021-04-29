@@ -1,4 +1,4 @@
-import { useState, memo, useEffect } from 'react'
+import { useState, memo, useEffect, useRef } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
 import CheckmarkButton from '../Buttons/CheckmarkButton'
@@ -41,18 +41,28 @@ const Record = (props: Props) => {
     const [ showSubtasks, setShowSubtasks ] = useState(false)
     const [ text, setText ] = useState(item.text)
 
+    /* 
+    Record state is not updated while editing but content
+    saved to the buffer and goes to state only after blur
+    to avoid problems with handling caret position on rerender.  
+    */
+    const recordTextBuffer = useRef(item.text)
+
     // rerender record after updating from cloud 
     useEffect(() => setText(item.text), [item.text])
 
-    const  updateTextFromTitle = (text: string) => {
+    const updateTextFromTitle = (text: string) => {
         updateTask({ ...item, text})
         setText(text)
     }
 
     const updateTextFromEditable = (text: string) => {
         updateTask({ ...item, text})
+        recordTextBuffer.current = text
         isProject && updateTitle(text)
     }
+
+    const updateTextFromBuffer = () => setText(recordTextBuffer.current)
 
     useEvent(Events.SetProjectByTitle + id, updateTextFromTitle)
 
@@ -104,6 +114,7 @@ const Record = (props: Props) => {
             <div 
                 className={recordClassName}
                 onClick={handleClickOnRecord}
+                onBlur={updateTextFromBuffer}
             >
                 <div className="row-btns">
                     <CheckmarkButton 
@@ -114,7 +125,7 @@ const Record = (props: Props) => {
                 </div>
                 <Editable 
                     text={text} 
-                    update={updateTextFromEditable} 
+                    saveContent={updateTextFromEditable} 
                     isEditable={isEditable}
                     getFocus={isFocused}
                     classes={[ 'item-content' ]}

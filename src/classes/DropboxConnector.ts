@@ -36,9 +36,13 @@ export default class DropboxConnector implements ICloudConnector {
         const files = []
         for (const name of names) {
             const path = `${DATA_FOLDER_PATH}/${name}.json`
-            const response: any = await this.dropboxClient.downloadFile(path)
-            const fileContent = await readFile(response.result.fileBlob)
-            files.push(JSON.parse(fileContent as string))
+            try {
+                const response: any = await this.dropboxClient.downloadFile(path)
+                const fileContent = await readFile(response.result.fileBlob)
+                files.push(JSON.parse(fileContent as string))
+            } catch (e) {
+                if (!this.isFileNotFound(e)) throw e
+            }  
         }
         return files
     }
@@ -55,14 +59,8 @@ export default class DropboxConnector implements ICloudConnector {
             const path = `${DATA_FOLDER_PATH}/${name}.json`    
             try {
                 await this.dropboxClient.deleteFile(path)
-            } catch (e) {
-                const fileNotFound = JSON
-                    .parse(e.error)
-                    .error_summary
-                    .includes('path_lookup/not_found')
-                if (!fileNotFound) {
-                    throw e
-                }
+            } catch (e) { 
+                if (!this.isFileNotFound(e)) throw e
             }                   
         }
     }
@@ -78,5 +76,11 @@ export default class DropboxConnector implements ICloudConnector {
 
     async uploadMetadata(metadata: string) {
         await this.dropboxClient.uploadFile(metadata, METADATA_FILE_PATH)
+    }
+
+    isFileNotFound(e: any): boolean {
+        return !!e && JSON.parse(e.error)
+            .error_summary
+            .includes('not_found')
     }
 }

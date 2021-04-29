@@ -148,8 +148,8 @@ class Syncer {
         const toDeleteLocal = remote.deleted
         const toDeleteRemote = local.deleted
     
-        const needToUpdateRemote = toUpload.length || toDeleteRemote.length
-        const needToUpdateLocal = toDownload.length || toDeleteLocal.length
+        const isRemoteModified = toUpload.length || toDeleteRemote.length
+        const isLocalModified = toDownload.length || toDeleteLocal.length
 
         const items = await this.cloudConnector?.downloadItems(toDownload)
         items?.forEach((it) => taskService.createTask(it))
@@ -167,9 +167,9 @@ class Syncer {
         local.reset()
         local.save()
 
-        needToUpdateLocal && reload()
-
-        needToUpdateRemote && this.uploadRemoteMeta(metaLocal)
+        isLocalModified && reload()
+        
+        if (isLocalModified || isRemoteModified) this.uploadRemoteMeta(metaLocal)
       }
 }
 
