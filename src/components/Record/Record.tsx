@@ -140,7 +140,7 @@ const Record = (props: Props) => {
                         showSubtasks={openSubtasks}
                         classes={[ hiddenBtnClassName ]}
                         isProject={isProject}
-                        isRoot={isRoot}
+                        isTitle={isRoot}
                         update={update}
                         remove={remove}
                     /> 

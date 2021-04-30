@@ -10,22 +10,22 @@ import AddSubtask from './AddSubtask'
 type Props = {
     task: Task,
     classes?: string[],
-    showSubtasks: () => void,
-    update: (task: Task) => void,
-    remove: (task: Task) => void,
-    isProject: boolean,
-    isRoot: boolean
+    showSubtasks?: () => void,
+    update?: (task: Task) => void,
+    remove?: (task: Task) => void,
+    isProject?: boolean,
+    isTitle?: boolean
 }
 
 const RecordMenu = (props: Props) => {
     const {
         task,
         classes = [],
-        showSubtasks,
-        update,
-        remove,
-        isProject,
-        isRoot
+        showSubtasks = () => {},
+        update = () => {},
+        remove = () => {},
+        isProject = false,
+        isTitle = false
     } = props
 
     const [ showMenu, setShowMenu ] = useState(false)
@@ -57,12 +57,12 @@ const RecordMenu = (props: Props) => {
                 onMouseLeave={handleMouseLeave}
                 onMouseEnter={handleMouseEnter}
             >
-                {!task.isDone && !isRoot && <Priority 
+                {!task.isDone && !isTitle && <Priority 
                     task={task} 
                     closeMenu={closeMenu} 
                     update={update}
                 />}
-                {!isProject && !task.isDone && !isRoot && <AddSubtask 
+                {!isProject && !task.isDone && !isTitle && <AddSubtask 
                     closeMenu={closeMenu}
                     showSubtasks={showSubtasks}
                     isDisabled={false}
@@ -74,7 +74,7 @@ const RecordMenu = (props: Props) => {
                     closeMenu={closeMenu}
                     remove={remove}
                 />
-                {!isRoot && 
+                {!isTitle && 
                     <DeleteRecords 
                         task={task}
                         remove={remove}

@@ -58,6 +58,7 @@
     justify-content: center;
     outline: none;
     white-space: nowrap;
+    position: relative;
 
     &:hover, &:focus {
         text-decoration: underline;
@@ -65,5 +66,11 @@
 
     &.read-only:hover {
         text-decoration: none;
+    }
+
+    .record-menu-box {
+        position: absolute;
+        right: 10px;
+        top: 15px;
     }
 }

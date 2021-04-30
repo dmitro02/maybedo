@@ -2,16 +2,20 @@ import { useEffect, useState } from "react"
 import { useEvent, notify, Events } from "../../classes/Store"
 import Task from "../../classes/Task"
 import Editable from "../Record/Editable"
+import RecordMenu from "../RecordMenu/RecordMenu"
 
 type Props =  {
     item: Task
-    isEditable?: boolean
+    isEditable?: boolean,
+    remove?: (task: Task) => void
 }
 
 const Title = (props: Props) => {
     const { 
         isEditable = true,
-        item: { text, id }
+        item,
+        item: { text, id },
+        remove = () => {}
     } = props
 
     const [ title, setTitle ] = useState('')
@@ -27,13 +31,19 @@ const Title = (props: Props) => {
     }
 
     return (
-        <Editable 
-            text={title} 
-            saveContent={updateTitle} 
-            isEditable={isEditable}
-            isSingleLine={true}
-            classes={[ 'title' ]}
-        />
+        <div className="title">
+            <Editable 
+                text={title} 
+                saveContent={updateTitle} 
+                isEditable={isEditable}
+                isSingleLine
+            />
+            <RecordMenu
+                task={item}
+                isTitle
+                remove={remove}
+            />
+        </div>
     )
 }
 

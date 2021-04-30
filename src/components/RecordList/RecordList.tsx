@@ -125,6 +125,7 @@ const RecordList = (props: Props) => {
                 <Title
                     item={root}
                     isEditable={isEditable}
+                    remove={deleteSubTask}
                 />
             }
             <div className="active-tasks" ref={activeItemListRef}>
