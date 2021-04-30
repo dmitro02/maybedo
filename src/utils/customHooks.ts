@@ -1,7 +1,6 @@
 import { 
     MutableRefObject, 
-    useEffect, 
-    useState 
+    useEffect 
 } from "react"
 
 export const useOutsideClickDetector = (
@@ -22,11 +21,4 @@ export const useOutsideClickDetector = (
 
         return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [action, isEnabled, ref])
-}
-
-export const useForceUpdate = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [value, setValue] = useState(0)
-
-    return () => setValue(value => value + 1)
 }

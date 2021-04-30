@@ -1,54 +1,83 @@
-import React, { useState, memo } from 'react'
+import { useState, memo, useEffect, useRef } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
-import SubTaskList from '../RecordList/SubTaskList'
 import CheckmarkButton from '../Buttons/CheckmarkButton'
- import { MdExpandLess, MdExpandMore } from 'react-icons/md'
-
+import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { useSubscribeWithForceUpdate } from '../../classes/Store'
-import { selectTask } from '../../classes/Store'
+import { updateTask } from '../../services/taskService'
+import RecordList from '../RecordList/RecordList'
+import { store, useEvent, notify, Events } from '../../classes/Store'
+import metadata from '../../classes/Metadata'
 
 type Props = { 
     item: Task, 
     isEditable?: boolean,
-    isTitle?: boolean,
-    isSelected?: boolean
+    isSelected?: boolean,
+    update?: (task: Task) => void,
+    remove?: (task: Task) => void,
+    isFocused?: boolean
 }
 
 const Record = (props: Props) => {
     const {
         isEditable = true,
-        isTitle = false,
         isSelected = false,
+        isFocused = false,
         item,
+        update = () => {},
+        remove = () => {},
         item: {
-            id, 
+            id,
+            text,
             isDone,
-            priority, 
-            parent
+            priority
         }
     } = props
 
-    useSubscribeWithForceUpdate(item.id)
+    const hasSubtasks = metadata.hasChildren(id)
+    const isProject = metadata.isProject(id)
+    const isRoot = metadata.isRoot(id)
 
-    const hasSubtasks = !!item.tasks.length
+    const [ showSubtasks, setShowSubtasks ] = useState(false)
+    const [ recordText, setRecordText ] = useState(text)
 
-    const isProject = !!!item.parent?.parent
+    /* 
+    Record state is not updated while editing but content
+    saved to the buffer and goes to state only after blur
+    to avoid problems with handling caret position on rerender.  
+    */
+    const recordTextBuffer = useRef(text)
 
-    const [ showSubtasks, setShowSubtasks ] = useState(item.isOpened && hasSubtasks)
+    // rerender record after updating from cloud 
+    useEffect(() => setRecordText(text), [text])
 
+    const updateTextFromTitle = (text: string) => {
+        updateTask({ ...item, text})
+        setRecordText(text)
+    }
+
+    const updateTextFromEditable = (text: string) => {
+        updateTask({ ...item, text})
+        recordTextBuffer.current = text
+        isProject && updateTitle(text)
+    }
+
+    const updateTextFromBuffer = () => setRecordText(recordTextBuffer.current)
+
+    useEvent(Events.SetProjectByTitle + id, updateTextFromTitle)
+
+    const updateTitle = (text: string) => notify(Events.SetTitleByProject + id, text)
+    
     const handleClickOnRecord = () => { 
-        if (isProject && parent && parent!.selectedSubTaskId !== id) {
-            selectTask(item)
-        }
+        if (isProject && !isRoot) store.selectedProjectId = id
     }
 
     const handleClickOnCheckbox = (e: any) => {
         e.stopPropagation()
         if (e.button === 0) { // left click only
             item.isDone = !item.isDone
+            update(item)
         }
     }
 
@@ -56,7 +85,6 @@ const Record = (props: Props) => {
         'record', 
         isSelected ? 'record-selected' : '',
         !isEditable ? 'read-only' : '',
-        isTitle ? 'title' : '',
         isProject? 'project' : '',
         isDone ? 'item-done' : ''
     ].join(' ')
@@ -65,12 +93,10 @@ const Record = (props: Props) => {
 
     const openSubtasks = () => {
         setShowSubtasks(true)
-        item.isOpened = true
     }
 
     const closeSubtasks = () => {
         setShowSubtasks(false)
-        item.isOpened = false
     }
 
     const getSubtasksBtn = () => {
@@ -88,8 +114,8 @@ const Record = (props: Props) => {
         <>
             <div 
                 className={recordClassName}
-                id={id} 
                 onClick={handleClickOnRecord}
+                onBlur={updateTextFromBuffer}
             >
                 <div className="row-btns">
                     <CheckmarkButton 
@@ -98,7 +124,13 @@ const Record = (props: Props) => {
                         priority={priority}
                     />
                 </div>
-                <Editable task={item} isEditable={isEditable} />
+                <Editable 
+                    text={recordText} 
+                    saveContent={updateTextFromEditable} 
+                    isEditable={isEditable}
+                    getFocus={isFocused}
+                    classes={[ 'item-content' ]}
+                />
                 {/* DEBUG: display task ID for each record  */}
                 {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
@@ -108,10 +140,18 @@ const Record = (props: Props) => {
                         showSubtasks={openSubtasks}
                         classes={[ hiddenBtnClassName ]}
                         isProject={isProject}
+                        isTitle={isRoot}
+                        update={update}
+                        remove={remove}
                     /> 
                 </div>
             </div>
-            {showSubtasks && <SubTaskList task={item} />}
+            {showSubtasks && 
+                <RecordList 
+                    classNames={['subtasks-list']}
+                    rootId={id}
+                />
+            }
         </>
     )
 }

@@ -1,25 +1,32 @@
 import { useRef } from 'react'
 import { useOutsideClickDetector } from '../../utils/customHooks'
-import taskStore from '../../classes/Store'
 import Fog from '../Fog/Fog'
-import ProjectList from '../RecordList/ProjectList'
-import './Sidebar.scss'
 import { BsBoxArrowLeft } from 'react-icons/bs'
+import RecordList from '../RecordList/RecordList'
+import { ROOT_ID } from '../../classes/Metadata'
+import { APP_VERSION } from '../../version'
 
 type Props = {
     isOpened: boolean,
     close: () => void,
-    isSettingsOpened: boolean
+    isSettingsOpened: boolean,
+    projectId: string
 }
 
-const Sidebar = ({ isOpened, close, isSettingsOpened }: Props) => {
-    const { taskList } = taskStore
+const Sidebar = (props: Props) => {
+    const { 
+        isOpened, 
+        close, 
+        isSettingsOpened, 
+        projectId 
+    } = props
 
     const leftPanelRef = useRef(null)
     useOutsideClickDetector(leftPanelRef, close, isOpened) 
 
     const handleClick = (e: any) => {
-        const el = e.target as HTMLDivElement        
+        const el = e.target as HTMLDivElement  
+              
         if (el.getAttribute('contenteditable') === "false") close()
     }
 
@@ -30,7 +37,12 @@ const Sidebar = ({ isOpened, close, isSettingsOpened }: Props) => {
     ].join(' ')
 
     return (
-        <div ref={leftPanelRef} className={classes} onClick={handleClick}>
+        <div 
+            ref={leftPanelRef} 
+            className={classes} 
+            onClick={handleClick}
+        >
+            <div className="app-version">v{APP_VERSION}</div>
             <Fog isDisplayed={isSettingsOpened} />
                 <div className="top-panel">
                     <div className="row-btns">
@@ -41,7 +53,12 @@ const Sidebar = ({ isOpened, close, isSettingsOpened }: Props) => {
                         />
                     </div>
                 </div>
-            <ProjectList rootTask={taskList} />
+            <RecordList 
+                rootId={ROOT_ID}
+                hasTitle
+                isEditable={false}
+                projectId={projectId}
+            />
         </div>
     )
 }

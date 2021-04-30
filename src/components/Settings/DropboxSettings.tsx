@@ -1,31 +1,27 @@
 import { useRef } from 'react'
 import DropboxConnector from '../../classes/DropboxConnector'
 import { FailureBanner, SuccessBanner } from '../Banner/Banner'
-import syncer, { SyncSources } from '../../classes/Syncer'
+import syncer from '../../classes/Syncer'
 import { GoArrowRight } from "react-icons/go";
 import Button from '../Buttons/Button'
-import { actions } from '../../classes/Store'
+import { store } from '../../classes/Store'
 
-type Props = { source: SyncSources }
-
-const DropboxSettings = ({ source }: Props) => {
+const DropboxSettings = () => {
     const dbx = new DropboxConnector()
 
     const authTokenRef = useRef<HTMLInputElement>(null)
 
     const authorizeApp = async () => {
-        actions.showLoading()
+        store.showLoading = true
         try {
             await dbx.authorize(authTokenRef.current?.value)
 
-            syncer.initSync(source, dbx)
-            const banner = new SuccessBanner('Application successfully authorized')
-            actions.showBanner(banner)
+            syncer.init(dbx)
+            store.banner = new SuccessBanner('Application successfully authorized')
         } catch(e) {
-            const banner = new FailureBanner('Error: ' + e.message)
-            actions.showBanner(banner)
+            store.banner = new FailureBanner('Error: ' + e.message)
         }
-        actions.hideLoading()
+        store.showLoading = false
     }
 
     return (

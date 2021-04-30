@@ -1,84 +1,80 @@
 import { useRef, useEffect } from 'react'
-import Task from '../../classes/Task'
 
 type Props = { 
-    task: Task, 
+    text: string, 
     isEditable: boolean,
+    saveContent: (text: string) => void,
+    getFocus?: boolean, 
+    isSingleLine?: boolean,
+    classes?: string[]
 }
 
-const Editable = ({ task, isEditable }: Props) => {
-    const { isNew, text } = task
+const Editable = (props: Props) => {
+    const {
+        text,
+        isEditable,
+        saveContent,
+        getFocus = false,
+        isSingleLine = false,
+        classes = []
+    } = props
 
     const editableRef = useRef<HTMLDivElement>(null)
 
-    const caretPosRef = useRef<number | undefined>(undefined)
+    useEffect(() => {
+        if (editableRef.current) editableRef.current.innerHTML = text
+    })
 
     useEffect(() => {
-        if (isNew) {            
+        if (getFocus) {        
             setContentEditable(true)
-            setCaretPosition(editableRef.current, text.length)
-            task.isNew = false
             editableRef.current?.focus()
+            setCaretPosition(editableRef.current, text.length)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        if (document.activeElement === editableRef.current) {
-            setCaretPosition(editableRef.current, caretPosRef.current)
-        }
-    })
-        
     const setContentEditable = (flag: boolean) => {
         const el = editableRef.current
         el?.setAttribute('contenteditable', '' + flag)
     }
 
-    const handleInput = debounceInput((text: string) => {
-        caretPosRef.current = getCaretPosition(editableRef.current)
-        task.text = text
-    })
+    const handleInput = debounceInput(saveContent)
 
-    const handleBlur = () => {
+    const handleBlur = (e: any) => {
+        saveContent(e.target.innerHTML)
         !isEditable && setContentEditable(false)
     }
+
+    const preserveSingleLine = (e: any) => {
+        isSingleLine && e.key === 'Enter' && e.preventDefault()
+    }
+
+    const classNames = [ 
+        ...classes,
+        isEditable ? '' : 'read-only'
+    ].join(' ')
 
     return (
         <div 
             ref={editableRef}
-            className="item-content"
+            className={classNames}
             contentEditable={isEditable}
             suppressContentEditableWarning={true}
             onInput={handleInput}
             onBlur={handleBlur}
-        >
-            {text}
-        </div>
+            onKeyPress={preserveSingleLine}
+        />
     )
 }
 
 const debounceInput = (callback: (text: string) => void) => {
     let timeout: any
     return (e: any) => {
-        const text = e.target.innerText
+        const text = e.target.innerHTML
         clearTimeout(timeout)
         timeout = setTimeout(() => callback(text), 700)
     }
-}
-
-const getCaretPosition = (el: HTMLElement | null): number | undefined => {
-    if (!el || !el.isContentEditable) return
-    let range
-    try {
-        range = document.getSelection()?.getRangeAt(0)
-    } catch(err) {
-        // do nothing
-    }
-    if (!range) return
-    let rangeClone = range.cloneRange()
-    rangeClone.selectNodeContents(el)
-    rangeClone.setEnd(range.endContainer, range.endOffset)
-    return rangeClone.toString().length
 }
 
 const setCaretPosition = (el: HTMLElement | null, pos?: number): void => {

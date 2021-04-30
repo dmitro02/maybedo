@@ -1,25 +1,21 @@
 import { SyncStatuses } from '../components/Statuses/SyncStatus';
 import DropboxConnector from './DropboxConnector';
-import * as lsUtils from "../utils/localStorageUtils"
-import taskStore, { actions } from './Store'
+import { reload, store } from './Store'
+import * as ls from "../services/localStorageService"
+import * as taskService from '../services/taskService'
+import metaLocal, { Metadata } from './Metadata'
 
-const SYNC_INTERVAL_IN_MINUTES = 5 
-
-export class Metadata {
-    updatedAt: number | undefined
-
-    constructor(updatedAt?: number) {
-        this.updatedAt = updatedAt
-    }
-}
+const SYNC_INTERVAL_IN_MINUTES = 10
 
 export interface ICloudConnector {
     syncTarget: SyncTargets
     authorize: () => any
     check: () => any
-    downloadMetadata: () => Promise<Metadata>
-    downloadTaskList: () => Promise<string | null>
-    uploadData: (metadata: Metadata, taskList: string) => any
+    downloadItems: (names: string[]) => Promise<any[]>
+    uploadItems: (files: string[][]) => Promise<void>
+    deleteItems: (names: string[]) => Promise<void>
+    downloadMetadata: () => Promise<string>
+    uploadMetadata: (metadata: string) => void
 }
 
 export enum SyncTargets {
@@ -27,29 +23,17 @@ export enum SyncTargets {
     Disabled = 'DISABLED'
 }
 
-export enum SyncSources {
-    Local = 'LOCAL',
-    Remote = 'REMOTE' 
-}
-
 class Syncer {
     private cloudConnector: ICloudConnector | null = null
     private isSyncFaild: boolean = false
     private interval: any = null
 
-    public constructor() {
-        this.onDemandCloud = this.onDemandCloud.bind(this)
-        this.onDemandLocal = this.onDemandLocal.bind(this)
-    }
-
-    async initSync(source?: SyncSources, cloudConnector?: ICloudConnector) {
-        actions.showLoading()
-
+    async init(cloudConnector?: ICloudConnector) {
         if (cloudConnector) {
             this.cloudConnector = cloudConnector
-            lsUtils.setSyncTarget(cloudConnector.syncTarget)
+            ls.setSyncTarget(cloudConnector.syncTarget)
         } else {
-            const syncTarget = lsUtils.getSyncTarget()
+            const syncTarget = ls.getSyncTarget()
             if (syncTarget === SyncTargets.Disabled) {
                 this.cloudConnector = null
             } else {
@@ -57,139 +41,33 @@ class Syncer {
             }
         }
         
-        this.resetSync()
+        clearInterval(this.interval)
 
         const isConfigured = this.cloudConnector ? await this.check() : false        
 
         if (isConfigured) {
-            if (source) {
-                await this.forceUpdateFromSource(source)
-            } else {
-                await this.onLoadCloud()
-            }
-            this.interval = setInterval(this.onDemandCloud, 60000 * SYNC_INTERVAL_IN_MINUTES)
-        } else {
-            this.onLoadLocal()
-            this.interval = setInterval(this.onDemandLocal, 60000 * SYNC_INTERVAL_IN_MINUTES)
+            await this.sync()
+            this.interval = setInterval(this.sync.bind(this), 60000 * SYNC_INTERVAL_IN_MINUTES)
         }
-
-        this.addGlobalEventListeners()
-
-        actions.hideLoading()
     }
 
-    private resetSync() {
-        clearInterval(this.interval)
-        this.removeGlobalEventListeners()
-    }
+    async sync() {
+        if (store.syncStatus === SyncStatuses.InProgress) return
 
-    private addGlobalEventListeners() {
-        window.addEventListener('unload', this.onDemandLocal)
-        window.addEventListener('blur', this.onDemandLocal)
-    }
-
-    private removeGlobalEventListeners() {
-        window.removeEventListener('unload', this.onDemandLocal)
-        window.removeEventListener('blur', this.onDemandLocal) 
-    }
-
-    private async onLoadCloud() {
         this.isSyncFaild = false
-        actions.setSyncStatus(SyncStatuses.InProgress)
+        store.syncStatus = SyncStatuses.InProgress
 
-        const cloudUpdatedAt = await this.getCloudUpdatedAt()
-        const lsUpdatedAt = lsUtils.getLsUpdatedAt()
-        
-        if (cloudUpdatedAt > lsUpdatedAt) {
-            const taskList = await this.getCloudTaskList()
-   
-            lsUtils.saveToLocalStorage(cloudUpdatedAt, taskList)
-            this.loadToStore(cloudUpdatedAt, taskList)
-        } else if (cloudUpdatedAt < lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-
-            if (taskList) {
-                this.loadToStore(lsUpdatedAt, taskList)
-                await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
-            }
-        } else if (cloudUpdatedAt === lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-
-            this.loadToStore(lsUpdatedAt, taskList)
-        } else {
-            this.saveToLS()
+        try {
+            const metaRemote = await this.fetchRemoteMeta()
+            await this.syncChanges(metaLocal, metaRemote)
+        } catch (e) {
+            console.error(e);
+            this.isSyncFaild = true
         }
 
-        this.setSyncResultStatus()
-    }
-
-    private async forceUpdateFromSource(source: SyncSources) {
-        this.isSyncFaild = false
-        actions.setSyncStatus(SyncStatuses.InProgress)
-        
-        if (source === SyncSources.Remote) {
-            const updatedAt = await this.getCloudUpdatedAt()
-            const taskList = await this.getCloudTaskList()
-            lsUtils.saveToLocalStorage(updatedAt, taskList)
-            this.loadToStore(updatedAt, taskList)
-        } else {
-            this.saveToLS()
-            const updatedAt = lsUtils.getLsUpdatedAt()
-            const taskList = lsUtils.getLsTaskList()
-            await this.setCloudData({ updatedAt }, taskList)
-        }
-
-        this.setSyncResultStatus()
-    }
-
-    private onLoadLocal() {
-        const lsUpdatedAt = lsUtils.getLsUpdatedAt()
-
-        if (lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-            this.loadToStore(lsUpdatedAt, taskList)
-        } else {
-            this.saveToLS()
-        }
-    }
-
-    async onDemandCloud() {
-        this.isSyncFaild = false
-        actions.setSyncStatus(SyncStatuses.InProgress)
-
-        this.saveToLS()
-        
-        const cloudUpdatedAt = await this.getCloudUpdatedAt()
-        const lsUpdatedAt = lsUtils.getLsUpdatedAt()     
-        
-        if (cloudUpdatedAt > lsUpdatedAt) {
-            const taskList = await this.getCloudTaskList()
-
-            lsUtils.saveToLocalStorage(cloudUpdatedAt, taskList)
-            this.loadToStore(cloudUpdatedAt, taskList)
-        } else if (cloudUpdatedAt < lsUpdatedAt) {
-            const taskList = lsUtils.getLsTaskList()
-
-            if (taskList) {
-                await this.setCloudData({ updatedAt: lsUpdatedAt }, taskList)
-            }
-        }
-
-        this.setSyncResultStatus()
-    }
-
-    private onDemandLocal() {
-        this.saveToLS()
-    }
-
-    private saveToLS() {
-        const { updatedAt, taskListJSON } = taskStore  
-        lsUtils.saveToLocalStorage(updatedAt, taskListJSON)
-    }
-
-    private loadToStore(updatedAt: number, taskList: string | null) {        
-        if (!taskList) return
-        taskStore.setData(taskList, updatedAt)
+        store.syncStatus = this.isSyncFaild
+            ? SyncStatuses.Failure
+            : SyncStatuses.Idle
     }
 
     private async check(): Promise<boolean> {
@@ -197,41 +75,14 @@ class Syncer {
             await this.cloudConnector!.check()
         } catch(e) {
             if (e.message.toLowerCase().includes('not_configured')) {
-                actions.setSyncStatus(SyncStatuses.NotConfigured)
+                store.syncStatus = SyncStatuses.NotConfigured
                 return false
             } else {
-                actions.setSyncStatus(SyncStatuses.Failure)
+                store.syncStatus = SyncStatuses.Failure
                 return true
             }
         }
         return true
-    }
-
-    private async getCloudUpdatedAt(): Promise<number> {
-        try {
-            const cloudMetadata = await this.cloudConnector!.downloadMetadata()
-            return cloudMetadata?.updatedAt || 0
-        } catch {
-            this.isSyncFaild = true
-            return 0
-        }
-    }
-
-    private async getCloudTaskList(): Promise<string | null> {
-        try {
-            return await this.cloudConnector!.downloadTaskList()
-        } catch {
-            this.isSyncFaild = true
-            return null
-        }
-    }
-
-    private async setCloudData(metadata: Metadata, taskList: string | null) {
-        try {
-            taskList && await this.cloudConnector!.uploadData(metadata, taskList)
-        } catch {
-            this.isSyncFaild = true            
-        }
     }
 
     private createCloudConnector(syncTarget?: SyncTargets) {
@@ -243,13 +94,83 @@ class Syncer {
         }
     }
 
-    private setSyncResultStatus() {
-        if (this.isSyncFaild) {
-            actions.setSyncStatus(SyncStatuses.Failure)
-        } else {
-            actions.setSyncStatus(SyncStatuses.Idle)
-        }
+    private async fetchRemoteMeta(): Promise<Metadata> {
+        const taskListStr = await this.cloudConnector?.downloadMetadata() || '{}'
+        const taskList = JSON.parse(taskListStr)
+        return new Metadata(taskList)
     }
+
+    private uploadRemoteMeta(metadata: Metadata) {
+        const taskListStr = JSON.stringify(metadata.taskList)
+        this.cloudConnector?.uploadMetadata(taskListStr)
+    }
+
+    private processChanges = (local: Metadata, remote: Metadata) => {
+        const localList = local.taskList
+        const remoteList = remote.taskList
+
+        if (!Object.keys(remoteList).length) {
+            local.created = Object.keys(localList)
+            local.deleted = []
+            return
+        }
+      
+        local.created.forEach((it) => { remoteList[it] = localList[it] })
+        local.deleted.forEach((it) => { remote.removeFromTaskList(it) })
+
+        Object.keys(localList).forEach((it) => {
+            if (!remoteList.hasOwnProperty(it)) {
+                remote.addToDeleted(it)
+                return
+            }
+      
+            const remoteUpdatedAt = remoteList[it].u
+            const localUpdatedAt =  localList[it].u
+            if (remoteUpdatedAt > localUpdatedAt) {
+                remote.addToUpdated(it)
+            } else if (remoteUpdatedAt < localUpdatedAt) {
+                local.addToUpdated(it)
+            }
+        })
+      
+        Object.keys(remoteList).forEach((it) => {
+            if (!localList.hasOwnProperty(it)) {
+                remote.addToCreated(it)
+            }
+        })
+    }
+
+    private syncChanges = async (local: Metadata, remote: Metadata) => {
+        this.processChanges(local, remote)
+
+        const toDownload = remote.created.concat(remote.updated)
+        const toUpload = local.created.concat(local.updated)
+        const toDeleteLocal = remote.deleted
+        const toDeleteRemote = local.deleted
+    
+        const isRemoteModified = toUpload.length || toDeleteRemote.length
+        const isLocalModified = toDownload.length || toDeleteLocal.length
+
+        const items = await this.cloudConnector?.downloadItems(toDownload)
+        items?.forEach((it) => taskService.createTask(it))
+ 
+        const filesToUpload = toUpload.map((it) => {
+            const fileContent = localStorage.getItem(it) || ''
+            return [fileContent, it]
+        })
+        await this.cloudConnector?.uploadItems(filesToUpload)
+
+        await this.cloudConnector?.deleteItems(toDeleteRemote)
+
+        toDeleteLocal.forEach((it) => taskService.deleteTask(it))
+    
+        local.reset()
+        local.save()
+
+        isLocalModified && reload()
+        
+        if (isLocalModified || isRemoteModified) this.uploadRemoteMeta(metaLocal)
+      }
 }
 
 const syncer = new Syncer()

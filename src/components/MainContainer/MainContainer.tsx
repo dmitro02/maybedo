@@ -4,22 +4,29 @@ import Loading from '../Statuses/Loading'
 import syncer from '../../classes/Syncer'
 import Sidebar from '../Sidebar/Sidebar'
 import Content from './Content'
-import { Events, useSubscribeWithForceUpdate } from '../../classes/Store'
+import { 
+    usePropertyWithState, 
+    useReload, 
+    initSelectProjectId 
+} from '../../classes/Store'
+import * as ls from "../../services/localStorageService"
 
 const MainContainer = () => {
     const [ isSettingsOpened, setIsSettingsOpened ] = useState(false)
-
     const [ isSidebarOpened, setIsSidebarOpened ] = useState(false)
 
-    useEffect(() => {
-        syncer.initSync()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const [ selectedProjectId, setSelectedProjectId ] 
+        = usePropertyWithState('selectedProjectId')
 
-    useSubscribeWithForceUpdate(Events.Reload)
+    useReload(() => setSelectedProjectId(initSelectProjectId()))    
 
-    const toggleSettings = () =>
-        setIsSettingsOpened(!isSettingsOpened)
+    useEffect(() => { syncer.init() }, [])
+
+    // useEffect(() => ls.setSelectedProjectId(selectedProjectId))
+
+    ls.setSelectedProjectId(selectedProjectId)
+
+    const toggleSettings = () => setIsSettingsOpened(!isSettingsOpened)
 
     const openSidebar = () => {
         setIsSidebarOpened(true)        
@@ -38,12 +45,14 @@ const MainContainer = () => {
                 isOpened={isSidebarOpened} 
                 close={closeSidebar} 
                 isSettingsOpened={isSettingsOpened}
+                projectId={selectedProjectId}
             />
             <Content 
                 isSettingsOpened={isSettingsOpened}
                 isSidebarOpened={isSidebarOpened}
                 toggleSettings={toggleSettings}
                 openSidebar={openSidebar}
+                projectId={selectedProjectId}
             />
         </div>
     )

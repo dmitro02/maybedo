@@ -1,12 +1,11 @@
 import syncer from '../../classes/Syncer'
 import './SyncStatus.scss'
-import { Events, useSubscribe } from '../../classes/Store'
-import { useState } from 'react'
 import { 
     MdSyncProblem,
     MdSyncDisabled,
     MdSync
 } from 'react-icons/md'
+import { usePropertyWithState } from '../../classes/Store'
 
 export enum SyncStatuses {
     NotConfigured = 'NOT_CONFIGURED',
@@ -16,13 +15,9 @@ export enum SyncStatuses {
 }
 
 const SyncStatus = () => {
-    const [ status, setStatus ] = useState<SyncStatuses>(SyncStatuses.NotConfigured)
+    const [ status ] = usePropertyWithState('syncStatus')
 
-    useSubscribe(Events.SetSyncStatus, setStatus)
-
-    const refresh = () => {
-        syncer.onDemandCloud()
-    }
+    const refresh = () => syncer.sync()
 
     const baseClass = 'material-icons-outlined common-btn'
     const noHoverClass = baseClass + ' no-hover'

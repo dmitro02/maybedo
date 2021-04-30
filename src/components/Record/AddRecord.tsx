@@ -1,23 +1,16 @@
-import { memo, useEffect, useRef } from 'react'
+import { memo } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
 import { MdAdd } from 'react-icons/md'
-import { createTask, selectTask } from '../../classes/Store'
- 
-const AddRecord = ({ root }: { root: Task }) => {
-    const editableRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        !window.iAmRunningOnMobile && editableRef.current?.focus()
-    }, [])
-    
+type Props = { add: (task: Task) => void }
+ 
+const AddRecord = ({ add }: Props) => {    
     const createRecord = (e: any) => {
-        const taskText = e.target.textContent.trim()
-        if (!taskText) return
-        const task: Task = new Task(taskText, root)
-        task.isNew = true
-        createTask(task)
-        task.isProject && selectTask(task)
+        const text = e.target.textContent.trim()
+        if (!text) return
+        const task = new Task({ text })
+        add(task)
         e.target.textContent = ''
     }
 
@@ -32,8 +25,7 @@ const AddRecord = ({ root }: { root: Task }) => {
                 suppressContentEditableWarning={true}
                 onInput={createRecord}
                 onKeyPress={preventEnterOnEmpty}
-                ref={editableRef}
-            ></div>
+            />
         </div>
     )
 }

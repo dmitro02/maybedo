@@ -10,16 +10,22 @@ import AddSubtask from './AddSubtask'
 type Props = {
     task: Task,
     classes?: string[],
-    showSubtasks: () => void,
-    isProject: boolean
+    showSubtasks?: () => void,
+    update?: (task: Task) => void,
+    remove?: (task: Task) => void,
+    isProject?: boolean,
+    isTitle?: boolean
 }
 
 const RecordMenu = (props: Props) => {
     const {
         task,
         classes = [],
-        showSubtasks,
-        isProject
+        showSubtasks = () => {},
+        update = () => {},
+        remove = () => {},
+        isProject = false,
+        isTitle = false
     } = props
 
     const [ showMenu, setShowMenu ] = useState(false)
@@ -42,12 +48,6 @@ const RecordMenu = (props: Props) => {
         clearTimeout(closeTimeout)
     }
     
-    const hasSubtasks = !!task.tasks.length
-
-    const hasCompleted = !!task.tasks.filter((it) => it.isDone).length
-
-    const isRoot = !!!task.parent
-
     return (
         <div className={'record-menu-box ' + classes.join(' ')}>
             <MdMoreVert className="common-btn" onClick={openMenu} />
@@ -57,22 +57,29 @@ const RecordMenu = (props: Props) => {
                 onMouseLeave={handleMouseLeave}
                 onMouseEnter={handleMouseEnter}
             >
-                {!task.isDone && !isRoot && <Priority 
+                {!task.isDone && !isTitle && <Priority 
                     task={task} 
                     closeMenu={closeMenu} 
+                    update={update}
                 />}
-                {!isProject && !task.isDone && !isRoot && <AddSubtask 
+                {!isProject && !task.isDone && !isTitle && <AddSubtask 
                     closeMenu={closeMenu}
                     showSubtasks={showSubtasks}
-                    isDisabled={hasSubtasks}
+                    isDisabled={false}
                 />}
                 <DeleteRecords
                     task={task} 
                     isBulk
-                    isDisabled={!hasCompleted || !hasSubtasks}
+                    isDisabled={false}
                     closeMenu={closeMenu}
+                    remove={remove}
                 />
-                {!isRoot && <DeleteRecords task={task} />}
+                {!isTitle && 
+                    <DeleteRecords 
+                        task={task}
+                        remove={remove}
+                    />
+                }
             </div>}
         </div>
     )
