@@ -1,11 +1,10 @@
-import { useState, memo, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import './Record.scss'
 import Task from '../../classes/Task'
 import CheckmarkButton from '../Buttons/CheckmarkButton'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import RecordMenu from '../RecordMenu/RecordMenu'
 import Editable from './Editable'
-import { updateTask } from '../../services/taskService'
 import RecordList from '../RecordList/RecordList'
 import { store, useEvent, notify, Events } from '../../classes/Store'
 import metadata from '../../classes/Metadata'
@@ -40,34 +39,17 @@ const Record = (props: Props) => {
     const isRoot = metadata.isRoot(id)
 
     const [ showSubtasks, setShowSubtasks ] = useState(false)
-    const [ recordText, setRecordText ] = useState(text)
-
-    /* 
-    Record state is not updated while editing but content
-    saved to the buffer and goes to state only after blur
-    to avoid problems with handling caret position on rerender.  
-    */
-    const recordTextBuffer = useRef(text)
-
-    // rerender record after updating from cloud 
-    useEffect(() => setRecordText(text), [text])
 
     const updateTextFromTitle = (text: string) => {
-        updateTask({ ...item, text})
-        setRecordText(text)
+        update({ ...item, text})
     }
 
-    const updateTextFromEditable = (text: string) => {
-        updateTask({ ...item, text})
-        recordTextBuffer.current = text
-        isProject && updateTitle(text)
+    const updateTextFromEditable = (text: string) => {        
+        update({ ...item, text})
+        isProject && notify(Events.SetTitleByProject + id, text)
     }
-
-    const updateTextFromBuffer = () => setRecordText(recordTextBuffer.current)
 
     useEvent(Events.SetProjectByTitle + id, updateTextFromTitle)
-
-    const updateTitle = (text: string) => notify(Events.SetTitleByProject + id, text)
     
     const handleClickOnRecord = () => { 
         if (isProject && !isRoot) store.selectedProjectId = id
@@ -75,9 +57,8 @@ const Record = (props: Props) => {
 
     const handleClickOnCheckbox = (e: any) => {
         e.stopPropagation()
-        if (e.button === 0) { // left click only
-            item.isDone = !item.isDone
-            update(item)
+        if (e.button === 0) { // left click only            
+            update({ ...item, isDone: !item.isDone})
         }
     }
 
@@ -115,7 +96,6 @@ const Record = (props: Props) => {
             <div 
                 className={recordClassName}
                 onClick={handleClickOnRecord}
-                onBlur={updateTextFromBuffer}
             >
                 <div className="row-btns">
                     <CheckmarkButton 
@@ -125,14 +105,12 @@ const Record = (props: Props) => {
                     />
                 </div>
                 <Editable 
-                    text={recordText} 
-                    saveContent={updateTextFromEditable} 
+                    text={text} 
+                    onInput={updateTextFromEditable} 
                     isEditable={isEditable}
                     getFocus={isFocused}
                     classes={[ 'item-content' ]}
                 />
-                {/* DEBUG: display task ID for each record  */}
-                {/* <span style={{fontSize: '10px'}}>{id}</span> */}
                 <div className="row-btns">
                     {getSubtasksBtn()}
                     <RecordMenu 
@@ -156,4 +134,4 @@ const Record = (props: Props) => {
     )
 }
 
-export default memo(Record)
+export default Record

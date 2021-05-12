@@ -56,9 +56,12 @@
     height: 56px;
     margin-bottom: 6px;
     justify-content: center;
-    outline: none;
     white-space: nowrap;
     position: relative;
+
+    div {
+        outline: none;
+    }
 
     &:hover, &:focus {
         text-decoration: underline;

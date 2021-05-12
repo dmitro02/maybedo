@@ -38,12 +38,10 @@ const Priority = (props: Props) => {
 
     const handleClickOnSwitch = (e: any) => {
         e.stopPropagation()
-
         const el = e.target as HTMLDivElement   
-        const newPrio = parseInt(el.textContent!)     
-        if (newPrio !== task.priority) {
-            task.priority = newPrio
-            update(task)
+        const priority = parseInt(el.textContent!)     
+        if (priority !== task.priority) {
+            update({ ...task, priority })
         }
         closeMenu() 
     }

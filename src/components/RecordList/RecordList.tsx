@@ -1,5 +1,4 @@
 import { 
-    useCallback, 
     useEffect, 
     useRef, 
     useState 
@@ -57,7 +56,7 @@ const RecordList = (props: Props) => {
 
     const isRootList = metadata.isRoot(rootId)
 
-    const addSubTask = useCallback((task: Task) => {
+    const addSubTask = (task: Task) => {
         task.parentId = root.id
 
         createTask(task)
@@ -68,25 +67,25 @@ const RecordList = (props: Props) => {
         setSubTasks(newSubTasks)
 
         if (isRootList) store.selectedProjectId = task.id
-    }, [isRootList, root.id, subTasks])
+    }
 
-    const updateSubTask = useCallback((task: Task) => {
+    const updateSubTask = (task: Task) => {
         const newSubTasks = subTasks.map((it) => {
             return it.id === task.id ? task : it  
         })
         setSubTasks(newSubTasks)
         updateTask(task)
-    }, [subTasks])
+    }
 
-    const deleteSubTask = useCallback((task: Task) => {
+    const deleteSubTask = (task: Task) => {
         const isSelectedPojectDeleted = store.selectedProjectId === task.id
         const newSubTasks = subTasks.filter((it) => it !== task)
         setSubTasks(newSubTasks)
         deleteTask(task.id)
         if (isSelectedPojectDeleted) store.selectedProjectId = ''
-    }, [subTasks])
+    }
 
-    const deleteCompletedSubTask = useCallback(() => {
+    const deleteCompletedSubTask = () => {
         const idsToDelete = subTasks.filter((it) => it.isDone).map((it) => it.id)
         const isSelectedPojectDeleted = idsToDelete
             .some((id) => store.selectedProjectId === id)
@@ -94,7 +93,7 @@ const RecordList = (props: Props) => {
         setSubTasks(newSubTasks)
         deleteTasks(idsToDelete)
         if (isSelectedPojectDeleted) store.selectedProjectId = ''
-    }, [subTasks])
+    }
 
     useEvent(Events.DeleteCompleted + rootId, deleteCompletedSubTask)
 

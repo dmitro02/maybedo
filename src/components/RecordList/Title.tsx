@@ -34,7 +34,7 @@ const Title = (props: Props) => {
         <div className="title">
             <Editable 
                 text={title} 
-                saveContent={updateTitle} 
+                onInput={updateTitle} 
                 isEditable={isEditable}
                 isSingleLine
             />

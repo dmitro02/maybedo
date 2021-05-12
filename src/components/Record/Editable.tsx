@@ -3,7 +3,7 @@ import { useRef, useEffect } from 'react'
 type Props = { 
     text: string, 
     isEditable: boolean,
-    saveContent: (text: string) => void,
+    onInput: (text: string) => void,
     getFocus?: boolean, 
     isSingleLine?: boolean,
     classes?: string[]
@@ -13,7 +13,7 @@ const Editable = (props: Props) => {
     const {
         text,
         isEditable,
-        saveContent,
+        onInput,
         getFocus = false,
         isSingleLine = false,
         classes = []
@@ -22,7 +22,8 @@ const Editable = (props: Props) => {
     const editableRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        if (editableRef.current) editableRef.current.innerHTML = text
+        const curr = editableRef.current
+        if (curr && curr.innerHTML !== text) curr.innerHTML = text
     })
 
     useEffect(() => {
@@ -39,10 +40,9 @@ const Editable = (props: Props) => {
         el?.setAttribute('contenteditable', '' + flag)
     }
 
-    const handleInput = debounceInput(saveContent)
+    const handleInput = debounceInput(onInput)
 
     const handleBlur = (e: any) => {
-        saveContent(e.target.innerHTML)
         !isEditable && setContentEditable(false)
     }
 
